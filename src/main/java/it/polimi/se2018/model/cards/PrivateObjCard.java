@@ -1,5 +1,7 @@
 package it.polimi.se2018.model.cards;
 
+import it.polimi.se2018.model.Card;
+import it.polimi.se2018.model.ColourEnum;
 /**
  * Private Objective Cards
  * @author Silvia Franzini
