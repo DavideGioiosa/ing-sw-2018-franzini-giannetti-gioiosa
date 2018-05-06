@@ -11,9 +11,9 @@ public class MoveMessage  {
     private List<Player> playerList;
     private BoardDice boardDice;
     private BoardCard boardCard;
-    private Trackboard trackboard;
+    private TrackBoard trackboard;
 
-    public MoveMessage(List<Player> playerList, BoardDice boardDice, BoardCard boardCard, Trackboard trackboard){
+    public MoveMessage(List<Player> playerList, BoardDice boardDice, BoardCard boardCard, TrackBoard trackboard){
         this.boardCard=boardCard;
         this.boardDice=boardDice;
         this.playerList=playerList;
@@ -48,7 +48,7 @@ public class MoveMessage  {
      * Allows the View to see the die on the TrackBoard
      * @return the TrackBoard
      */
-    public Trackboard getTrackboard() {
+    public TrackBoard getTrackboard() {
         return trackboard;
     }
 }
