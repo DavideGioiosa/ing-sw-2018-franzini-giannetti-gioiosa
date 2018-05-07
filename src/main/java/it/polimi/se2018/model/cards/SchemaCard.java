@@ -99,18 +99,48 @@ public class SchemaCard extends Card {
 
         if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
             if(position.getCol() - 1 >= 0) {
-                adjList.add(this.cellList.get(position.getRowCol(position.getRow(), position.getCol() - 1)));
+                adjList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow(), position.getCol() - 1)));
             }
             if(position.getCol() + 1 <= 4) {
-                adjList.add(this.cellList.get(position.getRowCol(position.getRow(), position.getCol() + 1)));
+                adjList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow(), position.getCol() + 1)));
             }
             if(position.getRow() - 1 >= 0) {
-                adjList.add(this.cellList.get(position.getRowCol(position.getRow() - 1, position.getCol())));
+                adjList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1, position.getCol())));
             }
             if(position.getRow() + 1 <= 3) {
-                adjList.add(this.cellList.get(position.getRowCol(position.getRow() + 1, position.getCol())));
+                adjList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1, position.getCol())));
             }
         }
         return adjList;
+    }
+
+    /**
+     * Max num of adj for a Cell: 4
+     * IF: 1. (r-1,c-1) up-sx    2. (r-1,c+1) up-dx   3. (r+1, c-1) dwn-sx  4. (r+1, c+1) dwn-dx
+     * @param position
+     * @return Arraylist of adjacents to the position requested
+     */
+    public ArrayList<Cell> getDiagonalAdjacents(Position position){
+        ArrayList<Cell> adjDiagList = new ArrayList<Cell>();
+
+        if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
+            if(position.getCol() - 1 >= 0 && position.getRow() - 1 >= 0) {
+                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
+                        position.getCol() - 1)));
+            }
+            if(position.getRow() - 1 >= 0 && position.getCol() + 1 <= 4) {
+                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
+                        position.getCol() + 1)));
+            }
+            if(position.getRow() + 1 <= 3 && position.getCol() - 1 >= 0) {
+                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
+                        position.getCol() - 1)));
+            }
+            if(position.getRow() + 1 <= 3 && position.getCol() + 1 <= 4) {
+                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
+                        position.getCol() + 1)));
+            }
+        }
+        return adjDiagList;
     }
 }

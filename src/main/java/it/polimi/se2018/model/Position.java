@@ -22,9 +22,9 @@ public class Position {
         this.col = col;
     }
 
-    public void setRowCol (int row, int col){
-        this.row = row;
-        this.col = col;
+    public void setRowCol (int indexArrayPosition){
+        this.row = indexArrayPosition / 5;
+        this.col = indexArrayPosition % 5;
     }
 
     /**
@@ -70,7 +70,7 @@ public class Position {
     /**
      * used by getAdjacents to pass row +1, row-1.. to get adj cells
      */
-    public int getRowCol (int row, int col){
+    public int getIndexArrayPosition (int row, int col){
         return row * 5 + col;
     }
 }

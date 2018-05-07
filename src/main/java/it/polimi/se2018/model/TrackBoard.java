@@ -12,6 +12,7 @@ public class TrackBoard {
     private ArrayList<ArrayList<Dice>> diceList;
 
     public TrackBoard(){
+        this.diceList = null;
     }
 
     /**

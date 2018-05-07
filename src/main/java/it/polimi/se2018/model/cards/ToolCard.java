@@ -1,7 +1,5 @@
 package it.polimi.se2018.model.cards;
 
-package groupid.model.cards;
-
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.ColourEnum;
 
@@ -17,6 +15,7 @@ public class ToolCard extends Card {
     public ToolCard (int id, String name, String description, ColourEnum colour){
         super(id, name, description);
         this.colour = colour;
+        this.token = 0;
     }
 
     public boolean isUsed(){
@@ -26,5 +25,9 @@ public class ToolCard extends Card {
         else {
             return false;
         }
+    }
+
+    public void updateToken (int token){
+        this.token += token;
     }
 }

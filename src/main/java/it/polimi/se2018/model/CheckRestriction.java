@@ -14,40 +14,49 @@ public class CheckRestriction {
     public CheckRestriction() {
     }
 
-    public boolean adjacentRestriction(SchemaCard schemaCard, Dice dice, Position position){
+    /**
+     * Check adjacents cells (also diagonal ones) of the position requested
+     * to get if there are any dice inside
+     */
+    public boolean adjacentRestriction(SchemaCard schemaCard, Dice dice, Position position) {
 
-        if(schemaCard.isEmpty()){
-            if(position.getRow() == 0 || position.getRow() == 3 || position.getCol() == 0 || position.getCol() == 4){
+        if (schemaCard.isEmpty()) {
+            if (position.getRow() == 0 || position.getRow() == 3 || position.getCol() == 0 || position.getCol() == 4) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
-
-        if(adjacentColourRestriction(schemaCard, dice, position) && adjacentValueRestriction(schemaCard, dice, position)) {
-            return true;
+        ArrayList<Cell> adjList = schemaCard.getAdjacents(position);
+        for (Cell c : adjList) {
+            if (c.getDice() != null) {
+                return true;
+            }
         }
-        else {
-            return false;
+        ArrayList<Cell> adjDiagList = schemaCard.getDiagonalAdjacents(position);
+        for (Cell d : adjDiagList) {
+             if (d.getDice() != null) {
+                 return true;
+             }
         }
+        return false;
     }
 
     public boolean cellValueRestriction(SchemaCard schemaCard, Dice dice, Position position){
         if(schemaCard.getCellList().get(position.getIndexArrayPosition()).getValue() != dice.getValue()){
-            return true;
+            return false;
         }
         else {
-            return false;
+            return true;
         }
     }
 
     public boolean cellColourRestriction (SchemaCard schemaCard, Dice dice, Position position){
         if(schemaCard.getCellList().get(position.getIndexArrayPosition()).getColour() != dice.getColour()){
-            return true;
+            return false;
         }
         else {
-            return false;
+            return true;
         }
     }
 
