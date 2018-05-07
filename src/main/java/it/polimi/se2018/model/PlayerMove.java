@@ -1,8 +1,11 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.player.Player;
-
 import java.util.List;
+
+/**
+ * PlayerMove contains the entire command sent by the player
+ */
 
 public class PlayerMove {
 

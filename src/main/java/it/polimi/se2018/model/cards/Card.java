@@ -1,5 +1,9 @@
 package it.polimi.se2018.model.cards;
 
+/**
+ * Card class indicates a generic Card with particular ID, name and description
+ */
+
 public class Card {
 
     private final int id;

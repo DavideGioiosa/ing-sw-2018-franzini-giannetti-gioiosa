@@ -2,6 +2,10 @@ package it.polimi.se2018.model;
 
 import java.util.ArrayList;
 
+/**
+ * BoardDice class contains the dice extracted from the Dice Bag at the beginning of the round
+ */
+
 public class BoardDice {
 
     private ArrayList<Dice> diceList;
@@ -20,8 +24,7 @@ public class BoardDice {
 
     public Dice takeDice(int index){
         Dice dice;
-        dice = diceList.get(index);
-        diceList.remove(index);
+        dice = diceList.remove(index);
         return dice;
     }
 

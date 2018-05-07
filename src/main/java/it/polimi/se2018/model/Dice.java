@@ -2,6 +2,11 @@ package it.polimi.se2018.model;
 
 import java.util.Random;
 
+/**
+ * Dice class has generic methods (roll and getValue) used for Dice and the methods used by the toolCard
+ * for modify the dice's value
+ */
+
 public class Dice {
 
     private final ColourEnum colour;
@@ -9,7 +14,7 @@ public class Dice {
 
     public Dice (ColourEnum colour){
         this.colour = colour;
-        value = 0;
+        this.value = 0;
     }
 
     public ColourEnum getColour(){
@@ -37,6 +42,9 @@ public class Dice {
         if (this.value<=6 && this.value>=2) this.value--;
     }
 
+    /**
+     * reRoll is possible only if a particular toolCard is active
+     */
     public void reRoll(){
         this.roll();
     }

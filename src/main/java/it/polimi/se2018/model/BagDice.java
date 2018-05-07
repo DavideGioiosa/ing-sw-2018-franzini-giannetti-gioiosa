@@ -3,6 +3,12 @@ package it.polimi.se2018.model;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * The class contains a list representing at the beginning of the game the entire deck of dice.
+ * It has methods for insert a Dice and extract a random Dice.
+ * The Constructor creates an equal number of Dices per colour.
+ */
+
 public class BagDice {
 
     private ArrayList<Dice> diceList;
@@ -11,16 +17,11 @@ public class BagDice {
         int i;
         Dice dice;
         for(i = 0; i < numberOfDice/5; i++){
-            dice = new Dice(ColourEnum.BLUE);
-            insertDice(dice);
-            dice = new Dice(ColourEnum.GREEN);
-            insertDice(dice);
-            dice = new Dice(ColourEnum.PURPLE);
-            insertDice(dice);
-            dice = new Dice(ColourEnum.RED);
-            insertDice(dice);
-            dice = new Dice(ColourEnum.YELLOW);
-            insertDice(dice);
+            insertDice(new Dice(ColourEnum.BLUE));
+            insertDice(new Dice(ColourEnum.GREEN));
+            insertDice(new Dice(ColourEnum.PURPLE));
+            insertDice(new Dice(ColourEnum.RED));
+            insertDice(new Dice(ColourEnum.YELLOW));
         }
     }
 
@@ -38,8 +39,7 @@ public class BagDice {
 
         Random randomGenerator = new Random();
         index =  (int)randomGenerator.nextInt(diceList.size());
-        dice = diceList.get(index);
-        diceList.remove(index);
+        dice = diceList.remove(index);
 
         return dice;
     }
