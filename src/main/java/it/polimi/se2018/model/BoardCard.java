@@ -1,5 +1,10 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.cards.ToolCard;
+import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,35 +12,14 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class BoardCard {
-    private static BoardCard instance= new BoardCard();
     private List<PublicObjCard> publicObjCardList;
     private List<ToolCard> toolCardList;
 
-    private BoardCard(){}
-
-    /**
-     * Used to get the instance of BoardCard as it is implemented with a Singleton pattern
-     * @return
-     */
-    public static BoardCard getInstance(){
-        return instance;
+    private BoardCard(List<PublicObjCard> publicObjCardArrayList, List<ToolCard> toolCardList){
+        this.publicObjCardList=publicObjCardArrayList;
+        this.toolCardList=toolCardList;
     }
 
-    /**
-     * Allows the initialization of the Public Objective Card list on board
-     * @param publicObjCardList list of Public Objective Cards extracted
-     */
-    public void setPublicObjCardList(List<PublicObjCard> publicObjCardList) {
-        this.publicObjCardList = publicObjCardList;
-    }
-
-    /**
-     * Allows the initialization of the Tool Card list on board
-     * @param toolCardList list of Tool Cards extracted
-     */
-    public void setToolCardList(List<ToolCard> toolCardList) {
-        this.toolCardList = toolCardList;
-    }
     /**
      * Returns the list of Public Cards extracted
      * @return a list of Public Cards

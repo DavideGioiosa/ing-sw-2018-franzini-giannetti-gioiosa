@@ -1,5 +1,10 @@
 package it.polimi.se2018.model.player;
 
+import it.polimi.se2018.model.ColourEnum;
+import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.Position;
+import it.polimi.se2018.model.cards.SchemaCard;
+
 /**
  * Class used to save the status of the player during the game
  * @author Silvia Franzini
@@ -26,7 +31,8 @@ public class Player {
      * @param connectionStatus boolean used to identify if the player is connected or not
      */
     public void setConnectionStatus(boolean connectionStatus){
-        this.connectionStatus=connectionStatus;
+            this.connectionStatus=connectionStatus;
+
     }
 
     /**
@@ -60,7 +66,7 @@ public class Player {
      */
     public void updateSchema(Dice dice, Position position){
 
-        this.schemaCard.getCellList().get(position.getArrayPosition()).setDice(dice);
+        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).setDice(dice);
 
     }
 

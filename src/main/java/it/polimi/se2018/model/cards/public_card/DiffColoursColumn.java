@@ -1,5 +1,7 @@
 package it.polimi.se2018.model.cards.public_card;
 
+import it.polimi.se2018.model.cards.SchemaCard;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -22,7 +24,7 @@ public class DiffColoursColumn implements ScoreStrategy {
         int score = 0;
         PublicColour pub = new PublicColour();
         for(int i=0; i<col; i++){
-            List<Integer> colCell = pub.differentColours(schema.getCellList().getCol(i));
+            List<Integer> colCell = pub.differentColours(schema.getCellCol(i));
             if(Collections.max(colCell)<1){
                 score += 1;
             }

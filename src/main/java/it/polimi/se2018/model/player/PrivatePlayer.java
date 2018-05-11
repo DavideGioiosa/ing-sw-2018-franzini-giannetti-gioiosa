@@ -1,15 +1,20 @@
 package it.polimi.se2018.model.player;
 
-**
-        * Class used to save the Private Objective Card
-        * in order not to allow the other players to find it out
-        * @author Silvia Franzini
-        */
-public class PrivatePlayer extends Player {
-    private PrivateObjCard privateObj;
+import it.polimi.se2018.model.ColourEnum;
+import it.polimi.se2018.model.cards.PrivateObjCard;
+import it.polimi.se2018.model.cards.SchemaCard;
 
-    public PrivatePlayer(String nickname, Boolean connection, ColourEnum frame, SchemaCard schema, int tokens, PrivateObjCard card){
-        super(nickname,connection,frame,schema,tokens);
+/**
+* Class used to save the Private Objective Card
+* in order not to allow the other players to find it out
+* @author Silvia Franzini
+*/
+public class PrivatePlayer {
+    private PrivateObjCard privateObj;
+    private Player ply;
+
+    public PrivatePlayer(SchemaCard schema, PrivateObjCard card){
+        this. ply=ply;
         this.privateObj=card;
     }
 
@@ -18,5 +23,13 @@ public class PrivatePlayer extends Player {
      */
     public PrivateObjCard getPrivateObj(){
         return privateObj;
+    }
+
+    /**
+     *
+     * @return Player whose Private Objective Card is stored
+     */
+    public Player getPlayer(){
+        return ply;
     }
 }

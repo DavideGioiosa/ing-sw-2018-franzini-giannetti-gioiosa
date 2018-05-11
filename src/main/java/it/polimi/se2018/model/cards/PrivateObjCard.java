@@ -1,5 +1,6 @@
 package it.polimi.se2018.model.cards;
 
+import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 /**
  * Private Objective Cards

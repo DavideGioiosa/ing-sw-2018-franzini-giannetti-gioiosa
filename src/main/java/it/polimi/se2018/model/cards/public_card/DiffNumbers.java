@@ -1,7 +1,10 @@
 package it.polimi.se2018.model.cards.public_card;
 
+import it.polimi.se2018.model.cards.SchemaCard;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Public Objective Class Different Numbers
@@ -17,7 +20,7 @@ public class DiffNumbers implements ScoreStrategy {
     @Override
     public int getScore(SchemaCard schema){
         PublicNumber pub = new PublicNumber();
-        ArrayList<Integer> numbers = pub.differentNumbers(schema.getCellList());
+        List<Integer> numbers = pub.differentNumbers(schema.getCellList());
         return Collections.min(numbers)*5;
     }
 }

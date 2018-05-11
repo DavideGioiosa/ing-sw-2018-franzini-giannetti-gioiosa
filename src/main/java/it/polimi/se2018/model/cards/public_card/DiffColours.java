@@ -1,7 +1,10 @@
 package it.polimi.se2018.model.cards.public_card;
 
+import it.polimi.se2018.model.cards.SchemaCard;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Public Class Different Colours
@@ -17,7 +20,7 @@ public class DiffColours implements ScoreStrategy {
     @Override
     public int getScore(SchemaCard schema){
         PublicColour pub = new PublicColour();
-        ArrayList<Integer> colours = pub.differentColours(schema.getCellList());
+        List<Integer> colours = pub.differentColours(schema.getCellList());
         return Collections.min(colours)*4;
     }
 }

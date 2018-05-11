@@ -1,5 +1,8 @@
 package it.polimi.se2018.model.cards.public_card;
 
+import it.polimi.se2018.model.cards.Card;
+import it.polimi.se2018.model.cards.SchemaCard;
+
 /**
  * Public Objective Cards
  * @author Silvia Franzini

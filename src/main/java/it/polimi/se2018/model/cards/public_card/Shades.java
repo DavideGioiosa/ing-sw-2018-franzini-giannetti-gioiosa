@@ -1,5 +1,7 @@
 package it.polimi.se2018.model.cards.public_card;
 
+import it.polimi.se2018.model.Cell;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ import java.util.List;
  * Class used by BigNumbers, MiddleNumbers, SmallNumbers to calculate the score
  */
 public class Shades {
-    private ArrayList<Integer> numbers;
+    private List<Integer> numbers;
 
     public Shades(){
         numbers= new ArrayList<>(2);
@@ -20,7 +22,7 @@ public class Shades {
      * @param num2 highest number of the shade
      * @return an array having the number of die of the same colour in every cell
      */
-    public ArrayList<Integer> operate(List<Cell> cellList, int num1, int num2){
+    public List<Integer> operate(List<Cell> cellList, int num1, int num2){
         for(Cell c: cellList){
             if(!c.isEmpty()){
                 if(c.getDice().getValue()== num1){

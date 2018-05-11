@@ -1,5 +1,8 @@
 package it.polimi.se2018.model.cards.public_card;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
+import it.polimi.se2018.model.Cell;
+
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -7,7 +10,7 @@ import java.util.List;
 * @author Silvia Franzini
 */
 public class PublicNumber {
-    private ArrayList<Integer> numbers;
+    private List<Integer> numbers;
 
     public PublicNumber() {
         numbers = new ArrayList<>(6);
@@ -18,7 +21,7 @@ public class PublicNumber {
      * @param cellList cells in the window pattern card
      * @return an array having the number of die of the same colour in every cell
      */
-    public ArrayList<Integer> differentNumbers(List<Cell> cellList) {
+    public List<Integer> differentNumbers(List<Cell> cellList) {
         for (Cell c : cellList) {
             if (!c.isEmpty()) {
                 switch(c.getDice().getValue()){

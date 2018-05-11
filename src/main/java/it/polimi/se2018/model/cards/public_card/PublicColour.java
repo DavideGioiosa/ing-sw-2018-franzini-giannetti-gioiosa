@@ -1,5 +1,7 @@
 package it.polimi.se2018.model.cards.public_card;
 
+import it.polimi.se2018.model.Cell;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class PublicColour {
-    private ArrayList<Integer> colours;
+    private List<Integer> colours;
     public PublicColour(){
         colours= new ArrayList<>(5);
     }
@@ -18,7 +20,7 @@ public class PublicColour {
      * @param cellList cells in the window pattern card
      * @return an array having the number of die of the same colour in every cell
      */
-    public ArrayList<Integer> differentColours(List<Cell> cellList){
+    public List<Integer> differentColours(List<Cell> cellList){
         for(Cell c : cellList){
             if(!c.isEmpty()){
                 switch (c.getDice().getColour()){
