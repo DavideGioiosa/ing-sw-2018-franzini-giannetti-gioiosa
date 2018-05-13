@@ -14,8 +14,17 @@ public class ToolCard extends Card {
 
     public ToolCard(int id, String name, String description, ColourEnum colour) {
         super(id, name, description);
+        if (colour == null) throw new IllegalArgumentException("ERROR: Cannnot set null colour in Tool Card");
         this.colour = colour;
         this.token = 0;
+    }
+
+    public int getToken() {
+        return token;
+    }
+
+    public ColourEnum getColour() {
+        return colour;
     }
 
     /**
@@ -24,7 +33,7 @@ public class ToolCard extends Card {
      */
     public boolean isUsed() {
         if (this.token < 0) {
-            throw new IllegalArgumentException("ERROR: Negative number of token on a ToolCard");
+            throw new RuntimeException("ERROR: Negative number of token on a ToolCard");
         }
         if (this.token > 0) {
             return true;
@@ -43,4 +52,5 @@ public class ToolCard extends Card {
         }
         this.token += token;
     }
+
 }

@@ -1,6 +1,5 @@
 package it.polimi.se2018.model.cards.public_card;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import it.polimi.se2018.model.Cell;
 
 import java.util.ArrayList;
