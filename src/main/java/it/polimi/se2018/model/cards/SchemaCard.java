@@ -159,7 +159,7 @@ public class SchemaCard extends Card {
 
         List<Cell> adjList = new ArrayList<Cell>();
 
-        if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
+        if(this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
             if(position.getCol() - 1 >= 0) {
                 adjList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow(), position.getCol() - 1)));
             }
@@ -191,7 +191,7 @@ public class SchemaCard extends Card {
 
         List<Cell> adjDiagList = new ArrayList<Cell>();
 
-        if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
+        if(this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
             if(position.getCol() - 1 >= 0 && position.getRow() - 1 >= 0) {
                 adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
                         position.getCol() - 1)));

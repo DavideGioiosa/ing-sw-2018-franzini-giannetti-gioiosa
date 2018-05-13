@@ -4,6 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test BagDice Class
+ * @author Davide Gioiosa
+ */
+
 public class BagDiceTest {
     /**
      * total number of dice usable in the match
