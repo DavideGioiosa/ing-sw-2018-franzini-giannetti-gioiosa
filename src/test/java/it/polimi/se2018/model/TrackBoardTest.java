@@ -31,7 +31,6 @@ public class TrackBoardTest {
     public void insertDice() {
         trackBoard.insertDice(surplus);
         assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1), surplus);
-        //assertArrayEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1), surplus);
     }
 
     @Test
