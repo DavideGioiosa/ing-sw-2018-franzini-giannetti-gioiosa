@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,13 +10,16 @@ import java.util.List;
  */
 
 public class TrackBoard {
+    /**
+     * List of dice in surplus placed in each round
+     */
     private List<List<Dice>> diceList;
 
     /**
-     * Builder: sets TrackBoard empty
+     * Builder: create an empty TrackBoard
      */
     public TrackBoard(){
-        this.diceList = null;
+        this.diceList = new ArrayList<>();
     }
 
     /**
@@ -38,6 +42,7 @@ public class TrackBoard {
     }
 
     /**
+     * Place the die selected from the Draft Pool into the Trackboard and removes the die selected from the TrackBoard
      * used by Toolcard 5
      * @param indexTb, index of the dice in the Trackboard
      * @param indexTbCell, index of the dice in the ArrayList in Trackboard[indexTb]
@@ -45,8 +50,17 @@ public class TrackBoard {
      * @return the dice removed in the Trackboard, replaced by dice
      */
     public Dice exchangeDice (int indexTb,int indexTbCell, Dice dice){
+        if(indexTb < 0 || indexTb > 9){
+            throw new IllegalArgumentException("ERROR: Insert indexTb out of the range permitted");
+        }
+        if (indexTbCell < 0 || indexTbCell >= diceList.get(indexTb).size()){
+            throw new IllegalArgumentException("ERROR: Insert indexTbCell out of the range permitted");
+        }
+        if(dice == null){
+            throw new IllegalArgumentException("ERROR: Insert null die");
+        }
         diceList.get(indexTb).add(dice);
 
-        return diceList.remove(indexTb).get(indexTbCell);
+        return diceList.get(indexTb).remove(indexTbCell);
     }
 }

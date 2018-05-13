@@ -6,16 +6,26 @@ package it.polimi.se2018.model;
  */
 
 public class Cell {
+
+    /**
+     * limitation dice value that a cell accepts
+     */
     private int value;
+    /**
+     * limitation dice colour that a cell accepts
+     */
     private ColourEnum colour;
+    /**
+     * dice placed in the cell
+     */
     private Dice dice;
 
     /**
-     * @param value value limitation that a cell may have
-     * @param colour limitation that a cell may have
+     * @param value value limitation that a cell may have, 0 if there's not limitation
+     * @param colour limitation that a cell may have, null if there's not limitation
      */
     public Cell (int value, ColourEnum colour){
-        if(value <1 || value >6) {
+        if(value <0 || value >6) {
             throw new IllegalArgumentException("ERROR: Cannot set a value limitation not in the range permitted");
         }
         this.value = value;
@@ -23,8 +33,8 @@ public class Cell {
     }
 
     /**
-     * Check if there is a dice placed on the cell
-     * @return true if there is
+     * Check if is there a dice placed on the cell
+     * @return true if there is any
      */
     public boolean isEmpty (){
         if(getDice() == null) {
@@ -36,14 +46,14 @@ public class Cell {
     }
 
     /**
-     * @param dice is placed in the cell, if it's empty
+     * @param dice to place in the cell, if the cell it's empty
      */
     public void insertDice(Dice dice) {
         if(dice == null){
             throw new IllegalArgumentException("ERROR: Try to insert a dice null");
         }
-        if (this.getDice() == null) {
-
+        if (!isEmpty()) {
+            throw new IllegalArgumentException("ERROR: Try to insert a dice in a not empty cell");
         }
         this.dice = dice;
     }
@@ -70,8 +80,9 @@ public class Cell {
     }
 
     /**
+     * Remove the dice in the cell
      * used by Toolcard 2,3,4,12
-     * @return dice removed from the Scheme
+     * @return die removed from the Scheme
      */
     public Dice pickDice(){
         if(this.getDice() == null){
