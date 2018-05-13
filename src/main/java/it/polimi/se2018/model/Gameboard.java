@@ -40,6 +40,22 @@ public class Gameboard {
      * @param boardCard, public and tool cards usable in the match
      */
     public Gameboard (List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard){
+        if(playerList == null){
+            throw new IllegalArgumentException("Insert a playerList null");
+        }
+        if(bagDice == null){
+            throw new IllegalArgumentException("Insert a bagDice null");
+        }
+        if(boardDice == null){
+            throw new IllegalArgumentException("Insert a boardDice null");
+        }
+        if(trackBoardDice == null){
+            throw new IllegalArgumentException("Insert a trackBoardDice null");
+        }
+        if(boardCard == null){
+            throw new IllegalArgumentException("Insert a boardCard null");
+        }
+
         this.playerList = playerList;
         this.bagDice = bagDice;
         this.boardDice = boardDice;

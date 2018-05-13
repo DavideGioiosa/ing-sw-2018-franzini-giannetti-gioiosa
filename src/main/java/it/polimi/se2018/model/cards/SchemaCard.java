@@ -36,10 +36,13 @@ public class SchemaCard extends Card {
      */
     public SchemaCard (String name, String description, int id, int token, List<Cell> cellList){
         super(id, name, description);
-        this.cellList = cellList;
+        if(cellList == null){
+            throw new IllegalArgumentException("ERROR: Insert cellList null");
+        }
         if(token < 0){
             throw new IllegalArgumentException("ERROR: Cannot set a value not in the range permitted");
         }
+        this.cellList = cellList;
         this.difficulty = token;
     }
 
@@ -58,6 +61,10 @@ public class SchemaCard extends Card {
     public void setCell (Position position, Dice dice){
         if(dice == null){
             throw new IllegalArgumentException("ERROR: Selected a null die");
+        }
+        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
+                    "out of the range permitted");
         }
         cellList.get(position.getIndexArrayPosition()).insertDice(dice);
     }
@@ -105,6 +112,10 @@ public class SchemaCard extends Card {
      * @return ArrayList with all the Cells that belong to that row
      */
     public List<Cell> getCellRow (int index) {
+        if(index <0 || index > 3){
+            throw new IllegalArgumentException("Insert index value out of the range permitted");
+        }
+
         List<Cell> rowList = new ArrayList<Cell>();
         int firstCellRow = index * 5;
 
@@ -120,6 +131,10 @@ public class SchemaCard extends Card {
      */
 
     public List<Cell> getCellCol (int index) {
+        if(index <0 || index > 4){
+            throw new IllegalArgumentException("Insert index value out of the range permitted");
+        }
+
         List<Cell> colList = new ArrayList<Cell>();
         int firstCellCol = index;
 
@@ -137,6 +152,11 @@ public class SchemaCard extends Card {
      * Max num of adj for a Cell: 4
      */
     public List<Cell> getAdjacents(Position position){
+        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
+                    "out of the range permitted");
+        }
+
         List<Cell> adjList = new ArrayList<Cell>();
 
         if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
@@ -164,6 +184,11 @@ public class SchemaCard extends Card {
      * Max num of adj for a Cell: 4
      */
     public List<Cell> getDiagonalAdjacents(Position position){
+        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
+                    "out of the range permitted");
+        }
+
         List<Cell> adjDiagList = new ArrayList<Cell>();
 
         if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
