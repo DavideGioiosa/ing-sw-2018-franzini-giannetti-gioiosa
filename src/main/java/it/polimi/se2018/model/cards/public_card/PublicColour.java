@@ -21,6 +21,9 @@ public class PublicColour {
      * @return an array having the number of die of the same colour in every cell
      */
     public List<Integer> differentColours(List<Cell> cellList){
+        if(cellList == null){
+            throw new IllegalArgumentException("ERROR: List does not exists");
+        }
         for(Cell c : cellList){
             if(!c.isEmpty()){
                 switch (c.getDice().getColour()){

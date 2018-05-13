@@ -15,8 +15,13 @@ public class BoardCard {
     private List<PublicObjCard> publicObjCardList;
     private List<ToolCard> toolCardList;
 
-    private BoardCard(List<PublicObjCard> publicObjCardArrayList, List<ToolCard> toolCardList){
-        this.publicObjCardList=publicObjCardArrayList;
+    /**
+     * Builder method of BoardCard class
+     * @param publicObjCardList List of Public Objective Cards extracted
+     * @param toolCardList List of Tool Cards extracted
+     */
+    private BoardCard(List<PublicObjCard> publicObjCardList, List<ToolCard> toolCardList){
+        this.publicObjCardList=publicObjCardList;
         this.toolCardList=toolCardList;
     }
 

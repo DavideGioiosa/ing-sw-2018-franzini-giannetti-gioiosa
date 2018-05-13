@@ -17,6 +17,14 @@ public class Player {
     private int usableTokens;
     private int score;
 
+    /**
+     * Builder Method for class Player
+     * @param nickname name chosen by the player
+     * @param connection status of player's connection
+     * @param frameColour frame colour chosen by the player
+     * @param schemaCard window pattern card chosen by the player
+     * @param tokens tokens of that window pattern card
+     */
     public Player(String nickname, Boolean connection, ColourEnum frameColour, SchemaCard schemaCard, int tokens){
         this.nickname=nickname;
         this.frameColour=frameColour;
@@ -31,7 +39,8 @@ public class Player {
      * @param connectionStatus boolean used to identify if the player is connected or not
      */
     public void setConnectionStatus(boolean connectionStatus){
-            this.connectionStatus=connectionStatus;
+
+        this.connectionStatus=connectionStatus;
 
     }
 
@@ -66,7 +75,13 @@ public class Player {
      */
     public void updateSchema(Dice dice, Position position){
 
-        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).setDice(dice);
+        if(dice == null){
+            throw  new IllegalArgumentException("ERROR: dice don't exists");
+        }
+        if(position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition()> schemaCard.getCellList().size()) {
+            throw new IndexOutOfBoundsException("ERROR: invalid position");
+        }
+        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).insertDice(dice);
 
     }
 
@@ -83,7 +98,9 @@ public class Player {
      * @param tokensUsed the number of tokens that the ToolCard required
      */
     public void updateTokens(int tokensUsed){
-
+        if(tokensUsed < 0 || tokensUsed > usableTokens){
+            throw new IllegalArgumentException("ERROR: Cannot use that tokens");
+        }
         this.usableTokens-= tokensUsed;
     }
 

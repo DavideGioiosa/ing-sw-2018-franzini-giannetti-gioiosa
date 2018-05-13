@@ -9,6 +9,13 @@ import it.polimi.se2018.model.ColourEnum;
 public class PrivateObjCard extends Card {
     private ColourEnum colour;
 
+    /**
+     * Builder Method of Private Objective Card class
+     * @param id identifier of the card
+     * @param name name of the card
+     * @param description descriprion of the card
+     * @param colour aim colour
+     */
     public PrivateObjCard(int id, String name, String description, ColourEnum colour) {
         super(id, name, description);
         this.colour = colour;
@@ -28,6 +35,9 @@ public class PrivateObjCard extends Card {
      * @return an int representing the score achieved
      */
     public int getScore(SchemaCard schemaCard){
+        if(schemaCard == null){
+            throw new IllegalArgumentException("ERROR: Cannot use that Schema Card");
+        }
         int sum = 0;
         for(Cell cell : schemaCard.getCellList()) {
 
