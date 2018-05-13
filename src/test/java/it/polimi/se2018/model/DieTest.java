@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Tests methods of Dice that don't use random functions
- * 
+ *
  * @author Cristian Giannetti
  */
 public class DieTest {
