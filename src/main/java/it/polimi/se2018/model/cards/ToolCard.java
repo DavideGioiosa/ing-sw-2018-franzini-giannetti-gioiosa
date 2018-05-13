@@ -27,15 +27,7 @@ public class ToolCard extends Card {
         this.colour = colour;
         this.token = 0;
     }
-
-    public int getToken() {
-        return token;
-    }
-
-    public ColourEnum getColour() {
-        return colour;
-    }
-
+    
     /**
      * @return colour of the ToolCard, used in SinglePlayer Mode
      */
