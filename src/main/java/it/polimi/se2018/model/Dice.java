@@ -25,6 +25,7 @@ public class Dice {
      * @param colour indicates the colour of the die
      */
     public Dice (ColourEnum colour){
+        if (colour == null) throw new IllegalArgumentException("ERROR: Cannot set a dice with no colour");
         this.colour = colour;
         this.value = 0;
     }
