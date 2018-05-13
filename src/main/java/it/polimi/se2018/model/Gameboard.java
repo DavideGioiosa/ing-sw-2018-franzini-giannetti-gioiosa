@@ -2,7 +2,6 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.player.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,14 +10,34 @@ import java.util.List;
  */
 
 public class Gameboard {
+    /**
+     * list of players in the match
+     */
     private List<Player> playerList;
+    /**
+     * bag containing all the 90 dice
+     */
     private BagDice bagDice;
+    /**
+     * dice in the Draft Pool
+     */
     private BoardDice boardDice;
+    /**
+     * dice placed on the trackboard
+     */
     private TrackBoard trackBoardDice;
+    /**
+     * public and tool cards usable in the match
+     */
     private BoardCard cardOnBoard;
 
     /**
      * Creation of the Gameboard of the match
+     * @param playerList, list of players in the match
+     * @param bagDice, bag containing all the 90 dice
+     * @param boardDice, dice in the Draft Pool
+     * @param trackBoardDice, dice placed on the trackboard
+     * @param boardCard, public and tool cards usable in the match
      */
     public Gameboard (List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard){
         this.playerList = playerList;

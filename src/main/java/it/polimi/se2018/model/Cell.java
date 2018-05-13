@@ -89,7 +89,7 @@ public class Cell {
             throw new IllegalArgumentException("ERROR: Tried to pick a dice in an empty cell");
         }
         Dice dicePicked = getDice();
-        insertDice(null);
+        this.dice = null;
 
         return dicePicked;
     }
