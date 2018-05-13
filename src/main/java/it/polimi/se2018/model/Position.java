@@ -17,7 +17,7 @@ public class Position {
     private int col;
 
     /**
-     * Builder: create an empty position
+     * Builder: create an empty position to use methods of the class
      */
     public Position (){
     }
@@ -39,7 +39,7 @@ public class Position {
     }
 
     /**
-     * @param row sets the row of Position
+     * @param row sets the row of the Scheme in matrix form
      */
     public void setRow(int row) {
         if(row < 0 || row > 3){
@@ -49,7 +49,7 @@ public class Position {
     }
 
     /**
-     * @param col sets the col of Position
+     * @param col sets the col of the Scheme in matrix form
      */
     public void setCol(int col) {
         if(col < 0 || row > 4) {
@@ -71,7 +71,7 @@ public class Position {
     }
 
     /**
-     * Builder: coord matrix (row and col) from index of Scheme Array
+     * Builder: coord matrix (row and col) from index of Scheme in array form
      * @param indexArrayPosition, index of the Scheme in array form
      */
     public Position (int indexArrayPosition){
@@ -80,14 +80,14 @@ public class Position {
     }
 
     /**
-     * @return row of Position
+     * @return row of the Scheme in matrix form
      */
     public int getRow() {
         return row;
     }
 
     /**
-     * @return col of Position
+     * @return col of the Scheme in matrix form
      */
     public int getCol() {
         return col;
@@ -110,7 +110,7 @@ public class Position {
     }
 
     /**
-     * @return index of the Scheme Array from the 2 coord of the matrix
+     * @return index of the Scheme in array form from the 2 coord of the matrix
      */
     public int getIndexArrayPosition (){
         return this.row * 5 + this.col;
