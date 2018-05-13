@@ -10,6 +10,10 @@ public class User {
     private Player player;
     //TODO: PARAMETRI CONNESSIONE
 
+    /**
+     * Builder: create a user
+     * @param nickname
+     */
     public User (String nickname){
         this.nickname = nickname;
     }
@@ -21,12 +25,17 @@ public class User {
         this.player = player;
     }
 
+    /**
+     * @return nickname of the player that is related to the user
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * @return player related to the user
+     */
     public Player getPlayer() {
         return player;
     }
-
 }

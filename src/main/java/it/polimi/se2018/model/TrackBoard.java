@@ -1,7 +1,7 @@
 package it.polimi.se2018.model;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Public Class Trackboard
@@ -9,8 +9,11 @@ import java.util.ArrayList;
  */
 
 public class TrackBoard {
-    private ArrayList<ArrayList<Dice>> diceList;
+    private List<List<Dice>> diceList;
 
+    /**
+     * Builder: sets TrackBoard empty
+     */
     public TrackBoard(){
         this.diceList = null;
     }
@@ -20,11 +23,17 @@ public class TrackBoard {
      * @param surplusDiceList, it's a List because at the end of the Round you may have more
      * than one dice in surplus
      */
-    public void insertDice (ArrayList<Dice> surplusDiceList){
+    public void insertDice (List<Dice> surplusDiceList){
+        if (surplusDiceList.isEmpty() == true){
+            throw new IllegalArgumentException("ERROR: No dice to put on the Trackboard");
+        }
         diceList.add(surplusDiceList);
     }
 
-    public ArrayList<ArrayList<Dice>> getDiceList() {
+    /**
+     * @return the TrackBoard with the dice placed on it
+     */
+    public List<List<Dice>> getDiceList() {
         return diceList;
     }
 

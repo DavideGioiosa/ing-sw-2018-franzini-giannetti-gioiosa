@@ -12,22 +12,35 @@ public class ToolCard extends Card {
     private ColourEnum colour;
     private int token;
 
-    public ToolCard (int id, String name, String description, ColourEnum colour){
+    public ToolCard(int id, String name, String description, ColourEnum colour) {
         super(id, name, description);
         this.colour = colour;
         this.token = 0;
     }
 
-    public boolean isUsed(){
-        if (token > 0){
-            return true;
+    /**
+     * Check based on the number of tokens placed on a toolcard, if it's already used or not
+     * @return true if the number of tokens is > 0
+     */
+    public boolean isUsed() {
+        if (this.token < 0) {
+            throw new IllegalArgumentException("ERROR: Negative number of token on a ToolCard");
         }
-        else {
+        if (this.token > 0) {
+            return true;
+        } else {
             return false;
         }
     }
 
-    public void updateToken (int token){
+    /**
+     * update the number of tokens placed on a Toolcard
+     * @param token is 1, if the ToolCard is not used yet, or 2 if it's already been used
+     */
+    public void updateToken(int token) {
+        if (token < 0 || token > 2) {
+            throw new IllegalArgumentException("ERROR: insert negative number of token or more than two tokens");
+        }
         this.token += token;
     }
 }
