@@ -41,6 +41,14 @@ public class SchemaCardTest {
     }
 
     /**
+     * Tests the method getDifficulty by controlling the value returned
+     */
+    @Test
+    public void getDifficulty(){
+        assertEquals(schema.getDifficulty(), 3);
+    }
+
+    /**
      * Tests method setCell by controlling that the cell chosen is actually filled wth the chosen dice
      */
     @Test

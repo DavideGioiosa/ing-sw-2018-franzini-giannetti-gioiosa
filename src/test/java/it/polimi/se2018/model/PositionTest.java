@@ -39,7 +39,7 @@ public class PositionTest {
     public void setRowBad(){
         int row = 5;
         try{
-            pos.getRow(row);
+            pos.setRow(row);
             fail();
         }catch(IllegalArgumentException e){
 
