@@ -3,60 +3,104 @@ package it.polimi.se2018.model;
 import java.util.Random;
 
 /**
- * Dice class has generic methods (roll and getValue) used for Dice and the methods used by the toolCard
- * for modify the dice's value
+ * Dice class represents every single dice of the game
+ *
+ * @author Cristian Giannetti
  */
 
 public class Dice {
 
+    /**
+     * Indicates the colour of the dice
+     */
     private final ColourEnum colour;
+
+    /**
+     * Indicates the value of the upper face of the die rolled. Value 0 indicates a die not rolled
+     */
     private int value;
 
+    /**
+     * Constructor creates a dice with a specific colour and a value equal to zero
+     * @param colour indicates the colour of the die
+     */
     public Dice (ColourEnum colour){
         this.colour = colour;
         this.value = 0;
     }
 
+    /**
+     * returns the colour of the die
+     * @return colour of the die
+     */
     public ColourEnum getColour(){
         return colour;
     }
 
+    /**
+     * returns the value of the die
+     * @return the value of the dice front face on board
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * method assigns a value between 1 and 6 to a die
+     */
     private void roll(){
         Random randomGenerator = new Random();
         value = 1 + (int)randomGenerator.nextInt(6);
     }
 
+    /**
+     * sets a specific value to a die
+     * @param val value to set on a die
+     */
     public void setValue(int val){
-        if (val<=6 && val>=1) this.value = val;
-    }
+        if (val > 6 || val < 1) throw new IllegalArgumentException("ERROR: Incorrect value of dice");
 
-    public void increaseValue(){
-        if (this.value<=5 && this.value>=1) this.value++;
-    }
-
-    public void decreaseValue(){
-        if (this.value<=6 && this.value>=2) this.value--;
+        this.value = val;
     }
 
     /**
-     * reRoll is possible only if a particular toolCard is active
+     * increases the value of the die by one unit
+     */
+    public void increaseValue(){
+        if (this.value >= 6) throw new RuntimeException("ERROR: Cannot increase the value of this dice");
+        this.value++;
+    }
+
+    /**
+     * decreases the value of the die by one unit
+     */
+    public void decreaseValue(){
+        if (this.value <= 1) throw new RuntimeException("ERROR: Cannot decrease the value of this dice");
+        this.value--;
+    }
+
+    /**
+     * is possible only if a particular toolCard is active
      */
     public void reRoll(){
+        //TODO check if the toolcard is active
         this.roll();
     }
 
+    /**
+     * rolls the die for the first time
+     */
     public void firstRoll(){
-        if(this.value == 0){
-            roll();
-        }
+        if(this.value != 0) throw new RuntimeException("ERROR: This dice is already rolled");
+        roll();
     }
 
+    /**
+     * Sets the value of the opposite face to the die
+     */
     public void oppositeValue(){
-        if (this.value > 0) this.setValue(7 - value);
+        if(this.value == 0) throw new RuntimeException("ERROR: This dice is not rolled");
+        this.setValue(7 - value);
     }
 
 }
