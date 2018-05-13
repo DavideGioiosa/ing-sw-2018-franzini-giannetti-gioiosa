@@ -16,12 +16,15 @@ public class CheckRestriction {
     }
 
     /**
-     * if Scheme isEmpty is true:
-     *
      * @param schemaCard of the currentPlayer
      * @param dice selected in the Draft Pool
-     * @param position,  where the currentPlayer wants to put the die
+     * @param position, where the currentPlayer wants to put the die
+     * if Scheme isEmpty is true:
      * 1. Check adjcents cells (also diagonal ones) and
+     * @return true if the position where the player wants to put the die is on the edge of his Scheme
+     * if Scheme isEmpty is false:
+     * 2. Check adjacents cells (also diagonal ones) of the position requested
+     * to get if there are any dice inside and
      * @return true if there's at least one adj die
      */
     public boolean adjacentRestriction(SchemaCard schemaCard, Dice dice, Position position) {

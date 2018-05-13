@@ -28,6 +28,12 @@ public class Position {
      * @param col of the Scheme in matrix form
      */
     public Position(int row, int col) {
+        if(row < 0 || row > 3){
+            throw new IllegalArgumentException("ERROR: Cannot set a row not in the range permitted");
+        }
+        if(col < 0 || col > 4){
+            throw new IllegalArgumentException("ERROR: Cannot set a col not in the range permitted");
+        }
         this.row = row;
         this.col = col;
     }

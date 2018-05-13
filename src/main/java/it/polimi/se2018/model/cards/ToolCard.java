@@ -17,7 +17,7 @@ public class ToolCard extends Card {
      * @param id, identified of the card
      * @param name, name of the card
      * @param description, informations about the card
-     * @param colour, colour of the ToolCard used in SinglePlayer Mode
+     * @param colour, colour of the ToolCard, used in SinglePlayer Mode
      */
     public ToolCard(int id, String name, String description, ColourEnum colour) {
         super(id, name, description);
@@ -26,6 +26,20 @@ public class ToolCard extends Card {
         }
         this.colour = colour;
         this.token = 0;
+    }
+
+    /**
+     * @return colour of the ToolCard, used in SinglePlayer Mode
+     */
+    public ColourEnum getColour() {
+        return colour;
+    }
+
+    /**
+     * @return number of tokens placed on the ToolCard
+     */
+    public int getToken() {
+        return token;
     }
 
     /**

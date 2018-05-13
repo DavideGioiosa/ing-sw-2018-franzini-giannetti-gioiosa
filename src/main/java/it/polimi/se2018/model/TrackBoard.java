@@ -28,6 +28,9 @@ public class TrackBoard {
      * than one dice in surplus
      */
     public void insertDice (List<Dice> surplusDiceList){
+        if(surplusDiceList == null){
+            throw new IllegalArgumentException("ERROR: Insert surplusDiceList null");
+        }
         if (surplusDiceList.isEmpty() == true){
             throw new IllegalArgumentException("ERROR: No dice to put on the Trackboard");
         }
