@@ -13,20 +13,36 @@ import java.util.List;
  */
 
 public class SchemaCard extends Card {
+    /**
+     * List of the cells componing the scheme
+     */
     private List<Cell> cellList;
+    /**
+     * Related to the number of tokens to give to the player
+     */
     private int difficulty;
+    /**
+     * Other scheme of the schemeCard, composed by 2 schemes
+     */
     private SchemaCard backSchema;
 
     /**
      * Builder: create a Scheme card
-     * @param token related to the difficulty of a scheme
+     * @param name, name of the card
+     * @param description, informations about the card
+     * @param id, identifier of the scheme
+     * @param token, related to the difficulty of a scheme
+     * @param cellList, 20 cells componing the scheme
      */
     public SchemaCard (String name, String description, int id, int token, List<Cell> cellList){
         super(id, name, description);
-        this.cellList = cellList;
-        if(token < 0 || token > 6){
+        if(cellList == null){
+            throw new IllegalArgumentException("ERROR: Insert cellList null");
+        }
+        if(token < 0){
             throw new IllegalArgumentException("ERROR: Cannot set a value not in the range permitted");
         }
+        this.cellList = cellList;
         this.difficulty = token;
     }
 
@@ -39,10 +55,16 @@ public class SchemaCard extends Card {
 
     /**
      * insertion of the dice in the Scheme
+     * @param position, where the player wants to put the dice
+     * @param dice, dice selected
      */
     public void setCell (Position position, Dice dice){
         if(dice == null){
             throw new IllegalArgumentException("ERROR: Selected a null die");
+        }
+        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
+                    "out of the range permitted");
         }
         cellList.get(position.getIndexArrayPosition()).insertDice(dice);
     }
@@ -55,10 +77,13 @@ public class SchemaCard extends Card {
     }
 
     /**
-     * sets the back schema of a scheme card
-     * @param backSchema
+     * sets the back scheme of a scheme card
+     * @param backSchema, related to a schema card
      */
     public void setBackSchema(SchemaCard backSchema) {
+        if(backSchema == null){
+            throw new IllegalArgumentException("ERROR: Insert a backSchema null");
+        }
         this.backSchema = backSchema;
     }
 
@@ -71,7 +96,7 @@ public class SchemaCard extends Card {
 
     /**
      * Check if every cell of the scheme is empty
-     * @return true if the all the cells are empty
+     * @return true if all the cells are empty
      */
     public boolean isEmpty (){
         for (Cell c : cellList){
@@ -87,6 +112,10 @@ public class SchemaCard extends Card {
      * @return ArrayList with all the Cells that belong to that row
      */
     public List<Cell> getCellRow (int index) {
+        if(index <0 || index > 3){
+            throw new IllegalArgumentException("Insert index value out of the range permitted");
+        }
+
         List<Cell> rowList = new ArrayList<Cell>();
         int firstCellRow = index * 5;
 
@@ -98,10 +127,14 @@ public class SchemaCard extends Card {
 
     /**
      * @param index, number of the column
-     * @return ArrayList with all the Cells that belong th that column
+     * @return ArrayList with all the Cells that belong to that column
      */
 
     public List<Cell> getCellCol (int index) {
+        if(index <0 || index > 4){
+            throw new IllegalArgumentException("Insert index value out of the range permitted");
+        }
+
         List<Cell> colList = new ArrayList<Cell>();
         int firstCellCol = index;
 
@@ -112,12 +145,18 @@ public class SchemaCard extends Card {
     }
 
     /**
+     * Create a list with adj cells of the position requested
      * IF: 1. (r,c-1) sx    2. (r,c+1) dx   3. (r-1, c) up  4. (r+1, c) dwn
-     * @param position
+     * @param position of the Cell to analyze adjacents
      * @return Arraylist of adjacents Cells of the position requested
      * Max num of adj for a Cell: 4
      */
     public List<Cell> getAdjacents(Position position){
+        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
+                    "out of the range permitted");
+        }
+
         List<Cell> adjList = new ArrayList<Cell>();
 
         if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
@@ -138,12 +177,18 @@ public class SchemaCard extends Card {
     }
 
     /**
+     * Create a list with adj cells of the position requested
      * IF: 1. (r-1,c-1) up-sx    2. (r-1,c+1) up-dx   3. (r+1, c-1) dwn-sx  4. (r+1, c+1) dwn-dx
-     * @param position
+     * @param position of the Cell to analyze adjacents
      * @return Arraylist of adjacents to the position requested
      * Max num of adj for a Cell: 4
      */
     public List<Cell> getDiagonalAdjacents(Position position){
+        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
+                    "out of the range permitted");
+        }
+
         List<Cell> adjDiagList = new ArrayList<Cell>();
 
         if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){

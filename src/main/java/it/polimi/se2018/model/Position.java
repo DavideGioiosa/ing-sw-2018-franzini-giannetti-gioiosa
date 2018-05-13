@@ -6,19 +6,34 @@ package it.polimi.se2018.model;
  */
 
 public class Position {
+
+    /**
+     * row of the Scheme in matrix form
+     */
     private int row;
+    /**
+     * col of the Scheme in matrix form
+     */
     private int col;
 
     /**
-     * Builder: empty
+     * Builder: create an empty position
      */
     public Position (){
     }
 
     /**
      * Builder: sets row and col of Position
+     * @param row of the Scheme in matrix form
+     * @param col of the Scheme in matrix form
      */
     public Position(int row, int col) {
+        if(row < 0 || row > 3){
+            throw new IllegalArgumentException("ERROR: Cannot set a row not in the range permitted");
+        }
+        if(col < 0 || col > 4){
+            throw new IllegalArgumentException("ERROR: Cannot set a col not in the range permitted");
+        }
         this.row = row;
         this.col = col;
     }
@@ -57,7 +72,7 @@ public class Position {
 
     /**
      * Builder: coord matrix (row and col) from index of Scheme Array
-     * @param indexArrayPosition
+     * @param indexArrayPosition, index of the Scheme in array form
      */
     public Position (int indexArrayPosition){
         this.row = indexArrayPosition / 5;
@@ -79,7 +94,7 @@ public class Position {
     }
 
     /**
-     * @param indexArrayPosition, index of the Scheme Array
+     * @param indexArrayPosition, index of the Scheme in array form
      * @return the row to which it belongs
      */
     public int getRow (int indexArrayPosition){
@@ -87,7 +102,7 @@ public class Position {
     }
 
     /**
-     * @param indexArrayPosition, index of the Scheme Array
+     * @param indexArrayPosition, index of the Scheme in array form
      * @return the col to which it belongs
      */
     public int getCol (int indexArrayPosition){
@@ -103,6 +118,9 @@ public class Position {
 
     /**
      * used by getAdjacents to pass row +1, row-1.. to get adj cells
+     * @param row of the Scheme in matrix form
+     * @param col of the Scheme in matrix form
+     * @return the related IndexArrayPosition from row and col
      */
     public int getIndexArrayPosition (int row, int col){
         return row * 5 + col;
