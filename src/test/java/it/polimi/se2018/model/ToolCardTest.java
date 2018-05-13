@@ -1,4 +1,3 @@
-
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cards.ToolCard;
@@ -8,6 +7,7 @@ import static org.junit.Assert.*;
 
 /**
  * Tests all ToolCard's methods
+ *
  * @author Cristian Giannetti
  */
 

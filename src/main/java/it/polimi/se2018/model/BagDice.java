@@ -22,6 +22,7 @@ public class BagDice {
      * @param numberOfDice the number of dice to be created
      */
     public BagDice(int numberOfDice) {
+        if (numberOfDice<0) throw new IllegalArgumentException("ERROR: Impossible create a negative number of Dice");
         int i;
         diceList = new ArrayList<Dice>();
 
@@ -57,6 +58,10 @@ public class BagDice {
         dice = diceList.remove(index);
 
         return dice;
+    }
+
+    public int numberOfRemainingDice(){
+        return diceList.size();
     }
 
 }

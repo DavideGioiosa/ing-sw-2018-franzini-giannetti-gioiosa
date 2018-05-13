@@ -44,7 +44,7 @@ public class ToolCard extends Card {
 
     /**
      * Check based on the number of tokens placed on a ToolCard, if it's already used or not
-     * @return true if the number of tokens is > 0
+     * @return true if the number of tokens is greater than 0
      */
     public boolean isUsed() {
         if (this.token < 0) {

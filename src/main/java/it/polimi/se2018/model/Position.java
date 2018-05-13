@@ -52,7 +52,7 @@ public class Position {
      * @param col sets the col of the Scheme in matrix form
      */
     public void setCol(int col) {
-        if(col < 0 || row > 4) {
+        if(col < 0 || col > 4) {
             throw new IllegalArgumentException("ERROR: Cannot set a col not in the range permitted");
         }
         this.col = col;
