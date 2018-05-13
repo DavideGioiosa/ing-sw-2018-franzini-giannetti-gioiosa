@@ -24,7 +24,8 @@ public class PublicObjCard extends Card {
 
     /**
      * returns the scoring related to that specific Public Objective Card
-     * @param schemaCard, window pattern card
+     * @param schemaCard window pattern card
+     * @return the score got with that Public Objective Card
      */
     public int scoreCalculation(SchemaCard schemaCard){
         if(schemaCard == null){

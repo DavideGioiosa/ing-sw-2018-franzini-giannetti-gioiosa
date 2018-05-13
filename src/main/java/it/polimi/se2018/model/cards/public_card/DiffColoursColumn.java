@@ -10,7 +10,7 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class DiffColoursColumn implements ScoreStrategy {
-    private final int col = 5;
+    private static final int COL = 5;
 
     /**
      * Class implementing pattern Strategy for the evaluation of the player's score
@@ -23,13 +23,13 @@ public class DiffColoursColumn implements ScoreStrategy {
 
         int score = 0;
         PublicColour pub = new PublicColour();
-        for(int i=0; i<col; i++){
+        for(int i=0; i<COL; i++){
             List<Integer> colCell = pub.differentColours(schema.getCellCol(i));
             if(Collections.max(colCell)<1){
                 score += 1;
             }
         }
-        return score*col;
+        return score*COL;
     }
 }
 

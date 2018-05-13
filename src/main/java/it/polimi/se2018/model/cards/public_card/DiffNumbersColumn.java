@@ -10,8 +10,8 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class DiffNumbersColumn implements ScoreStrategy {
-    private final int col = 5;
-    private final int offset = 4;
+    private static final int COL = 5;
+    private static final int OFFSET = 4;
     /**
      * Class implementing pattern Strategy for the evaluation of the player's score
      * due to the Public Objective Cards
@@ -23,13 +23,13 @@ public class DiffNumbersColumn implements ScoreStrategy {
 
         int score = 0;
         PublicNumber pub = new PublicNumber();
-        for(int i=0; i<col; i++){
+        for(int i=0; i<COL; i++){
             List<Integer> colCell = pub.differentNumbers(schema.getCellCol(i));
             if(Collections.max(colCell)<1){
                 score += 1;
             }
         }
-        return score*offset;
+        return score*OFFSET;
     }
 }
 

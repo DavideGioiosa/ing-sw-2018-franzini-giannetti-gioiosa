@@ -32,6 +32,9 @@ public class PositionTest {
 
     }
 
+    /**
+     * Tests the method setRow (should fail)
+     */
     @Test
     public void setRowBad(){
         int row = 5;
@@ -58,6 +61,9 @@ public class PositionTest {
         }
      }
 
+    /**
+     * Tests the method setCol (should fail)
+     */
     @Test
     public void setColBad() {
         int col = 6;
@@ -85,6 +91,9 @@ public class PositionTest {
         }
     }
 
+    /**
+     * Tests the method setRowCol (should fail)
+     */
     @Test
     public void setRowColBad() {
         int index = 25;

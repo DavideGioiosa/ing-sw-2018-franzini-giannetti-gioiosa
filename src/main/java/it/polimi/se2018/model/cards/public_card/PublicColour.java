@@ -11,6 +11,10 @@ import java.util.List;
  */
 public class PublicColour {
     private List<Integer> colours;
+
+    /**
+     * Builder method of PublicColour class
+     */
     public PublicColour(){
         colours= new ArrayList<>(5);
     }

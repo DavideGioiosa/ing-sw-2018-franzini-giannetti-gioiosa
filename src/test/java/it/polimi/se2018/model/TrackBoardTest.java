@@ -12,8 +12,13 @@ public class TrackBoardTest {
 
     private TrackBoard trackBoard;
     private List<Dice> surplus;
-    private Dice d, d1, d2;
+    private Dice d;
+    private Dice d1;
+    private Dice d2;
 
+    /**
+     * Initialization for TrackBoardTest
+     */
     @Before
     public void init(){
             trackBoard = new TrackBoard();
@@ -27,17 +32,40 @@ public class TrackBoardTest {
             surplus.add(d2);
     }
 
+    /**
+     * Tests the method insertDice by controlling if the List insert is in the last position
+     */
     @Test
     public void insertDice() {
-        trackBoard.insertDice(surplus);
-        assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1), surplus);
+        try{
+            trackBoard.insertDice(surplus);
+            assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1), surplus);
+        }catch(IllegalArgumentException e){
+            fail();
+        }
+
     }
 
+    /**
+     * Tests the method exchangeDice by controlling if the element removed is returned and replaced by the
+     * chosen dice
+     */
     @Test
     public void exchangeDice() {
-        surplus.add(d);
-        trackBoard.insertDice(surplus);
-        trackBoard.exchangeDice(trackBoard.getDiceList().size(),0,d1);
-        assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size()).get(0), d1);
+       try{
+           surplus.add(d);
+           trackBoard.getDiceList().remove(surplus);
+           trackBoard.insertDice(surplus);
+           if(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1).equals(surplus)){
+               Dice die = trackBoard.exchangeDice(trackBoard.getDiceList().size()-1,0,d1);
+               if(die.equals(d2)){
+                   assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1).get(0), d);
+               }
+
+           }
+       }catch(IllegalArgumentException e){
+           fail();
+       }
+
     }
 }

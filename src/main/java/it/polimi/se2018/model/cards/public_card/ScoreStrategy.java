@@ -11,6 +11,7 @@ public interface ScoreStrategy {
     /**
      * method that the classes are going to implement
      * @param schemaCard, window pattern card
+     * @return returns the score achieved by the usage of a certain card
      */
     int getScore(SchemaCard schemaCard);
 

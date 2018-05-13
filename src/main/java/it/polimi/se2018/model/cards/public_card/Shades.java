@@ -11,6 +11,9 @@ import java.util.List;
 public class Shades {
     private List<Integer> numbers;
 
+    /**
+     * Buider method of Shades Class
+     */
     public Shades(){
         numbers= new ArrayList<>(2);
     }

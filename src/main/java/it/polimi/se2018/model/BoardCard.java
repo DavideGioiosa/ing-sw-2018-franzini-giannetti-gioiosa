@@ -3,8 +3,6 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +18,7 @@ public class BoardCard {
      * @param publicObjCardList List of Public Objective Cards extracted
      * @param toolCardList List of Tool Cards extracted
      */
-    private BoardCard(List<PublicObjCard> publicObjCardList, List<ToolCard> toolCardList){
+    public BoardCard(List<PublicObjCard> publicObjCardList, List<ToolCard> toolCardList){
         this.publicObjCardList=publicObjCardList;
         this.toolCardList=toolCardList;
     }

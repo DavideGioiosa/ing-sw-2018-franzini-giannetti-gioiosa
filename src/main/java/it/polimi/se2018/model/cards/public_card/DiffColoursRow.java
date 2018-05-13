@@ -10,8 +10,8 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class DiffColoursRow implements ScoreStrategy {
-    private final int row = 4;
-    private final int offset = 6;
+    private static final int ROW = 4;
+    private static final int OFFSET = 6;
     /**
      * Class implementing pattern Strategy for the evaluation of the player's score
      * due to the Public Objective Cards
@@ -23,12 +23,12 @@ public class DiffColoursRow implements ScoreStrategy {
 
         int score = 0;
         PublicColour pub = new PublicColour();
-        for(int i=0; i<row; i++){
+        for(int i=0; i<ROW; i++){
             List<Integer> rowCell = pub.differentColours(schema.getCellRow(i));
             if(Collections.max(rowCell)<1){
                 score += 1;
             }
         }
-        return score*offset;
+        return score*OFFSET;
     }
 }

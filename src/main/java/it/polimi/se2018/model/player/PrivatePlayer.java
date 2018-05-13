@@ -1,8 +1,8 @@
 package it.polimi.se2018.model.player;
 
-import it.polimi.se2018.model.ColourEnum;
+
 import it.polimi.se2018.model.cards.PrivateObjCard;
-import it.polimi.se2018.model.cards.SchemaCard;
+
 
 /**
 * Class used to save the Private Objective Card
