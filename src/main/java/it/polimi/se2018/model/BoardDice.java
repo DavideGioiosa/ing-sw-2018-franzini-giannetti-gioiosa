@@ -41,7 +41,7 @@ public class BoardDice {
 
     /**
      * takes a Dice from the Draft Pool
-     * @param index The position of the dice to be taken from the Draft Pool
+     * @param index Position of dice to be taken from the Draft Pool
      * @return Dice removed from the Draft Pool
      */
     public Dice takeDice(int index){

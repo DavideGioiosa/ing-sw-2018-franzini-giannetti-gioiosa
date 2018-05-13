@@ -11,15 +11,21 @@ public class Cell {
     private Dice dice;
 
     /**
-     * @param value number of the Cell
-     * @param colour
+     * @param value value limitation that a cell may have
+     * @param colour limitation that a cell may have
      */
-    private Cell (int value, ColourEnum colour){
+    public Cell (int value, ColourEnum colour){
+        if(value <1 || value >6) {
+            throw new IllegalArgumentException("ERROR: Cannot set a value limitation not in the range permitted");
+        }
         this.value = value;
         this.colour = colour;
     }
 
-
+    /**
+     * Check if there is a dice placed on the cell
+     * @return true if there is
+     */
     public boolean isEmpty (){
         if(getDice() == null) {
             return true;
@@ -29,26 +35,36 @@ public class Cell {
         }
     }
 
-    public void setDice(Dice dice) {
+    /**
+     * @param dice is placed in the cell, if it's empty
+     */
+    public void insertDice(Dice dice) {
+        if(dice == null){
+            throw new IllegalArgumentException("ERROR: Try to insert a dice null");
+        }
+        if (this.getDice() == null) {
+
+        }
         this.dice = dice;
     }
 
+    /**
+     * @return the dice placed in the cell
+     */
     public Dice getDice() {
         return dice;
     }
 
-    public void setValue(int value) {
-        this.value = value;
-    }
-
+    /**
+     * @return the value limitation that a cell may have
+     */
     public int getValue() {
         return value;
     }
 
-    public void setColour(ColourEnum colour){
-        this.colour = colour;
-    }
-
+    /**
+     * @return the colour limitation that a cell may have
+     */
     public ColourEnum getColour() {
         return colour;
     }
@@ -58,8 +74,11 @@ public class Cell {
      * @return dice removed from the Scheme
      */
     public Dice pickDice(){
+        if(this.getDice() == null){
+            throw new IllegalArgumentException("ERROR: Tried to pick a dice in an empty cell");
+        }
         Dice dicePicked = getDice();
-        setDice(null);
+        insertDice(null);
 
         return dicePicked;
     }
