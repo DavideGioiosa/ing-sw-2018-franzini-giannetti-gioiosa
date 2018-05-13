@@ -11,14 +11,20 @@ import it.polimi.se2018.model.cards.SchemaCard;
 */
 public class PrivatePlayer {
     private PrivateObjCard privateObj;
-    private Player ply;
+    private Player player;
 
-    public PrivatePlayer(SchemaCard schema, PrivateObjCard card){
-        this. ply=ply;
+    /**
+     * Builder method of PrivatePlayer's class
+     * @param player Player associated to this PrivatePlayer
+     * @param card Private Objective Card associated to the Player
+     */
+    public PrivatePlayer(Player player, PrivateObjCard card){
+        this.player=player;
         this.privateObj=card;
     }
 
     /**
+     * Method returns the Private Objective Card
      * @return Private Objective Card of the player
      */
     public PrivateObjCard getPrivateObj(){
@@ -26,10 +32,10 @@ public class PrivatePlayer {
     }
 
     /**
-     *
+     *Method returns the Player
      * @return Player whose Private Objective Card is stored
      */
     public Player getPlayer(){
-        return ply;
+        return player;
     }
 }

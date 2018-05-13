@@ -26,17 +26,27 @@ public class CellTest {
      */
     @Test
     public void pickDice() {
-        c.pickDice();
-        assertTrue(c.isEmpty());
+        c.insertDice(d);
+        try{
+            c.pickDice();
+            assertTrue(c.isEmpty());
+        }catch(IllegalArgumentException e){
+            fail();
+        }
+
     }
 
     /**
      * Tests the method setDice that places a dice in that specific cell
      */
     @Test
-    public void setDice() {
-       c.setDice(d);
-       assertTrue(d.equals(c.getDice()));
+    public void insertDice() {
+      try{
+          c.insertDice(d);
+          assertTrue(d.equals(c.getDice()));
+      } catch(IllegalArgumentException e){
+          fail();
+      }
     }
 
 

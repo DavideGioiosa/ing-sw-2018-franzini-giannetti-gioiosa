@@ -19,6 +19,7 @@ public class DiffColours implements ScoreStrategy {
      */
     @Override
     public int getScore(SchemaCard schema){
+
         PublicColour pub = new PublicColour();
         List<Integer> colours = pub.differentColours(schema.getCellList());
         return Collections.min(colours)*4;

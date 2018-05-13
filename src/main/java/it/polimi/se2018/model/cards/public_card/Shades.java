@@ -23,6 +23,9 @@ public class Shades {
      * @return an array having the number of die of the same colour in every cell
      */
     public List<Integer> operate(List<Cell> cellList, int num1, int num2){
+        if(cellList == null){
+            throw new IllegalArgumentException("ERROR: List does not exists");
+        }
         for(Cell c: cellList){
             if(!c.isEmpty()){
                 if(c.getDice().getValue()== num1){

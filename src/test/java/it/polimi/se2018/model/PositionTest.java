@@ -21,29 +21,79 @@ public class PositionTest {
      * Tests the method setRow by controlling if the row value is the same of the one set
      */
     @Test
-    public void setRow() {
+    public void setRowGood() {
+        int row = 2;
+        try{
+            pos.setRow(row);
+            assertEquals(pos.getRow(), row);
+        }catch(IllegalArgumentException e){
+            fail();
+        }
+
+    }
+
+    @Test
+    public void setRowBad(){
         int row = 5;
-        pos.setRow(5);
-        assertEquals(pos.getRow(), row);
+        try{
+            pos.getRow(row);
+            fail();
+        }catch(IllegalArgumentException e){
+
+        }
     }
 
     /**
      * Tests the method setCol by controlling if the col value is the same of the one set
      */
     @Test
-    public void setCol() {
-        int col = 5;
-        pos.setCol(col);
-        assertEquals(pos.getCol(), col);
+    public void setColGood() {
+        int col = 2;
+        try{
+            pos.setCol(col);
+            assertEquals(pos.getCol(), col);
+
+        }catch(IllegalArgumentException e){
+            fail();
+        }
+     }
+
+    @Test
+    public void setColBad() {
+        int col = 6;
+        try{
+            pos.setCol(col);
+            fail();
+
+        }catch(IllegalArgumentException e){
+
+        }
     }
 
     /**
      * Tests method setRowCol by controlling the values of col and row set
      */
     @Test
-    public void setRowCol() {
+    public void setRowColGood() {
+        int index = 10;
+        try{
+            pos.setRowCol(index);
+            assertTrue(pos.getCol()==0 && pos.getRow()==2);
+
+        }catch(IllegalArgumentException e){
+            fail();
+        }
+    }
+
+    @Test
+    public void setRowColBad() {
         int index = 25;
-        pos.setRowCol(index);
-        assertTrue(pos.getCol()==0 && pos.getRow()==5);
+        try{
+            pos.setRowCol(index);
+            fail();
+
+        }catch(IllegalArgumentException e){
+
+        }
     }
 }

@@ -19,6 +19,7 @@ public class DiffNumbers implements ScoreStrategy {
      */
     @Override
     public int getScore(SchemaCard schema){
+
         PublicNumber pub = new PublicNumber();
         List<Integer> numbers = pub.differentNumbers(schema.getCellList());
         return Collections.min(numbers)*5;

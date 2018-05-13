@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class DiffColoursColumn implements ScoreStrategy {
     private final int col = 5;
-    private final int add = 1;
 
     /**
      * Class implementing pattern Strategy for the evaluation of the player's score
@@ -21,6 +20,7 @@ public class DiffColoursColumn implements ScoreStrategy {
      */
     @Override
     public int getScore(SchemaCard schema){
+
         int score = 0;
         PublicColour pub = new PublicColour();
         for(int i=0; i<col; i++){

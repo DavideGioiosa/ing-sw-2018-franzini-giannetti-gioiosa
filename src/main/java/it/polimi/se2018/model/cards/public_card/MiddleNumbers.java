@@ -19,6 +19,7 @@ public class MiddleNumbers implements ScoreStrategy {
      */
     @Override
     public int getScore(SchemaCard schema){
+
         Shades shad = new Shades();
         List<Integer> numbers = shad.operate(schema.getCellList(), 3, 4);
         return Collections.min(numbers)*2;

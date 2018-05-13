@@ -27,6 +27,7 @@ public class SchemaCardTest {
         d.firstRoll();
         int id=1;
         int idBack = 2;
+        int token = 3;
         String name = "name";
         String backName = "backName";
         String desc = "desc";
@@ -34,8 +35,8 @@ public class SchemaCardTest {
         for(i = 0; i<10; i++){
             cellList.add(new Cell(d.getValue(), d.getColour()));
         }
-        schema = new SchemaCard(name, desc, id, cellList);
-        backSchema = new SchemaCard(backName, desc,idBack, cellList);
+        schema = new SchemaCard(name, desc, id, token, cellList);
+        backSchema = new SchemaCard(backName, desc,idBack, token, cellList);
 
     }
 
@@ -44,10 +45,16 @@ public class SchemaCardTest {
      */
     @Test
     public void setCell() {
-        Position pos = new Position(0,0);
-        schema.setCell(pos, d);
-        Cell c = schema.getCellList().get(0);
-        assertEquals(c.getDice(),d);
+        try{
+            Position pos = new Position(0,0);
+            schema.setCell(pos, d);
+            Cell c = schema.getCellList().get(0);
+            assertEquals(c.getDice(),d);
+
+        }catch(IllegalArgumentException e){
+            fail();
+        }
+
     }
 
     /**

@@ -20,6 +20,7 @@ public class DiffNumbersColumn implements ScoreStrategy {
      */
     @Override
     public int getScore(SchemaCard schema){
+
         int score = 0;
         PublicNumber pub = new PublicNumber();
         for(int i=0; i<col; i++){
