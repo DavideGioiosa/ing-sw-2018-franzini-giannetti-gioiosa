@@ -90,7 +90,7 @@ public class CheckRestriction {
     }
 
     /**
-     * Check adjacents cells of the position requested
+     * Check adjacents cells with a die inside, of the position requested,
      * to get if there is a adj dice (no on diagonals) of the same colour of the dice that the player wants to put
      * into the position of the Scheme
      *
@@ -104,15 +104,17 @@ public class CheckRestriction {
 
         List<Cell> adjList = schemaCard.getAdjacents(position);
         for (Cell c : adjList) {
-            if (c.getDice().getColour() == dice.getColour()) {
-                return false;
+            if(!c.isEmpty()) {
+                if (c.getDice().getColour() == dice.getColour()) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
     /**
-     * Check adjacents cells of the position requested
+     * Check adjacents cells with a die inside, of the position requested,
      * to get if there is a adj dice (no on diagonals) of the same value of the dice that the player wants to put
      * into the position of the Scheme
      *
@@ -126,8 +128,10 @@ public class CheckRestriction {
 
         List<Cell> adjList = schemaCard.getAdjacents(position);
         for (Cell c : adjList) {
-            if (c.getDice().getValue() == dice.getValue()) {
-                return false;
+            if(!c.isEmpty()) {
+                if (c.getDice().getValue() == dice.getValue()) {
+                    return false;
+                }
             }
         }
         return true;

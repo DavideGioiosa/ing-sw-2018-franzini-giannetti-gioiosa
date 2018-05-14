@@ -47,6 +47,8 @@ public class SchemaCard extends Card {
     }
 
     /**
+     * Difficulty of the Scheme, related to the number of tokens to give to the player
+     * at the beginning of the match
      * @return the difficulty of the scheme
      */
     public int getDifficulty() {
@@ -70,6 +72,7 @@ public class SchemaCard extends Card {
     }
 
     /**
+     * List of cell componing the Scheme Card
      * @return the list of the cells componing the scheme
      */
     public List<Cell> getCellList() {
