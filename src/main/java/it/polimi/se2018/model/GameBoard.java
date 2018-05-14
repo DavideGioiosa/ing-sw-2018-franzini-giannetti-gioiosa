@@ -5,11 +5,11 @@ import it.polimi.se2018.model.player.Player;
 import java.util.List;
 
 /**
- * Public Class Gameboard
+ * Public Class GameBoard
  * @author Davide Gioiosa
  */
 
-public class Gameboard {
+public class GameBoard {
     /**
      * list of players in the match
      */
@@ -32,14 +32,14 @@ public class Gameboard {
     private BoardCard cardOnBoard;
 
     /**
-     * Creation of the Gameboard of the match
-     * @param playerList, list of players in the match
-     * @param bagDice, bag containing all the 90 dice
-     * @param boardDice, dice in the Draft Pool
-     * @param trackBoardDice, dice placed on the trackboard
-     * @param boardCard, public and tool cards usable in the match
+     * Creation of the GameBoard of the match
+     * @param playerList list of players in the match
+     * @param bagDice bag containing all the 90 dice
+     * @param boardDice dice in the Draft Pool
+     * @param trackBoardDice dice placed on the trackboard
+     * @param boardCard public and tool cards usable in the match
      */
-    public Gameboard (List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard){
+    public GameBoard(List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard){
         if(playerList == null){
             throw new IllegalArgumentException("Insert a playerList null");
         }

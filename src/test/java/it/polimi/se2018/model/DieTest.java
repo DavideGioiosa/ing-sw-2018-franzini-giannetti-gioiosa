@@ -6,7 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * Tests methods of Dice that don't use random functions
+ * Tests methods of Die that don't use random functions
  *
  * @author Cristian Giannetti
  */
@@ -15,22 +15,22 @@ public class DieTest {
     public final ColourEnum colour = ColourEnum.BLUE;
 
     /**
-     * Tests the creation of a Dice with good parameters
+     * Tests the creation of a Die with good parameters
      */
     @Test
     public void creationDiceGoodTest(){
-        Dice die = new Dice(colour);
-        assertEquals(die.getColour(),colour);
-        assertEquals(die.getValue(), 0);
+        Die die = new Die(colour);
+        assertEquals(colour, die.getColour());
+        assertEquals(0, die.getValue());
     }
 
     /**
-     * Tests the creation of a Dice with bad parameters
+     * Tests the creation of a Die with bad parameters
      */
     @Test
     public void creationDiceBadTest(){
         try{
-            Dice die = new Dice(null);
+            Die die = new Die(null);
             fail();
         } catch (IllegalArgumentException e){
         }
@@ -42,9 +42,9 @@ public class DieTest {
     @Test
     public void setValueGoodTest(){
         final int value = 6;
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         die.setValue(value);
-        assertEquals(die.getValue(),value);
+        assertEquals(value, die.getValue());
     }
 
     /**
@@ -54,7 +54,7 @@ public class DieTest {
     public void setValueBadTest(){
         final int highValue = 7;
         final int lowValue = 0;
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         try{
             die.setValue(highValue);
             fail();
@@ -74,10 +74,10 @@ public class DieTest {
     @Test
     public void IncreaseValueGoodTest(){
         final int value = 5;
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         die.setValue(value);
         die.increaseValue();
-        assertEquals(die.getValue(), 1 + value);
+        assertEquals(1 + value, die.getValue());
     }
 
     /**
@@ -86,7 +86,7 @@ public class DieTest {
     @Test
     public void IncreaseValueBadTest(){
         final int value = 6;
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         die.setValue(value);
         try{
             die.increaseValue();
@@ -104,10 +104,10 @@ public class DieTest {
     @Test
     public void DecreaseValueGoodTest(){
         final int value = 5;
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         die.setValue(value);
         die.decreaseValue();
-        assertEquals(die.getValue(), value - 1);
+        assertEquals(value - 1, die.getValue());
 
     }
 
@@ -117,7 +117,7 @@ public class DieTest {
     @Test
     public void DecreaseValueBadTest(){
         final int value = 1;
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         die.setValue(value);
         try{
             die.decreaseValue();
@@ -134,10 +134,10 @@ public class DieTest {
     @Test
     public void oppositeValueGoodTest(){
         final int value = 1;
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         die.setValue(value);
         die.oppositeValue();
-        assertEquals(die.getValue(), 6);
+        assertEquals(6, die.getValue());
     }
 
     /**
@@ -145,7 +145,7 @@ public class DieTest {
      */
     @Test
     public void oppositeValueBadTest(){
-        Dice die = new Dice(colour);
+        Die die = new Die(colour);
         try{
             die.oppositeValue();
             fail();

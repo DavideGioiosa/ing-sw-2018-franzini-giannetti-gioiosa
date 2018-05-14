@@ -30,7 +30,7 @@ public class PublicNumber {
         }
         for (Cell c : cellList) {
             if (!c.isEmpty()) {
-                switch(c.getDice().getValue()){
+                switch(c.getDie().getValue()){
                     case 1: numbers.set(0,numbers.get(0)+1); break;
                     case 2: numbers.set(1,numbers.get(1)+1); break;
                     case 3: numbers.set(2,numbers.get(2)+1); break;

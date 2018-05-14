@@ -2,7 +2,7 @@ package it.polimi.se2018.model.player;
 
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
-import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
 import org.junit.Before;
@@ -17,7 +17,7 @@ public class PlayerTest {
 
     private Player player;
     private SchemaCard schemaCard;
-    private Dice d;
+    private Die d;
     private Position pos;
 
     /**
@@ -32,7 +32,7 @@ public class PlayerTest {
         int id = 2;
         int token = 3;
         List<Cell> cellList = new ArrayList<Cell>();
-        d = new Dice(ColourEnum.RED);
+        d = new Die(ColourEnum.RED);
         d.firstRoll();
         for(int i = 0; i<10; i++){
             cellList.add(new Cell(d.getValue(), d.getColour()));
@@ -71,7 +71,7 @@ public class PlayerTest {
     public void updateSchema() {
         try{
             player.updateSchema(d,pos);
-            assertEquals(player.getSchemaCard().getCellList().get(pos.getIndexArrayPosition()).getDice(), d);
+            assertEquals(player.getSchemaCard().getCellList().get(pos.getIndexArrayPosition()).getDie(), d);
         }catch(IllegalArgumentException e){
             fail();
         }

@@ -24,12 +24,12 @@ public class ToolCardTest{
     @Test
     public void toolCardCreationGoodTest() {
         ToolCard toolCard = new ToolCard(ID,NAME, DESCRIPTION, colour);
-        assertEquals(toolCard.getId(),ID);
+        assertEquals(ID,toolCard.getId());
         assertFalse(toolCard.isUsed());
-        assertEquals(toolCard.getName(), NAME);
-        assertEquals(toolCard.getDescription(),DESCRIPTION);
-        assertEquals(toolCard.getColour(),colour);
-        assertEquals(toolCard.getToken(), 0);
+        assertEquals(NAME, toolCard.getName());
+        assertEquals(DESCRIPTION, toolCard.getDescription());
+        assertEquals(colour, toolCard.getColour());
+        assertEquals(0, toolCard.getToken());
     }
 
     /**
@@ -72,9 +72,9 @@ public class ToolCardTest{
         final int token = 2;
         ToolCard toolCard = new ToolCard(ID, NAME, DESCRIPTION, colour);
         toolCard.updateToken(token);
-        assertEquals(toolCard.getToken(), token);
+        assertEquals(token, toolCard.getToken());
         toolCard.updateToken(token);
-        assertEquals(toolCard.getToken(),token + token);
+        assertEquals(token + token, toolCard.getToken());
         assertTrue(toolCard.isUsed());
     }
 

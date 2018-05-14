@@ -8,14 +8,14 @@ import static org.junit.Assert.*;
 public class CellTest {
 
     private Cell c;
-    private Dice d;
+    private Die d;
 
     /**
      * Initialization for CellTest
      */
     @Before
     public void init(){
-        d = new Dice(ColourEnum.RED);
+        d = new Die(ColourEnum.RED);
         d.firstRoll();
         int value= d.getValue();
         c= new Cell(value, ColourEnum.RED);
@@ -43,7 +43,7 @@ public class CellTest {
     public void insertDice() {
       try{
           c.insertDice(d);
-          assertTrue(d.equals(c.getDice()));
+          assertTrue(d.equals(c.getDie()));
       } catch(IllegalArgumentException e){
           fail();
       }

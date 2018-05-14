@@ -67,12 +67,12 @@ public class GameBoardTest {
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
 
 
-        Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, trackBoardDice, boardCard);
-        assertEquals(gameBoard.getPlayerList(),playerList);
-        assertEquals(gameBoard.getBagDice(),bagDice);
-        assertEquals(gameBoard.getBoardDice(),boardDice);
-        assertEquals(gameBoard.getTrackBoardDice(),trackBoardDice);
-        assertEquals(gameBoard.getCardOnBoard(),boardCard);
+        GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, boardCard);
+        assertEquals(playerList, gameBoard.getPlayerList());
+        assertEquals(bagDice, gameBoard.getBagDice());
+        assertEquals(boardDice, gameBoard.getBoardDice());
+        assertEquals(trackBoardDice, gameBoard.getTrackBoardDice());
+        assertEquals(boardCard, gameBoard.getCardOnBoard());
 
     }
 
@@ -98,23 +98,23 @@ public class GameBoardTest {
         BagDice bagDice = new BagDice(90);
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
         try{
-            Gameboard gameBoard = new Gameboard(null, bagDice,boardDice, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(null, bagDice,boardDice, trackBoardDice, boardCard);
             fail();
         }catch(IllegalArgumentException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, null,boardDice, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, null,boardDice, trackBoardDice, boardCard);
             fail();
         }catch(IllegalArgumentException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, bagDice,null, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice,null, trackBoardDice, boardCard);
             fail();
         }catch(IllegalArgumentException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, null, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, null, boardCard);
             fail();
         }catch(IllegalArgumentException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, trackBoardDice, null);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, null);
             fail();
         }catch(IllegalArgumentException e){}
     }

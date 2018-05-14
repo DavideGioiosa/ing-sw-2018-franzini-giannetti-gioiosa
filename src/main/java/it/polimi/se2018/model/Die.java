@@ -3,12 +3,12 @@ package it.polimi.se2018.model;
 import java.util.Random;
 
 /**
- * Dice class represents every single dice of the game
+ * Die class represents every single dice of the game
  *
  * @author Cristian Giannetti
  */
 
-public class Dice {
+public class Die {
 
     /**
      * Indicates the colour of the dice
@@ -24,7 +24,7 @@ public class Dice {
      * Constructor creates a dice with a specific colour and a value equal to zero
      * @param colour indicates the colour of the die
      */
-    public Dice (ColourEnum colour){
+    public Die(ColourEnum colour){
         if (colour == null) throw new IllegalArgumentException("ERROR: Cannot set a dice with no colour");
         this.colour = colour;
         this.value = 0;
