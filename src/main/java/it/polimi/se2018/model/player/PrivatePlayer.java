@@ -38,7 +38,7 @@ public class PrivatePlayer {
     }
 
     /**
-     *Method returns the Player
+     * Method returns the Player
      * @return Player whose Private Objective Card is stored
      */
     public Player getPlayer(){

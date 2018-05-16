@@ -14,10 +14,10 @@ public class ToolCard extends Card {
 
     /**
      * Builder: create ToolCard
-     * @param id, identified of the card
-     * @param name, name of the card
-     * @param description, informations about the card
-     * @param colour, colour of the ToolCard, used in SinglePlayer Mode
+     * @param id identified of the card
+     * @param name name of the card
+     * @param description informations about the card
+     * @param colour colour of the ToolCard, used in SinglePlayer Mode
      */
     public ToolCard(int id, String name, String description, ColourEnum colour) {
         super(id, name, description);
@@ -44,7 +44,7 @@ public class ToolCard extends Card {
 
     /**
      * Check based on the number of tokens placed on a ToolCard, if it's already used or not
-     * @return true if the number of tokens is > 0
+     * @return true if the number of tokens is greater than 0
      */
     public boolean isUsed() {
         if (this.token < 0) {

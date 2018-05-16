@@ -4,9 +4,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test BagDice Class
+ * @author Davide Gioiosa
+ */
+
 public class BagDiceTest {
     /**
      * total number of dice usable in the match
+     * @author Davide Gioiosa
      */
     public final static int totalDice = 90;
 
@@ -23,8 +29,8 @@ public class BagDiceTest {
 
         BagDice bagDice = new BagDice(totalDice);
         for (int i = 0; i < totalDice; i++) {
-            Dice dice = bagDice.extractDice();
-            switch (dice.getColour()) {
+            Die die = bagDice.extractDice();
+            switch (die.getColour()) {
                 case BLUE:
                     numOfBlue++;
                     break;
@@ -71,11 +77,11 @@ public class BagDiceTest {
         int numOfBlue = 0;
 
         BagDice bagDice = new BagDice(5);
-        Dice dice = new Dice(ColourEnum.BLUE);
-        bagDice.insertDice(dice);
+        Die die = new Die(ColourEnum.BLUE);
+        bagDice.insertDice(die);
         for(int i = 0; i < 6; i++){
-            Dice diceExtracted = bagDice.extractDice();
-            if(diceExtracted.getColour() == ColourEnum.BLUE){
+            Die dieExtracted = bagDice.extractDice();
+            if(dieExtracted.getColour() == ColourEnum.BLUE){
                 numOfBlue++;
             }
         }
@@ -88,7 +94,7 @@ public class BagDiceTest {
     @Test
     public void extractDice_shouldReturnTrueIfTheDiceHasBeenRemoved(){
         BagDice bagDice = new BagDice(5);
-        Dice dice = bagDice.extractDice();
+        Die die = bagDice.extractDice();
         assertEquals(4, bagDice.numberOfRemainingDice());
     }
 }

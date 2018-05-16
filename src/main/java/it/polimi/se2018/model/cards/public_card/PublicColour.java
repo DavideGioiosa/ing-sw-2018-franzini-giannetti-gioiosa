@@ -30,7 +30,7 @@ public class PublicColour {
         }
         for(Cell c : cellList){
             if(!c.isEmpty()){
-                switch (c.getDice().getColour()){
+                switch (c.getDie().getColour()){
                     case BLUE: colours.set(0,colours.get(0)+1); break;
                     case GREEN: colours.set(1,colours.get(1)+1); break;
                     case PURPLE: colours.set(2,colours.get(2)+1); break;

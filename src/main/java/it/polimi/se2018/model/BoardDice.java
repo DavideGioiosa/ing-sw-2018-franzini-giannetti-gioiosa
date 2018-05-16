@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * BoardDice represents the Draft Pool. It contains the dice extracted from the Dice Bag at the beginning of the round
+ * BoardDice represents the Draft Pool. It contains the dice extracted from the Die Bag at the beginning of the round
  *
  * @author Cristian Giannetti
  */
@@ -12,45 +12,45 @@ import java.util.List;
 public class BoardDice {
 
     /**
-     * List of Dice in the Draft Pool
+     * List of Die in the Draft Pool
      */
-    private List<Dice> diceList;
+    private List<Die> dieList;
 
     /**
      * The Constructor creates an empty Draft Pool
      */
     public BoardDice(){
-        diceList = new ArrayList<Dice>();
+        dieList = new ArrayList<Die>();
     }
 
     /**
      * returns the list of the dice in the Draft Pool
-     * @return the list of Dice contained in the Draft Pool
+     * @return the list of Die contained in the Draft Pool
      */
-    public List<Dice> getDiceList() {
-        return diceList;
+    public List<Die> getDieList() {
+        return dieList;
     }
 
     /**
-     * inserts a dice in the Draft Pool
-     * @param dice to be inserted in the Draft Pool
+     * inserts a die in the Draft Pool
+     * @param die to be inserted in the Draft Pool
      */
-    public void insertDice(Dice dice){
-        diceList.add(dice);
+    public void insertDice(Die die){
+        dieList.add(die);
     }
 
     /**
-     * takes a Dice from the Draft Pool
+     * takes a Die from the Draft Pool
      * @param index Position of dice to be taken from the Draft Pool
-     * @return Dice removed from the Draft Pool
+     * @return Die removed from the Draft Pool
      */
-    public Dice takeDice(int index){
-        if (diceList.size() == 0) throw new RuntimeException("ERROR: Draft Pool is empty");
-        if (index < 0 || index > diceList.size() -1) throw new RuntimeException("ERROR: A dice with this index does not exist");
+    public Die takeDice(int index){
+        if (dieList.size() == 0) throw new RuntimeException("ERROR: Draft Pool is empty");
+        if (index < 0 || index > dieList.size() -1) throw new RuntimeException("ERROR: A die with this index does not exist");
 
-        Dice dice;
-        dice = diceList.remove(index);
-        return dice;
+        Die die;
+        die = dieList.remove(index);
+        return die;
     }
 
 }

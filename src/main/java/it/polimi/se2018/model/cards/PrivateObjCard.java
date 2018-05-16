@@ -31,7 +31,7 @@ public class PrivateObjCard extends Card {
 
     /**
      * Method used to return the score due to the Private Objective Card
-     * @param schemaCard, player's window pattern card
+     * @param schemaCard player's window pattern card
      * @return an int representing the score achieved
      */
     public int getScore(SchemaCard schemaCard){
@@ -41,8 +41,8 @@ public class PrivateObjCard extends Card {
         int sum = 0;
         for(Cell cell : schemaCard.getCellList()) {
 
-            if(cell.getDice().getColour().equals(colour)){
-                sum += cell.getDice().getValue();
+            if(cell.getDie().getColour().equals(colour)){
+                sum += cell.getDie().getValue();
             }
         }
         return sum;

@@ -1,7 +1,7 @@
 package it.polimi.se2018.model.player;
 
 import it.polimi.se2018.model.ColourEnum;
-import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
 
@@ -73,18 +73,18 @@ public class Player {
 
     /**
      * Updates the player's window pattern card after a move is made
-     * @param dice the dice chosen by the player to perform an action
-     * @param position the position in which the dice will be placed
+     * @param die the die chosen by the player to perform an action
+     * @param position the position in which the die will be placed
      */
-    public void updateSchema(Dice dice, Position position){
+    public void updateSchema(Die die, Position position){
 
-        if(dice == null){
-            throw  new IllegalArgumentException("ERROR: dice don't exists");
+        if(die == null){
+            throw  new IllegalArgumentException("ERROR: die don't exists");
         }
         if(position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition()> schemaCard.getCellList().size()) {
             throw new IndexOutOfBoundsException("ERROR: invalid position");
         }
-        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).insertDice(dice);
+        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).insertDice(die);
 
     }
 

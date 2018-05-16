@@ -1,7 +1,7 @@
 package it.polimi.se2018.model.cards;
 
 import it.polimi.se2018.model.Cell;
-import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 
 import java.util.ArrayList;
@@ -28,11 +28,11 @@ public class SchemaCard extends Card {
 
     /**
      * Builder: create a Scheme card
-     * @param name, name of the card
-     * @param description, informations about the card
-     * @param id, identifier of the scheme
-     * @param token, related to the difficulty of a scheme
-     * @param cellList, 20 cells componing the scheme
+     * @param name name of the card
+     * @param description informations about the card
+     * @param id identifier of the scheme
+     * @param token related to the difficulty of a scheme
+     * @param cellList 20 cells componing the scheme
      */
     public SchemaCard (String name, String description, int id, int token, List<Cell> cellList){
         super(id, name, description);
@@ -47,6 +47,8 @@ public class SchemaCard extends Card {
     }
 
     /**
+     * Difficulty of the Scheme, related to the number of tokens to give to the player
+     * at the beginning of the match
      * @return the difficulty of the scheme
      */
     public int getDifficulty() {
@@ -54,22 +56,23 @@ public class SchemaCard extends Card {
     }
 
     /**
-     * insertion of the dice in the Scheme
-     * @param position, where the player wants to put the dice
-     * @param dice, dice selected
+     * insertion of the die in the Scheme
+     * @param position where the player wants to put the die
+     * @param die die selected
      */
-    public void setCell (Position position, Dice dice){
-        if(dice == null){
+    public void setCell (Position position, Die die){
+        if(die == null){
             throw new IllegalArgumentException("ERROR: Selected a null die");
         }
         if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
             throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
                     "out of the range permitted");
         }
-        cellList.get(position.getIndexArrayPosition()).insertDice(dice);
+        cellList.get(position.getIndexArrayPosition()).insertDice(die);
     }
 
     /**
+     * List of cell componing the Scheme Card
      * @return the list of the cells componing the scheme
      */
     public List<Cell> getCellList() {
@@ -78,7 +81,7 @@ public class SchemaCard extends Card {
 
     /**
      * sets the back scheme of a scheme card
-     * @param backSchema, related to a schema card
+     * @param backSchema related to a schema card
      */
     public void setBackSchema(SchemaCard backSchema) {
         if(backSchema == null){
@@ -108,7 +111,7 @@ public class SchemaCard extends Card {
     }
 
     /**
-     * @param index, number of the row
+     * @param index number of the row
      * @return ArrayList with all the Cells that belong to that row
      */
     public List<Cell> getCellRow (int index) {
@@ -126,7 +129,7 @@ public class SchemaCard extends Card {
     }
 
     /**
-     * @param index, number of the column
+     * @param index number of the column
      * @return ArrayList with all the Cells that belong to that column
      */
 
@@ -159,7 +162,7 @@ public class SchemaCard extends Card {
 
         List<Cell> adjList = new ArrayList<Cell>();
 
-        if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
+        if(this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
             if(position.getCol() - 1 >= 0) {
                 adjList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow(), position.getCol() - 1)));
             }
@@ -191,7 +194,7 @@ public class SchemaCard extends Card {
 
         List<Cell> adjDiagList = new ArrayList<Cell>();
 
-        if(!this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
+        if(this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
             if(position.getCol() - 1 >= 0 && position.getRow() - 1 >= 0) {
                 adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
                         position.getCol() - 1)));
