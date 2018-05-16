@@ -26,6 +26,9 @@ public class Player {
      * @param tokens tokens of that window pattern card
      */
     public Player(String nickname, Boolean connection, ColourEnum frameColour, SchemaCard schemaCard, int tokens){
+        if(schemaCard == null){
+            throw new NullPointerException("ERROR: SchemaCard not existing");
+        }
         this.nickname=nickname;
         this.frameColour=frameColour;
         this.schemaCard=schemaCard;
@@ -109,6 +112,9 @@ public class Player {
      * @param score the sum of the points scored by the player
      */
     public void setScore(int score){
+        if(score < 0){
+            throw new IllegalArgumentException("ERROR: Score cannot be negative");
+        }
         this.score=score;
     }
 

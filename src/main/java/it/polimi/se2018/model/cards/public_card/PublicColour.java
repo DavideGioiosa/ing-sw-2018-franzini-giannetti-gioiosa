@@ -26,7 +26,7 @@ public class PublicColour {
      */
     public List<Integer> differentColours(List<Cell> cellList){
         if(cellList == null){
-            throw new IllegalArgumentException("ERROR: List does not exists");
+            throw new NullPointerException("ERROR: List does not exists");
         }
         for(Cell c : cellList){
             if(!c.isEmpty()){

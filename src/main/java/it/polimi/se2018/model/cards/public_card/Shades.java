@@ -27,7 +27,7 @@ public class Shades {
      */
     public List<Integer> operate(List<Cell> cellList, int num1, int num2){
         if(cellList == null){
-            throw new IllegalArgumentException("ERROR: List does not exists");
+            throw new NullPointerException("ERROR: List does not exists");
         }
         for(Cell c: cellList){
             if(!c.isEmpty()){
