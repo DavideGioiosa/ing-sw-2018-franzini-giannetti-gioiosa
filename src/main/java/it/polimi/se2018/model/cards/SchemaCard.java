@@ -34,7 +34,7 @@ public class SchemaCard extends Card {
      * @param token related to the difficulty of a scheme
      * @param cellList 20 cells componing the scheme
      */
-    public SchemaCard (String name, String description, int id, int token, List<Cell> cellList){
+    public SchemaCard (int id, String name, String description, int token, List<Cell> cellList){
         super(id, name, description);
         if(cellList == null){
             throw new IllegalArgumentException("ERROR: Insert cellList null");

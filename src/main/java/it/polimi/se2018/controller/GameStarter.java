@@ -1,7 +1,8 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.ColourEnum;
-import it.polimi.se2018.model.Gameboard;
+import it.polimi.se2018.model.GameBoard;
+import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.CardDeck;
 import it.polimi.se2018.model.cards.PrivateObjCard;
@@ -20,7 +21,7 @@ import java.util.Random;
  * @author Silvia Franzini
  */
 public class GameStarter {
-    private Gameboard gameboard;
+    private GameBoard gameboard;
     private GameLoader gameLoader;
     private List<Player> playerList;
 
@@ -36,7 +37,7 @@ public class GameStarter {
      * @param userList
      * @return
      */
-    public Gameboard startGame(List<User> userList){
+    public GameBoard startGame(List<User> userList){
         if(gameLoader.getPublicObjDeck() == null){
             throw new NullPointerException("ERROR: PublicObj deck not existing ");
         }
@@ -48,8 +49,8 @@ public class GameStarter {
         }
             placeSeat(userList);
             for(int i=0; i<3; i++){
-                gameboard.getCardOnBoard().getPublicObjCardList().add(extractCard(gameLoader.getPublicObjDeck()));
-                gameboard.getCardOnBoard().getToolCardList().add(extractCard(gameLoader.getToolDeck()));
+                //gameboard.getCardOnBoard().getPublicObjCardList().add(extractCard(gameLoader.getPublicObjDeck()));
+                //gameboard.getCardOnBoard().getToolCardList().add(extractCard(gameLoader.getToolDeck()));
             }
             distributePrivateObjCard(gameLoader.getPrivateObjDeck());
 
@@ -78,10 +79,10 @@ public class GameStarter {
             indici.add(n);
         }
         for(int i=0; i<indici.size(); i++){
-            Player player = new Player(userList.get(indici.get(i)).getNickname(),connection,colour, schemacard, tokens );
+            /*Player player = new Player(userList.get(indici.get(i)).getNickname(),connection,colour, schemacard, tokens );
             //necesario implementare comunicazioni
             userList.get(indici.get(i)).setPlayer(player);
-            playerList.add(player);
+            playerList.add(player);*/
         }
     }
 
@@ -94,7 +95,6 @@ public class GameStarter {
         if(cardDeck == null) {
             throw new NullPointerException("ERROR: Card deck not existing");
         }
-        cardDeck.shuffleCards();
         Card card = cardDeck.extractCard();
         return card;
     }
@@ -110,7 +110,7 @@ public class GameStarter {
         }
         for(int i=0; i<playerList.size(); i++){
             PrivatePlayer privatePlayer = new PrivatePlayer(playerList.get(i),(PrivateObjCard)extractCard(privateObjCardDeck));
-            gameboard.getPrivatePlayerList().add(privatePlayer);
+            //gameboard.getPrivatePlayerList().add(privatePlayer);
         }
     }
 

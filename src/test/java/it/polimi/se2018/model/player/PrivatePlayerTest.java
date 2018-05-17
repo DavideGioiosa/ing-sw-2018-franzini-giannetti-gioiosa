@@ -35,7 +35,7 @@ public class PrivatePlayerTest {
         for(int i = 0; i<10; i++){
             cellList.add(new Cell(d.getValue(), d.getColour()));
         }
-        SchemaCard schemaCard = new SchemaCard(name,desc,id,token,cellList);
+        SchemaCard schemaCard = new SchemaCard(id, name, desc, token, cellList);
         privateObjCard = new PrivateObjCard(id,name,desc, ColourEnum.GREEN);
         player = new Player(nick, false, ColourEnum.BLUE, schemaCard, token);
         privatePlayer = new PrivatePlayer(player,privateObjCard);

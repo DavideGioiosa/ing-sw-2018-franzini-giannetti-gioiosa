@@ -35,8 +35,8 @@ public class SchemaCardTest {
         for(i = 0; i<10; i++){
             cellList.add(new Cell(d.getValue(), d.getColour()));
         }
-        schema = new SchemaCard(name, desc, id, token, cellList);
-        backSchema = new SchemaCard(backName, desc,idBack, token, cellList);
+        schema = new SchemaCard(id, name, desc, token, cellList);
+        backSchema = new SchemaCard(idBack, backName, desc, token, cellList);
 
     }
 

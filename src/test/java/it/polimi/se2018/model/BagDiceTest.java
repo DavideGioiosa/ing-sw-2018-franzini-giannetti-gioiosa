@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import org.junit.Test;
 
+import static it.polimi.se2018.model.Config.*;
 import static org.junit.Assert.*;
 
 /**
@@ -27,8 +28,8 @@ public class BagDiceTest {
         int numOfGreen = 0;
         int numOfPurple = 0;
 
-        BagDice bagDice = new BagDice(totalDice);
-        for (int i = 0; i < totalDice; i++) {
+        BagDice bagDice = new BagDice();
+        for (int i = 0; i < NUMBEROFDICEPERCOLOUR; i++) {
             Die die = bagDice.extractDice();
             switch (die.getColour()) {
                 case BLUE:
@@ -63,7 +64,7 @@ public class BagDiceTest {
     @Test
     public void BagDice_ErrorCreationReturningFalse (){
         try {
-            BagDice bagDice = new BagDice(-10);
+            BagDice bagDice = new BagDice();
             fail();
         }catch(IllegalArgumentException e){
         }
@@ -76,7 +77,7 @@ public class BagDiceTest {
     public void insertDice_shouldReturnTrueIfTheDiceHasBeenAdded(){
         int numOfBlue = 0;
 
-        BagDice bagDice = new BagDice(5);
+        BagDice bagDice = new BagDice();
         Die die = new Die(ColourEnum.BLUE);
         bagDice.insertDice(die);
         for(int i = 0; i < 6; i++){
@@ -93,7 +94,7 @@ public class BagDiceTest {
      */
     @Test
     public void extractDice_shouldReturnTrueIfTheDiceHasBeenRemoved(){
-        BagDice bagDice = new BagDice(5);
+        BagDice bagDice = new BagDice();
         Die die = bagDice.extractDice();
         assertEquals(4, bagDice.numberOfRemainingDice());
     }

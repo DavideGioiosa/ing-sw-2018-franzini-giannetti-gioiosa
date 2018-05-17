@@ -44,7 +44,7 @@ public class CheckRestrictionTest {
     @Test
     public void adjacentRestriction_BadParametresSent() {
         cellList.add(new Cell(0, null));
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die = new Die(ColourEnum.BLUE);
         Position position = new Position(4);
         try {
@@ -74,7 +74,7 @@ public class CheckRestrictionTest {
     @Test
     public void adjacentRestriction_shouldReturnTrueWhenThePositionIsOnTheEdge() {
         cellList.add(new Cell(0, null));
-        SchemaCard schemaCard = new SchemaCard(NAME,DESCRIPTION, DIFFICULTY, ID, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
         Die die = new Die(ColourEnum.BLUE);
         die.firstRoll();
@@ -92,7 +92,7 @@ public class CheckRestrictionTest {
     @Test
     public void adjacentRestriction_shouldReturnFalseWhenThePositionIsNotOnTheEdge() {
         cellList.add(new Cell(0, null));
-        SchemaCard schemaCard = new SchemaCard(NAME,DESCRIPTION, DIFFICULTY, ID, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
         Die die = new Die(ColourEnum.BLUE);
         die.firstRoll();
@@ -112,7 +112,7 @@ public class CheckRestrictionTest {
     @Test
     public void adjacentRestriction_shouldReturnTrueWhenThereIsAtLeastADiceAdjacent() {
         cellList.add(new Cell(0, null));
-        SchemaCard schemaCard = new SchemaCard(NAME,DESCRIPTION, DIFFICULTY, ID, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
         Die die1 = new Die(ColourEnum.BLUE);
         die1.firstRoll();
@@ -142,7 +142,7 @@ public class CheckRestrictionTest {
     @Test
     public void adjacentRestriction_shouldReturnFalseWhenNoAdjacent() {
         cellList.add(new Cell(0, null));
-        SchemaCard schemaCard = new SchemaCard(NAME,DESCRIPTION, DIFFICULTY, ID, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
         Die die1 = new Die(ColourEnum.BLUE);
         die1.firstRoll();
@@ -167,7 +167,7 @@ public class CheckRestrictionTest {
     public void cellValueRestriction_shouldReturnFalseIfDiceValueNotEqualsCellValue(){
         cellList.add(new Cell(5, null));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die = new Die(ColourEnum.BLUE);
         die.setValue(5);
         Position position = new Position(19);
@@ -187,7 +187,7 @@ public class CheckRestrictionTest {
     public void cellValueRestriction_shouldReturnTrueIfDiceValueEqualsCellValue(){
         cellList.add(new Cell(5, null));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die = new Die(ColourEnum.BLUE);
         die.setValue(2);
         Position position = new Position(19);
@@ -207,7 +207,7 @@ public class CheckRestrictionTest {
     public void cellColourRestriction_shouldReturnTrueIfDiceColourEqualsCellColour() {
         cellList.add(new Cell(0, ColourEnum.BLUE));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die = new Die(ColourEnum.BLUE);
         die.firstRoll();
         Position position = new Position(19);
@@ -227,7 +227,7 @@ public class CheckRestrictionTest {
     public void cellColourRestriction_shouldReturnFalseIfDiceColourEqualsCellColour() {
         cellList.add(new Cell(0, ColourEnum.BLUE));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die = new Die(ColourEnum.RED);
         die.firstRoll();
         Position position = new Position(19);
@@ -247,7 +247,7 @@ public class CheckRestrictionTest {
     public void adjacentColourRestriction_shouldReturnFalseIfThereIsAtLeastAnAdjDieOfTheSameColour() {
         cellList.add(new Cell(0, null));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.firstRoll();
         cellList.get(1).insertDice(die1);
@@ -280,7 +280,7 @@ public class CheckRestrictionTest {
     public void adjacentColourRestriction_shouldReturnTrueIfThereAreNoAdjDiceOfTheSameColour() {
         cellList.add(new Cell(0, null));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.firstRoll();
         cellList.get(1).insertDice(die1);
@@ -316,7 +316,7 @@ public class CheckRestrictionTest {
     public void adjacentValueRestriction_shouldReturnTrueIfThereIsAtLeastAnAdjDieOfTheSameValue() {
         cellList.add(new Cell(0, null));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.setValue(6);
         cellList.get(1).insertDice(die1);
@@ -355,7 +355,7 @@ public class CheckRestrictionTest {
     public void adjacentValueRestriction_shouldReturnFalseIfThereAreNoAdjDiceOfTheSameValue() {
         cellList.add(new Cell(0, null));
 
-        SchemaCard schemaCard = new SchemaCard(NAME, DESCRIPTION, ID, DIFFICULTY, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.setValue(6);
         cellList.get(1).insertDice(die1);

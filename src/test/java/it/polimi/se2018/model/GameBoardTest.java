@@ -41,7 +41,7 @@ public class GameBoardTest {
         for(i = 0; i<20; i++){
             cellList.add(new Cell(0, null));
         }
-        SchemaCard schemaCard = new SchemaCard("name","desc", DIFFICULTY, ID, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList);
     }
 
     /**
@@ -63,7 +63,7 @@ public class GameBoardTest {
 
         BoardDice boardDice = new BoardDice();
         TrackBoard trackBoardDice = new TrackBoard();
-        BagDice bagDice = new BagDice(90);
+        BagDice bagDice = new BagDice();
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
 
 
@@ -95,7 +95,7 @@ public class GameBoardTest {
 
         BoardDice boardDice = new BoardDice();
         TrackBoard trackBoardDice = new TrackBoard();
-        BagDice bagDice = new BagDice(90);
+        BagDice bagDice = new BagDice();
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
         try{
             GameBoard gameBoard = new GameBoard(null, bagDice,boardDice, trackBoardDice, boardCard);
@@ -110,11 +110,11 @@ public class GameBoardTest {
             fail();
         }catch(IllegalArgumentException e){}
         try{
-            GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, null, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, null, boardCard);
             fail();
         }catch(IllegalArgumentException e){}
         try{
-            GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, null);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, trackBoardDice, null);
             fail();
         }catch(IllegalArgumentException e){}
     }

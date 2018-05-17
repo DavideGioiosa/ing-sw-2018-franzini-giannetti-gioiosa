@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.Cell;
-import it.polimi.se2018.model.Gameboard;
+import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.User;
@@ -17,12 +17,12 @@ import java.util.List;
 
 public class GameManager {
 
-    private Gameboard gameBoard;
+    private GameBoard gameBoard;
     private List<User> userList;
-    private List<Round> roundList;
+//    private List<Round> roundList;
     private Player winner;
     private GameStarter gameStarter;
-    private View view;
+  //  private View view;
 
     /**
      * Builder method of GameManager class
@@ -38,13 +38,13 @@ public class GameManager {
     public void newGame(){
         gameStarter = new GameStarter();
         gameBoard = gameStarter.startGame(this.userList);
-        for(Round round : roundList){
+        //for(Round round : roundList){
             //da completare con elementi relativi a round
 
             calculateGameScore();
             setGameWinner();
             //ritornare vincitore alla view per visualizzazione
-        }
+        //}
     }
 
     /**

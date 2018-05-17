@@ -2,6 +2,8 @@ package it.polimi.se2018.model;
 
 import java.util.Random;
 
+import static it.polimi.se2018.model.Config.*;
+
 /**
  * Die class represents every single dice of the game
  *
@@ -51,7 +53,7 @@ public class Die {
      */
     private void roll(){
         Random randomGenerator = new Random();
-        value = 1 + (int)randomGenerator.nextInt(6);
+        value = 1 + (int)randomGenerator.nextInt(DIEMAXVALUE);
     }
 
     /**
@@ -59,7 +61,7 @@ public class Die {
      * @param val value to set on a die
      */
     public void setValue(int val){
-        if (val > 6 || val < 1) throw new IllegalArgumentException("ERROR: Incorrect value of dice");
+        if (val > DIEMAXVALUE || val < DIEMINVALUE) throw new IllegalArgumentException("ERROR: Incorrect value of dice");
 
         this.value = val;
     }
@@ -68,7 +70,7 @@ public class Die {
      * increases the value of the die by one unit
      */
     public void increaseValue(){
-        if (this.value >= 6) throw new RuntimeException("ERROR: Cannot increase the value of this dice");
+        if (this.value >= DIEMAXVALUE) throw new RuntimeException("ERROR: Cannot increase the value of this dice");
         this.value++;
     }
 
@@ -76,7 +78,7 @@ public class Die {
      * decreases the value of the die by one unit
      */
     public void decreaseValue(){
-        if (this.value <= 1) throw new RuntimeException("ERROR: Cannot decrease the value of this dice");
+        if (this.value <= DIEMINVALUE) throw new RuntimeException("ERROR: Cannot decrease the value of this dice");
         this.value--;
     }
 
@@ -101,7 +103,7 @@ public class Die {
      */
     public void oppositeValue(){
         if(this.value == 0) throw new RuntimeException("ERROR: This dice is not rolled");
-        this.setValue(7 - value);
+        this.setValue(DIEMINVALUE + DIEMAXVALUE - value);
     }
 
 }

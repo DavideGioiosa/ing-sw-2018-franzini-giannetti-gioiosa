@@ -37,7 +37,7 @@ public class PlayerTest {
         for(int i = 0; i<10; i++){
             cellList.add(new Cell(d.getValue(), d.getColour()));
         }
-        schemaCard = new SchemaCard(name,desc,id,token,cellList);
+        schemaCard = new SchemaCard(id,name,desc,token,cellList);
         player = new Player(nick, false, ColourEnum.BLUE,schemaCard,token);
         pos = new Position(0,0);
     }

@@ -34,7 +34,7 @@ public class UserTest {
         for(int i = 0; i<10; i++){
             cellList.add(new Cell(d.getValue(), d.getColour()));
         }
-        SchemaCard schemaCard = new SchemaCard(name,desc,id,token,cellList);
+        SchemaCard schemaCard = new SchemaCard(id, name,desc,token,cellList);
         player = new Player( nick,false,ColourEnum.BLUE,schemaCard,token);
         user = new User(nick);
 

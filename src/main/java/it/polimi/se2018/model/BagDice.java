@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static it.polimi.se2018.model.Config.*;
+
 /**
  * BagDice represents the bag from which the dice are extracted.
  *
@@ -18,20 +20,15 @@ public class BagDice {
     private List<Die> dieList;
 
     /**
-     * The Constructor creates an equal number of Die per colour.
-     * @param numberOfDice the number of dice to be created
+     * The Constructor creates an equal number of Dice per colour.
      */
-    public BagDice(int numberOfDice) {
-        if (numberOfDice<0) throw new IllegalArgumentException("ERROR: Impossible create a negative number of Die");
+    public BagDice() {
         int i;
-        dieList = new ArrayList<Die>();
+        dieList = new ArrayList<>();
 
-        for (i = 0; i < numberOfDice / 5; i++) {
-            insertDice(new Die(ColourEnum.BLUE));
-            insertDice(new Die(ColourEnum.GREEN));
-            insertDice(new Die(ColourEnum.PURPLE));
-            insertDice(new Die(ColourEnum.RED));
-            insertDice(new Die(ColourEnum.YELLOW));
+        for (i = 0; i < NUMBEROFDICEPERCOLOUR; i++) {
+            for (ColourEnum colourEnum : ColourEnum.values())
+            insertDice(new Die(colourEnum));
         }
     }
 

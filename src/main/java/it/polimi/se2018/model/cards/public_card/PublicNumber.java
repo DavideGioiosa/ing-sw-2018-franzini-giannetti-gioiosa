@@ -31,7 +31,7 @@ public class PublicNumber {
         for (Cell c : cellList) {
             if (!c.isEmpty()) {
 
-                numbers.set(c.getDice().getValue()-1, numbers.get(c.getDice().getValue()-1)+1);
+                numbers.set(c.getDie().getValue()-1, numbers.get(c.getDie().getValue()-1)+1);
             }
         }
         return numbers;
