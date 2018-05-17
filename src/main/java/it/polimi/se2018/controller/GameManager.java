@@ -19,10 +19,10 @@ public class GameManager {
 
     private GameBoard gameBoard;
     private List<User> userList;
-//    private List<Round> roundList;
+    private List<Round> roundList;
     private Player winner;
     private GameStarter gameStarter;
-  //  private View view;
+    private View view;
 
     /**
      * Builder method of GameManager class
@@ -38,13 +38,13 @@ public class GameManager {
     public void newGame(){
         gameStarter = new GameStarter();
         gameBoard = gameStarter.startGame(this.userList);
-        //for(Round round : roundList){
+        for(Round round : roundList){
             //da completare con elementi relativi a round
 
             calculateGameScore();
             setGameWinner();
             //ritornare vincitore alla view per visualizzazione
-        //}
+        }
     }
 
     /**

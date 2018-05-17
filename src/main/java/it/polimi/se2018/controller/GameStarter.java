@@ -1,13 +1,9 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.ColourEnum;
-import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.CardDeck;
 import it.polimi.se2018.model.cards.PrivateObjCard;
-import it.polimi.se2018.model.cards.ToolCard;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.model.player.User;
@@ -21,7 +17,7 @@ import java.util.Random;
  * @author Silvia Franzini
  */
 public class GameStarter {
-    private GameBoard gameboard;
+    private GameBoard gameBoard;
     private GameLoader gameLoader;
     private List<Player> playerList;
 
@@ -49,12 +45,12 @@ public class GameStarter {
         }
             placeSeat(userList);
             for(int i=0; i<3; i++){
-                //gameboard.getCardOnBoard().getPublicObjCardList().add(extractCard(gameLoader.getPublicObjDeck()));
-                //gameboard.getCardOnBoard().getToolCardList().add(extractCard(gameLoader.getToolDeck()));
+                gameBoard.getCardOnBoard().getPublicObjCardList().add(extractCard(gameLoader.getPublicObjDeck()));
+                gameBoard.getCardOnBoard().getToolCardList().add(extractCard(gameLoader.getToolDeck()));
             }
             distributePrivateObjCard(gameLoader.getPrivateObjDeck());
 
-            return gameboard;
+            return gameBoard;
     }
 
     /**
@@ -79,10 +75,10 @@ public class GameStarter {
             indici.add(n);
         }
         for(int i=0; i<indici.size(); i++){
-            /*Player player = new Player(userList.get(indici.get(i)).getNickname(),connection,colour, schemacard, tokens );
+            Player player = new Player(userList.get(indici.get(i)).getNickname(),connection, colour, schemacard, tokens );
             //necesario implementare comunicazioni
             userList.get(indici.get(i)).setPlayer(player);
-            playerList.add(player);*/
+            playerList.add(player);
         }
     }
 
@@ -110,7 +106,7 @@ public class GameStarter {
         }
         for(int i=0; i<playerList.size(); i++){
             PrivatePlayer privatePlayer = new PrivatePlayer(playerList.get(i),(PrivateObjCard)extractCard(privateObjCardDeck));
-            //gameboard.getPrivatePlayerList().add(privatePlayer);
+            gameBoard.getPrivatePlayerList().add(privatePlayer);
         }
     }
 
