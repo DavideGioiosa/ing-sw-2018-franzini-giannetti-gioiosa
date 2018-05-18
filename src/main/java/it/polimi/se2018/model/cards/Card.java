@@ -31,7 +31,7 @@ public class Card {
      */
     public Card(int id, String name, String description){
         if (id == 0) throw new IllegalArgumentException("ERROR: Invalid Card ID");
-        if (name == null || name == "") throw new IllegalArgumentException("ERORR: Invalid Card Name");
+        if (name == null || name == "") throw new IllegalArgumentException("ERROR: Invalid Card Name");
         this.id = id;
         this.name = name;
         this.description = description;

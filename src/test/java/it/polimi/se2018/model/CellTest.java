@@ -8,14 +8,14 @@ import static org.junit.Assert.*;
 public class CellTest {
 
     private Cell c;
-    private Dice d;
+    private Die d;
 
     /**
      * Initialization for CellTest
      */
     @Before
     public void init(){
-        d = new Dice(ColourEnum.RED);
+        d = new Die(ColourEnum.RED);
         d.firstRoll();
         int value= d.getValue();
         c= new Cell(value, ColourEnum.RED);
@@ -30,7 +30,7 @@ public class CellTest {
         try{
             c.pickDice();
             assertTrue(c.isEmpty());
-        }catch(NullPointerException e){
+        }catch(IllegalArgumentException e){
             fail();
         }
 
@@ -43,8 +43,8 @@ public class CellTest {
     public void insertDice() {
       try{
           c.insertDice(d);
-          assertTrue(d.equals(c.getDice()));
-      } catch(NullPointerException e){
+          assertTrue(d.equals(c.getDie()));
+      } catch(IllegalArgumentException e){
           fail();
       }
     }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static it.polimi.se2018.model.Config.*;
+
 /**
  * BagDice represents the bag from which the dice are extracted.
  *
@@ -15,53 +17,48 @@ public class BagDice {
     /**
      * The list of dices contained in the bag
      */
-    private List<Dice> diceList;
+    private List<Die> dieList;
 
     /**
      * The Constructor creates an equal number of Dice per colour.
-     * @param numberOfDice the number of dice to be created
      */
-    public BagDice(int numberOfDice) {
-        if (numberOfDice<0) throw new IllegalArgumentException("ERROR: Impossible create a negative number of Dice");
+    public BagDice() {
         int i;
-        diceList = new ArrayList<Dice>();
+        dieList = new ArrayList<>();
 
-        for (i = 0; i < numberOfDice / 5; i++) {
-            insertDice(new Dice(ColourEnum.BLUE));
-            insertDice(new Dice(ColourEnum.GREEN));
-            insertDice(new Dice(ColourEnum.PURPLE));
-            insertDice(new Dice(ColourEnum.RED));
-            insertDice(new Dice(ColourEnum.YELLOW));
+        for (i = 0; i < NUMBEROFDICEPERCOLOUR; i++) {
+            for (ColourEnum colourEnum : ColourEnum.values())
+            insertDice(new Die(colourEnum));
         }
     }
 
     /**
-     * insertDice inserts a Dice in the bag.
-     * @param dice The Dice to be inserted
+     * insertDice inserts a Die in the bag.
+     * @param die The Die to be inserted
      */
-    public void insertDice(Dice dice){
-        diceList.add(dice);
+    public void insertDice(Die die){
+        dieList.add(die);
     }
 
     /**
-     * extractDice extracts randomly one of the remaining Dice
-     * @return The Dice extracted randomly
+     * extractDice extracts randomly one of the remaining Die
+     * @return The Die extracted randomly
      */
-    public Dice extractDice(){
-        if (diceList.size() < 1) throw new RuntimeException("ERROR: Bag Dice is empty");
+    public Die extractDice(){
+        if (dieList.size() < 1) throw new RuntimeException("ERROR: Bag Die is empty");
 
         int index;
-        Dice dice;
+        Die die;
 
         Random randomGenerator = new Random();
-        index =  (int)randomGenerator.nextInt(diceList.size());
-        dice = diceList.remove(index);
+        index =  (int)randomGenerator.nextInt(dieList.size());
+        die = dieList.remove(index);
 
-        return dice;
+        return die;
     }
 
     public int numberOfRemainingDice(){
-        return diceList.size();
+        return dieList.size();
     }
 
 }

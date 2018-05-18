@@ -41,7 +41,7 @@ public class GameBoardTest {
         for(i = 0; i<20; i++){
             cellList.add(new Cell(0, null));
         }
-        SchemaCard schemaCard = new SchemaCard("name","desc", DIFFICULTY, ID, cellList);
+        SchemaCard schemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList);
     }
 
     /**
@@ -63,16 +63,16 @@ public class GameBoardTest {
 
         BoardDice boardDice = new BoardDice();
         TrackBoard trackBoardDice = new TrackBoard();
-        BagDice bagDice = new BagDice(90);
+        BagDice bagDice = new BagDice();
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
 
 
-        Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, trackBoardDice, boardCard);
-        assertEquals(gameBoard.getPlayerList(),playerList);
-        assertEquals(gameBoard.getBagDice(),bagDice);
-        assertEquals(gameBoard.getBoardDice(),boardDice);
-        assertEquals(gameBoard.getTrackBoardDice(),trackBoardDice);
-        assertEquals(gameBoard.getCardOnBoard(),boardCard);
+        GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, boardCard);
+        assertEquals(playerList, gameBoard.getPlayerList());
+        assertEquals(bagDice, gameBoard.getBagDice());
+        assertEquals(boardDice, gameBoard.getBoardDice());
+        assertEquals(trackBoardDice, gameBoard.getTrackBoardDice());
+        assertEquals(boardCard, gameBoard.getCardOnBoard());
 
     }
 
@@ -95,26 +95,26 @@ public class GameBoardTest {
 
         BoardDice boardDice = new BoardDice();
         TrackBoard trackBoardDice = new TrackBoard();
-        BagDice bagDice = new BagDice(90);
+        BagDice bagDice = new BagDice();
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
         try{
-            Gameboard gameBoard = new Gameboard(null, bagDice,boardDice, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(null, bagDice,boardDice, trackBoardDice, boardCard);
             fail();
         }catch(NullPointerException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, null,boardDice, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, null,boardDice, trackBoardDice, boardCard);
             fail();
         }catch(NullPointerException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, bagDice,null, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice,null, trackBoardDice, boardCard);
             fail();
         }catch(NullPointerException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, null, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, null, boardCard);
             fail();
         }catch(NullPointerException e){}
         try{
-            Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, trackBoardDice, null);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, trackBoardDice, null);
             fail();
         }catch(NullPointerException e){}
     }

@@ -19,6 +19,12 @@ public class PrivatePlayer {
      * @param card Private Objective Card associated to the Player
      */
     public PrivatePlayer(Player player, PrivateObjCard card){
+        if(player == null){
+            throw new NullPointerException("ERROR: Player not existing");
+        }
+        if(card == null){
+            throw new NullPointerException("ERROR: PrivateObj card not existing");
+        }
         this.player=player;
         this.privateObj=card;
     }
@@ -32,7 +38,7 @@ public class PrivatePlayer {
     }
 
     /**
-     *Method returns the Player
+     * Method returns the Player
      * @return Player whose Private Objective Card is stored
      */
     public Player getPlayer(){

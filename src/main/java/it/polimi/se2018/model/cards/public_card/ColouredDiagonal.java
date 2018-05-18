@@ -33,8 +33,8 @@ public class ColouredDiagonal implements ScoreStrategy {
                 cells = schema.getDiagonalAdjacents(pos);
                 //compares the colour in the main cell with the colours of the adjacent cells
                 for(Cell c : cells){
-                    colour=schema.getCellList().get(pos.getIndexArrayPosition()).getDice().getColour();
-                    if(colour.equals(c.getDice().getColour())){
+                    colour=schema.getCellList().get(pos.getIndexArrayPosition()).getDie().getColour();
+                    if(colour.equals(c.getDie().getColour())){
                         adj = 1;
                         // adjacent found sets adj
                     }

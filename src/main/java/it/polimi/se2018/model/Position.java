@@ -72,7 +72,7 @@ public class Position {
 
     /**
      * Builder: coord matrix (row and col) from index of Scheme in array form
-     * @param indexArrayPosition, index of the Scheme in array form
+     * @param indexArrayPosition index of the Scheme in array form
      */
     public Position (int indexArrayPosition){
         this.row = indexArrayPosition / 5;
@@ -94,7 +94,7 @@ public class Position {
     }
 
     /**
-     * @param indexArrayPosition, index of the Scheme in array form
+     * @param indexArrayPosition index of the Scheme in array form
      * @return the row to which it belongs
      */
     public int getRow (int indexArrayPosition){
@@ -102,7 +102,7 @@ public class Position {
     }
 
     /**
-     * @param indexArrayPosition, index of the Scheme in array form
+     * @param indexArrayPosition index of the Scheme in array form
      * @return the col to which it belongs
      */
     public int getCol (int indexArrayPosition){

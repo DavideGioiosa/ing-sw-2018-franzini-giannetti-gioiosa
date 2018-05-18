@@ -2,7 +2,7 @@ package it.polimi.se2018.model.cards;
 
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
-import it.polimi.se2018.model.Dice;
+import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 public class SchemaCardTest {
     private SchemaCard schema;
     private SchemaCard backSchema;
-    private Dice d;
+    private Die d;
 
     /**
      * Initialization for the SchemaCardTest
@@ -23,7 +23,7 @@ public class SchemaCardTest {
     @Before
     public void init(){
         List<Cell> cellList = new ArrayList<Cell>();
-        d = new Dice(ColourEnum.BLUE);
+        d = new Die(ColourEnum.BLUE);
         d.firstRoll();
         int id=1;
         int idBack = 2;
@@ -35,8 +35,8 @@ public class SchemaCardTest {
         for(i = 0; i<10; i++){
             cellList.add(new Cell(d.getValue(), d.getColour()));
         }
-        schema = new SchemaCard(name, desc, id, token, cellList);
-        backSchema = new SchemaCard(backName, desc,idBack, token, cellList);
+        schema = new SchemaCard(id, name, desc, token, cellList);
+        backSchema = new SchemaCard(idBack, backName, desc, token, cellList);
 
     }
 
@@ -57,7 +57,7 @@ public class SchemaCardTest {
             Position pos = new Position(0,0);
             schema.setCell(pos, d);
             Cell c = schema.getCellList().get(0);
-            assertEquals(c.getDice(),d);
+            assertEquals(c.getDie(),d);
 
         }catch(IllegalArgumentException e){
             fail();

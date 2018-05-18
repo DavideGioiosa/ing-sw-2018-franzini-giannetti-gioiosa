@@ -11,10 +11,10 @@ import static org.junit.Assert.*;
 public class TrackBoardTest {
 
     private TrackBoard trackBoard;
-    private List<Dice> surplus;
-    private Dice d;
-    private Dice d1;
-    private Dice d2;
+    private List<Die> surplus;
+    private Die d;
+    private Die d1;
+    private Die d2;
 
     /**
      * Initialization for TrackBoardTest
@@ -22,12 +22,12 @@ public class TrackBoardTest {
     @Before
     public void init(){
             trackBoard = new TrackBoard();
-            surplus = new ArrayList<Dice>();
-            d= new Dice(ColourEnum.BLUE);
+            surplus = new ArrayList<Die>();
+            d= new Die(ColourEnum.BLUE);
             d.firstRoll();
-            d1= new Dice(ColourEnum.GREEN);
+            d1= new Die(ColourEnum.GREEN);
             d1.firstRoll();
-            d2= new Dice(ColourEnum.RED);
+            d2= new Die(ColourEnum.RED);
             d2.firstRoll();
             surplus.add(d2);
     }
@@ -57,7 +57,7 @@ public class TrackBoardTest {
            trackBoard.getDiceList().remove(surplus);
            trackBoard.insertDice(surplus);
            if(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1).equals(surplus)){
-               Dice die = trackBoard.exchangeDice(trackBoard.getDiceList().size()-1,0,d1);
+               Die die = trackBoard.exchangeDice(trackBoard.getDiceList().size()-1,0,d1);
                if(die.equals(d2)){
                    assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1).get(0), d);
                }

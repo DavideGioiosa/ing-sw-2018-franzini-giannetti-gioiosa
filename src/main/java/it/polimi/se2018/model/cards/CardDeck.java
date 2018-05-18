@@ -1,5 +1,8 @@
 package it.polimi.se2018.model.cards;
 
+import it.polimi.se2018.model.CardTypeEnum;
+import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -18,29 +21,68 @@ public class CardDeck {
     private List<Card> cardList;
 
     /**
+     * Type of card contained in the Deck
+     */
+    private CardTypeEnum cardType;
+
+    /**
+     * Boolean indicating if the deck has been shuffled
+     */
+    private boolean shuffled;
+
+    /**
      * Constructor sets an empty Deck
      */
-    public CardDeck(){
+    public CardDeck(CardTypeEnum cardType) {
+        if (cardType == null) throw new NullPointerException("ERROR: Cannot create a null type deck");
+        this.cardType = cardType;
         cardList = new ArrayList<>();
+        shuffled = false;
     }
 
     /**
-     * Insert a Card in the Deck
+     * Inserts a Card in the Deck
      * @param card Card to be inserted in the Deck
      */
     public void insertCard(Card card){
-        if (card == null) throw new IllegalArgumentException("ERROR: Cannot insert a null Card");
-        cardList.add(card);
+        if (card == null) throw new NullPointerException("ERROR: Cannot insert a null Card");
+
+        //TODO: exceptions in card and deck with different types
+        switch (cardType){
+
+            case PUBLICOBJCARD:
+                PublicObjCard publicObjCard = (PublicObjCard) card;
+                cardList.add(publicObjCard);
+                break;
+
+            case PRIVATEOBJCARD:
+                PrivateObjCard privateObjCard = (PrivateObjCard) card;
+                cardList.add(privateObjCard);
+                break;
+
+            case SCHEMACARD:
+                SchemaCard schemaCard = (SchemaCard) card;
+                cardList.add(schemaCard);
+                break;
+
+            case TOOLCARD:
+                ToolCard toolCard = (ToolCard) card;
+                cardList.add(toolCard);
+                break;
+
+            default: throw new RuntimeException("ERROR: No type of deck");
+        }
+        shuffled = false;
     }
 
     /**
-     * Exrtact the first Card in the Deck
+     * Shuffles the Deck if never shuffled and extracts the first Card
      * @return Card in the first position
      */
     public Card extractCard(){
 
         if (cardList.isEmpty()) throw new RuntimeException("ERROR: Empty Deck. Cannot extract a card");
-
+        if(!shuffled) shuffleCards();
         Card card = cardList.remove(0);
         return card;
     }
@@ -48,7 +90,7 @@ public class CardDeck {
     /**
      * Shuffles the entire deck of Cards mixing their positions in the ArrayList
      */
-    public void shuffleCards(){
+    private void shuffleCards(){
         if (cardList.isEmpty()) throw new RuntimeException("ERROR: Empty Deck. It cannot be shuffled");
 
         int index = 0;

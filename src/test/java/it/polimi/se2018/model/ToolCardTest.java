@@ -24,12 +24,12 @@ public class ToolCardTest{
     @Test
     public void toolCardCreationGoodTest() {
         ToolCard toolCard = new ToolCard(ID,NAME, DESCRIPTION, colour);
-        assertEquals(toolCard.getId(),ID);
+        assertEquals(ID,toolCard.getId());
         assertFalse(toolCard.isUsed());
-        assertEquals(toolCard.getName(), NAME);
-        assertEquals(toolCard.getDescription(),DESCRIPTION);
-        assertEquals(toolCard.getColour(),colour);
-        assertEquals(toolCard.getToken(), 0);
+        assertEquals(NAME, toolCard.getName());
+        assertEquals(DESCRIPTION, toolCard.getDescription());
+        assertEquals(colour, toolCard.getColour());
+        assertEquals(0, toolCard.getToken());
     }
 
     /**
@@ -40,29 +40,42 @@ public class ToolCardTest{
         try {
             ToolCard toolCard = new ToolCard(0, NAME, DESCRIPTION, colour);
             fail();
-        }catch(IllegalArgumentException e){
+        }catch(IllegalArgumentException e){}
+    }
 
-        }
-
+    /**
+     * Creates a new Card with incorrect empty name
+     */
+    @Test
+    public void toolCardCreationBadTestEmptyName(){
         try {
             ToolCard toolCard = new ToolCard(ID, "", DESCRIPTION, colour);
             fail();
-        }catch(IllegalArgumentException e){
-        }
+        }catch(IllegalArgumentException e){}
+    }
 
+    /**
+     * Creates a new Card with incorrect null name
+     */
+    @Test
+    public void toolCardCreationBadTestNullName(){
         try {
             ToolCard toolCard = new ToolCard(ID, null, DESCRIPTION, colour);
             fail();
-        }catch(IllegalArgumentException e){
-        }
+        }catch(IllegalArgumentException e){}
+    }
 
+    /**
+     * Creates a new Card with incorrect null colour
+     */
+    @Test
+    public void toolCardCreationBadTestNullColour(){
         try {
             ToolCard toolCard = new ToolCard(ID, NAME, DESCRIPTION, null);
             fail();
-        }catch(IllegalArgumentException e){
-        }
-
+        }catch(IllegalArgumentException e){}
     }
+
 
     /**
      * Updates the number of token used with correct parameters
@@ -72,31 +85,35 @@ public class ToolCardTest{
         final int token = 2;
         ToolCard toolCard = new ToolCard(ID, NAME, DESCRIPTION, colour);
         toolCard.updateToken(token);
-        assertEquals(toolCard.getToken(), token);
+        assertEquals(token, toolCard.getToken());
         toolCard.updateToken(token);
-        assertEquals(toolCard.getToken(),token + token);
+        assertEquals(token + token, toolCard.getToken());
         assertTrue(toolCard.isUsed());
     }
 
     /**
-     * Updates the number of token used with incorrect parameters
+     * Updates the number of token used with incorrect high parameter
      */
     @Test
-    public void useToolCardBadTest() {
-        final int token = -1;
+    public void useToolCardBadTestLowToken() {
         ToolCard toolCard = new ToolCard(ID, NAME, DESCRIPTION, colour);
         try{
-            toolCard.updateToken(token);
+            toolCard.updateToken(-1);
             fail();
-        }catch(IllegalArgumentException e){
-        }
+        }catch(IllegalArgumentException e){}
         assertFalse(toolCard.isUsed());
+    }
 
+    /**
+     * Updates the number of token used with incorrect negative parameter
+     */
+    @Test
+    public void useToolCardBadHighToken() {
+        ToolCard toolCard = new ToolCard(ID, NAME, DESCRIPTION, colour);
         try{
             toolCard.updateToken(3);
             fail();
-        }catch(IllegalArgumentException e){
-        }
+        }catch(IllegalArgumentException e){}
         assertFalse(toolCard.isUsed());
     }
 

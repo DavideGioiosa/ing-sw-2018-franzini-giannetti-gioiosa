@@ -19,6 +19,12 @@ public class BoardCard {
      * @param toolCardList List of Tool Cards extracted
      */
     public BoardCard(List<PublicObjCard> publicObjCardList, List<ToolCard> toolCardList){
+        if(publicObjCardList == null){
+         throw new NullPointerException("ERROR: PublicObj card not existing");
+        }
+        if(toolCardList == null){
+            throw new NullPointerException("ERROR: Tool card not existing");
+        }
         this.publicObjCardList=publicObjCardList;
         this.toolCardList=toolCardList;
     }

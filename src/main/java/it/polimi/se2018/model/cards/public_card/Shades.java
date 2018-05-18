@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Class used by BigNumbers, MiddleNumbers, SmallNumbers to calculate the score
+ * @author Silvia Franzini
  */
 public class Shades {
     private List<Integer> numbers;
@@ -27,14 +28,14 @@ public class Shades {
      */
     public List<Integer> operate(List<Cell> cellList, int num1, int num2){
         if(cellList == null){
-            throw new IllegalArgumentException("ERROR: List does not exists");
+            throw new NullPointerException("ERROR: List does not exists");
         }
         for(Cell c: cellList){
             if(!c.isEmpty()){
-                if(c.getDice().getValue()== num1){
+                if(c.getDie().getValue()== num1){
                     numbers.set(0,numbers.get(0)+1);
                 }
-                else if(c.getDice().getValue()== num2){
+                else if(c.getDie().getValue()== num2){
                     numbers.set(1,numbers.get(1)+1);
                 }
             }

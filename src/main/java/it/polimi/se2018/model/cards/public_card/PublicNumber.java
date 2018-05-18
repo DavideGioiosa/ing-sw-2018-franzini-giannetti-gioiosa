@@ -26,19 +26,12 @@ public class PublicNumber {
      */
     public List<Integer> differentNumbers(List<Cell> cellList) {
         if(cellList == null){
-            throw new IllegalArgumentException("ERROR: List does not exists");
+            throw new NullPointerException("ERROR: List does not exists");
         }
         for (Cell c : cellList) {
             if (!c.isEmpty()) {
-                switch(c.getDice().getValue()){
-                    case 1: numbers.set(0,numbers.get(0)+1); break;
-                    case 2: numbers.set(1,numbers.get(1)+1); break;
-                    case 3: numbers.set(2,numbers.get(2)+1); break;
-                    case 4: numbers.set(3,numbers.get(3)+1); break;
-                    case 5: numbers.set(4,numbers.get(4)+1); break;
-                    case 6: numbers.set(5,numbers.get(5)+1); break;
-                    default: break;
-                }
+
+                numbers.set(c.getDie().getValue()-1, numbers.get(c.getDie().getValue()-1)+1);
             }
         }
         return numbers;

@@ -19,7 +19,9 @@ public class PublicObjCard extends Card {
      */
     public PublicObjCard(int id, String name, String description,ScoreStrategy scoreStrategy){
         super(id,name,description);
-        this.scoreStrategy=scoreStrategy;
+        if(scoreStrategy == null){
+            throw new NullPointerException("ERROR: ScoreStrategy not existing");
+        }else this.scoreStrategy=scoreStrategy;
     }
 
     /**
@@ -29,7 +31,7 @@ public class PublicObjCard extends Card {
      */
     public int scoreCalculation(SchemaCard schemaCard){
         if(schemaCard == null){
-            throw new IllegalArgumentException("ERROR: Cannot use that Schema Card");
+            throw new NullPointerException("ERROR: Schema Card not existing");
         }
         return scoreStrategy.getScore(schemaCard);
     }

@@ -8,17 +8,17 @@ package it.polimi.se2018.model;
 public class Cell {
 
     /**
-     * limitation dice value that a cell accepts
+     * limitation die value that a cell accepts
      */
     private int value;
     /**
-     * limitation dice colour that a cell accepts
+     * limitation die colour that a cell accepts
      */
     private ColourEnum colour;
     /**
-     * dice placed in the cell
+     * die placed in the cell
      */
-    private Dice dice;
+    private Die die;
 
     /**
      * @param value value limitation that a cell may have, 0 if there's not limitation
@@ -33,11 +33,11 @@ public class Cell {
     }
 
     /**
-     * Check if is there a dice placed on the cell
+     * Check if is there a die placed on the cell
      * @return true if there is any
      */
     public boolean isEmpty (){
-        if(getDice() == null) {
+        if(getDie() == null) {
             return true;
         }
         else {
@@ -46,24 +46,23 @@ public class Cell {
     }
 
     /**
-     * Insertion of a die in the cell
-     * @param dice to place in the cell, if the cell it's empty
+     * @param die to place in the cell, if the cell it's empty
      */
-    public void insertDice(Dice dice) {
-        if(dice == null){
-            throw new NullPointerException("ERROR: Try to insert a dice null");
+    public void insertDice(Die die) {
+        if(die == null){
+            throw new IllegalArgumentException("ERROR: Try to insert a die null");
         }
         if (!isEmpty()) {
-            throw new IllegalArgumentException("ERROR: Try to insert a dice in a not empty cell");
+            throw new IllegalArgumentException("ERROR: Try to insert a die in a not empty cell");
         }
-        this.dice = dice;
+        this.die = die;
     }
 
     /**
-     * @return the dice placed in the cell
+     * @return the die placed in the cell
      */
-    public Dice getDice() {
-        return dice;
+    public Die getDie() {
+        return die;
     }
 
     /**
@@ -81,17 +80,17 @@ public class Cell {
     }
 
     /**
-     * Remove the dice in the cell
+     * Remove the die in the cell
      * used by Toolcard 2,3,4,12
      * @return die removed from the Scheme
      */
-    public Dice pickDice(){
-        if(this.getDice() == null){
-            throw new NullPointerException("ERROR: Tried to pick a dice in an empty cell");
+    public Die pickDice(){
+        if(this.getDie() == null){
+            throw new IllegalArgumentException("ERROR: Tried to pick a die in an empty cell");
         }
-        Dice dicePicked = getDice();
-        this.dice = null;
+        Die diePicked = getDie();
+        this.die = null;
 
-        return dicePicked;
+        return diePicked;
     }
 }
