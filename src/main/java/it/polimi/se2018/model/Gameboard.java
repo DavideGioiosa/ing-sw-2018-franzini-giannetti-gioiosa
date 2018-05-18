@@ -41,19 +41,19 @@ public class Gameboard {
      */
     public Gameboard (List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard){
         if(playerList == null){
-            throw new IllegalArgumentException("Insert a playerList null");
+            throw new NullPointerException("Insert a playerList null");
         }
         if(bagDice == null){
-            throw new IllegalArgumentException("Insert a bagDice null");
+            throw new NullPointerException("Insert a bagDice null");
         }
         if(boardDice == null){
-            throw new IllegalArgumentException("Insert a boardDice null");
+            throw new NullPointerException("Insert a boardDice null");
         }
         if(trackBoardDice == null){
-            throw new IllegalArgumentException("Insert a trackBoardDice null");
+            throw new NullPointerException("Insert a trackBoardDice null");
         }
         if(boardCard == null){
-            throw new IllegalArgumentException("Insert a boardCard null");
+            throw new NullPointerException("Insert a boardCard null");
         }
 
         this.playerList = playerList;

@@ -29,7 +29,7 @@ public class TrackBoard {
      */
     public void insertDice (List<Dice> surplusDiceList){
         if(surplusDiceList == null){
-            throw new IllegalArgumentException("ERROR: Insert surplusDiceList null");
+            throw new NullPointerException("ERROR: Insert surplusDiceList null");
         }
         if (surplusDiceList.isEmpty() == true){
             throw new IllegalArgumentException("ERROR: No dice to put on the Trackboard");
@@ -60,7 +60,7 @@ public class TrackBoard {
             throw new IllegalArgumentException("ERROR: Insert indexTbCell out of the range permitted");
         }
         if(dice == null){
-            throw new IllegalArgumentException("ERROR: Insert null die");
+            throw new NullPointerException("ERROR: Insert null die");
         }
         diceList.get(indexTb).add(dice);
 

@@ -100,23 +100,23 @@ public class GameBoardTest {
         try{
             Gameboard gameBoard = new Gameboard(null, bagDice,boardDice, trackBoardDice, boardCard);
             fail();
-        }catch(IllegalArgumentException e){}
+        }catch(NullPointerException e){}
         try{
             Gameboard gameBoard = new Gameboard(playerList, null,boardDice, trackBoardDice, boardCard);
             fail();
-        }catch(IllegalArgumentException e){}
+        }catch(NullPointerException e){}
         try{
             Gameboard gameBoard = new Gameboard(playerList, bagDice,null, trackBoardDice, boardCard);
             fail();
-        }catch(IllegalArgumentException e){}
+        }catch(NullPointerException e){}
         try{
             Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, null, boardCard);
             fail();
-        }catch(IllegalArgumentException e){}
+        }catch(NullPointerException e){}
         try{
             Gameboard gameBoard = new Gameboard(playerList, bagDice,boardDice, trackBoardDice, null);
             fail();
-        }catch(IllegalArgumentException e){}
+        }catch(NullPointerException e){}
     }
 
 }

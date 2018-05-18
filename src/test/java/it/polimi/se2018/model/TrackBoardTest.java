@@ -40,7 +40,7 @@ public class TrackBoardTest {
         try{
             trackBoard.insertDice(surplus);
             assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1), surplus);
-        }catch(IllegalArgumentException e){
+        }catch(NullPointerException e){
             fail();
         }
 
@@ -63,7 +63,7 @@ public class TrackBoardTest {
                }
 
            }
-       }catch(IllegalArgumentException e){
+       }catch(NullPointerException e){
            fail();
        }
 

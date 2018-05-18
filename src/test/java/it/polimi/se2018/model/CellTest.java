@@ -30,7 +30,7 @@ public class CellTest {
         try{
             c.pickDice();
             assertTrue(c.isEmpty());
-        }catch(IllegalArgumentException e){
+        }catch(NullPointerException e){
             fail();
         }
 
@@ -44,7 +44,7 @@ public class CellTest {
       try{
           c.insertDice(d);
           assertTrue(d.equals(c.getDice()));
-      } catch(IllegalArgumentException e){
+      } catch(NullPointerException e){
           fail();
       }
     }

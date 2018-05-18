@@ -46,11 +46,12 @@ public class Cell {
     }
 
     /**
+     * Insertion of a die in the cell
      * @param dice to place in the cell, if the cell it's empty
      */
     public void insertDice(Dice dice) {
         if(dice == null){
-            throw new IllegalArgumentException("ERROR: Try to insert a dice null");
+            throw new NullPointerException("ERROR: Try to insert a dice null");
         }
         if (!isEmpty()) {
             throw new IllegalArgumentException("ERROR: Try to insert a dice in a not empty cell");
@@ -86,7 +87,7 @@ public class Cell {
      */
     public Dice pickDice(){
         if(this.getDice() == null){
-            throw new IllegalArgumentException("ERROR: Tried to pick a dice in an empty cell");
+            throw new NullPointerException("ERROR: Tried to pick a dice in an empty cell");
         }
         Dice dicePicked = getDice();
         this.dice = null;

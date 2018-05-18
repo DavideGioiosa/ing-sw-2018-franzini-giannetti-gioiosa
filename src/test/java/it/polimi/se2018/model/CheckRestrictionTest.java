@@ -24,7 +24,7 @@ public class CheckRestrictionTest {
     private CheckRestriction checkRestriction;
     private List<Cell> cellList;
 
-    
+
     /**
      * Check exceptions of the class, create a Scheme with 19 cells so that
      * other tests can add the last one with limitations where needed
@@ -43,6 +43,7 @@ public class CheckRestrictionTest {
      * the CheckRestrictions Class, throws exceptions if one of the parametres
      * is null
      */
+
     @Test
     public void adjacentRestriction_BadParametresSent() {
         cellList.add(new Cell(0, null));
@@ -53,19 +54,19 @@ public class CheckRestrictionTest {
             checkRestriction.adjacentRestriction(schemaCard, dice, null);
             fail();
         }
-        catch (Exception e){
+        catch (NullPointerException e){
         }
         try {
             checkRestriction.adjacentRestriction(schemaCard, null, position);
             fail();
         }
-        catch (Exception e){
+        catch (NullPointerException e){
         }
         try {
             checkRestriction.adjacentRestriction(null, dice, position);
             fail();
         }
-        catch (Exception e){
+        catch (NullPointerException e){
         }
     }
 
