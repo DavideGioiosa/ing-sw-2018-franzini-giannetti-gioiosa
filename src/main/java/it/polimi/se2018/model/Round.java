@@ -29,7 +29,7 @@ public class Round {
     /**
      * Trackboard cointaning surplus dice of every round
      */
-    TrackBoard trackBoard;
+    private TrackBoard trackBoard;
 
     /**
      * Builder of Round
@@ -37,6 +37,15 @@ public class Round {
      * @param gameBoard full table of the game
      */
     public Round (List<Player> playerList, GameBoard gameBoard, TrackBoard trackBoard){
+        if(playerList == null){
+            throw new NullPointerException("Insertion of null parameter playerList");
+        }
+        if (gameBoard == null){
+            throw new NullPointerException("Insertion of null parameter gameBoard");
+        }
+        if (trackBoard == null){
+            throw new NullPointerException("Insertion of null parameter trackBoard");
+        }
         this.playerList = playerList;
         this.gameBoard = gameBoard;
         this.trackBoard = trackBoard;
@@ -47,6 +56,9 @@ public class Round {
      * @param turnOrder list of player ordered by turn priority
      */
     public void startRound(List<Player> turnOrder) {
+        if(turnOrder == null){
+            throw new RuntimeException("Empty list of players in order ready to play");
+        }
         turnsActionsList = new ArrayList<ArrayList<Action>> ();
 
         for (int i = 0; i <= turnOrder.size(); i++) {
@@ -73,7 +85,16 @@ public class Round {
      * @param actionOrder list of player ordered by turn priority
      * @param index of the current player
      */
-    public void update (PlayerMove playerMove, List<Player> actionOrder, int index){
+    private void update (PlayerMove playerMove, List<Player> actionOrder, int index){
+        if(playerMove == null){
+            throw new RuntimeException("Empty playerMove action to execute");
+        }
+        if(actionOrder == null){
+            throw new RuntimeException("Empty list of players in order ready to play");
+        }
+        if(index < 0 || index > actionOrder.size()) {
+            throw new IllegalArgumentException("Error index out of the range permitted");
+        }
         this.playerMove = playerMove;
         if (playerMove.getPlayer() ==  actionOrder.get(index)) {
             while (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PASS)){
