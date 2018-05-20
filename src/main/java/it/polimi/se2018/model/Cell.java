@@ -50,7 +50,7 @@ public class Cell {
      */
     public void insertDice(Die die) {
         if(die == null){
-            throw new IllegalArgumentException("ERROR: Try to insert a die null");
+            throw new NullPointerException("ERROR: Try to insert a die null");
         }
         if (!isEmpty()) {
             throw new IllegalArgumentException("ERROR: Try to insert a die in a not empty cell");
@@ -86,7 +86,7 @@ public class Cell {
      */
     public Die pickDice(){
         if(this.getDie() == null){
-            throw new IllegalArgumentException("ERROR: Tried to pick a die in an empty cell");
+            throw new NullPointerException("ERROR: Tried to pick a die in an empty cell");
         }
         Die diePicked = getDie();
         this.die = null;

@@ -27,7 +27,7 @@ public class TrackBoard {
      * @param surplusDiceList, it's a List because at the end of the Round you may have more
      * than one dice in surplus
      */
-    public void insertDice (List<Dice> surplusDiceList){
+    public void insertDice (List<Die> surplusDiceList){
         if(surplusDiceList == null){
             throw new NullPointerException("ERROR: Insert surplusDiceList null");
         }

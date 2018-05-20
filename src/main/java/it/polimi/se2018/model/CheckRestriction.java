@@ -19,10 +19,10 @@ public class CheckRestriction {
      * @param schemaCard of the currentPlayer
      * @param die selected in the Draft Pool
      * @param position where the currentPlayer wants to put the die
-     * if Scheme isEmpty is true:
+     * if the Scheme is empty:
      * 1. Check adjcents cells (also diagonal ones) and
      * @return true if the position where the player wants to put the die is on the edge of his Scheme
-     * if Scheme isEmpty is false:
+     * if the Scheme is empty:
      * 2. Check adjacents cells (also diagonal ones) of the position requested
      * to get if there are any die inside and
      * @return true if there's at least one adj die
@@ -146,10 +146,10 @@ public class CheckRestriction {
      */
     private void validateParameters(SchemaCard schemaCard, Die die, Position position) {
         if (schemaCard == null) {
-            throw new IllegalArgumentException("ERROR: SchemeCard selected is null");
+            throw new NullPointerException("ERROR: SchemeCard selected is null");
         }
         if (die == null) {
-            throw new IllegalArgumentException("ERROR: Die selected is null");
+            throw new NullPointerException("ERROR: Die selected is null");
         }
         if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
             throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
