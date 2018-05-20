@@ -29,7 +29,7 @@ public class BagDiceTest {
         int numOfPurple = 0;
 
         BagDice bagDice = new BagDice();
-        for (int i = 0; i < NUMBEROFDICEPERCOLOUR; i++) {
+        for (int i = 0; i < NUMBEROFDICEPERCOLOUR * 5; i++) {
             Die die = bagDice.extractDice();
             switch (die.getColour()) {
                 case BLUE:
@@ -59,18 +59,6 @@ public class BagDiceTest {
     }
 
     /**
-     * Create an wrong bagDice with a negative number of dice
-     */
-    @Test
-    public void BagDice_ErrorCreationReturningFalse (){
-        try {
-            BagDice bagDice = new BagDice();
-            fail();
-        }catch(IllegalArgumentException e){
-        }
-    }
-
-    /**
      * Insert a die correctly in the bagDice
      */
     @Test
@@ -80,13 +68,13 @@ public class BagDiceTest {
         BagDice bagDice = new BagDice();
         Die die = new Die(ColourEnum.BLUE);
         bagDice.insertDice(die);
-        for(int i = 0; i < 6; i++){
+        for(int i = 0; i < 91; i++){
             Die dieExtracted = bagDice.extractDice();
             if(dieExtracted.getColour() == ColourEnum.BLUE){
                 numOfBlue++;
             }
         }
-        assertEquals(2, numOfBlue);
+        assertEquals(19, numOfBlue);
     }
 
     /**
@@ -96,6 +84,6 @@ public class BagDiceTest {
     public void extractDice_shouldReturnTrueIfTheDiceHasBeenRemoved(){
         BagDice bagDice = new BagDice();
         Die die = bagDice.extractDice();
-        assertEquals(4, bagDice.numberOfRemainingDice());
+        assertEquals(89, bagDice.numberOfRemainingDice());
     }
 }

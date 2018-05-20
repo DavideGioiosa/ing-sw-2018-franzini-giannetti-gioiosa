@@ -12,6 +12,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests SchemaCard class
+ *
+ * @author Silvia Franzini
+ * @author Cristian Giannetti
+ */
 public class SchemaCardTest {
     private SchemaCard schema;
     private SchemaCard backSchema;

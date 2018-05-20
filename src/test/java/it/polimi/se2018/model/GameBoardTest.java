@@ -6,6 +6,7 @@ import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 import it.polimi.se2018.model.cards.public_card.ScoreStrategy;
 import it.polimi.se2018.model.player.Player;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,21 +21,21 @@ import static org.junit.Assert.fail;
  * @author Cristian Giannetti
  */
 public class GameBoardTest {
-    public final String NICKNAME = "Nickname";
-    public final String NAME = "Name";
-    public final String DESCRIPTION = "Description";
-    public final ColourEnum FRAMECOLOUR = ColourEnum.BLUE;
-    public final ColourEnum COLOUR = ColourEnum.BLUE;
-    public final boolean CONNECTION = true;
-    public SchemaCard schemaCard;
-    public final int ID = 1;
-    public final int DIFFICULTY = 1;
-    public ScoreStrategy strategy = null;
+    private final String NICKNAME = "Nickname";
+    private final String NAME = "Name";
+    private final String DESCRIPTION = "Description";
+    private final ColourEnum FRAMECOLOUR = ColourEnum.BLUE;
+    private final ColourEnum COLOUR = ColourEnum.BLUE;
+    private final boolean CONNECTION = true;
+    private SchemaCard schemaCard;
+    private final int ID = 1;
+    private final int DIFFICULTY = 1;
+    private ScoreStrategy strategy = null;
 
-    /**
+/*    /**
      * Sets a valid Schema Card
      */
-    @Before
+/*   @Before
     public void setUp(){
         List<Cell> cellList = new ArrayList<Cell>();
         int i;
@@ -42,13 +43,22 @@ public class GameBoardTest {
             cellList.add(new Cell(0, null));
         }
         SchemaCard schemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList);
-    }
+
+    }*/
 
     /**
      * Create a new GameBoard with valid values
      */
     @Test
     public void creationDiceGoodTest(){
+
+        List<Cell> cellList = new ArrayList<Cell>();
+        int i;
+        for(i = 0; i<20; i++){
+            cellList.add(new Cell(0, null));
+        }
+        SchemaCard schemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList);
+
         Player player = new Player(NICKNAME, CONNECTION, FRAMECOLOUR, schemaCard, 2);
         List<Player> playerList = new ArrayList<Player>();
         playerList.add(player);
@@ -81,6 +91,14 @@ public class GameBoardTest {
      */
     @Test
     public void creationDiceBadTest(){
+
+        List<Cell> cellList = new ArrayList<Cell>();
+        int i;
+        for(i = 0; i<20; i++){
+            cellList.add(new Cell(0, null));
+        }
+        SchemaCard schemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList);
+
         Player player = new Player(NICKNAME, CONNECTION, FRAMECOLOUR, schemaCard, 2);
         List<Player> playerList = new ArrayList<Player>();
         playerList.add(player);

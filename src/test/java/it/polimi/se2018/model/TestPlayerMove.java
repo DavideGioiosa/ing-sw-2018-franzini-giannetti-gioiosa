@@ -1,13 +1,16 @@
 package it.polimi.se2018.model;
 
-import it.polimi.se2018.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
+/**
+ * Tests PlayerMove class
+ *
+ * @author Cristian Giannetti
+ */
 public class TestPlayerMove {
 
     PlayerMove playerMove;
@@ -18,7 +21,7 @@ public class TestPlayerMove {
     }
 
     /**
-     *
+     * Tests the creation of a new PlayerMove
      */
     @Test
     public void newPlayerMoveGoodTest() {
@@ -33,12 +36,18 @@ public class TestPlayerMove {
 
     }
 
+    /**
+     * Tests Value setter with good parameter
+     */
     @Test
     public void setValueGoodTest(){
         playerMove.setValue(2);
         assertEquals(2,playerMove.getValue());
     }
 
+    /**
+     * Tests Player setter with null parameter
+     */
     @Test
     public void setPlayerBadTest(){
        try{
@@ -46,12 +55,18 @@ public class TestPlayerMove {
        }catch(IllegalArgumentException e){}
     }
 
+    /**
+     * Tests TypeOfChoice setter with good parameter
+     */
     @Test
-    public void setTypeOfChoiceGoodTeest(){
+    public void setTypeOfChoiceGoodTest(){
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.TOOL);
         assertEquals(TypeOfChoiceEnum.TOOL,playerMove.getTypeOfChoice());
     }
 
+    /**
+     * Tests DiceBoard setter with good parameter
+     */
     @Test
     public void setDiceBoardIndexGoodTest(){
         playerMove.setDiceBoardIndex(5);

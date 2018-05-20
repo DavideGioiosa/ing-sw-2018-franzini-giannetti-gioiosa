@@ -13,6 +13,11 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests PrivatePlayer Class
+ *
+ * @author Silvia Franzini
+ */
 public class PrivatePlayerTest {
 
     private PrivatePlayer privatePlayer;
