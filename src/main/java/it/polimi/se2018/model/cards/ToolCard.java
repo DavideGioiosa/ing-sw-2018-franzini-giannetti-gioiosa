@@ -16,7 +16,7 @@ public class ToolCard extends Card {
      * Builder: create ToolCard
      * @param id identified of the card
      * @param name name of the card
-     * @param description informations about the card
+     * @param description information about the card
      * @param colour colour of the ToolCard, used in SinglePlayer Mode
      */
     public ToolCard(int id, String name, String description, ColourEnum colour) {

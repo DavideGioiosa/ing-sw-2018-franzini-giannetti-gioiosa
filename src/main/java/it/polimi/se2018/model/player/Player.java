@@ -42,9 +42,7 @@ public class Player {
      * @param connectionStatus boolean used to identify if the player is connected or not
      */
     public void setConnectionStatus(boolean connectionStatus){
-
-        this.connectionStatus=connectionStatus;
-
+        this.connectionStatus = connectionStatus;
     }
 
     /**

@@ -27,7 +27,7 @@ public class Die {
      * @param colour indicates the colour of the die
      */
     public Die(ColourEnum colour){
-        if (colour == null) throw new IllegalArgumentException("ERROR: Cannot set a dice with no colour");
+        if (colour == null) throw new NullPointerException("ERROR: Cannot set a dice with no colour");
         this.colour = colour;
         this.value = 0;
     }
@@ -67,7 +67,7 @@ public class Die {
     }
 
     /**
-     * increases the value of the die by one unit
+     * Increases the value of the die by one unit
      */
     public void increaseValue(){
         if (this.value >= DIEMAXVALUE) throw new RuntimeException("ERROR: Cannot increase the value of this dice");
@@ -75,7 +75,7 @@ public class Die {
     }
 
     /**
-     * decreases the value of the die by one unit
+     * Decreases the value of the die by one unit
      */
     public void decreaseValue(){
         if (this.value <= DIEMINVALUE) throw new RuntimeException("ERROR: Cannot decrease the value of this dice");
@@ -83,7 +83,7 @@ public class Die {
     }
 
     /**
-     * is possible only if a particular toolCard is active
+     * Is possible only if a particular toolCard is active
      */
     public void reRoll(){
         //TODO check if the toolcard is active
