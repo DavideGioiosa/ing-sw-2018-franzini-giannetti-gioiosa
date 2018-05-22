@@ -5,6 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests Cell class
+ *
+ * @author Silvia Franzini
+ */
 public class CellTest {
 
     private Cell c;

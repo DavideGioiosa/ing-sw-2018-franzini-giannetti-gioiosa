@@ -10,11 +10,12 @@ public class PositionTest {
 
     /**
      * Initialization for PositionTest
+     *
+     * @author Silvia Franzini
      */
     @Before
     public void init(){
         pos = new Position(0,0);
-
     }
 
     /**
@@ -33,7 +34,7 @@ public class PositionTest {
     }
 
     /**
-     * Tests the method setRow (should fail)
+     * Tests the method setRow with a wrong parameter
      */
     @Test
     public void setRowBad(){
@@ -62,7 +63,7 @@ public class PositionTest {
      }
 
     /**
-     * Tests the method setCol (should fail)
+     * Tests the method setCol with a wrong parameter
      */
     @Test
     public void setColBad() {
@@ -92,7 +93,7 @@ public class PositionTest {
     }
 
     /**
-     * Tests the method setRowCol (should fail)
+     * Tests the method setRowCol with a wrong parameter
      */
     @Test
     public void setRowColBad() {

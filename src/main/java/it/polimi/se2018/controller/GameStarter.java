@@ -1,14 +1,18 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.GameBoard;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.CardDeck;
 import it.polimi.se2018.model.cards.PrivateObjCard;
+import it.polimi.se2018.model.cards.ToolCard;
+import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.model.player.User;
+import it.polimi.se2018.utils.Observer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -16,24 +20,33 @@ import java.util.Random;
  * Controller's Class GameStarter
  * @author Silvia Franzini
  */
-public class GameStarter {
+public class GameStarter implements Observer<PlayerChoice> {
     private GameBoard gameBoard;
     private GameLoader gameLoader;
     private List<Player> playerList;
+    //GESTIRE COMUNICAZIONI VIEW
 
     /**
      * Builder method for GameStarter class
      */
     public GameStarter(){
         gameLoader = new GameLoader();
+        playerList = new ArrayList<>();
     }
 
     /**
      * Method prepares the board by extracting cards
-     * @param userList
-     * @return
+     * @param userList list of users connected to the game
+     * @return the game table of the match
      */
     public GameBoard startGame(List<User> userList){
+        List<PublicObjCard> publicObjCardList= new ArrayList<>();
+        List<ToolCard> toolCardList= new ArrayList<>();
+        BoardCard boardCard;
+        List<PrivatePlayer> privatePlayerList;
+        BoardDice boardDice = new BoardDice();
+        BagDice bagDice = new BagDice();
+        TrackBoard trackBoard = new TrackBoard();
         if(gameLoader.getPublicObjDeck() == null){
             throw new NullPointerException("ERROR: PublicObj deck not existing ");
         }
@@ -43,43 +56,29 @@ public class GameStarter {
         if(gameLoader.getPrivateObjDeck() == null){
             throw new NullPointerException("ERROR: PrivateObj deck not existing");
         }
-            placeSeat(userList);
-            for(int i=0; i<3; i++){
-                gameBoard.getCardOnBoard().getPublicObjCardList().add(extractCard(gameLoader.getPublicObjDeck()));
-                gameBoard.getCardOnBoard().getToolCardList().add(extractCard(gameLoader.getToolDeck()));
-            }
-            distributePrivateObjCard(gameLoader.getPrivateObjDeck());
+        if(playerList.size()!= userList.size()){
+            throw new RuntimeException("ERROR: not enough players");
+        }
+        for(int i=0; i<3; i++){
+            publicObjCardList.add(extractCard(gameLoader.getPublicObjDeck()));
+            toolCardList.add(extractCard(gameLoader.getToolDeck()));
+        }
+        boardCard = new BoardCard(publicObjCardList, toolCardList);
+        privatePlayerList = distributePrivateObjCard(gameLoader.getPrivateObjDeck());
+        gameBoard = new GameBoard(playerList,bagDice,boardDice,trackBoard,boardCard,privatePlayerList);
 
-            return gameBoard;
+        return gameBoard;
     }
 
     /**
-     * Creates a Player object for each use on userList (not completed, missing a PlayerChoice)
-     * @param userList list of all users connected for the match
+     * Shuffles the list of players to make it random
+     * @param playerList list of all users connected for the match
      */
-    private void placeSeat(List<User> userList){
-        if(userList == null){
-            throw new NullPointerException("ERROR: User list does not exists");
+    private void placeSeat(List<Player> playerList){
+        if(playerList == null){
+            throw new NullPointerException("ERROR: Player list does not exists");
         }
-        int flag = 0;
-        List<Integer> indici = new ArrayList<>();
-        playerList = new ArrayList<>();
-        Random rand = new Random();
-        int  n = rand.nextInt(userList.size()) + 1;
-        for(int i=0; i<indici.size(); i++){
-            if(n== indici.get(i)){
-                flag=1;
-            }
-        }
-        if(flag==0){
-            indici.add(n);
-        }
-        for(int i=0; i<indici.size(); i++){
-            Player player = new Player(userList.get(indici.get(i)).getNickname(),connection, colour, schemacard, tokens );
-            //necesario implementare comunicazioni
-            userList.get(indici.get(i)).setPlayer(player);
-            playerList.add(player);
-        }
+        Collections.shuffle(playerList);
     }
 
     /**
@@ -100,14 +99,16 @@ public class GameStarter {
      * Method distributes PrivateObj cards to the players
      * @param privateObjCardDeck deck of PrivateObj cards
      */
-    private void distributePrivateObjCard(CardDeck privateObjCardDeck){
+    private List<PrivatePlayer> distributePrivateObjCard(CardDeck privateObjCardDeck){
+        List<PrivatePlayer> privatePlayerList = new ArrayList<>();
         if(privateObjCardDeck == null){
             throw new NullPointerException("ERROR: PrivateObjCard deck not existing");
         }
         for(int i=0; i<playerList.size(); i++){
             PrivatePlayer privatePlayer = new PrivatePlayer(playerList.get(i),(PrivateObjCard)extractCard(privateObjCardDeck));
-            gameBoard.getPrivatePlayerList().add(privatePlayer);
+            privatePlayerList.add(privatePlayer);
         }
+         return privatePlayerList;
     }
 
     /**
@@ -115,6 +116,22 @@ public class GameStarter {
      */
     public List<Player> getPlayerList(){
         return this.playerList;
+    }
+
+    public void addPlayer(Player player){
+        this.playerList.add(player);
+    }
+
+    /**
+     *
+     * @param playerChoice
+     */
+    public void update(PlayerChoice playerChoice)
+    {
+        User user = playerChoice.getUser();
+        Player player = new Player(user.getNickname(), user.isConnected(), playerChoice.getChosenColour(), playerChoice.getChosenSchema(), playerChoice.getChosenSchema().getDifficulty());
+        user.setPlayer(player);
+        addPlayer(player);
     }
 
 }

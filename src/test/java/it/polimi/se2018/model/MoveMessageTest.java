@@ -20,6 +20,8 @@ public class MoveMessageTest {
 
     /**
      * Initialization of MoveMessageTest
+     *
+     * @author Silvia Franzini
      */
     @Before
     public void init(){

@@ -12,6 +12,11 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests User class
+ *
+ * @author Silvia Franzini
+ */
 public class UserTest {
 
     private User user;

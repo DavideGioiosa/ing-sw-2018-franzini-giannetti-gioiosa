@@ -13,10 +13,10 @@ import static org.junit.Assert.*;
 
 public class ToolCardTest{
 
-    public final static String NAME = "Name";
-    public final static String DESCRIPTION = "Description";
-    final ColourEnum colour = ColourEnum.BLUE;
-    final int ID = 1;
+    private final String NAME = "Name";
+    private final String DESCRIPTION = "Description";
+    private final ColourEnum colour = ColourEnum.BLUE;
+    private final int ID = 1;
 
     /**
      * Creates a new Card with correct parameters

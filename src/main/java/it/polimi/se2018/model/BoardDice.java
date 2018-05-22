@@ -46,7 +46,7 @@ public class BoardDice {
      */
     public Die takeDice(int index){
         if (dieList.size() == 0) throw new RuntimeException("ERROR: Draft Pool is empty");
-        if (index < 0 || index > dieList.size() -1) throw new RuntimeException("ERROR: A die with this index does not exist");
+        if (index < 0 || index >= dieList.size()) throw new RuntimeException("ERROR: A die with this index does not exist");
 
         Die die;
         die = dieList.remove(index);

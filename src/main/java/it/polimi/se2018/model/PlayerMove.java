@@ -5,6 +5,7 @@ import it.polimi.se2018.model.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO exceptions
 /**
  * PlayerMove contains the entire command representing the Action that the Player wants to do.
  *
@@ -95,7 +96,7 @@ public class PlayerMove {
      * @param player Player who wants to make the Player Move
      */
     public void setPlayer(Player player) {
-        if (player == null) throw new IllegalArgumentException("ERROR: No player setted in the Player Move");
+        if (player == null) throw new NullPointerException("ERROR: No player setted in the Player Move");
         this.player = player;
     }
 
@@ -112,7 +113,7 @@ public class PlayerMove {
      * @param typeOfChoice Enum with all type of move that the Player can make
      */
     public void setTypeOfChoice(TypeOfChoiceEnum typeOfChoice) {
-        if (typeOfChoice == null) throw new IllegalArgumentException("ERROR: No TypeOfChoice setted in the Player Move");
+        if (typeOfChoice == null) throw new NullPointerException("ERROR: No TypeOfChoice setted in the Player Move");
         this.typeOfChoice = typeOfChoice;
     }
 

@@ -7,6 +7,11 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests BoardDice class
+ *
+ * @author Silvia Franzini
+ */
 public class BoardDiceTest {
 
     private BoardDice boardDice;

@@ -37,6 +37,7 @@ public class BagDice {
      * @param die The Die to be inserted
      */
     public void insertDice(Die die){
+        if(die == null) throw new NullPointerException("ERROR: Cannot insert a null Die");
         dieList.add(die);
     }
 
