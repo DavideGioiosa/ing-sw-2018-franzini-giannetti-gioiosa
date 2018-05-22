@@ -15,5 +15,4 @@ public interface ScoreStrategy {
      */
     int getScore(SchemaCard schemaCard);
 
-
 }

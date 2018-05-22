@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<privateObjCards>
+    <card>
+        <name>Colori Diversi - Riga</name>
+        <description>Righe senza colori ripetuti</description>
+        <typeofcalculatiion>DiffColoursRow</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Colori Diversi - Colonna</name>
+        <description>Colonne senza colori ripetuti</description>
+        <typeofcalculatiion>DiffColoursColumn</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Sfumature Diverse - Riga</name>
+        <description>Righe senza sfumature ripetute</description>
+        <typeofcalculatiion>DiffNumbersRow</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Sfumature Diverse - Colonna</name>
+        <description>Colonne senza sfumature ripetute</description>
+        <typeofcalculatiion>DiffNumbersColumn</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Sfumature Chiare</name>
+        <description>Set di 1 e 2 ovunque</description>
+        <typeofcalculatiion>SmallNumbers</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Sfumature Medie</name>
+        <description>Set di 3 e 4 ovunque</description>
+        <typeofcalculatiion>MiddleNumbers</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Sfumature Scure</name>
+        <description>Set di 5 e 6 ovunque</description>
+        <typeofcalculatiion>BigNumbers</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Sfumature Diverse</name>
+        <description>Set di dadi di ogni valore ovunque</description>
+        <typeofcalculatiion>DiffNumbers</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Diagonali Colorate</name>
+        <description>Numero di dadi dello stesso colore diagonalmente adiacenti</description>
+        <typeofcalculatiion>ColouredDiagonal</typeofcalculatiion>
+    </card>
+    <card>
+        <name>Varietà di Colore</name>
+        <description>Set di dadi di ogni colore ovunque</description>
+        <typeofcalculatiion>DiffColours</typeofcalculatiion>
+    </card>
+</privateObjCards>

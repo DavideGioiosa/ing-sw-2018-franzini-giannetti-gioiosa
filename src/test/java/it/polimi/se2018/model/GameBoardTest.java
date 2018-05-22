@@ -5,6 +5,7 @@ import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 import it.polimi.se2018.model.cards.public_card.ScoreStrategy;
 import it.polimi.se2018.model.player.Player;
+import it.polimi.se2018.model.player.PrivatePlayer;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,8 +31,8 @@ public class GameBoardTest {
     private SchemaCard schemaCard;
     private final int ID = 1;
     private final int DIFFICULTY = 1;
-    private ScoreStrategy strategy = null;
-
+    private String strategy = null;
+    private List<PrivatePlayer> privatePlayerList = new ArrayList<>();
 /*    /**
      * Sets a valid Schema Card
      */
@@ -77,7 +78,7 @@ public class GameBoardTest {
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
 
 
-        GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, boardCard);
+        GameBoard gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, boardCard, privatePlayerList);
         assertEquals(playerList, gameBoard.getPlayerList());
         assertEquals(bagDice, gameBoard.getBagDice());
         assertEquals(boardDice, gameBoard.getBoardDice());
@@ -116,23 +117,23 @@ public class GameBoardTest {
         BagDice bagDice = new BagDice();
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
         try{
-            GameBoard gameBoard = new GameBoard(null, bagDice,boardDice, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(null, bagDice,boardDice, trackBoardDice, boardCard, privatePlayerList);
             fail();
         }catch(NullPointerException e){}
         try{
-            GameBoard gameBoard = new GameBoard(playerList, null,boardDice, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, null,boardDice, trackBoardDice, boardCard, privatePlayerList);
             fail();
         }catch(NullPointerException e){}
         try{
-            GameBoard gameBoard = new GameBoard(playerList, bagDice,null, trackBoardDice, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice,null, trackBoardDice, boardCard, privatePlayerList);
             fail();
         }catch(NullPointerException e){}
         try{
-            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, null, boardCard);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, null, boardCard, privatePlayerList);
             fail();
         }catch(NullPointerException e){}
         try{
-            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, trackBoardDice, null);
+            GameBoard gameBoard = new GameBoard(playerList, bagDice, boardDice, trackBoardDice, null, privatePlayerList);
             fail();
         }catch(NullPointerException e){}
     }

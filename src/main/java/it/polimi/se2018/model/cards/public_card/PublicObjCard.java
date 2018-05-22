@@ -17,11 +17,12 @@ public class PublicObjCard extends Card {
      * @param description description of the card
      * @param scoreStrategy used for Strategy Pattern
      */
-    public PublicObjCard(int id, String name, String description,ScoreStrategy scoreStrategy){
+    public PublicObjCard(int id, String name, String description,String scoreStrategy){
         super(id,name,description);
-        if(scoreStrategy == null){
+        this.scoreStrategy = setScoreStrategy(scoreStrategy);
+        if(this.scoreStrategy == null){
             throw new NullPointerException("ERROR: ScoreStrategy not existing");
-        }else this.scoreStrategy=scoreStrategy;
+        }
     }
 
     /**
@@ -34,5 +35,42 @@ public class PublicObjCard extends Card {
             throw new NullPointerException("ERROR: Schema Card not existing");
         }
         return scoreStrategy.getScore(schemaCard);
+    }
+
+    private ScoreStrategy setScoreStrategy(String strategy) {
+        ScoreStrategy scoreStrategy = null;
+        switch(strategy){
+            case "DiffColoursRow":
+                scoreStrategy = new DiffColoursRow();
+                break;
+            case "DiffColoursColumn":
+                scoreStrategy = new DiffColoursColumn();
+                break;
+            case "DiffNumbersRow":
+                scoreStrategy = new DiffNumbersRow();
+                break;
+            case "DiffNumbersColumn":
+                scoreStrategy = new DiffNumbersColumn();
+                break;
+            case "SmallNumbers":
+                scoreStrategy = new SmallNumbers();
+                break;
+            case "MiddleNumbers":
+                scoreStrategy = new MiddleNumbers();
+                break;
+            case "BigNumbers":
+                scoreStrategy = new BigNumbers();
+                break;
+            case "DiffNumbers":
+                scoreStrategy = new DiffNumbers();
+                break;
+            case "ColouredDiagonal":
+                scoreStrategy = new ColouredDiagonal();
+                break;
+            case "DiffColours":
+                scoreStrategy = new DiffColours();
+                break;
+        }
+        return scoreStrategy;
     }
 }
