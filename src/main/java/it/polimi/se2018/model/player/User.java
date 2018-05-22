@@ -8,6 +8,7 @@ package it.polimi.se2018.model.player;
 public class User {
     private String nickname;
     private Player player;
+    private boolean connection;
     //TODO: PARAMETRI CONNESSIONE
 
     /**
@@ -16,6 +17,7 @@ public class User {
      */
     public User (String nickname){
         this.nickname = nickname;
+        this.connection = true;
     }
 
     /**
@@ -37,5 +39,9 @@ public class User {
      */
     public Player getPlayer() {
         return player;
+    }
+
+    public boolean isConnected() {
+        return connection;
     }
 }
