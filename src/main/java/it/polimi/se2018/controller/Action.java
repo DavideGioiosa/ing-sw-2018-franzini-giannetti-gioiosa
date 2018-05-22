@@ -24,7 +24,7 @@ public class Action {
     public boolean selectAction(PlayerMove playerMove){
       switch (playerMove.getTypeOfChoice()){
           case PICK: try{
-              //placeDice(playerMove.getPlayer(), gameboard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()), playerMove.getDiceSchemaWhereToLeave());
+             placeDice(playerMove.getPlayer(), gameboard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),playerMove.getDiceSchemaWhereToLeave().get(0));
           }catch(IllegalArgumentException e){
               return false;
           }
@@ -33,14 +33,26 @@ public class Action {
               useTool(playerMove);
           }catch(IllegalArgumentException e){
               return false;
-          } break;
-          case PASS: return true;// break;
-          case ROLL:  break;
+          }
+          break;
+          case PASS: break;
+          case ROLL: for(Die die : gameboard.getBoardDice().getDieList()){
+              try{
+                  die.firstRoll();
+              }catch(RuntimeException e){return false;}
+
+          }; break;
           case EXTRACT: for(int i=0; i<gameboard.getPlayerList().size()*2 +1; i++){
-              gameboard.getBagDice().extractDice();
+              //try{}catch da implementare nella classe BoardDice
+              Die die;
+              try{
+                 die = gameboard.getBagDice().extractDice();
+              }catch(RuntimeException e){
+                  return false;
+              }
+             gameboard.getBoardDice().insertDice(die);
           } break;
           default: break;
-
       }
       return true;
     }
@@ -53,43 +65,38 @@ public class Action {
      * @return true if action completed, false otherwise
      */
     private boolean placeDice(Player actualPlayer, Die die, Position position){
-        boolean success=false;
+        boolean success = false;
+
         try{
             success = checkRestriction.adjacentColourRestriction(actualPlayer.getSchemaCard(), die, position);
         }catch(IllegalArgumentException e){
             throw new IllegalArgumentException("ERROR: incorrect parameters");
         }
-        if(success){
-            try{
-                success = checkRestriction.adjacentRestriction(actualPlayer.getSchemaCard(), die, position);
-            }catch(IllegalArgumentException e){
-                throw new IllegalArgumentException("ERROR: incorrect parameters");
-            }
-            if(success){
-                try{
-                    success = checkRestriction.adjacentValueRestriction(actualPlayer.getSchemaCard(), die, position);
-                }catch(IllegalArgumentException e){
-                    throw new IllegalArgumentException("ERROR: incorrect parameters");
-                }
-                if(success){
-                    try{
-                        success = checkRestriction.cellColourRestriction(actualPlayer.getSchemaCard(), die, position);
-                    }catch(IllegalArgumentException e){
-                        throw new IllegalArgumentException("ERROR: incorrect parameters");
-                    }
-                    if(success){
-                        try{
-                            success = checkRestriction.cellValueRestriction(actualPlayer.getSchemaCard(), die, position);
-                        }catch(IllegalArgumentException e){
-                            throw new IllegalArgumentException("ERROR: incorrect parameters");
-                        }
-                    }else return false;
-
-                }else return false;
-
-            }else return false;
-
-        } else return false;
+        if(!success){return false;}
+        try{
+            success = checkRestriction.adjacentRestriction(actualPlayer.getSchemaCard(), die, position);
+        }catch(IllegalArgumentException e){
+            throw new IllegalArgumentException("ERROR: incorrect parameters");
+        }
+        if(!success){return false;}
+        try{
+            success = checkRestriction.adjacentValueRestriction(actualPlayer.getSchemaCard(), die, position);
+        }catch(IllegalArgumentException e){
+            throw new IllegalArgumentException("ERROR: incorrect parameters");
+        }
+        if(!success){return false;}
+        try{
+            success = checkRestriction.cellColourRestriction(actualPlayer.getSchemaCard(), die, position);
+        }catch(IllegalArgumentException e){
+            throw new IllegalArgumentException("ERROR: incorrect parameters");
+        }
+        if(!success){return false;}
+        try{
+            success = checkRestriction.cellValueRestriction(actualPlayer.getSchemaCard(), die, position);
+        }catch(IllegalArgumentException e){
+            throw new IllegalArgumentException("ERROR: incorrect parameters");
+        }
+        if(!success){return false;}
 
         actualPlayer.getSchemaCard().getCellList().get(position.getIndexArrayPosition()).insertDice(die);
         return true;
