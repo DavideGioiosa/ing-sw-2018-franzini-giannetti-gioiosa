@@ -39,7 +39,7 @@ public class GameLoader {
     /**
      * Deck with Schema Cards
      */
-    public CardDeck schemaDeck;
+    private CardDeck schemaDeck;
     /**
      * Deck with Tool Cards
      */
@@ -201,9 +201,6 @@ public class GameLoader {
 
         Cell cell;
         List<Cell> cellList;
-        ColourEnum colour = null;
-        int value = 1;
-
 
         try {
 
@@ -223,62 +220,42 @@ public class GameLoader {
                     Element element = (Element) node;
                     name = element.getElementsByTagName("name").item(0).getTextContent();
                     difficulty = Integer.valueOf(element.getElementsByTagName("difficulty").item(0).getTextContent());
-                    for (int row = 0; row < NUMBEROFSCHEMAROW; row++) {
 
+                    for (int row = 0; row < NUMBEROFSCHEMAROW; row++) {
                         for (int col = 0; col < NUMBEROFSCHEMACOL; col++) {
 
                             restriction = element.getElementsByTagName("cell").item(row * NUMBEROFSCHEMACOL + col).getTextContent();
-                            if(restriction.charAt(0) >= 49 && restriction.charAt(0) <= 54){
-                                value = restriction.charAt(0)-48;
-                                colour = null;
-                            }else if(restriction.equals("BLANK")){
-                                value = 0;
-                                colour = null;
-                            }else{
-                                value = 0;
-                                colour = ColourEnum.valueOf(restriction);
-                            }
-                            cellList.add(new Cell(value, colour));
+                            cell = parseCell(restriction);
+                            cellList.add(cell);
 
                         }
 
                     }
 
                     SchemaCard frontCard = new SchemaCard(id, name, "", difficulty, cellList);
+                    id ++;
 
                     cellList = new ArrayList<>();
 
                     for (int row = 0; row < NUMBEROFSCHEMAROW; row++) {
-
                         for (int col = 0; col < NUMBEROFSCHEMACOL; col++) {
 
                             restriction = element.getElementsByTagName("cell").item(NUMBEROFSCHEMACOL * NUMBEROFSCHEMAROW + row * NUMBEROFSCHEMACOL + col).getTextContent();
-                            if(restriction.charAt(0) >= 49 && restriction.charAt(0) <= 54){
-                                value = restriction.charAt(0)-48;
-                                colour = null;
-                            }else if(restriction.equals("BLANK")){
-                                value = 0;
-                                colour = null;
-                            }else{
-                                value = 0;
-                                colour = ColourEnum.valueOf(restriction);
-                            }
-                            cellList.add(new Cell(value, colour));
+                            cell = parseCell(restriction);
+                            cellList.add(cell);
 
                         }
-
                     }
 
                     SchemaCard backCard = new SchemaCard(id, name, "", difficulty, cellList);
-
+                    id ++;
                     frontCard.setBackSchema(backCard);
                     backCard.setBackSchema(frontCard);
 
                     schemaDeck.insertCard(frontCard);
-                    schemaDeck.insertCard(backCard);
 
                 }
-                id ++;
+
             }
 
         } catch (Exception e) {
@@ -291,6 +268,43 @@ public class GameLoader {
      * Creates Tool Cards Deck
      */
     private void createToolDeck(){
+
+        int id = IDFIRSTTOOLCARDS;
+        String name;
+        String description;
+        ColourEnum colour;
+        String pathName = "src\\main\\java\\it\\polimi\\se2018\\ToolCards.xml";
+
+        try {
+
+            File file = new File(pathName);
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(file);
+
+            NodeList nodeList = document.getElementsByTagName("card");
+
+            toolDeck = new CardDeck(CardTypeEnum.TOOLCARD);
+
+            for (int index = 0; index < nodeList.getLength(); index++) {
+                Node node = nodeList.item(index);
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    name = element.getElementsByTagName("name").item(0).getTextContent();
+                    description = element.getElementsByTagName("description").item(0).getTextContent();
+                    colour = ColourEnum.valueOf(element.getElementsByTagName("colour").item(0).getTextContent());
+
+                    ToolCard card = new ToolCard(id, name, description, colour);
+                    toolDeck.insertCard(card);
+                }
+                id ++;
+            }
+
+        } catch (Exception e) {
+            //TODO: Gestione Exceptions
+        }
 
     }
 
@@ -305,4 +319,28 @@ public class GameLoader {
         windowFrame.add(ColourEnum.RED);
     }
 
+
+    /**
+     * Parses the restriction from string to values
+     * @param restriction String containing the description of the restriction
+     * @return New Cell with restriction setted
+     */
+    private Cell parseCell(String restriction){
+
+        int value;
+        ColourEnum colour;
+
+        if(restriction.charAt(0) >= 49 && restriction.charAt(0) <= 54){
+            value = restriction.charAt(0) - 48;
+            colour = null;
+        }else if(restriction.equals("BLANK")){
+            value = 0;
+            colour = null;
+        }else{
+            value = 0;
+            colour = ColourEnum.valueOf(restriction);
+        }
+
+        return new Cell(value, colour);
+    }
 }
