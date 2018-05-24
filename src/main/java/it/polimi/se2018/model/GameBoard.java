@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.player.Player;
+import it.polimi.se2018.model.player.PrivatePlayer;
 
 import java.util.List;
 
@@ -32,14 +33,21 @@ public class GameBoard {
     private BoardCard cardOnBoard;
 
     /**
+     * List of Private Objective Card referred to every Player
+     */
+    private List<PrivatePlayer> privatePlayerList;
+
+
+    /**
      * Creation of the GameBoard of the match
      * @param playerList list of players in the match
      * @param bagDice bag containing all the 90 dice
      * @param boardDice dice in the Draft Pool
      * @param trackBoardDice dice placed on the trackboard
      * @param boardCard public and tool cards usable in the match
+     * @param privatePlayerList List of Private Objective Card referred to every Player
      */
-    public GameBoard(List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard){
+    public GameBoard(List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard, List<PrivatePlayer> privatePlayerList){
         if(playerList == null){
             throw new NullPointerException("Insert a playerList null");
         }
@@ -55,12 +63,16 @@ public class GameBoard {
         if(boardCard == null){
             throw new NullPointerException("Insert a boardCard null");
         }
+        if(privatePlayerList == null){
+            throw new NullPointerException("Insert a privatePlayerList null");
+        }
 
         this.playerList = playerList;
         this.bagDice = bagDice;
         this.boardDice = boardDice;
         this.trackBoardDice = trackBoardDice;
         this.cardOnBoard = boardCard;
+        this.privatePlayerList = privatePlayerList;
     }
 
     /**
@@ -96,5 +108,9 @@ public class GameBoard {
      */
     public BoardCard getCardOnBoard() {
         return cardOnBoard;
+    }
+
+    public List<PrivatePlayer> getPrivatePlayerList() {
+        return privatePlayerList;
     }
 }
