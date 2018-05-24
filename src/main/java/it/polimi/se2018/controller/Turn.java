@@ -19,28 +19,25 @@ public class Turn {
      */
     private GameBoard gameBoard;
     /**
-     * current playerMove belonging to the current Turn player
-     */
-    private PlayerMove playerMove;
-    /**
      * list of Actions of the player componing the turn
      */
     private List<Action> turnsActionsList;
+    /**
+     * informs if the action PICK has already done or not
+     * it can be done once a Turn for each player
+     */
+    private boolean isPick;
 
     /**
      * Builder of Turn which composes the Round
      * @param gameboard full table of the game
-     * @param playerMove contains the action belonging to the current player
      */
-    public Turn (GameBoard gameboard, PlayerMove playerMove){
+    public Turn (GameBoard gameboard){
         if (gameBoard == null){
             throw new NullPointerException("Insertion of null parameter gameBoard");
         }
-        if (playerMove == null){
-            throw new NullPointerException("Insertion of null parameter playerMove");
-        }
         this.gameBoard = gameboard;
-        this.playerMove = playerMove;
+        this.isPick = false;
         startTurn();
     }
 
@@ -53,13 +50,21 @@ public class Turn {
 
     /**
      * Start run creating the action and adding to the list of Action if it can be done
+     * Check if the action PICK has already done or not, it can be done once for Turn
      * @return boolean to communicate the result of the action
      */
-    public boolean runTurn (){
+    public boolean runTurn (PlayerMove playerMove){
+        if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK) && isPick){
+            return false;
+        }
+
         Action action = new Action (gameBoard);
 
         if(action.selectAction(playerMove)){
             turnsActionsList.add(action);
+            if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK)){
+                this.isPick = true;
+            }
             return true;
         }
         return false;
@@ -69,7 +74,7 @@ public class Turn {
      * Communicate if the action received is the last of the player
      * @return boolean to communicate the end of the Turn for the current player
      */
-    public boolean endTurn (){
+    public boolean endTurn (PlayerMove playerMove){
         if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PASS)){
             return true;
         }

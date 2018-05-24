@@ -19,20 +19,12 @@ public class CheckRestriction {
      * @param schemaCard of the currentPlayer
      * @param die selected in the Draft Pool
      * @param position where the currentPlayer wants to put the die
-     * if the Scheme is empty:
-     * 1. Check adjcents cells (also diagonal ones) and
-     * @return true if the position where the player wants to put the die is on the edge of his Scheme
-     * if the Scheme is empty:
-     * 2. Check adjacents cells (also diagonal ones) of the position requested
+     * Check adjacents cells (also diagonal ones) of the position requested
      * to get if there are any die inside and
      * @return true if there's at least one adj die
      */
     public boolean adjacentRestriction(SchemaCard schemaCard, Die die, Position position) {
         validateParameters(schemaCard, die, position);
-
-        if (schemaCard.isEmpty()) {
-            return isOnTheBorder(position);
-        }
 
         List<Cell> adjList = schemaCard.getAdjacents(position);
         for (Cell c : adjList) {
@@ -50,7 +42,17 @@ public class CheckRestriction {
         return false;
     }
 
-    private boolean isOnTheBorder(Position position) {
+    /**
+     * called if the Scheme is empty, check if the position where
+     * the player wants to put the die is on the edge of his Scheme
+     * @param position where the currentPlayer wants to put the die
+     * @return true if the position is valid
+     */
+    public boolean isOnTheBorder(Position position) {
+        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
+                    "out of the range permitted");
+        }
         return position.getRow() == 0 || position.getRow() == 3 || position.getCol() == 0 || position.getCol() == 4;
     }
 
@@ -97,7 +99,7 @@ public class CheckRestriction {
      * @param schemaCard of the currentPlayer
      * @param die selected in the Draft Pool
      * @param position where the currentPlayer wants to put the die
-     * @return true if the there aren't
+     * @return true if the there aren't any
      */
     public boolean adjacentColourRestriction(SchemaCard schemaCard, Die die, Position position) {
         validateParameters(schemaCard, die, position);
@@ -121,7 +123,7 @@ public class CheckRestriction {
      * @param schemaCard of the currentPlayer
      * @param die selected in the Draft Pool
      * @param position where the currentPlayer wants to put the die
-     * @return true if there aren't
+     * @return true if there aren't any
      */
     public boolean adjacentValueRestriction(SchemaCard schemaCard, Die die, Position position) {
         validateParameters(schemaCard, die, position);
