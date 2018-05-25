@@ -12,7 +12,7 @@ import java.util.List;
  * @author Cristian Giannetti
  */
 
-public class PlayerMove {
+public class PlayerMove extends PlayerMessage {
 
     /**
      * Progressive identifier of the Player Move
