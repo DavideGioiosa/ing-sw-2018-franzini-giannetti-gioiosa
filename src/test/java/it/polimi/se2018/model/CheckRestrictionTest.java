@@ -69,11 +69,12 @@ public class CheckRestrictionTest {
     }
 
     /**
-     * If the Scheme is empty the die has to be placed in a border cell
+     * Check if the die has to be placed in a border cell
+     * Method will be called only when the Scheme is empty
      * Check a positive insertion of position
      */
     @Test
-    public void adjacentRestriction_shouldReturnTrueWhenThePositionIsOnTheEdge() {
+    public void isOnTheBorder_shouldReturnTrueWhenThePositionIsOnTheEdge() {
         cellList.add(new Cell(0, null));
         SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
@@ -81,17 +82,18 @@ public class CheckRestrictionTest {
         die.firstRoll();
         Position position = new Position(3);
 
-        boolean result = checkRestriction.adjacentRestriction(schemaCard, die, position);
+        boolean result = checkRestriction.isOnTheBorder(position);
 
         assertTrue(result);
     }
 
     /**
-     * Check if the Scheme is empty the die has to be placed in a border cell
+     * Check if the die has to be placed in a border cell
+     * Method will be called only when the Scheme is empty
      * Check a negative insertion of position
      */
     @Test
-    public void adjacentRestriction_shouldReturnFalseWhenThePositionIsNotOnTheEdge() {
+    public void isOnTheBorder_shouldReturnFalseWhenThePositionIsNotOnTheEdge() {
         cellList.add(new Cell(0, null));
         SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
@@ -99,7 +101,7 @@ public class CheckRestrictionTest {
         die.firstRoll();
         Position position = new Position(7);
 
-        boolean result = checkRestriction.adjacentRestriction(schemaCard, die, position);
+        boolean result = checkRestriction.isOnTheBorder (position);
 
         assertFalse(result);
     }

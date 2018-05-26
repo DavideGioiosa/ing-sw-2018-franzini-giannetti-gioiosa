@@ -10,7 +10,7 @@ import java.util.List;
  * Class used to send user's choices during match setup
  * @author Silvia Franzini
  */
-public class PlayerChoice {
+public class PlayerChoice extends PlayerMessage {
     private User user;
     private List<SchemaCard> schemaCardList;
     private List<ColourEnum> colourEnumList;
@@ -25,6 +25,8 @@ public class PlayerChoice {
         this.user=user;
         schemaCardList = new ArrayList<>();
         colourEnumList = new ArrayList<>();
+        chosenColour = null;
+        chosenSchema = null;
     }
 
     /**
@@ -59,24 +61,44 @@ public class PlayerChoice {
         return colourEnumList;
     }
 
-
+    /**
+     * Setter method for frame colour's choice
+     * @param chosenColour
+     */
     public void setChosenColour(ColourEnum chosenColour) {
         this.chosenColour = chosenColour;
     }
 
+    /**
+     * Setter method for the window pattern card
+     * @param chosenSchema window pattern chosen
+     */
     public void setChosenSchema(SchemaCard chosenSchema) {
         this.chosenSchema = chosenSchema;
     }
 
+    /**
+     * Getter method
+     * @return
+     */
     public ColourEnum getChosenColour() {
         return chosenColour;
     }
 
+    /**
+     *
+     * @return
+     */
     public SchemaCard getChosenSchema() {
         return chosenSchema;
     }
 
+    /**
+     *
+     * @return
+     */
     public User getUser() {
         return user;
     }
+
 }

@@ -4,10 +4,10 @@ import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.PlayerMove;
 import it.polimi.se2018.model.TrackBoard;
 import it.polimi.se2018.model.player.Player;
+import it.polimi.se2018.utils.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 
 
 /**
@@ -15,7 +15,7 @@ import java.util.Observer;
  * @author Davide Gioiosa
  */
 
-public class Round implements Observer <PlayerMove> {
+public class Round implements Observer<PlayerMove>{
     /**
      * list of Turns of each player componing the round
      */
@@ -24,10 +24,6 @@ public class Round implements Observer <PlayerMove> {
      * list of players in the match
      */
     private List <Player> playerList;
-    /**
-     * current playerMove belonging to the current Turn player
-     */
-    private PlayerMove playerMove;
     /**
      * table containing all the objects belonging to the match
      */
@@ -50,10 +46,9 @@ public class Round implements Observer <PlayerMove> {
      * Builder of Round which composes the match
      * @param playerList list of player in the game
      * @param gameBoard full table of the game
-     * @param trackBoard list of dice in surplus placed in each round
      * @param indexRound index of the current Round created
      */
-    public Round (List<Player> playerList, GameBoard gameBoard, TrackBoard trackBoard, int indexRound){
+    public Round (List<Player> playerList, GameBoard gameBoard, int indexRound){
         if(playerList == null){
             throw new NullPointerException("Insertion of null parameter playerList");
         }
@@ -69,18 +64,19 @@ public class Round implements Observer <PlayerMove> {
         }
         this.playerList = playerList;
         this.gameBoard = gameBoard;
-        this.trackBoard = trackBoard;
-        startRound(indexRound);
-        turn = new Turn(gameBoard, playerMove);
+        this.trackBoard = gameBoard.getTrackBoardDice();
+        initializeRound(indexRound);
     }
 
     /**
      * Start of the round sets the list of players ordered by priority for the current Round
      * and creates the list of Turns belonging to each player
      */
-    private void startRound(int indexRound) {
+    private void initializeRound(int indexRound) {
         turnsList = new ArrayList<Turn> ();
         setRoundPlayerOrder(indexRound);
+        turn = new Turn(gameBoard);
+        turnsList.add(turn);
     }
 
     /**
@@ -109,7 +105,7 @@ public class Round implements Observer <PlayerMove> {
     /**
      * Exctraction of the current player from the ordered list of turns in the Round
      */
-    public void removeCurrPlayer () {
+    private void removeCurrPlayer () {
         roundPlayerOrder.remove(0);
     }
 
@@ -118,6 +114,7 @@ public class Round implements Observer <PlayerMove> {
      */
     private void endRound (){
         trackBoard.insertDice(gameBoard.getBoardDice().getDieList());
+        notify(); //to check
     }
 
     /**
@@ -125,24 +122,31 @@ public class Round implements Observer <PlayerMove> {
      * perform Turns of each player composed by actions
      * @param playerMove action of the current player
      */
-    private void update (PlayerMove playerMove){
+    public void update (PlayerMove playerMove){
         if(playerMove == null){
             throw new RuntimeException("Empty playerMove action to execute");
         }
 
         if (playerMove.getPlayer().equals(getCurrPlayer())) {
-            this.playerMove = playerMove;
 
-            if(turn.runTurn()) {
-                turnsList.add(turn);
+            if(!turn.runTurn(playerMove)){
+                //Notifica al server che la playerMove non è corretta
             }
 
-            if(turn.endTurn()){
+            if(turn.endTurn(playerMove)){
                 removeCurrPlayer();
-                if(turnsList.size() < playerList.size() * 2) {
-                    turn = new Turn(gameBoard, playerMove);
+
+                //works but it be may exists a better check
+                if(turnsList.size() < roundPlayerOrder.size() + turnsList.size()) {
+                    turn = new Turn(gameBoard);
+                    turnsList.add(turn);
+                }
+
+                if(roundPlayerOrder.isEmpty()){
+                    endRound();
                 }
             }
         }
     }
+
 }
