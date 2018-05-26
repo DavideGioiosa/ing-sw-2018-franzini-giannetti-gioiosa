@@ -56,7 +56,7 @@ public class PlayerMove {
     /**
      * Constructor sets the identifier to 0 and it resets all value of Player Move
      */
-    PlayerMove() {
+    public PlayerMove() {
         this.id = 0;
         newPlayerMove();
     }
@@ -208,7 +208,7 @@ public class PlayerMove {
 
     /**
      * Sets a generic value nedeed by different Tool Cards
-     * @param value Value used in this Player Move
+     * @param value Value used in the Player Move
      */
     public void setValue(int value) {
         this.value = value;
@@ -216,7 +216,7 @@ public class PlayerMove {
 
     /**
      * Gets value nedeed by different Tool Cards
-     * @return Value used in this Player Move
+     * @return Value used in the Player Move
      */
     public int getValue() {
         return value;
