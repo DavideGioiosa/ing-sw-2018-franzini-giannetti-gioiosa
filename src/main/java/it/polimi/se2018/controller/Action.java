@@ -4,7 +4,7 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.player.Player;
 
 public class Action {
-    private GameBoard gameboard;
+    private GameBoard gameBoard;
     private CheckRestriction checkRestriction;
 
     /**
@@ -12,7 +12,7 @@ public class Action {
      * @param gameboard the game board of the match with all the elements on the board
      */
     public Action(GameBoard gameboard){
-        this.gameboard=gameboard;
+        this.gameBoard=gameboard;
         checkRestriction = new CheckRestriction();
     }
 
@@ -24,7 +24,7 @@ public class Action {
     public boolean selectAction(PlayerMove playerMove){
       switch (playerMove.getTypeOfChoice()){
           case PICK: try{
-             placeDice(playerMove.getPlayer(), gameboard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),playerMove.getDiceSchemaWhereToLeave().get(0));
+             placeDice(playerMove.getPlayer(), gameBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),playerMove.getDiceSchemaWhereToLeave().get(0));
           }catch(IllegalArgumentException e){
               return false;
           }
@@ -36,21 +36,21 @@ public class Action {
           }
           break;
           case PASS: break;
-          case ROLL: for(Die die : gameboard.getBoardDice().getDieList()){
+          case ROLL: for(Die die : gameBoard.getBoardDice().getDieList()){
               try{
                   die.firstRoll();
               }catch(RuntimeException e){return false;}
 
           }; break;
-          case EXTRACT: for(int i=0; i<gameboard.getPlayerList().size()*2 +1; i++){
+          case EXTRACT: for(int i=0; i<gameBoard.getPlayerList().size()*2 +1; i++){
               //try{}catch da implementare nella classe BoardDice
               Die die;
               try{
-                 die = gameboard.getBagDice().extractDice();
+                 die = gameBoard.getBagDice().extractDice();
               }catch(RuntimeException e){
                   return false;
               }
-             gameboard.getBoardDice().insertDice(die);
+             gameBoard.getBoardDice().insertDice(die);
           } break;
           default: break;
       }

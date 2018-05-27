@@ -1,8 +1,10 @@
 package it.polimi.se2018.controller;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
+import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.view.*;
 import it.polimi.se2018.utils.*;
 
@@ -31,7 +33,8 @@ public class GameManager implements Observer<Round>{
     public GameManager(RemoteView view){
         this.view = view;
         roundList = new ArrayList<>();
-        Round round = new Round(gameBoard.getPlayerList(), gameBoard, gameBoard.getTrackBoardDice(), 0 );
+        Round round = new Round(gameBoard.getPlayerList(), gameBoard, 0 );
+        roundList.add(round);
     }
 
     /**
@@ -39,6 +42,9 @@ public class GameManager implements Observer<Round>{
      * @param gameBoard the table of the game
      */
     public void setGameBoard(GameBoard gameBoard) {
+        if(gameBoard == null){
+            view.reportError();
+        }
         this.gameBoard = gameBoard;
     }
 
@@ -46,22 +52,28 @@ public class GameManager implements Observer<Round>{
      * Method calculates the game score for each player at the end of the match
      */
     private void calculateGameScore(){
-        int score = 0;
+
         for(Player player: gameBoard.getPlayerList()){
+            int score = 0;
             for(PublicObjCard publicObjCard : gameBoard.getCardOnBoard().getPublicObjCardList()){
                 try{
                     score += publicObjCard.scoreCalculation(player.getSchemaCard());
                 }catch (NullPointerException e){
                     view.reportError();
-                    //da gestire con invio errore al client
                 }
 
             }
+           for(PrivatePlayer privatePlayer: gameBoard.getPrivatePlayerList()){
+                if(player.equals(privatePlayer.getPlayer())){
+                    score += privatePlayer.getPrivateObj().getScore(player.getSchemaCard());
+                }
+           }
             for(Cell c : player.getSchemaCard().getCellList()){
                 if(c.isEmpty()){
                     score--;
                 }
             }
+            score += player.getTokens();
             player.setScore(score);
         }
     }
@@ -88,14 +100,13 @@ public class GameManager implements Observer<Round>{
      */
     public void update(Round round){
         if(roundList.size()==10){
-            view.reportError(); //definire tipologia errore
-        }else roundList.add(round);
-
-        if(roundList.size()==10){
             calculateGameScore();
             setGameWinner();
-        }
 
+        }else {
+            Round newRound = new Round(gameBoard.getPlayerList(), gameBoard, roundList.size() );
+            roundList.add(newRound);
+        }
     }
 
 }
