@@ -1,6 +1,5 @@
 package it.polimi.se2018.view;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import it.polimi.se2018.model.MoveMessage;
 import it.polimi.se2018.model.PlayerChoice;
 import it.polimi.se2018.model.PlayerMove;

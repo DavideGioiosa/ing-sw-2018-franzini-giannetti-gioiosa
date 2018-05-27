@@ -49,22 +49,22 @@ public class GameBoard {
      */
     public GameBoard(List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard, List<PrivatePlayer> privatePlayerList){
         if(playerList == null){
-            throw new NullPointerException("Insert a playerList null");
+            throw new NullPointerException("Insertion of a null playerList");
         }
         if(bagDice == null){
-            throw new NullPointerException("Insert a bagDice null");
+            throw new NullPointerException("Insertion of a null bagDice");
         }
         if(boardDice == null){
-            throw new NullPointerException("Insert a boardDice null");
+            throw new NullPointerException("Insertion of a null boardDice");
         }
         if(trackBoardDice == null){
-            throw new NullPointerException("Insert a trackBoardDice null");
+            throw new NullPointerException("Insertion of a null trackBoardDice");
         }
         if(boardCard == null){
-            throw new NullPointerException("Insert a boardCard null");
+            throw new NullPointerException("Insertion of a null boardCard");
         }
         if(privatePlayerList == null){
-            throw new NullPointerException("Insert a privatePlayerList null");
+            throw new NullPointerException("Insertion of a null privatePlayerList");
         }
 
         this.playerList = playerList;

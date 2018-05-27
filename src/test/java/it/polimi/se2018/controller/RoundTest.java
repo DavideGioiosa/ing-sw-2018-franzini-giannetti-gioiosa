@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Test Round Class
+ * Test Controller's Class Round
  * @author Davide Gioiosa
  */
 

@@ -2,6 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.TypeOfChoiceEnum;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.utils.Observer;
 
@@ -36,7 +37,11 @@ public class Round implements Observer<PlayerMove>{
      * Turn componing the Round
      */
     private Turn turn;
-
+    /**
+     * informs if the action EXTRACT has already done or not
+     * it can be done once a Round and only by the first player
+     */
+    private boolean isDraftPoolSet;
 
     /**
      * Builder of Round which composes the match
@@ -53,6 +58,7 @@ public class Round implements Observer<PlayerMove>{
         }
         this.playerList = gameBoard.getPlayerList();
         this.gameBoard = gameBoard;
+        this.isDraftPoolSet = false;
         initializeRound(indexRound);
     }
 
@@ -106,6 +112,21 @@ public class Round implements Observer<PlayerMove>{
     }
 
     /**
+     *
+     * @param playerMove
+     * @return
+     */
+    private boolean setDraftPoolDice (PlayerMove playerMove) {
+        if (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.EXTRACT)){
+            for (int i = 0; i < playerList.size() * 2 + 1; i++) {
+                gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Update of the playerMove of the current Player during the Round,
      * perform Turns of each player composed by actions
      * @param playerMove action of the current player
@@ -116,22 +137,33 @@ public class Round implements Observer<PlayerMove>{
         }
 
         if (playerMove.getPlayer().equals(getCurrPlayer())) {
-
-            if(!turn.runTurn(playerMove)){
-                //Notifica al server che la playerMove non è corretta
+            if (!isDraftPoolSet) {
+                if (setDraftPoolDice(playerMove)) {
+                    this.isDraftPoolSet = true;
+                }
+                else {
+                    //set errore da restituire
+                    //System.out.println("La prima mossa da fare per il primo player del Round è l'extract");
+                }
             }
 
-            if(turn.endTurn()){
-                removeCurrPlayer();
-
-                //works but it be may exists a better check
-                if(turnsList.size() < roundPlayerOrder.size() + turnsList.size()) {
-                    turn = new Turn(gameBoard);
-                    turnsList.add(turn);
+            else {
+                if (!turn.runTurn(playerMove)) {
+                    //Notifica al server che la playerMove non è corretta
                 }
 
-                if(roundPlayerOrder.isEmpty()){
-                    endRound();
+                if (turn.endTurn()) {
+                    removeCurrPlayer();
+
+                    //works but it be may exists a better check
+                    if (turnsList.size() < roundPlayerOrder.size() + turnsList.size()) {
+                        turn = new Turn(gameBoard);
+                        turnsList.add(turn);
+                    }
+
+                    if (roundPlayerOrder.isEmpty()) {
+                        endRound();
+                    }
                 }
             }
         }

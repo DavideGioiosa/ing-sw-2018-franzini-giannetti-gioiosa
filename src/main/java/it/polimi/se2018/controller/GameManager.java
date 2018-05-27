@@ -1,6 +1,5 @@
 package it.polimi.se2018.controller;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.public_card.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
@@ -104,7 +103,7 @@ public class GameManager implements Observer<Round>{
             setGameWinner();
 
         }else {
-            Round newRound = new Round(gameBoard.getPlayerList(), gameBoard, roundList.size() );
+            Round newRound = new Round(gameBoard, roundList.size() );
             roundList.add(newRound);
         }
     }

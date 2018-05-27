@@ -61,6 +61,9 @@ public class Turn {
      * @return boolean to communicate the result of the action
      */
     public boolean runTurn (PlayerMove playerMove){
+        if(playerMove == null){
+            throw new RuntimeException("Insertion of a PlayerMove null");
+        }
         if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK) && isPick){
             return false;
         }

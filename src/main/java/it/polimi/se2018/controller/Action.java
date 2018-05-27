@@ -34,7 +34,9 @@ public class Action {
         this.playerMove = playerMove;
       switch (playerMove.getTypeOfChoice()){
           case PICK: try{
-             placeDice(playerMove.getPlayer(), gameBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),playerMove.getDiceSchemaWhereToLeave().get(0));
+              Die dieExtracted = gameBoard.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
+              placeDice(playerMove.getPlayer(), dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
+
           }catch(IllegalArgumentException e){
               return false;
           }
