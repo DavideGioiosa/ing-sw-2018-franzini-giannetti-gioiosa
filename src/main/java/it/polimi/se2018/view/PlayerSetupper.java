@@ -39,7 +39,7 @@ public class PlayerSetupper {
      * @return Error or ok message
      */
     public String validCommand(String message){
-        message.toUpperCase();
+        message = message.toUpperCase();
         ColourEnum colourToCheck;
 
         try{

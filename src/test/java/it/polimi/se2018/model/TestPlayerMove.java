@@ -52,7 +52,7 @@ public class TestPlayerMove {
     public void setPlayerBadTest(){
        try{
            playerMove.setPlayer(null);
-       }catch(IllegalArgumentException e){}
+       }catch(NullPointerException e){}
     }
 
     /**
