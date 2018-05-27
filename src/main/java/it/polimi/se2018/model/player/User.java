@@ -9,18 +9,20 @@ public class User {
     private String nickname;
     private Player player;
     private boolean connection;
-    //TODO: PARAMETRI CONNESSIONE
+    private TypeOfConnection typeOfConnection;
 
     /**
-     * Builder: create a user
-     * @param nickname
+     * Builder: create a user with the id and the connection
+     * @param nickname chosen by the user
      */
-    public User (String nickname){
+    public User (String nickname, TypeOfConnection typeOfConnection){
         this.nickname = nickname;
         this.connection = true;
+        this.typeOfConnection = typeOfConnection;
     }
 
     /**
+     * Sets the player in the game related to the User
      * @param player in the game, related to the user
      */
     public void setPlayer(Player player) {
@@ -41,6 +43,10 @@ public class User {
         return player;
     }
 
+    /**
+     * Informs if the player is online or not
+     * @return the state of the connection
+     */
     public boolean isConnected() {
         return connection;
     }

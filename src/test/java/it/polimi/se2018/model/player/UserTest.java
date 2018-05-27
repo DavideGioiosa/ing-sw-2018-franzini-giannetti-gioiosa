@@ -41,7 +41,7 @@ public class UserTest {
         }
         SchemaCard schemaCard = new SchemaCard(id, name,desc,token,cellList);
         player = new Player( nick,false,ColourEnum.BLUE,schemaCard,token);
-        user = new User(nick);
+        user = new User(nick, TypeOfConnection.SOCKET);
 
     }
 

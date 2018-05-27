@@ -31,7 +31,7 @@ public class GameManager implements Observer<Round>{
     public GameManager(RemoteView view){
         this.view = view;
         roundList = new ArrayList<>();
-        Round round = new Round(gameBoard.getPlayerList(), gameBoard, gameBoard.getTrackBoardDice(), 0 );
+        Round round = new Round(gameBoard, 0 );
     }
 
     /**

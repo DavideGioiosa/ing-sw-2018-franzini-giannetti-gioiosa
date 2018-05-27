@@ -2,7 +2,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.PlayerMove;
-import it.polimi.se2018.model.TrackBoard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.utils.Observer;
 
@@ -11,7 +10,8 @@ import java.util.List;
 
 
 /**
- * Public Class Round
+ * Controller's Class Round
+ * componing the the match
  * @author Davide Gioiosa
  */
 
@@ -29,10 +29,6 @@ public class Round implements Observer<PlayerMove>{
      */
     private GameBoard gameBoard;
     /**
-     * trackboard cointaning surplus dice of every Round
-     */
-    private TrackBoard trackBoard;
-    /**
      * list of all the turns belonging to each player in the Round
      */
     private List<Player> roundPlayerOrder;
@@ -44,27 +40,19 @@ public class Round implements Observer<PlayerMove>{
 
     /**
      * Builder of Round which composes the match
-     * @param playerList list of player in the game
      * @param gameBoard full table of the game
      * @param indexRound index of the current Round created
      */
-    public Round (List<Player> playerList, GameBoard gameBoard, int indexRound){
-        if(playerList == null){
-            throw new NullPointerException("Insertion of null parameter playerList");
-        }
+    public Round (GameBoard gameBoard, int indexRound){
         if (gameBoard == null){
             throw new NullPointerException("Insertion of null parameter gameBoard");
-        }
-        if (trackBoard == null){
-            throw new NullPointerException("Insertion of null parameter trackBoard");
         }
         if (indexRound < 0 || indexRound > 9){
             throw new IllegalArgumentException("Error creation of a Round " +
                     "with index out of the range permitted");
         }
-        this.playerList = playerList;
+        this.playerList = gameBoard.getPlayerList();
         this.gameBoard = gameBoard;
-        this.trackBoard = gameBoard.getTrackBoardDice();
         initializeRound(indexRound);
     }
 
@@ -89,7 +77,7 @@ public class Round implements Observer<PlayerMove>{
         for (int i = indexRound; i < indexRound + playerList.size(); i++){
             roundPlayerOrder.add(playerList.get(i % playerList.size()));
         }
-        for (int i = indexRound + playerList.size(); i > indexRound; i--){
+        for (int i = indexRound + playerList.size() - 1 ; i > indexRound; i--){
             roundPlayerOrder.add(playerList.get(i % playerList.size()));
         }
     }
@@ -113,8 +101,8 @@ public class Round implements Observer<PlayerMove>{
      * Placement of the surplus dice in the Draft Pool on the Trackboard
      */
     private void endRound (){
-        trackBoard.insertDice(gameBoard.getBoardDice().getDieList());
-        notify(); //to check
+        gameBoard.getTrackBoardDice().insertDice(gameBoard.getBoardDice().getDieList());
+        notify(); //TODO: CHECK CORRECT
     }
 
     /**
@@ -133,7 +121,7 @@ public class Round implements Observer<PlayerMove>{
                 //Notifica al server che la playerMove non è corretta
             }
 
-            if(turn.endTurn(playerMove)){
+            if(turn.endTurn()){
                 removeCurrPlayer();
 
                 //works but it be may exists a better check

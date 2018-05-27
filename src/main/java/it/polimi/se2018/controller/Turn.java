@@ -9,7 +9,8 @@ import java.util.List;
 
 
 /**
- * Public Class Turn
+ * Controller's Class Turn
+ * componing the round with all the action of the current player
  * @author Davide Gioiosa
  */
 
@@ -27,17 +28,23 @@ public class Turn {
      * it can be done once a Turn for each player
      */
     private boolean isPick;
+    /**
+     * informs if the action TOOL has already done or not
+     * it can be done once a Turn for each player
+     */
+    private boolean isToolCardUsed;
 
     /**
      * Builder of Turn which composes the Round
-     * @param gameboard full table of the game
+     * @param gameBoard full table of the game
      */
-    public Turn (GameBoard gameboard){
+    public Turn (GameBoard gameBoard){
         if (gameBoard == null){
             throw new NullPointerException("Insertion of null parameter gameBoard");
         }
-        this.gameBoard = gameboard;
+        this.gameBoard = gameBoard;
         this.isPick = false;
+        this.isToolCardUsed = false;
         startTurn();
     }
 
@@ -57,6 +64,9 @@ public class Turn {
         if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK) && isPick){
             return false;
         }
+        if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL) && isToolCardUsed){
+            return false;
+        }
 
         Action action = new Action (gameBoard);
 
@@ -65,17 +75,20 @@ public class Turn {
             if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK)){
                 this.isPick = true;
             }
+            else if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL)){
+                this.isToolCardUsed = true;
+            }
             return true;
         }
         return false;
     }
 
     /**
-     * Communicate if the action received is the last of the player
+     * Communicate if the action received is the last of the player and ends the turn
      * @return boolean to communicate the end of the Turn for the current player
      */
-    public boolean endTurn (PlayerMove playerMove){
-        if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PASS)){
+    public boolean endTurn (){
+        if(turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS)){
             return true;
         }
         return false;

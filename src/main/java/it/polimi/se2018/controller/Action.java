@@ -6,6 +6,7 @@ import it.polimi.se2018.model.player.Player;
 public class Action {
     private GameBoard gameboard;
     private CheckRestriction checkRestriction;
+    private PlayerMove playerMove;
 
     /**
      * Builder method of Action class
@@ -17,11 +18,20 @@ public class Action {
     }
 
     /**
+     * Choice of the player
+     * @return playerMove related to the action
+     */
+    public PlayerMove getPlayerMove() {
+        return playerMove;
+    }
+
+    /**
      * Method used to call the correct action chosen by the player
      * @param playerMove choices of the player
      * @return true if action completed, false otherwise
      */
     public boolean selectAction(PlayerMove playerMove){
+        this.playerMove = playerMove;
       switch (playerMove.getTypeOfChoice()){
           case PICK: try{
              placeDice(playerMove.getPlayer(), gameboard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),playerMove.getDiceSchemaWhereToLeave().get(0));
