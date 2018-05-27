@@ -109,7 +109,7 @@ public class GameLoader {
         String name;
         String description;
         ColourEnum colour;
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\PrivateObjCard.xml";
+        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PrivateObjCard.xml";
 
         try {
 
@@ -151,7 +151,7 @@ public class GameLoader {
         int id = IDFIRSTPUBLICOBJCARD;
         String name;
         String description;
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\PublicObjCards.xml";
+        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PublicObjCards.xml";
         String strategy;
 
         try {
@@ -229,7 +229,6 @@ public class GameLoader {
                             cellList.add(cell);
 
                         }
-
                     }
 
                     SchemaCard frontCard = new SchemaCard(id, name, "", difficulty, cellList);
@@ -255,13 +254,11 @@ public class GameLoader {
                     schemaDeck.insertCard(frontCard);
 
                 }
-
             }
 
         } catch (Exception e) {
             //TODO: Gestione Exceptions
         }
-
     }
 
     /**
@@ -273,7 +270,7 @@ public class GameLoader {
         String name;
         String description;
         ColourEnum colour;
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\ToolCards.xml";
+        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\ToolCards.xml";
 
         try {
 
@@ -319,7 +316,6 @@ public class GameLoader {
         windowFrame.add(ColourEnum.RED);
     }
 
-
     /**
      * Parses the restriction from string to values
      * @param restriction String containing the description of the restriction
@@ -338,7 +334,11 @@ public class GameLoader {
             colour = null;
         }else{
             value = 0;
-            colour = ColourEnum.valueOf(restriction);
+            try{
+                colour = ColourEnum.valueOf(restriction);
+            }catch (IllegalArgumentException e){
+                colour = null;
+            }
         }
 
         return new Cell(value, colour);

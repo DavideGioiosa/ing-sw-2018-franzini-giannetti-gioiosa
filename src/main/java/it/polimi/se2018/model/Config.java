@@ -17,6 +17,9 @@ public class Config {
     public static final int NUMBEROFPUBLICOBJCARD = 10;
     public static final int NUMBEROFPRIVATEOBJCARD = 5;
 
+    public static final int NUMBEROFPUBLICOBJCARDONBOARD = 3;
+    public static final int NUMBEROFTOOLCARDONBOARD = 3;
+
     public static final int IDFIRSTPUBLICOBJCARD = 100;
     public static final int IDFIRSTPRIVATEOBJCARD = 200;
     public static final int IDFIRSTTOOLCARDS = 300;
@@ -26,5 +29,6 @@ public class Config {
     public static final int NUMBEROFSCHEMAROW = 4;
     public static final int NUMBEROFSCHEMACOL = 5;
 
+    public static final String RESETCOMMAND = "CANCEL";
 
 }

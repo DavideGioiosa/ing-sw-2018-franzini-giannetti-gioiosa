@@ -18,6 +18,7 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class GameStarter implements Observer<PlayerChoice> {
+
     private GameBoard gameBoard;
     private GameLoader gameLoader;
     private List<Player> playerList;
@@ -26,7 +27,7 @@ public class GameStarter implements Observer<PlayerChoice> {
     private GameManager gameManager;
     private RemoteView remoteView;
     private List<ColourEnum> colourEnumList;
-    private List<SchemaCard> schemaCardList;
+    private List<PlayerChoice> playerChoiceSaved;
 
 
     /**
@@ -38,9 +39,13 @@ public class GameStarter implements Observer<PlayerChoice> {
         playerChoiceList = new ArrayList<>();
         this.gameManager= gameManager;
         this.userList = userList;
-        colourEnumList = new ArrayList<>();
-        schemaCardList = new ArrayList<>();
+        playerChoiceSaved = new ArrayList<>();
         remoteView = new RemoteView();
+        colourEnumList = gameLoader.getWindowFrame();
+        if(userList.iterator().hasNext()){
+            sendColours(userList.iterator().next(),colourEnumList);
+        }
+
     }
 
     /**
@@ -57,7 +62,7 @@ public class GameStarter implements Observer<PlayerChoice> {
         BagDice bagDice = new BagDice();
         TrackBoard trackBoard = new TrackBoard();
 
-        if(playerList.size()!= userList.size()){
+        if(playerChoiceList.size()!= userList.size()){
             throw new RuntimeException("ERROR: not enough players");
         }
         for(int i=0; i<3; i++){
@@ -148,19 +153,44 @@ public class GameStarter implements Observer<PlayerChoice> {
         this.playerList.add(player);
     }
 
+    /**
+     * Method used to send the SchemaCards to the user in the set up phase
+     * @param playerChoice Object used to send the SchemaCards extracted
+     */
     public void sendCardChoices(PlayerChoice playerChoice){
 
         List<SchemaCard> schemaCards = new ArrayList<>();
         try{
             schemaCards.add((SchemaCard)extractCard(gameLoader.getSchemaDeck()));
             schemaCards.add((SchemaCard)extractCard(gameLoader.getSchemaDeck()));
+            schemaCards.add(schemaCards.get(0).getBackSchema());
+            schemaCards.add(schemaCards.get(1).getBackSchema());
             playerChoice.setSchemaCardList(schemaCards);
-            remoteView. send(playerChoice);
+            for(PlayerChoice choiceSaved : playerChoiceSaved){
+                if(choiceSaved.getUser().equals(playerChoice.getUser())){
+                    if(choiceSaved.getSchemaCardList()== null){
+                        choiceSaved.setSchemaCardList(schemaCards);
+                    }else remoteView.reportError();
+                }
+            }
+            remoteView.sendChoice(playerChoice);
 
         }catch (RuntimeException e){remoteView.reportError();}
 
-        //studiare interazioni con view
+        //TODO studiare interazioni con view
 
+    }
+
+    /**
+     * Method used to send the Colours choices for the frame
+     * @param user addressee of the message
+     * @param colourEnumList list of remaining colours
+     */
+    public void sendColours(User user, List<ColourEnum> colourEnumList){
+        PlayerChoice playerChoice = new PlayerChoice(user);
+        playerChoice.setColourEnumList(colourEnumList);
+        playerChoiceSaved.add(playerChoice);
+        remoteView.sendChoice(playerChoice);
     }
 
     /**
@@ -169,25 +199,30 @@ public class GameStarter implements Observer<PlayerChoice> {
      */
     public void update(PlayerChoice playerChoice)
     {
-        boolean set = false;
-        User user = playerChoice.getUser();
-        for(PlayerChoice player: playerChoiceList){
-            if(player.getUser().equals(user)){
+        for(PlayerChoice choiceSaved: playerChoiceSaved){
+            if(choiceSaved.getUser().equals(playerChoice.getUser())){
 
-                if(playerChoice.getChosenSchema()!=null){
-                    if(player.getChosenSchema() != null){
-                        remoteView.reportError(); //da definire parametro
+                if(choiceSaved.getSchemaCardList().contains(playerChoice.getChosenSchema()))
+                {
+                    choiceSaved.setChosenSchema(playerChoice.getChosenSchema());
+                    List<SchemaCard> schemaCards = new ArrayList<>();
+                    schemaCards.add(playerChoice.getChosenSchema());
+                    choiceSaved.setSchemaCardList(schemaCards);
+                    playerChoiceList.add(choiceSaved);
 
-                    }else player.setChosenSchema(playerChoice.getChosenSchema());
-                }
-                set = true;
-                sendCardChoices(playerChoice);
+                }else remoteView.reportError();
+
+                if(choiceSaved.getColourEnumList().contains(playerChoice.getChosenColour())){
+
+                    colourEnumList.remove(playerChoice.getChosenColour());
+                    choiceSaved.setChosenColour(playerChoice.getChosenColour());
+                    sendCardChoices(playerChoice);
+                    if(userList.iterator().hasNext()){
+                        sendColours(userList.iterator().next(), colourEnumList);
+                    }
+
+                }else remoteView.reportError();
             }
-        }
-        if(!set){
-            colourEnumList.remove(playerChoice.getChosenColour());
-            playerChoiceList.add(playerChoice);
-            remoteView.send(playerChoice);
         }
 
         if(playerChoiceList.size()== userList.size()){

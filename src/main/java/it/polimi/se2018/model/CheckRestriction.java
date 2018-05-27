@@ -153,9 +153,12 @@ public class CheckRestriction {
         if (die == null) {
             throw new NullPointerException("ERROR: Die selected is null");
         }
-        if (position == null || position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
-            throw new IllegalArgumentException("ERROR: Position is null or insert an indexArrayPosition " +
-                    "out of the range permitted");
+        if (position == null){
+            throw new NullPointerException("ERROR: Position selected is null");
         }
+        if (position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
+            throw new IllegalArgumentException("Index inserted is out of the range permitted");
+        }
+
     }
 }

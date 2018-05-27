@@ -47,9 +47,9 @@ public class PlayerMove extends PlayerMessage {
     /**
      * Position of dice in Track Board from where the player wants to pick a die.
      */
-    private Position trackBoardIndex;
+    private int trackBoardIndexArray[];
     /**
-     * Value used by different toolcards
+     * Generic value used by different Tool Cards
      */
     private int value;
 
@@ -72,7 +72,7 @@ public class PlayerMove extends PlayerMessage {
         this.diceBoardIndex = -1;
         this.diceSchemaWhereToTake = new ArrayList<>();
         this.diceSchemaWhereToLeave = new ArrayList<>();
-        this.trackBoardIndex = null;
+        this.trackBoardIndexArray = null;
         this.value = 0;
     }
 
@@ -162,8 +162,8 @@ public class PlayerMove extends PlayerMessage {
      * Sets a list of Position from where the Player wants to move the dice.
      * @param diceSchemaWhereToTake List of Position from where the Player wants to move the dice
      */
-    public void setDiceSchemaWhereToTake(List<Position> diceSchemaWhereToTake) {
-        this.diceSchemaWhereToTake = diceSchemaWhereToTake;
+    public void insertDiceSchemaWhereToTake(Position diceSchemaWhereToTake) {
+        this.diceSchemaWhereToTake.add(diceSchemaWhereToTake);
     }
 
     /**
@@ -178,8 +178,8 @@ public class PlayerMove extends PlayerMessage {
      * Sets a list of Position where the Player wants to move the dice
      * @param diceSchemaWhereToLeave List of Position where the Player wants to move the dice
      */
-    public void setDiceSchemaWhereToLeave(List<Position> diceSchemaWhereToLeave) {
-        this.diceSchemaWhereToLeave = diceSchemaWhereToLeave;
+    public void insertDiceSchemaWhereToLeave(Position diceSchemaWhereToLeave) {
+        this.diceSchemaWhereToLeave.add(diceSchemaWhereToLeave);
     }
 
     /**
@@ -191,19 +191,21 @@ public class PlayerMove extends PlayerMessage {
     }
 
     /**
-     * Sets the index of Draft Pool from where the Player wants to pick a dice
-     * @param trackBoardIndex Index of the Draft Pool from where the Player wants to pick a dice
+     * Sets the indexes of Track Board from where the Player wants to pick a dice
+     * @param roundIndex Index of the Track Board from where the Player wants to pick a dice
+     * @param diceIndex Index of the Dice in selected Round cell from where the Player wants to pick a dice
      */
-    public void setTrackBoardIndex(Position trackBoardIndex) {
-        this.trackBoardIndex = trackBoardIndex;
+    public void setTrackBoardIndex(int roundIndex, int diceIndex) {
+        this.trackBoardIndexArray[0] = roundIndex;
+        this.trackBoardIndexArray[1] = diceIndex;
     }
 
     /**
      * Gets the index of Draft Pool from where the Player wants to use in this Player Move
      * @return Index of the Draft Pool from where the Player wants to use in this Player Move
      */
-    public Position getTrackBoardIndex() {
-        return trackBoardIndex;
+    public int[] getTrackBoardIndex() {
+        return trackBoardIndexArray;
     }
 
     /**

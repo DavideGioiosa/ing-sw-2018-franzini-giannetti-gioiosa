@@ -32,7 +32,7 @@ public class DieTest {
         try{
             Die die = new Die(null);
             fail();
-        } catch (IllegalArgumentException e){
+        } catch (NullPointerException e){
         }
     }
 
