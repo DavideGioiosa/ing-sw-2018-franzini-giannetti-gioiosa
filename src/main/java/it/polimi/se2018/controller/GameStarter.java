@@ -29,7 +29,6 @@ public class GameStarter implements Observer<PlayerChoice> {
     private List<ColourEnum> colourEnumList;
     private List<PlayerChoice> playerChoiceSaved;
 
-
     /**
      * Builder method for GameStarter class
      */

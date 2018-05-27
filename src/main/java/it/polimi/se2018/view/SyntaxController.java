@@ -40,8 +40,8 @@ public class SyntaxController {
      */
     public SyntaxController(GameBoard gameBoard, Player player){
         this.gameBoard = gameBoard;
-        nextCommandType = CommandTypeEnum.TYPEOFCHOICE;
         this.player = player;
+        newSyntaxController();
     }
 
     /**
@@ -50,15 +50,12 @@ public class SyntaxController {
      * @return Error or OK message
      */
     public String validCommand(String message){
-        String outputMessage;
 
         if (message == null) return "COMANDO ERRATO";
         message = message.toUpperCase();
 
         if (message.equals(RESETCOMMAND)){
-            nextCommandType = CommandTypeEnum.TYPEOFCHOICE;
-            playerMove = new PlayerMove();
-            playerMove.setPlayer(player);
+            newSyntaxController();
             return "OK MESSAGE";
 
         }
@@ -177,6 +174,16 @@ public class SyntaxController {
             nextCommandType = CommandTypeEnum.TOOLCARDID;
             return;
         }
+    }
+
+    public PlayerMove getPlayerMove(){
+        return playerMove;
+    }
+
+    public void newSyntaxController(){
+        nextCommandType = CommandTypeEnum.TYPEOFCHOICE;
+        this.playerMove = new PlayerMove();
+        this.playerMove.setPlayer(this.player);
     }
 
 }

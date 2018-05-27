@@ -27,12 +27,11 @@ public class MoveMessageTest {
     public void init(){
         List<PublicObjCard> publicObjCardList = new ArrayList<PublicObjCard>();
         List<ToolCard> toolCardList = new ArrayList<ToolCard>();
-        playerList = new ArrayList<Player>();
+        playerList = new ArrayList<>();
         boardCard = new BoardCard(publicObjCardList,toolCardList);
         boardDice = new BoardDice();
         trackBoard = new TrackBoard();
         moveMessage = new MoveMessage(playerList,boardDice,boardCard,trackBoard);
-
     }
 
     /**

@@ -30,7 +30,7 @@ public class PlayerTest {
      * @throws Exception
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         String nick = "nick";
         String desc = "desc";
         String name = "name";
@@ -104,5 +104,9 @@ public class PlayerTest {
         assertEquals(player.getScore(), 10);
     }
 
+    public Player newPlayer(){
+        setUp();
+        return player;
+    }
 
 }
