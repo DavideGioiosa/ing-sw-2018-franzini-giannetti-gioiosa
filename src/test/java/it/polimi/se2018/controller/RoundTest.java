@@ -35,6 +35,11 @@ public class RoundTest {
     private GameBoard gameBoard;
 
     private PlayerMove playerMove;
+    private PlayerMove playerMoveExtract;
+    private PlayerMove playerMovePass;
+    private PlayerMove playerMovePass2;
+    private PlayerMove playerMovePassPl2;
+    private PlayerMove playerMovePass2Pl2;
     private Round round;
 
     /**
@@ -43,8 +48,7 @@ public class RoundTest {
     @Before
     public void init(){
         List<Cell> cellList = new ArrayList<Cell>();
-        int i;
-        for(i = 0; i<20; i++){
+        for(int i = 0; i<20; i++){
             cellList.add(new Cell(0, null));
         }
         SchemaCard schemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList);
@@ -69,6 +73,42 @@ public class RoundTest {
         BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
 
         gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, boardCard, privatePlayerList);
+
+        for(int i = 0; i < 5; i++) {
+            gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+        }
+
+        //PICK Move
+        playerMove = new PlayerMove();
+        playerMove.setPlayer(player);
+        playerMove.setTypeOfChoice(TypeOfChoiceEnum.PICK);
+        playerMove.setDiceBoardIndex(3);
+        playerMove.insertDiceSchemaWhereToLeave(new Position(2));
+
+        //EXTRACT Move
+        playerMoveExtract = new PlayerMove();
+        playerMoveExtract.setPlayer(player);
+        playerMoveExtract.setTypeOfChoice(TypeOfChoiceEnum.EXTRACT);
+
+        //PASS MOVE Player1
+        playerMovePass = new PlayerMove();
+        playerMovePass.setPlayer(player);
+        playerMovePass.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+
+        //PASS MOVE Player1 2
+        playerMovePass2 = new PlayerMove();
+        playerMovePass2.setPlayer(player);
+        playerMovePass2.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+
+        //PASS MOVE Player2
+        playerMovePassPl2 = new PlayerMove();
+        playerMovePassPl2.setPlayer(player2);
+        playerMovePassPl2.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+
+        //PASS MOVE Player2 2
+        playerMovePass2Pl2 = new PlayerMove();
+        playerMovePass2Pl2.setPlayer(player2);
+        playerMovePass2Pl2.setTypeOfChoice(TypeOfChoiceEnum.PASS);
     }
 
     /**
@@ -103,9 +143,54 @@ public class RoundTest {
         }
     }
 
-    //TODO: Related to GameManager to notify
+    /**
+     * Test after the first action of the first Player at the beginning of the Turn is 'EXTRACT'
+     * ends the turn of the current player and prepares the new one for the next player
+     */
+    @Test
+    public void update_shouldEndCurrentTurnAndPrepareTheNewOne() {
+        round = new Round(gameBoard, 0);
+        round.update(playerMoveExtract);
+
+        round.update(playerMovePass);
+
+        assertEquals(1, round.getTurnsList().get(0).getTurnsActionsList().size());
+        assertEquals(TypeOfChoiceEnum.PASS ,
+                round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getTypeOfChoice());
+        assertEquals(playerMove.getPlayer(),
+                round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getPlayer());
+    }
+
+    /**
+     * Test if the first action of the first Player at the beginning of the Turn is not 'EXTRACT'
+     * it doesn't accept that action
+     */
+    @Test
+    public void update_shouldNotStartTheRoundBecauseNotEXTRACTAction() {
+        round = new Round(gameBoard, 0);
+
+        round.update(playerMove);
+
+        assertEquals(0, round.getTurnsList().get(0).getTurnsActionsList().size());
+    }
+
+    /**
+     * Test after the first action of the first Player at the beginning of the Turn is 'EXTRACT'
+     * begins the turn of the current player
+     */
     @Test
     public void update() {
+        round = new Round(gameBoard, 0);
+        round.update(playerMoveExtract);
+
+
+        round.update(playerMove);
+
+        assertEquals(1, round.getTurnsList().get(0).getTurnsActionsList().size());
+        assertEquals(TypeOfChoiceEnum.PICK ,
+                round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getTypeOfChoice());
+        assertEquals(playerMove.getPlayer(),
+                round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getPlayer());
     }
 
     /**
@@ -114,9 +199,9 @@ public class RoundTest {
     @Test
     public void update_shouldCallExceptionForNullParameter() {
         round = new Round(gameBoard, 0);
-        playerMove = null;
+        PlayerMove playerMoveNull = null;
         try {
-            round.update(playerMove);
+            round.update(playerMoveNull);
         }
         catch (RuntimeException e){
         }

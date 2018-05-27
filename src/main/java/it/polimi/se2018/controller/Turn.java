@@ -56,6 +56,14 @@ public class Turn {
     }
 
     /**
+     * List of the actions componing the Turn
+     * @return list of actions
+     */
+    public List<Action> getTurnsActionsList() {
+        return turnsActionsList;
+    }
+
+    /**
      * Start run creating the action and adding to the list of Action if it can be done
      * Check if the action PICK has already done or not, it can be done once for Turn
      * @return boolean to communicate the result of the action

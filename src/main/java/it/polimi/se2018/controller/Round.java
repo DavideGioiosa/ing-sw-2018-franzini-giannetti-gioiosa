@@ -83,7 +83,7 @@ public class Round implements Observer<PlayerMove>{
         for (int i = indexRound; i < indexRound + playerList.size(); i++){
             roundPlayerOrder.add(playerList.get(i % playerList.size()));
         }
-        for (int i = indexRound + playerList.size() - 1 ; i > indexRound; i--){
+        for (int i = indexRound + playerList.size() - 1 ; i >= indexRound; i--){
             roundPlayerOrder.add(playerList.get(i % playerList.size()));
         }
     }
@@ -94,6 +94,14 @@ public class Round implements Observer<PlayerMove>{
      */
     private Player getCurrPlayer() {
         return roundPlayerOrder.get(0);
+    }
+
+    /**
+     * List of the turns componing the Round
+     * @return list of turns
+     */
+    public List<Turn> getTurnsList() {
+        return turnsList;
     }
 
     /**
@@ -108,13 +116,13 @@ public class Round implements Observer<PlayerMove>{
      */
     private void endRound (){
         gameBoard.getTrackBoardDice().insertDice(gameBoard.getBoardDice().getDieList());
-        notify(); //TODO: CHECK CORRECT
+        //notify(); //TODO: CHECK CORRECT
     }
 
     /**
-     *
-     * @param playerMove
-     * @return
+     * Extraction of the dice from the BagDice into the Draft Pool
+     * @param playerMove extraction of the first player of the Turn
+     * @return the result of the operation
      */
     private boolean setDraftPoolDice (PlayerMove playerMove) {
         if (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.EXTRACT)){
