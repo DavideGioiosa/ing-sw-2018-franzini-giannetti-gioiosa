@@ -147,7 +147,7 @@ public class SyntaxController {
                 nextCommandType = CommandTypeEnum.DICEBOARDINDEX;
                 return;
             }
-            if (playerMove.getDiceSchemaWhereToLeave() == null) {
+            if (playerMove.getDiceSchemaWhereToLeave() == null || playerMove.getDiceSchemaWhereToLeave().isEmpty()) {
                 nextCommandType = CommandTypeEnum.DICESCHEMAWHERETOLEAVE;
                 return;
             }
@@ -178,6 +178,10 @@ public class SyntaxController {
 
     public PlayerMove getPlayerMove(){
         return playerMove;
+    }
+
+    public CommandTypeEnum getNextCommandType() {
+        return nextCommandType;
     }
 
     public void newSyntaxController(){

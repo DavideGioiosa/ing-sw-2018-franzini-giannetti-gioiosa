@@ -37,12 +37,7 @@ public class Cell {
      * @return true if there is any
      */
     public boolean isEmpty (){
-        if(getDie() == null) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return getDie() == null;
     }
 
     /**

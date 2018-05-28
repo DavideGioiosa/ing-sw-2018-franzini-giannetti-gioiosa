@@ -83,8 +83,7 @@ public class CardDeck {
 
         if (cardList.isEmpty()) throw new RuntimeException("ERROR: Empty Deck. Cannot extract a card");
         if(!shuffled) shuffleCards();
-        Card card = cardList.remove(0);
-        return card;
+        return cardList.remove(0);
     }
 
     /**
@@ -98,7 +97,7 @@ public class CardDeck {
         Random randomGenerator = new Random();
 
         while(!cardList.isEmpty()){
-            index = (int)randomGenerator.nextInt(cardList.size());
+            index = randomGenerator.nextInt(cardList.size());
             mixedCards.add(cardList.remove(index));
         }
 
