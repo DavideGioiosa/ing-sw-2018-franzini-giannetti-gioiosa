@@ -1,10 +1,13 @@
 package it.polimi.se2018.view;
 
 
+import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.MoveMessage;
 import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.cards.SchemaCard;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,21 +15,25 @@ import java.util.Map;
  * View class, used for interaction with the player
  * @author Silvia Franzini
  */
-public class View implements Observer<PlayerMessage> {
+public class View  {
 protected InputStrategy inputStrategy;
 protected ConnectionStrategy connectionStrategy;
 private MoveMessage moveMessage;
-private static final Map<Integer, String> errors= new HashMap<Integer, String>();
-    static{
-            errors.put(1, "SchemaCardNulla");
-            //esempio di inserimento
-        //TODO gestire inserimento da file
-    }
+private MessageLoader messageLoader;
+
 
     /**
      * Builder method of the class
      */
-    public View(){}
+    public View() {
+        moveMessage = null;
+        try{
+            messageLoader = new MessageLoader();
+
+        }catch(IOException e){
+            //TODO Gestire eccezione
+        }
+    }
 
     /**
      * Setter method for the chosen graphic (CLI/GUI)
@@ -46,25 +53,26 @@ private static final Map<Integer, String> errors= new HashMap<Integer, String>()
     }
 
     /**
-     * Update method for the implementation of the Observer pattern
-     * @param playerMessage type of message received
-     */
-    public void update(PlayerMessage playerMessage){
-        connectionStrategy.send(playerMessage);
-    }
-
-    /**
      * Method used to identify the type of message received by the Server
      * @param playerMessage message received
      */
     public void receive(PlayerMessage playerMessage){
         switch (playerMessage.getId()){
-            //TODO definire metodi per gestione mosse
-            case '1': break;
-            case '2': break;
+            case '1': updateSchema(playerMessage.getPlayerMove());break;
+            case '2': inputStrategy.showChoice(playerMessage.getPlayerChoice()); break;
             case '3': updateTable(playerMessage.getMoveMessage()); break;
             default: throw new IllegalArgumentException("ERROR: Message not set");
         }
+    }
+
+    /**
+     * Method used to update the status of the table when a player haa played and only used a PICK action
+     * @param playerMove class containing all the parameters of the move
+     */
+    public void updateSchema(PlayerMove playerMove){
+        SchemaCard schemaCard = playerMove.getPlayer().getSchemaCard();
+        Die die = moveMessage.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
+        schemaCard.setCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
     }
 
     /**
@@ -72,7 +80,7 @@ private static final Map<Integer, String> errors= new HashMap<Integer, String>()
      * @param moveMessage class containing the several elements of the table
      */
     public void updateTable(MoveMessage moveMessage){
-        //TODO da definire chi chiama richiama il model
+
         this.moveMessage = moveMessage;
     }
 

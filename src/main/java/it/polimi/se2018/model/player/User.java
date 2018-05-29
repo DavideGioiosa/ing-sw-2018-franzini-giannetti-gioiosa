@@ -50,4 +50,8 @@ public class User {
     public boolean isConnected() {
         return connection;
     }
+
+    public TypeOfConnection getTypeOfConnection() {
+        return typeOfConnection;
+    }
 }

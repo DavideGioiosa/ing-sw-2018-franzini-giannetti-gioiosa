@@ -51,7 +51,7 @@ public class UserTest {
     @Test
     public void setPlayer() {
         user.setPlayer(player);
-        assertEquals(user.getPlayer(), player);
+        assertEquals(player, user.getPlayer());
 
     }
 
@@ -60,7 +60,7 @@ public class UserTest {
      */
     @Test
     public void getNickname() {
-        assertEquals(user.getNickname(), nick);
+        assertEquals(nick, user.getNickname());
     }
 
 

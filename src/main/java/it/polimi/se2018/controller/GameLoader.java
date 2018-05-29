@@ -5,7 +5,6 @@ import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.*;
 import it.polimi.se2018.model.cards.public_card.PublicObjCard;
-import it.polimi.se2018.model.cards.public_card.ScoreStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +111,6 @@ public class GameLoader {
         String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PrivateObjCard.xml";
 
         try {
-
             File file = new File(pathName);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -151,29 +149,28 @@ public class GameLoader {
         int id = IDFIRSTPUBLICOBJCARD;
         String name;
         String description;
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PublicObjCards.xml";
         String strategy;
+        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PublicObjCards.xml";
 
         try {
-
             File file = new File(pathName);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file);
 
             NodeList nodeList = document.getElementsByTagName("card");
 
-            publicObjDeck = new CardDeck(CardTypeEnum.PRIVATEOBJCARD);
+            publicObjDeck = new CardDeck(CardTypeEnum.PUBLICOBJCARD);
 
             for (int index = 0; index < nodeList.getLength(); index++) {
                 Node node = nodeList.item(index);
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
+
                     Element element = (Element) node;
                     name = element.getElementsByTagName("name").item(0).getTextContent();
                     description = element.getElementsByTagName("description").item(0).getTextContent();
-                    strategy = element.getElementsByTagName("strategy").item(0).getTextContent();
+                    strategy = element.getElementsByTagName("typeofcalculation").item(0).getTextContent();
 
                     PublicObjCard card = new PublicObjCard(id, name, description, strategy);
                     publicObjDeck.insertCard(card);

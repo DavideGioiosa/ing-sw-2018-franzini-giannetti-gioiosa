@@ -31,7 +31,7 @@ public class TrackBoard {
         if(surplusDiceList == null){
             throw new NullPointerException("ERROR: Insert surplusDiceList null");
         }
-        if (surplusDiceList.isEmpty() == true){
+        if (surplusDiceList.isEmpty()){
             throw new IllegalArgumentException("ERROR: No dice to put on the Trackboard");
         }
         diceList.add(surplusDiceList);

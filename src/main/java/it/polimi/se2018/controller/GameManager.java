@@ -29,22 +29,16 @@ public class GameManager implements Observer<Round>{
     /**
      * Builder method of GameManager class
      */
-    public GameManager(RemoteView view){
-        this.view = view;
+    public GameManager(RemoteView view, GameBoard gameBoard){
+        if(view == null){
+            throw new NullPointerException("ERROR: view not initialized");
+        }else this.view = view;
+        if(gameBoard == null){
+            this.view.reportError();
+        }else this.gameBoard = gameBoard;
         roundList = new ArrayList<>();
         Round round = new Round(gameBoard, 0 );
         roundList.add(round);
-    }
-
-    /**
-     * Setter method for gameBoard parameter
-     * @param gameBoard the table of the game
-     */
-    public void setGameBoard(GameBoard gameBoard) {
-        if(gameBoard == null){
-            view.reportError();
-        }
-        this.gameBoard = gameBoard;
     }
 
     /**
@@ -62,16 +56,17 @@ public class GameManager implements Observer<Round>{
                 }
 
             }
-           for(PrivatePlayer privatePlayer: gameBoard.getPrivatePlayerList()){
-                if(player.equals(privatePlayer.getPlayer())){
-                    score += privatePlayer.getPrivateObj().getScore(player.getSchemaCard());
-                }
-           }
             for(Cell c : player.getSchemaCard().getCellList()){
                 if(c.isEmpty()){
                     score--;
                 }
             }
+            for(PrivatePlayer privatePlayer: gameBoard.getPrivatePlayerList()){
+                if(player.equals(privatePlayer.getPlayer())){
+                    score += privatePlayer.getPrivateObj().getScore(player.getSchemaCard());
+                }
+            }
+
             score += player.getTokens();
             player.setScore(score);
         }

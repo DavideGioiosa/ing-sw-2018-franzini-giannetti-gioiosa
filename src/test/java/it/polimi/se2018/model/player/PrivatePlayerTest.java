@@ -51,7 +51,7 @@ public class PrivatePlayerTest {
      */
     @Test
     public void getPrivateObj() {
-        assertEquals(privatePlayer.getPrivateObj(), privateObjCard);
+        assertEquals(privateObjCard, privatePlayer.getPrivateObj());
     }
 
     /**
@@ -59,6 +59,6 @@ public class PrivatePlayerTest {
      */
     @Test
     public void getPlayer() {
-        assertEquals(privatePlayer.getPlayer(), player);
+        assertEquals(player, privatePlayer.getPlayer());
     }
 }
