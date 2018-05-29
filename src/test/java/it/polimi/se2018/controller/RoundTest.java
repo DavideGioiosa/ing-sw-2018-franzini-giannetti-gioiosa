@@ -36,14 +36,12 @@ public class RoundTest {
 
     private PlayerMove playerMove;
     private PlayerMove playerMoveExtract;
-    private PlayerMove playerMovePass;
-    private PlayerMove playerMovePass2;
-    private PlayerMove playerMovePassPl2;
-    private PlayerMove playerMovePass2Pl2;
+    private PlayerMove playerMovePassPlayer1;
+    private PlayerMove playerMovePassPlayer2;
     private Round round;
 
     /**
-     * Sets the gameBoard
+     * Creates and sets the gameBoard and a 'PICK', 'EXTRACT' and two 'PASS' playerMoves
      */
     @Before
     public void init(){
@@ -91,24 +89,14 @@ public class RoundTest {
         playerMoveExtract.setTypeOfChoice(TypeOfChoiceEnum.EXTRACT);
 
         //PASS MOVE Player1
-        playerMovePass = new PlayerMove();
-        playerMovePass.setPlayer(player);
-        playerMovePass.setTypeOfChoice(TypeOfChoiceEnum.PASS);
-
-        //PASS MOVE Player1 2
-        playerMovePass2 = new PlayerMove();
-        playerMovePass2.setPlayer(player);
-        playerMovePass2.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+        playerMovePassPlayer1 = new PlayerMove();
+        playerMovePassPlayer1.setPlayer(player);
+        playerMovePassPlayer1.setTypeOfChoice(TypeOfChoiceEnum.PASS);
 
         //PASS MOVE Player2
-        playerMovePassPl2 = new PlayerMove();
-        playerMovePassPl2.setPlayer(player2);
-        playerMovePassPl2.setTypeOfChoice(TypeOfChoiceEnum.PASS);
-
-        //PASS MOVE Player2 2
-        playerMovePass2Pl2 = new PlayerMove();
-        playerMovePass2Pl2.setPlayer(player2);
-        playerMovePass2Pl2.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+        playerMovePassPlayer2 = new PlayerMove();
+        playerMovePassPlayer2.setPlayer(player2);
+        playerMovePassPlayer2.setTypeOfChoice(TypeOfChoiceEnum.PASS);
     }
 
     /**
@@ -152,13 +140,46 @@ public class RoundTest {
         round = new Round(gameBoard, 0);
         round.update(playerMoveExtract);
 
-        round.update(playerMovePass);
+        round.update(playerMovePassPlayer1);
 
         assertEquals(1, round.getTurnsList().get(0).getTurnsActionsList().size());
         assertEquals(TypeOfChoiceEnum.PASS ,
                 round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getTypeOfChoice());
         assertEquals(playerMove.getPlayer(),
                 round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getPlayer());
+    }
+
+    /**
+     * Test after the first action of the first Player at the beginning of the Turn is 'EXTRACT'
+     * ends the all the turns of each player ending the round
+     */
+    @Test
+    public void update_shouldEndCurrentRound() {
+        round = new Round(gameBoard, 0);
+        round.update(playerMoveExtract);
+
+        round.update(playerMovePassPlayer1);
+        round.update(playerMovePassPlayer2);
+        round.update(playerMovePassPlayer2);
+        round.update(playerMovePassPlayer1);
+
+        assertEquals(4, round.getTurnsList().size());
+        assertEquals(TypeOfChoiceEnum.PASS,
+                round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getTypeOfChoice());
+        assertEquals(TypeOfChoiceEnum.PASS,
+                round.getTurnsList().get(1).getTurnsActionsList().get(0).getPlayerMove().getTypeOfChoice());
+        assertEquals(TypeOfChoiceEnum.PASS,
+                round.getTurnsList().get(2).getTurnsActionsList().get(0).getPlayerMove().getTypeOfChoice());
+        assertEquals(TypeOfChoiceEnum.PASS,
+                round.getTurnsList().get(3).getTurnsActionsList().get(0).getPlayerMove().getTypeOfChoice());
+        assertEquals(playerMovePassPlayer1.getPlayer(),
+                round.getTurnsList().get(0).getTurnsActionsList().get(0).getPlayerMove().getPlayer());
+        assertEquals(playerMovePassPlayer2.getPlayer(),
+                round.getTurnsList().get(1).getTurnsActionsList().get(0).getPlayerMove().getPlayer());
+        assertEquals(playerMovePassPlayer2.getPlayer(),
+                round.getTurnsList().get(2).getTurnsActionsList().get(0).getPlayerMove().getPlayer());
+        assertEquals(playerMovePassPlayer1.getPlayer(),
+                round.getTurnsList().get(3).getTurnsActionsList().get(0).getPlayerMove().getPlayer());
     }
 
     /**

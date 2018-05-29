@@ -60,7 +60,7 @@ public class SchemaCard extends Card {
      * @param position where the player wants to put the die
      * @param die die selected
      */
-    public void setCell (Position position, Die die){
+    public void setDiceIntoCell(Position position, Die die){
         if(die == null){
             throw new IllegalArgumentException("ERROR: Selected a null die");
         }
