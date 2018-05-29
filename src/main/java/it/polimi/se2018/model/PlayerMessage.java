@@ -6,12 +6,14 @@ public class PlayerMessage {
     private PlayerMove playerMove;
     private PlayerChoice playerChoice;
     private MoveMessage moveMessage;
+    private boolean closure;
 
     public PlayerMessage(){
         playerMove=null;
         playerChoice=null;
         moveMessage=null;
         id=0;
+        closure = false;
     }
 
     public void setMove(PlayerMove playerMove) {
@@ -27,6 +29,14 @@ public class PlayerMessage {
     public void setMessage(MoveMessage moveMessage) {
         this.moveMessage = moveMessage;
         id=3;
+    }
+
+    public void setClosure() {
+        this.closure = true;
+    }
+
+    public boolean isClosed() {
+        return closure;
     }
 
     public int getId() {

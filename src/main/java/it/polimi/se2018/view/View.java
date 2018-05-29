@@ -30,7 +30,7 @@ private MessageLoader messageLoader;
         try{
             messageLoader = new MessageLoader();
 
-        }catch(IOException e){
+        }catch(Exception e){
             //TODO Gestire eccezione
         }
     }
@@ -91,4 +91,5 @@ private MessageLoader messageLoader;
         //TODO necessario definire tipologie errore
 
     }
+
 }
