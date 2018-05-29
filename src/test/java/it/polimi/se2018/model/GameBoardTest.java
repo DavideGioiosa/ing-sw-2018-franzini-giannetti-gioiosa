@@ -31,7 +31,7 @@ public class GameBoardTest {
     private SchemaCard schemaCard;
     private final int ID = 1;
     private final int DIFFICULTY = 1;
-    private String strategy = null;
+    private String strategy = "DiffColoursRow";
     private List<PrivatePlayer> privatePlayerList = new ArrayList<>();
 /*    /**
      * Sets a valid Schema Card

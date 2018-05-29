@@ -55,13 +55,13 @@ public class SchemaCardTest {
     }
 
     /**
-     * Tests method setCell by controlling that the cell chosen is actually filled wth the chosen dice
+     * Tests method setDiceIntoCell by controlling that the cell chosen is actually filled wth the chosen dice
      */
     @Test
     public void setCell() {
         try{
             Position pos = new Position(0,0);
-            schema.setCell(pos, d);
+            schema.setDiceIntoCell(pos, d);
             Cell c = schema.getCellList().get(0);
             assertEquals(c.getDie(),d);
 

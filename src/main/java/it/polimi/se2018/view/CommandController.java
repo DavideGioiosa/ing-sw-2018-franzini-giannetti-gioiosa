@@ -33,16 +33,12 @@ public class CommandController {
     public int checkMoveValidity (PlayerMove playerMove, GameBoard gameBoard){
 
         if (playerMove.getPlayer().getSchemaCard().isEmpty() &&
-                checkRestriction.isOnTheBorder(playerMove.getDiceSchemaWhereToLeave().get(0))) {
-            return 0;
-        }
-
-        if (playerMove.getPlayer().getSchemaCard().isEmpty() &&
                 !checkRestriction.isOnTheBorder(playerMove.getDiceSchemaWhereToLeave().get(0))) {
             return 1;
         }
 
-        if(playerMove.getIdToolCard() != 9 && !checkRestriction.adjacentRestriction(playerMove.getPlayer().getSchemaCard(),
+        if(!playerMove.getPlayer().getSchemaCard().isEmpty() &&
+                playerMove.getIdToolCard() != 9 && !checkRestriction.adjacentRestriction(playerMove.getPlayer().getSchemaCard(),
                 gameBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
                 playerMove.getDiceSchemaWhereToLeave().get(0))){
             return 2;
@@ -60,13 +56,15 @@ public class CommandController {
             return 4;
         }
 
-        if(!checkRestriction.adjacentColourRestriction(playerMove.getPlayer().getSchemaCard(),
+        if(!playerMove.getPlayer().getSchemaCard().isEmpty() &&
+                !checkRestriction.adjacentColourRestriction(playerMove.getPlayer().getSchemaCard(),
                 gameBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
                 playerMove.getDiceSchemaWhereToLeave().get(0))){
             return 5;
         }
 
-        if(!checkRestriction.adjacentValueRestriction(playerMove.getPlayer().getSchemaCard(),
+        if(!playerMove.getPlayer().getSchemaCard().isEmpty() &&
+                !checkRestriction.adjacentValueRestriction(playerMove.getPlayer().getSchemaCard(),
                 gameBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
                 playerMove.getDiceSchemaWhereToLeave().get(0))){
             return 6;
@@ -74,5 +72,5 @@ public class CommandController {
 
         return 0;
     }
-
+        //chiama ClientStrategy per inviare la playermove
 }
