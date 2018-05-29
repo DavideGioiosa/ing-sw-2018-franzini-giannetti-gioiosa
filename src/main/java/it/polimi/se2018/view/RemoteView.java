@@ -2,7 +2,10 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.MoveMessage;
 import it.polimi.se2018.model.PlayerChoice;
+import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.player.Player;
+import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
 
 import java.util.List;
@@ -13,7 +16,7 @@ import java.util.List;
  */
 public class RemoteView extends View {
 
- private List<User> userList;  //TODO da rivedere se riferimento è necessario
+ private List<User> userList;  //necessario per sapere parametri connessione
 //private SocketTypeServer socketTypeServer;
 //private RMITypeServer rmiTypeServer;
 //TODO inserire server con cui far comunicare la view
@@ -21,8 +24,33 @@ public class RemoteView extends View {
     /**
      * Builder method of the class
      */
-    public RemoteView(){
+    public RemoteView(List<User> userList){
 
+        this.userList=userList;
+
+    }
+
+    /**
+     * Getter method for the list of users
+     * @return the list of users
+     */
+    public List<User> getUserList() {
+        return userList;
+    }
+
+
+    public void getServer(PlayerMessage playerMessage, Player player){
+
+        //gestione errore player inesistente?
+        for(User user : userList){
+            if(user.getPlayer().equals(player))
+            {
+                /*switch (user.getTypeOfConnection()){
+                    case RMI: rmiTypeServer.send(playerMessage);
+                    case SOCKET: socketTypeServer.send(playerMessage);
+                }*/
+            }
+        }
     }
 
     /**

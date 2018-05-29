@@ -19,15 +19,14 @@ import java.util.List;
  */
 public class GameStarter implements Observer<PlayerChoice> {
 
-    private GameBoard gameBoard;
     private GameLoader gameLoader;
     private List<Player> playerList;
     private List<User> userList;
     private List<PlayerChoice> playerChoiceList;
-    private GameManager gameManager;
     private RemoteView remoteView;
     private List<ColourEnum> colourEnumList;
     private List<PlayerChoice> playerChoiceSaved;
+    private GameBoard gameBoard;
 
     /**
      * Builder method for GameStarter class
@@ -36,7 +35,6 @@ public class GameStarter implements Observer<PlayerChoice> {
         gameLoader = new GameLoader();
         playerList = new ArrayList<>();
         playerChoiceList = new ArrayList<>();
-        this.gameManager= gameManager;
         this.userList = userList;
         playerChoiceSaved = new ArrayList<>();
         remoteView = new RemoteView();
@@ -89,11 +87,14 @@ public class GameStarter implements Observer<PlayerChoice> {
         placeSeat(playerList);
         try{
             privatePlayerList = distributePrivateObjCard(gameLoader.getPrivateObjDeck());
-            gameBoard = new GameBoard(playerList,bagDice,boardDice,trackBoard,boardCard,privatePlayerList);
-            gameManager.setGameBoard(gameBoard);
+             this.gameBoard = new GameBoard(playerList,bagDice,boardDice,trackBoard,boardCard,privatePlayerList);
         }catch(NullPointerException e){
             remoteView.reportError();
         }
+    }
+
+    public GameBoard getGameBoard() {
+        return gameBoard;
     }
 
     /**
