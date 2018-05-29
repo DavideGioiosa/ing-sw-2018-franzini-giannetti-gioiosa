@@ -27,7 +27,6 @@ public class PlayerTest {
 
     /**
      * Initialization of PlayerTest
-     * @throws Exception
      */
     @Before
     public void setUp(){
@@ -53,7 +52,7 @@ public class PlayerTest {
     @Test
     public void setConnectionStatus() {
         player.setConnectionStatus(true);
-        assertEquals(player.getConnectionStatus(), true);
+        assertEquals(true, player.getConnectionStatus());
     }
 
     /**
@@ -61,12 +60,12 @@ public class PlayerTest {
      */
     @Test
     public void getFrameColour() {
-        assertEquals(player.getFrameColour(), ColourEnum.BLUE);
+        assertEquals(ColourEnum.BLUE, player.getFrameColour());
     }
 
     @Test
     public void getSchemaCard() {
-        assertEquals(player.getSchemaCard(), schemaCard);
+        assertEquals(schemaCard, player.getSchemaCard());
     }
 
     /**
@@ -89,7 +88,7 @@ public class PlayerTest {
     public void updateTokens() {
         try{
             player.updateTokens(1);
-            assertEquals(player.getTokens(), 2);
+            assertEquals(2, player.getTokens());
         }catch (IllegalArgumentException e){
             fail();
         }
@@ -101,7 +100,7 @@ public class PlayerTest {
     @Test
     public void setScore() {
         player.setScore(10);
-        assertEquals(player.getScore(), 10);
+        assertEquals(10, player.getScore());
     }
 
     public Player newPlayer(){

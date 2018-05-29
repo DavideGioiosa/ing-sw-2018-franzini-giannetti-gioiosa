@@ -53,9 +53,11 @@ public class GameBoardTest {
         playerList = new ArrayList<>();
         playerList.add(player);
 
-        toolCard = (ToolCard) gameLoader.getToolDeck().extractCard();
         toolCardList = new ArrayList<>();
-        toolCardList.add(toolCard);
+        for (int i = 0; i<12; i++) {
+            toolCard = (ToolCard) gameLoader.getToolDeck().extractCard();
+            toolCardList.add(toolCard);
+        }
 
         privateObjCard = (PrivateObjCard) gameLoader.getPrivateObjDeck().extractCard();
         PrivatePlayer privatePlayer = new PrivatePlayer(player, privateObjCard);

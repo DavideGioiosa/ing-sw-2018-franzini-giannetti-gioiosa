@@ -53,7 +53,7 @@ public class Die {
      */
     private void roll(){
         Random randomGenerator = new Random();
-        value = 1 + (int)randomGenerator.nextInt(DIEMAXVALUE);
+        value = 1 + randomGenerator.nextInt(DIEMAXVALUE);
     }
 
     /**

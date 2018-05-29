@@ -11,11 +11,6 @@ import static org.junit.Assert.*;
  */
 
 public class BagDiceTest {
-    /**
-     * total number of dice usable in the match
-     * @author Davide Gioiosa
-     */
-    public final static int totalDice = 90;
 
     /**
      * Creates a new BagDice containing 90 dice, 18 for each colour

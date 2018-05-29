@@ -5,7 +5,6 @@ import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.*;
 import it.polimi.se2018.model.cards.public_card.PublicObjCard;
-import it.polimi.se2018.model.cards.public_card.ScoreStrategy;
 
 import java.util.ArrayList;
 import java.util.List;

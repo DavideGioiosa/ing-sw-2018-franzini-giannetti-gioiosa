@@ -46,13 +46,13 @@ public class BagDice {
      * @return The Die extracted randomly
      */
     public Die extractDice(){
-        if (dieList.size() < 1) throw new RuntimeException("ERROR: Bag Die is empty");
+        if (dieList.isEmpty()) throw new RuntimeException("ERROR: Bag Die is empty");
 
         int index;
         Die die;
 
         Random randomGenerator = new Random();
-        index =  (int)randomGenerator.nextInt(dieList.size());
+        index = randomGenerator.nextInt(dieList.size());
         die = dieList.remove(index);
 
         return die;
