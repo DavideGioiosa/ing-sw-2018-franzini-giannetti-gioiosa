@@ -1,7 +1,9 @@
 package it.polimi.se2018.model;
 
 
-public class PlayerMessage {
+import java.io.Serializable;
+
+public class PlayerMessage implements Serializable {
     private int id;
     private PlayerMove playerMove;
     private PlayerChoice playerChoice;

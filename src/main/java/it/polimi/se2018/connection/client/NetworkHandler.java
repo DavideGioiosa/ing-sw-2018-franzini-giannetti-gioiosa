@@ -15,10 +15,11 @@ public class NetworkHandler extends Thread{
     private SocketTypeClient socketTypeClient;
     private OutputStreamWriter out;
     private boolean quit;
+    private Gson gson;
 
 
     public NetworkHandler(String host, int port, SocketTypeClient socketTypeClient){
-
+        gson = new Gson();
         quit=false;
         this.socketTypeClient=socketTypeClient;
         try {
@@ -43,7 +44,8 @@ public class NetworkHandler extends Thread{
         while(!socket.isClosed() && !quit){
             try{
                 String message = bufferedReader.readLine();
-                socketTypeClient.receive(message);
+                PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
+                socketTypeClient.receive(playerMessage);
 
             }catch (IOException e){
                 e.printStackTrace();
@@ -58,10 +60,11 @@ public class NetworkHandler extends Thread{
 
     }
 
-    public synchronized void send(String playerMessage){
+    public synchronized void send(PlayerMessage playerMessage){
         try {
             out = new OutputStreamWriter(socket.getOutputStream());
-            out.write(playerMessage);
+            String jsonInString = gson.toJson(playerMessage);
+            out.write(jsonInString);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,10 +75,9 @@ public class NetworkHandler extends Thread{
     public synchronized void closeConnection() throws IOException{
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setClosure();
-        Gson gson = new Gson();
-        String jsonInString = gson.toJson(playerMessage);
+
         try {
-            send(jsonInString);
+            send(playerMessage);
         }
         finally {
             try {

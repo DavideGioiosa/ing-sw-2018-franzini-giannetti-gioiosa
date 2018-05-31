@@ -1,33 +1,32 @@
 package it.polimi.se2018.connection.client;
 
-import com.google.gson.Gson;
-import it.polimi.se2018.connection.client.Client;
-import it.polimi.se2018.connection.client.NetworkHandler;
 import it.polimi.se2018.model.PlayerMessage;
 
-public class SocketTypeClient {
+public class SocketTypeClient implements ClientStrategy, ClientSocketInterface{
 
     private NetworkHandler networkHandler;
     private int networkPort;
     private String host;
-    private Gson gson;
     private Client client;
 
-    public SocketTypeClient(Client client){
-        gson = new Gson();
+    public SocketTypeClient(Client client, String host, int port){
+
         this.client = client;
+        this.host=host;
+        this.networkPort = port;
+        this.networkHandler = new NetworkHandler(this.host, this.networkPort, this);
     }
 
-    public void receive(String string){
-        PlayerMessage playerMessage = gson.fromJson(string, PlayerMessage.class);
+
+    public void receive(PlayerMessage playerMessage){
         client.receive(playerMessage);
     }
 
 
     public void sendToServer(PlayerMessage playerMessage){
-        String jsonInString = gson.toJson(playerMessage);
-        networkHandler.send(jsonInString);
+        networkHandler.send(playerMessage);
     }
+
 
     public void close(){
         networkHandler.setQuit();
