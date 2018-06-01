@@ -30,6 +30,9 @@ public class Client implements Observer<PlayerMessage> {
         {
             view.receive(playerMessage);
         }
+    }
 
+    public void close(){
+        clientStrategy.close();
     }
 }

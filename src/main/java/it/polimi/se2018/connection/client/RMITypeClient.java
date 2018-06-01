@@ -12,6 +12,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class RMITypeClient implements ClientStrategy {
@@ -31,21 +33,16 @@ public class RMITypeClient implements ClientStrategy {
         try {
              LocateRegistry.getRegistry();
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
 
         try {
 
                 this.stub = (ServerRemoteInterface) Naming.lookup("//localhost");
 
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        } catch (RemoteException | NotBoundException | MalformedURLException e) {
+            Logger.getGlobal().log(Level.SEVERE, e.toString());
         }
-
     }
     @Override
     public void sendToServer(PlayerMessage playerMessage){
@@ -55,7 +52,7 @@ public class RMITypeClient implements ClientStrategy {
             try {
                 stub.receive(playerMessage);
             } catch (RemoteException e) {
-                e.printStackTrace();
+                Logger.getGlobal().log(Level.SEVERE, e.toString());
             }
         }
     }
@@ -73,7 +70,7 @@ public class RMITypeClient implements ClientStrategy {
         try {
             stub.receive(playerMessage);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE, e.toString());
         }
     }
 }

@@ -5,7 +5,8 @@ import it.polimi.se2018.model.PlayerMessage;
 
 import java.io.*;
 import java.net.Socket;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class NetworkHandler extends Thread{
@@ -25,13 +26,9 @@ public class NetworkHandler extends Thread{
         try {
             socket = new Socket(host, port);
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE, e.toString());
         }
-
-
     }
 
     public synchronized void setQuit() {// viene invocato da SocketTypeClient
@@ -48,14 +45,14 @@ public class NetworkHandler extends Thread{
                 socketTypeClient.receive(playerMessage);
 
             }catch (IOException e){
-                e.printStackTrace();
+                Logger.getGlobal().log(Level.SEVERE, e.toString());
             }
         }
 
         try{
             this.closeConnection();
         }catch (IOException e){
-            e.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE, e.toString());
         }
 
     }
@@ -67,7 +64,7 @@ public class NetworkHandler extends Thread{
             out.write(jsonInString);
             out.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getGlobal().log(Level.SEVERE, e.toString());
         }
 
     }
