@@ -1,11 +1,7 @@
 package it.polimi.se2018.model.cards;
 
 import it.polimi.se2018.model.CardTypeEnum;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
-import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Test CardDeck Class

@@ -15,7 +15,7 @@ import static it.polimi.se2018.model.Config.*;
 public class BagDice {
 
     /**
-     * The list of dices contained in the bag
+     * List of dices contained in the bag
      */
     private List<Die> dieList;
 
@@ -33,8 +33,8 @@ public class BagDice {
     }
 
     /**
-     * insertDice inserts a Die in the bag.
-     * @param die The Die to be inserted
+     * Inserts a Die in the bag.
+     * @param die Die to be inserted
      */
     public void insertDice(Die die){
         if(die == null) throw new NullPointerException("ERROR: Cannot insert a null Die");
@@ -42,8 +42,8 @@ public class BagDice {
     }
 
     /**
-     * extractDice extracts randomly one of the remaining Die
-     * @return The Die extracted randomly
+     * Extracts randomly one of the remaining Die
+     * @return Die extracted randomly
      */
     public Die extractDice(){
         if (dieList.isEmpty()) throw new RuntimeException("ERROR: Bag Die is empty");

@@ -1,4 +1,4 @@
-package it.polimi.se2018.model.cards.public_card;
+package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.cards.SchemaCard;
 
@@ -7,10 +7,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Public Objective Card Middle Shades
+ * Public Class Different Colours
  * @author Silvia Franzini
  */
-public class MiddleNumbers implements ScoreStrategy {
+public class DiffColours implements ScoreStrategy {
     /**
      * Class implementing pattern Strategy for the evaluation of the player's score
      * due to the Public Objective Cards
@@ -20,9 +20,8 @@ public class MiddleNumbers implements ScoreStrategy {
     @Override
     public int getScore(SchemaCard schema){
 
-        Shades shad = new Shades();
-        List<Integer> numbers = shad.operate(schema.getCellList(), 3, 4);
-        return Collections.min(numbers)*2;
+        PublicColour pub = new PublicColour();
+        List<Integer> colours = pub.differentColours(schema.getCellList());
+        return Collections.min(colours)*4;
     }
-
 }

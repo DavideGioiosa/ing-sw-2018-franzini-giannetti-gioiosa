@@ -1,7 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cards.ToolCard;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package it.polimi.se2018.model.cards;
 
 import it.polimi.se2018.model.CardTypeEnum;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 
 import java.util.ArrayList;
 import java.util.List;

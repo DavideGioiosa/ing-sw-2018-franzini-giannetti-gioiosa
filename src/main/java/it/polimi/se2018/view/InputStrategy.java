@@ -7,7 +7,7 @@ import it.polimi.se2018.model.PlayerChoice;
  */
 public interface InputStrategy {
 
-    void getInput();
-    void show();
+    String getInput(Integer idMessage);
+    void show(Integer idMessage);
     void showChoice(PlayerChoice playerChoice);
 }

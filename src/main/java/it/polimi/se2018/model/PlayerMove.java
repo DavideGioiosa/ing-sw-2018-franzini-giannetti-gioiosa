@@ -130,7 +130,6 @@ public class PlayerMove extends PlayerMessage {
      * @param idToolCard Identifier of the Tool Card
      */
     public void setIdToolCard(int idToolCard) {
-        //TODO: check existent Tool Card id
         this.idToolCard = idToolCard;
     }
 

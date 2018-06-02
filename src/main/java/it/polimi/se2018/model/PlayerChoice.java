@@ -11,10 +11,25 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class PlayerChoice extends PlayerMessage {
+    /**
+     * User
+     */
     private User user;
+    /**
+     *
+     */
     private List<SchemaCard> schemaCardList;
+    /**
+     *
+     */
     private List<ColourEnum> colourEnumList;
+    /**
+     *
+     */
     private SchemaCard chosenSchema;
+    /**
+     *
+     */
     private ColourEnum chosenColour;
 
     /**
@@ -30,6 +45,14 @@ public class PlayerChoice extends PlayerMessage {
     }
 
     /**
+     * Getter method for the user to whom the choice is referred
+     * @return User to whom the choice is referred
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
      * Setter method for SchemaCard list
      * @param schemaCardList list of Schema Cards
      */
@@ -38,19 +61,19 @@ public class PlayerChoice extends PlayerMessage {
     }
 
     /**
-     * Setter method for Colours list
-     * @param colourEnumList list of available colours
-     */
-    public void setColourEnumList(List<ColourEnum> colourEnumList) {
-        this.colourEnumList = colourEnumList;
-    }
-
-    /**
      * Getter method for SchemaCard list
      * @return the list of available Schema Cards
      */
     public List<SchemaCard> getSchemaCardList() {
         return schemaCardList;
+    }
+
+    /**
+     * Setter method for Colours list
+     * @param colourEnumList list of available colours
+     */
+    public void setColourEnumList(List<ColourEnum> colourEnumList) {
+        this.colourEnumList = colourEnumList;
     }
 
     /**
@@ -63,42 +86,34 @@ public class PlayerChoice extends PlayerMessage {
 
     /**
      * Setter method for frame colour's choice
-     * @param chosenColour
+     * @param chosenColour Colour chosen by the User
      */
     public void setChosenColour(ColourEnum chosenColour) {
         this.chosenColour = chosenColour;
     }
 
     /**
-     * Setter method for the window pattern card
-     * @param chosenSchema window pattern chosen
-     */
-    public void setChosenSchema(SchemaCard chosenSchema) {
-        this.chosenSchema = chosenSchema;
-    }
-
-    /**
-     * Getter method
-     * @return
+     * Getter method for chosen Window frame colour
+     * @return Window frame colour chosen by the User
      */
     public ColourEnum getChosenColour() {
         return chosenColour;
     }
 
     /**
-     *
-     * @return
+     * Setter method for the window pattern card
+     * @param chosenSchema Window pattern chosen by the User
      */
-    public SchemaCard getChosenSchema() {
-        return chosenSchema;
+    public void setChosenSchema(SchemaCard chosenSchema) {
+        this.chosenSchema = chosenSchema;
     }
 
     /**
-     *
-     * @return
+     * Getter method for chosen SchemaCard
+     * @return SchemaCard chosen by the User
      */
-    public User getUser() {
-        return user;
+    public SchemaCard getChosenSchema() {
+        return chosenSchema;
     }
 
 }

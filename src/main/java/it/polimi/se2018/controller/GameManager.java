@@ -1,7 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.view.*;
@@ -12,18 +12,29 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
-
 /**
  * Controller's Class GameManager
+ *
  * @author Silvia Franzini
  */
 
 public class GameManager implements Observer<Round>{
 
+    /**
+     * Status of the Board Table
+     */
     private GameBoard gameBoard;
+    /**
+     * List of game Round
+     */
     private List<Round> roundList;
+    /**
+     * Winner of the game
+     */
     private Player winner;
+    /**
+     * View called for show board's updates and errors
+     */
     private RemoteView view;
 
     /**
@@ -82,6 +93,7 @@ public class GameManager implements Observer<Round>{
     }
 
     /**
+     * Gets game winner of the match
      * @return the winner of the match
      */
     public Player getGameWinner(){
@@ -89,11 +101,11 @@ public class GameManager implements Observer<Round>{
     }
 
     /**
-     * Update method for Observer pattern implemntation
+     * Update method for Observer pattern implementation
      * @param round round just completed
      */
     public void update(Round round){
-        if(roundList.size()==10){
+        if(roundList.size() == 10){
             calculateGameScore();
             setGameWinner();
 

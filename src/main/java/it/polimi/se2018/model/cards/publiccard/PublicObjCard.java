@@ -1,4 +1,4 @@
-package it.polimi.se2018.model.cards.public_card;
+package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.SchemaCard;
@@ -8,7 +8,11 @@ import it.polimi.se2018.model.cards.SchemaCard;
  * @author Silvia Franzini
  */
 public class PublicObjCard extends Card {
+
     private ScoreStrategy scoreStrategy;
+
+    //TODO: SETTARE BONUS SU CALCOLO
+    private int bonus;
 
     /**
      * Builder method of Public Objective Card class
@@ -17,9 +21,10 @@ public class PublicObjCard extends Card {
      * @param description description of the card
      * @param scoreStrategy used for Strategy Pattern
      */
-    public PublicObjCard(int id, String name, String description,String scoreStrategy){
+    public PublicObjCard(int id, String name, String description, int bonus, String scoreStrategy){
         super(id,name,description);
-        this.scoreStrategy = setScoreStrategy(scoreStrategy);
+        setScoreStrategy(scoreStrategy);
+        this.bonus = bonus;
         if(this.scoreStrategy == null){
             throw new NullPointerException("ERROR: ScoreStrategy not existing");
         }
@@ -37,40 +42,47 @@ public class PublicObjCard extends Card {
         return scoreStrategy.getScore(schemaCard);
     }
 
-    private ScoreStrategy setScoreStrategy(String strategy) {
-        ScoreStrategy scoreStrategy = null;
+    private void setScoreStrategy(String strategy) {
         switch(strategy){
             case "DiffColoursRow":
-                scoreStrategy = new DiffColoursRow();
+                this.scoreStrategy = new DiffColoursRow();
                 break;
             case "DiffColoursColumn":
-                scoreStrategy = new DiffColoursColumn();
+                this.scoreStrategy = new DiffColoursColumn();
                 break;
             case "DiffNumbersRow":
-                scoreStrategy = new DiffNumbersRow();
+                this.scoreStrategy = new DiffNumbersRow();
                 break;
             case "DiffNumbersColumn":
-                scoreStrategy = new DiffNumbersColumn();
+                this.scoreStrategy = new DiffNumbersColumn();
                 break;
             case "SmallNumbers":
-                scoreStrategy = new SmallNumbers();
+                this.scoreStrategy = new SmallNumbers();
                 break;
             case "MiddleNumbers":
-                scoreStrategy = new MiddleNumbers();
+                this.scoreStrategy = new MiddleNumbers();
                 break;
             case "BigNumbers":
-                scoreStrategy = new BigNumbers();
+                this.scoreStrategy = new BigNumbers();
                 break;
             case "DiffNumbers":
-                scoreStrategy = new DiffNumbers();
+                this.scoreStrategy = new DiffNumbers();
                 break;
             case "ColouredDiagonal":
-                scoreStrategy = new ColouredDiagonal();
+                this.scoreStrategy = new ColouredDiagonal();
                 break;
             case "DiffColours":
-                scoreStrategy = new DiffColours();
+                this.scoreStrategy = new DiffColours();
                 break;
+            default: this.scoreStrategy = null;
         }
-        return scoreStrategy;
+    }
+
+    /**
+     * Getter method for bonus points
+     * @return bonus points of the card
+     */
+    public int getBonus() {
+        return bonus;
     }
 }

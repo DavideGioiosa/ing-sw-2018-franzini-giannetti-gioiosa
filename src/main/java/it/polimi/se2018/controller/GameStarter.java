@@ -2,7 +2,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.*;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.model.player.User;
@@ -12,6 +12,8 @@ import it.polimi.se2018.view.RemoteView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static it.polimi.se2018.model.Config.*;
 
 /**
  * Controller's Class GameStarter
@@ -37,7 +39,7 @@ public class GameStarter implements Observer<PlayerChoice> {
         playerChoiceList = new ArrayList<>();
         this.userList = userList;
         playerChoiceSaved = new ArrayList<>();
-        remoteView = new RemoteView();
+        remoteView = new RemoteView(userList);
         colourEnumList = gameLoader.getWindowFrame();
         if(userList.iterator().hasNext()){
             sendColours(userList.iterator().next(),colourEnumList);
@@ -62,18 +64,21 @@ public class GameStarter implements Observer<PlayerChoice> {
         if(playerChoiceList.size()!= userList.size()){
             throw new RuntimeException("ERROR: not enough players");
         }
-        for(int i=0; i<3; i++){
+
+        for(int i = 0; i < getNumberOfToolCardOnBoard(); i++){
             try{
                 publicObjCardList.add((PublicObjCard)extractCard(gameLoader.getPublicObjDeck()));
             }catch(RuntimeException e){
                 remoteView.reportError(); //probabilmente necessario passare un parametro
             }
+        }
+
+        for (int i = 0; i < getNumberOfToolCardOnBoard(); i++){
             try{
                 toolCardList.add((ToolCard)extractCard(gameLoader.getToolDeck()));
             }catch(RuntimeException e){
                 remoteView.reportError();
             }
-
         }
         boardCard = new BoardCard(publicObjCardList, toolCardList);
 
@@ -130,7 +135,7 @@ public class GameStarter implements Observer<PlayerChoice> {
         if(privateObjCardDeck == null){
             throw new NullPointerException("ERROR: PrivateObjCard deck not existing");
         }
-        for(int i=0; i<playerList.size(); i++){
+        for(int i = 0; i < playerList.size(); i++){
             PrivatePlayer privatePlayer = new PrivatePlayer(playerList.get(i),(PrivateObjCard)extractCard(privateObjCardDeck));
             privatePlayerList.add(privatePlayer);
         }
@@ -194,38 +199,50 @@ public class GameStarter implements Observer<PlayerChoice> {
     }
 
     /**
-     *Update method for Observer implementation
+     * Update method for Observer implementation
      * @param playerChoice
      */
-    public void update(PlayerChoice playerChoice)
-    {
+    public void update(PlayerChoice playerChoice){
+
         for(PlayerChoice choiceSaved: playerChoiceSaved){
             if(choiceSaved.getUser().equals(playerChoice.getUser())){
 
-                if(choiceSaved.getSchemaCardList().contains(playerChoice.getChosenSchema()))
-                {
-                    choiceSaved.setChosenSchema(playerChoice.getChosenSchema());
-                    List<SchemaCard> schemaCards = new ArrayList<>();
-                    schemaCards.add(playerChoice.getChosenSchema());
-                    choiceSaved.setSchemaCardList(schemaCards);
-                    playerChoiceList.add(choiceSaved);
+                if(choiceSaved.getSchemaCardList() != null) {
+                    if (choiceSaved.getSchemaCardList().contains(playerChoice.getChosenSchema())) {
 
-                }else remoteView.reportError();
+                        choiceSaved.setChosenSchema(playerChoice.getChosenSchema());
+
+                        //Sets the player's colour choice in his possible choices, so it cannot be changed
+                        List<SchemaCard> schemaSelected = new ArrayList<>();
+                        schemaSelected.add(playerChoice.getChosenSchema());
+                        choiceSaved.setSchemaCardList(schemaSelected);
+
+                        playerChoiceList.add(choiceSaved);
+
+                    } else remoteView.reportError();
+                }
 
                 if(choiceSaved.getColourEnumList().contains(playerChoice.getChosenColour())){
 
                     colourEnumList.remove(playerChoice.getChosenColour());
                     choiceSaved.setChosenColour(playerChoice.getChosenColour());
+
+                    //Sets the player's colour choice in his possible choices, so it cannot be changed
+                    List<ColourEnum> colourSelected = new ArrayList<>();
+                    colourSelected.add(choiceSaved.getChosenColour());
+                    choiceSaved.setColourEnumList(colourSelected);
+
                     sendCardChoices(playerChoice);
                     if(userList.iterator().hasNext()){
                         sendColours(userList.iterator().next(), colourEnumList);
                     }
 
                 }else remoteView.reportError();
+
             }
         }
 
-        if(playerChoiceList.size()== userList.size()){
+        if(playerChoiceList.size() == userList.size()){
             startGame(playerChoiceList);
         }
     }

@@ -12,27 +12,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * View class, used for interaction with the player
+ * Used for interaction with the player
  * @author Silvia Franzini
  */
 public class View  {
 protected InputStrategy inputStrategy;
 protected ConnectionStrategy connectionStrategy;
 private MoveMessage moveMessage;
-private MessageLoader messageLoader;
+//private MessageLoader messageLoader;
 
 
     /**
      * Builder method of the class
      */
     public View() {
-        moveMessage = null;
+        /*moveMessage = null;
         try{
             messageLoader = new MessageLoader();
 
         }catch(Exception e){
             //TODO Gestire eccezione
-        }
+        }*/
     }
 
     /**
@@ -41,7 +41,7 @@ private MessageLoader messageLoader;
      */
     public void setInputStrategy(InputStrategy inputStrategy) {
         this.inputStrategy = inputStrategy;
-        inputStrategy.getInput();
+        //inputStrategy.getInput();
     }
 
     /**
@@ -72,7 +72,7 @@ private MessageLoader messageLoader;
     public void updateSchema(PlayerMove playerMove){
         SchemaCard schemaCard = playerMove.getPlayer().getSchemaCard();
         Die die = moveMessage.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
-        schemaCard.setCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
+        schemaCard.setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
     }
 
     /**
