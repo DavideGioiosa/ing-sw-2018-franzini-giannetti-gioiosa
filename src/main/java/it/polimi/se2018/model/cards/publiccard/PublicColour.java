@@ -1,8 +1,10 @@
 package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.Cell;
+import it.polimi.se2018.model.ColourEnum;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,16 +12,20 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class PublicColour {
-    private List<Integer> colours;
-
+    private HashMap<ColourEnum,Integer> hashMapColours;
     /**
      * Builder method of PublicColour class
      */
     public PublicColour(){
-        colours= new ArrayList<>();
-        for(int i = 0; i < 5; i++){
-            colours.add(0);
-        }
+
+        hashMapColours = new HashMap();
+        hashMapColours.put(ColourEnum.BLUE, 0);
+        hashMapColours.put(ColourEnum.GREEN, 0);
+        hashMapColours.put(ColourEnum.PURPLE, 0);
+        hashMapColours.put(ColourEnum.RED, 0);
+        hashMapColours.put(ColourEnum.YELLOW, 0);
+
+
     }
 
     /**
@@ -27,23 +33,18 @@ public class PublicColour {
      * @param cellList cells in the window pattern card
      * @return an array having the number of die of the same colour in every cell
      */
-    public List<Integer> differentColours(List<Cell> cellList){
+    public HashMap<ColourEnum,Integer> differentColours(List<Cell> cellList){
         if(cellList == null){
             throw new NullPointerException("ERROR: List does not exists");
         }
         for(Cell c : cellList){
             if(!c.isEmpty()){
-                switch (c.getDie().getColour()){
-                    case BLUE: colours.set(0,colours.get(0)+1); break;
-                    case GREEN: colours.set(1,colours.get(1)+1); break;
-                    case PURPLE: colours.set(2,colours.get(2)+1); break;
-                    case RED: colours.set(3,colours.get(3)+1); break;
-                    case YELLOW: colours.set(4,colours.get(4)+1); break;
-                    default: break;
-                }
+
+                hashMapColours.put(c.getDie().getColour(), hashMapColours.get(c.getDie().getColour())+1);
+
             }
         }
-        return colours;
+        return hashMapColours;
     }
 
 }

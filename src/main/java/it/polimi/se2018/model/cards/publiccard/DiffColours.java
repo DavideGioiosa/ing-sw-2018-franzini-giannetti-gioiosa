@@ -1,10 +1,13 @@
 package it.polimi.se2018.model.cards.publiccard;
 
+import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.SchemaCard;
 
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Public Class Different Colours
@@ -21,7 +24,9 @@ public class DiffColours implements ScoreStrategy {
     public int getScore(SchemaCard schema){
 
         PublicColour pub = new PublicColour();
-        List<Integer> colours = pub.differentColours(schema.getCellList());
-        return Collections.min(colours)*4;
+        HashMap<ColourEnum,Integer> colours = pub.differentColours(schema.getCellList());
+        ColourEnum key = Collections.max(colours.entrySet(), Map.Entry.comparingByValue()).getKey();
+
+        return 4*colours.get(key);
     }
 }

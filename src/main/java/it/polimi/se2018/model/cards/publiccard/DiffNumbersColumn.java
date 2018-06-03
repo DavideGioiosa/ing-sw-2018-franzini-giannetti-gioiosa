@@ -25,7 +25,8 @@ public class DiffNumbersColumn implements ScoreStrategy {
         PublicNumber pub = new PublicNumber();
         for(int i=0; i<COL; i++){
             List<Integer> colCell = pub.differentNumbers(schema.getCellCol(i));
-            if(Collections.max(colCell)<1){
+
+            if(colCell.stream().allMatch(c -> c.equals(1))){
                 score += 1;
             }
         }

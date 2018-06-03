@@ -1,8 +1,10 @@
 package it.polimi.se2018.model.cards.publiccard;
 
+import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.SchemaCard;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,8 +26,9 @@ public class DiffColoursRow implements ScoreStrategy {
         int score = 0;
         PublicColour pub = new PublicColour();
         for(int i=0; i<ROW; i++){
-            List<Integer> rowCell = pub.differentColours(schema.getCellRow(i));
-            if(Collections.max(rowCell)<1){
+            HashMap<ColourEnum,Integer> rowCell = pub.differentColours(schema.getCellRow(i));
+
+            if(rowCell.values().stream().allMatch(c -> c.equals(1))){
                 score += 1;
             }
         }
