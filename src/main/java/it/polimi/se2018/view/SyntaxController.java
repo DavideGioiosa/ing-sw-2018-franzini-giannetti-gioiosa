@@ -33,6 +33,8 @@ public class SyntaxController {
      */
     private PlayerMove playerMove;
 
+    private final String okmessage = "OK MESSAGE";
+    private final String errorMessage = "ERROR MESSAGE";
     /**
      * Constructor sets the first nextCommandType
      * @param gameBoard Game Board for the move checks
@@ -51,10 +53,10 @@ public class SyntaxController {
      */
     public String validCommand(String message){
 
-        if (message == null) return "COMANDO ERRATO";
+        if (message == null) return errorMessage;
         message = message.toUpperCase();
 
-        if (message.equals(RESETCOMMAND)){
+        if (message.equals(RESET_COMMAND)){
             newSyntaxController();
             return "OK MESSAGE";
 
@@ -67,7 +69,7 @@ public class SyntaxController {
                     setNextCommandType(playerMove);
                     return "OK MESSAGE";
                 } catch (IllegalArgumentException e) {
-                    return "COMANDO ERRATO";
+                    return errorMessage;
                 }
 
             case TOOLCARDID:
@@ -75,23 +77,23 @@ public class SyntaxController {
                     if (Integer.valueOf(message) == toolCard.getId()) {
                         playerMove.setIdToolCard(Integer.valueOf(message));
                         setNextCommandType(playerMove);
-                        return "OK MESSAGE";
+                        return okmessage;
                     }
                 }
-                return "COMANDO ERRATO";
+                return errorMessage;
 
             case DICEBOARDINDEX:
                 if (Integer.valueOf(message) >= 0 && Integer.valueOf(message) < gameBoard.getBoardDice().getDieList().size()) {
                     playerMove.setDiceBoardIndex(Integer.valueOf(message));
                     setNextCommandType(playerMove);
-                    return "OK MESSAGE";
+                    return okmessage;
                 }
-                return "COMANDO ERRATO";
+                return errorMessage;
 
             case VALUE:
                 playerMove.setValue(Integer.valueOf(message));
                 setNextCommandType(playerMove);
-                return "OK MESSAGE";
+                return okmessage;
             default:
                 int value1 = Integer.parseInt(message.split(" ")[0]);
                 int value2 = Integer.parseInt(message.split(" ")[1]);
@@ -103,30 +105,30 @@ public class SyntaxController {
 
                             playerMove.setTrackBoardIndex(value1,value2);
                             setNextCommandType(playerMove);
-                            return "OK MESSAGE";
+                            return okmessage;
                         }
-                        return "COMANDO ERRATO";
+                        return errorMessage;
 
                     case DICESCHEMAWHERETOTAKE:
-                        if (value1 >= 0 && value1 < NUMBEROFSCHEMAROW && value2 >=0 && value2 < NUMBEROFSCHEMACOL){
+                        if (value1 >= 0 && value1 < NUMBER_OF_SCHEMA_ROW && value2 >=0 && value2 < NUMBER_OF_SCHEMA_COL){
 
                             playerMove.insertDiceSchemaWhereToTake(new Position(value1,value2));
                             setNextCommandType(playerMove);
-                            return "OK MESSAGE";
+                            return okmessage;
                         }
-                        return "COMANDO ERRATO";
+                        return errorMessage;
 
                     case DICESCHEMAWHERETOLEAVE:
-                        if (value1 >= 0 && value1 < NUMBEROFSCHEMAROW && value2 >=0 && value2 < NUMBEROFSCHEMACOL){
+                        if (value1 >= 0 && value1 < NUMBER_OF_SCHEMA_ROW && value2 >=0 && value2 < NUMBER_OF_SCHEMA_COL){
 
                             playerMove.insertDiceSchemaWhereToLeave(new Position(value1,value2));
                             setNextCommandType(playerMove);
-                            return "OK MESSAGE";
+                            return okmessage;
                         }
-                        return "COMANDO ERRATO";
+                        return errorMessage;
 
                     default:
-                        return "COMANDO ERRATO";
+                        return errorMessage;
                 }
 
         }
@@ -177,14 +179,25 @@ public class SyntaxController {
         }
     }
 
+    /**
+     * Gets Player Move
+     * @return Actual status of the PlayerMove
+     */
     public PlayerMove getPlayerMove(){
         return playerMove;
     }
 
+    /**
+     * Gets next type of input expected
+     * @return Enum containing next type of input expected
+     */
     public CommandTypeEnum getNextCommandType() {
         return nextCommandType;
     }
 
+    /**
+     * Resets Command
+     */
     public void newSyntaxController(){
         nextCommandType = CommandTypeEnum.TYPEOFCHOICE;
         this.playerMove = new PlayerMove();

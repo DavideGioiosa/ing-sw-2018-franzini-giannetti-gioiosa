@@ -51,7 +51,7 @@ public class SchemaCardTest {
      */
     @Test
     public void getDifficulty(){
-        assertEquals(schema.getDifficulty(), 3);
+        assertEquals(3, schema.getDifficulty());
     }
 
     /**

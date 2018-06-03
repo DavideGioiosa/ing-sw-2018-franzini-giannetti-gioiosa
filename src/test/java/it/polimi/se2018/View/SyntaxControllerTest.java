@@ -18,7 +18,7 @@ public class SyntaxControllerTest {
     private GameBoard gameBoard;
     private Player player;
     private final String OKMESSAGE = "OK MESSAGE";
-    private final String ERRORMESSAGE = "COMANDO ERRATO";
+    private final String ERRORMESSAGE = "ERROR MESSAGE";
 
 
     @Before

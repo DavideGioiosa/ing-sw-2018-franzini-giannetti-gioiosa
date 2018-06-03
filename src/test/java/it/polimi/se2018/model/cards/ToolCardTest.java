@@ -1,5 +1,6 @@
-package it.polimi.se2018.model;
+package it.polimi.se2018.model.cards;
 
+import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.ToolCard;
 import org.junit.Test;
 
@@ -62,7 +63,7 @@ public class ToolCardTest{
         try {
             ToolCard toolCard = new ToolCard(ID, null, DESCRIPTION, colour);
             fail();
-        }catch(IllegalArgumentException e){}
+        }catch(NullPointerException e){}
     }
 
     /**

@@ -119,7 +119,7 @@ public class SchemaCard extends Card {
             throw new IllegalArgumentException("Insert index value out of the range permitted");
         }
 
-        List<Cell> rowList = new ArrayList<Cell>();
+        List<Cell> rowList = new ArrayList<>();
         int firstCellRow = index * 5;
 
         for(int i=0; i <= 4; i++){
@@ -138,7 +138,7 @@ public class SchemaCard extends Card {
             throw new IllegalArgumentException("Insert index value out of the range permitted");
         }
 
-        List<Cell> colList = new ArrayList<Cell>();
+        List<Cell> colList = new ArrayList<>();
         int firstCellCol = index;
 
         for(int i=0; i <= 3; i++){
@@ -160,7 +160,7 @@ public class SchemaCard extends Card {
                     "out of the range permitted");
         }
 
-        List<Cell> adjList = new ArrayList<Cell>();
+        List<Cell> adjList = new ArrayList<>();
 
         if(this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
             if(position.getCol() - 1 >= 0) {
@@ -192,25 +192,23 @@ public class SchemaCard extends Card {
                     "out of the range permitted");
         }
 
-        List<Cell> adjDiagList = new ArrayList<Cell>();
+        List<Cell> adjDiagList = new ArrayList<>();
 
-        if(this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
-            if(position.getCol() - 1 >= 0 && position.getRow() - 1 >= 0) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
-                        position.getCol() - 1)));
-            }
-            if(position.getRow() - 1 >= 0 && position.getCol() + 1 <= 4) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
-                        position.getCol() + 1)));
-            }
-            if(position.getRow() + 1 <= 3 && position.getCol() - 1 >= 0) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
-                        position.getCol() - 1)));
-            }
-            if(position.getRow() + 1 <= 3 && position.getCol() + 1 <= 4) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
-                        position.getCol() + 1)));
-            }
+        if(position.getCol() - 1 >= 0 && position.getRow() - 1 >= 0) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
+                    position.getCol() - 1)));
+        }
+        if(position.getRow() - 1 >= 0 && position.getCol() + 1 <= 4) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
+                    position.getCol() + 1)));
+        }
+        if(position.getRow() + 1 <= 3 && position.getCol() - 1 >= 0) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
+                    position.getCol() - 1)));
+        }
+        if(position.getRow() + 1 <= 3 && position.getCol() + 1 <= 4) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
+                    position.getCol() + 1)));
         }
         return adjDiagList;
     }
