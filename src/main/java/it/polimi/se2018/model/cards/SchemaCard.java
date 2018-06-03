@@ -194,24 +194,23 @@ public class SchemaCard extends Card {
 
         List<Cell> adjDiagList = new ArrayList<Cell>();
 
-        if(this.cellList.get(position.getIndexArrayPosition()).isEmpty()){
-            if(position.getCol() - 1 >= 0 && position.getRow() - 1 >= 0) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
-                        position.getCol() - 1)));
-            }
-            if(position.getRow() - 1 >= 0 && position.getCol() + 1 <= 4) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
-                        position.getCol() + 1)));
-            }
-            if(position.getRow() + 1 <= 3 && position.getCol() - 1 >= 0) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
-                        position.getCol() - 1)));
-            }
-            if(position.getRow() + 1 <= 3 && position.getCol() + 1 <= 4) {
-                adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
-                        position.getCol() + 1)));
-            }
+        if(position.getCol() - 1 >= 0 && position.getRow() - 1 >= 0) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
+                    position.getCol() - 1)));
         }
+        if(position.getRow() - 1 >= 0 && position.getCol() + 1 <= 4) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() - 1,
+                    position.getCol() + 1)));
+        }
+        if(position.getRow() + 1 <= 3 && position.getCol() - 1 >= 0) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
+                    position.getCol() - 1)));
+        }
+        if(position.getRow() + 1 <= 3 && position.getCol() + 1 <= 4) {
+            adjDiagList.add(this.cellList.get(position.getIndexArrayPosition(position.getRow() + 1,
+                    position.getCol() + 1)));
+        }
+
         return adjDiagList;
     }
 }
