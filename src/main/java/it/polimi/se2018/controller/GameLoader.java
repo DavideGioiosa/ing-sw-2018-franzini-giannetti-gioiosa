@@ -4,7 +4,7 @@ import it.polimi.se2018.model.CardTypeEnum;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.*;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import static it.polimi.se2018.model.Config.*;
+import static java.lang.Integer.valueOf;
 
 
 /**
  * Creates Public Objective, Private Objective and Tool Cards and loads Schema Cards
+ *
  * @author Cristian Giannetti
  */
 public class GameLoader {
@@ -47,6 +49,18 @@ public class GameLoader {
      * List of Frame Colour
      */
     private List<ColourEnum> windowFrame;
+    /**
+     * Name of Card tag in XML file
+     */
+    private static final String CARDTAG = "card";
+    /**
+     * Name of Name tag in XML file
+     */
+    private static final String NAMETAG = "name";
+    /**
+     * Name of Description tag in XML file
+     */
+    private static final String DESCRIPTIONTAG = "description";
 
     /**
      * The constructor creates all type of Deck and the list of frame colour
@@ -111,12 +125,9 @@ public class GameLoader {
         String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PrivateObjCard.xml";
 
         try {
-            File file = new File(pathName);
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
 
-            NodeList nodeList = document.getElementsByTagName("card");
+            NodeList nodeList = getNodeList(pathName, CARDTAG);
+            if (nodeList == null) throw new RuntimeException("ERRORE FILE");
 
             privateObjDeck = new CardDeck(CardTypeEnum.PRIVATEOBJCARD);
 
@@ -125,8 +136,8 @@ public class GameLoader {
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) node;
-                    name = eElement.getElementsByTagName("name").item(0).getTextContent();
-                    description = eElement.getElementsByTagName("description").item(0).getTextContent();
+                    name = eElement.getElementsByTagName(NAMETAG).item(0).getTextContent();
+                    description = eElement.getElementsByTagName(DESCRIPTIONTAG).item(0).getTextContent();
                     colour = ColourEnum.valueOf(eElement.getElementsByTagName("colour").item(0).getTextContent());
 
                     PrivateObjCard card = new PrivateObjCard(id, name, description, colour);
@@ -149,16 +160,14 @@ public class GameLoader {
         int id = IDFIRSTPUBLICOBJCARD;
         String name;
         String description;
+        int bonus;
         String strategy;
         String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PublicObjCards.xml";
 
         try {
-            File file = new File(pathName);
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
 
-            NodeList nodeList = document.getElementsByTagName("card");
+            NodeList nodeList = getNodeList(pathName, CARDTAG);
+            if (nodeList == null) throw new RuntimeException("ERRORE FILE");
 
             publicObjDeck = new CardDeck(CardTypeEnum.PUBLICOBJCARD);
 
@@ -168,11 +177,12 @@ public class GameLoader {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element element = (Element) node;
-                    name = element.getElementsByTagName("name").item(0).getTextContent();
-                    description = element.getElementsByTagName("description").item(0).getTextContent();
+                    name = element.getElementsByTagName(NAMETAG).item(0).getTextContent();
+                    description = element.getElementsByTagName(DESCRIPTIONTAG).item(0).getTextContent();
                     strategy = element.getElementsByTagName("typeofcalculation").item(0).getTextContent();
+                    bonus = valueOf(element.getElementsByTagName("bonus").item(0).getTextContent());
 
-                    PublicObjCard card = new PublicObjCard(id, name, description, strategy);
+                    PublicObjCard card = new PublicObjCard(id, name, description, bonus, strategy);
                     publicObjDeck.insertCard(card);
                 }
                 id ++;
@@ -188,60 +198,39 @@ public class GameLoader {
      * Creates Schema Cards Deck
      */
     private void createSchemaCard(){
-
         int id = IDFIRSTSCHEMACARD;
         String name;
         int difficulty;
-        String restriction;
+        List<Cell> cellList;
+        final String DIFFICULTYTAG = "difficulty";
 
         String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\SchemaCards.xml";
 
-        Cell cell;
-        List<Cell> cellList;
-
         try {
 
-            File file = new File(pathName);
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
+            NodeList nodeList = getNodeList(pathName, CARDTAG);
+            if (nodeList == null) throw new NullPointerException("ERRORE FILE");
 
-            NodeList nodeList = document.getElementsByTagName("card");
             schemaDeck = new CardDeck(CardTypeEnum.SCHEMACARD);
 
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node node = nodeList.item(i);
-                cellList = new ArrayList<>();
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    name = element.getElementsByTagName("name").item(0).getTextContent();
-                    difficulty = Integer.valueOf(element.getElementsByTagName("difficulty").item(0).getTextContent());
+                    name = element.getElementsByTagName(NAMETAG).item(0).getTextContent();
+                    difficulty = valueOf(element.getElementsByTagName(DIFFICULTYTAG).item(0).getTextContent());
 
-                    for (int row = 0; row < NUMBEROFSCHEMAROW; row++) {
-                        for (int col = 0; col < NUMBEROFSCHEMACOL; col++) {
-
-                            restriction = element.getElementsByTagName("cell").item(row * NUMBEROFSCHEMACOL + col).getTextContent();
-                            cell = parseCell(restriction);
-                            cellList.add(cell);
-
-                        }
-                    }
+                    cellList = extractCells(0, element);
 
                     SchemaCard frontCard = new SchemaCard(id, name, "", difficulty, cellList);
+
                     id ++;
 
-                    cellList = new ArrayList<>();
+                    name = element.getElementsByTagName(NAMETAG).item(1).getTextContent();
+                    difficulty = valueOf(element.getElementsByTagName(DIFFICULTYTAG).item(1).getTextContent());
 
-                    for (int row = 0; row < NUMBEROFSCHEMAROW; row++) {
-                        for (int col = 0; col < NUMBEROFSCHEMACOL; col++) {
-
-                            restriction = element.getElementsByTagName("cell").item(NUMBEROFSCHEMACOL * NUMBEROFSCHEMAROW + row * NUMBEROFSCHEMACOL + col).getTextContent();
-                            cell = parseCell(restriction);
-                            cellList.add(cell);
-
-                        }
-                    }
+                    cellList = extractCells(NUMBEROFSCHEMACOL * NUMBEROFSCHEMAROW, element);
 
                     SchemaCard backCard = new SchemaCard(id, name, "", difficulty, cellList);
                     id ++;
@@ -271,13 +260,8 @@ public class GameLoader {
 
         try {
 
-            File file = new File(pathName);
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
-
-            NodeList nodeList = document.getElementsByTagName("card");
+            NodeList nodeList = getNodeList(pathName, CARDTAG);
+            if (nodeList == null) throw new NullPointerException("ERRORE FILE");
 
             toolDeck = new CardDeck(CardTypeEnum.TOOLCARD);
 
@@ -286,8 +270,8 @@ public class GameLoader {
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    name = element.getElementsByTagName("name").item(0).getTextContent();
-                    description = element.getElementsByTagName("description").item(0).getTextContent();
+                    name = element.getElementsByTagName(NAMETAG).item(0).getTextContent();
+                    description = element.getElementsByTagName(DESCRIPTIONTAG).item(0).getTextContent();
                     colour = ColourEnum.valueOf(element.getElementsByTagName("colour").item(0).getTextContent());
 
                     ToolCard card = new ToolCard(id, name, description, colour);
@@ -339,5 +323,50 @@ public class GameLoader {
         }
 
         return new Cell(value, colour);
+    }
+
+    /**
+     * Creates a NodeList from a XML file
+     * @param pathName Path of XML File
+     * @param tag Tag of a single element in the file
+     * @return List of elements divided by the tag selected
+     */
+    private NodeList getNodeList(String pathName, String tag){
+        try{
+            File file = new File(pathName);
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(file);
+            return document.getElementsByTagName(tag);
+        }catch (Exception e){
+
+        }
+        return null;
+    }
+
+    /**
+     * Extract a List of Cells in the Element selected
+     * @param startingIndex Index of the first cell in file
+     * @param element Element where the cells are
+     * @return Entire list of cell imported from the file
+     */
+    private List<Cell> extractCells(int startingIndex, Element element){
+
+        final String CELLTAG = "cell";
+        List<Cell> cellList = new ArrayList<>();
+        Cell cell;
+        String restriction;
+
+        for (int row = 0; row < NUMBEROFSCHEMAROW; row++) {
+            for (int col = 0; col < NUMBEROFSCHEMACOL; col++) {
+
+                restriction = element.getElementsByTagName(CELLTAG).item(startingIndex + row * NUMBEROFSCHEMACOL + col).getTextContent();
+                cell = parseCell(restriction);
+                cellList.add(cell);
+
+            }
+        }
+        return cellList;
     }
 }

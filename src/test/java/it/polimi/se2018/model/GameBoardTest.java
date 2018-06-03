@@ -4,12 +4,10 @@ import it.polimi.se2018.controller.GameLoader;
 import it.polimi.se2018.model.cards.PrivateObjCard;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.cards.ToolCard;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
-import it.polimi.se2018.model.cards.public_card.ScoreStrategy;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;

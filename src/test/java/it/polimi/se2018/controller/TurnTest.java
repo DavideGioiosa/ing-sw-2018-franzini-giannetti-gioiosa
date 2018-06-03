@@ -3,7 +3,7 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.cards.ToolCard;
-import it.polimi.se2018.model.cards.public_card.PublicObjCard;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import org.junit.Before;
@@ -58,7 +58,7 @@ public class TurnTest {
         List<ToolCard> toolCardList = new ArrayList<>();
         toolCardList.add(toolCard);
 
-        PublicObjCard publicObjCard = new PublicObjCard(5,NAME,DESCRIPTION, strategy);
+        PublicObjCard publicObjCard = new PublicObjCard(5,NAME,DESCRIPTION,2, strategy);
         List<PublicObjCard> publicCardList = new ArrayList<>();
         publicCardList.add(publicObjCard);
 

@@ -17,14 +17,14 @@ public class BoardDice {
     private List<Die> dieList;
 
     /**
-     * The Constructor creates an empty Draft Pool
+     * Constructor creates an empty Draft Pool
      */
     public BoardDice(){
         dieList = new ArrayList<>();
     }
 
     /**
-     * returns the list of the dice in the Draft Pool
+     * Returns the list of the dice in the Draft Pool
      * @return the list of Die contained in the Draft Pool
      */
     public List<Die> getDieList() {
@@ -32,7 +32,7 @@ public class BoardDice {
     }
 
     /**
-     * inserts a die in the Draft Pool
+     * Inserts a die in the Draft Pool
      * @param die to be inserted in the Draft Pool
      */
     public void insertDice(Die die){
@@ -40,7 +40,7 @@ public class BoardDice {
     }
 
     /**
-     * takes a Die from the Draft Pool
+     * Takes a Die from the Draft Pool
      * @param index Position of dice to be taken from the Draft Pool
      * @return Die removed from the Draft Pool
      */

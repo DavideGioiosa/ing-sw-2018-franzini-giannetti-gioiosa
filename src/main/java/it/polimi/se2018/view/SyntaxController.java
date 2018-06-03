@@ -92,43 +92,44 @@ public class SyntaxController {
                 playerMove.setValue(Integer.valueOf(message));
                 setNextCommandType(playerMove);
                 return "OK MESSAGE";
+            default:
+                int value1 = Integer.parseInt(message.split(" ")[0]);
+                int value2 = Integer.parseInt(message.split(" ")[1]);
+                switch (nextCommandType) {
+
+                    case TRACKBOARDINDEX:
+                        if (value1 >= 0 && value1 < gameBoard.getTrackBoardDice().getDiceList().size() && value2 >=0 &&
+                                value2 < gameBoard.getTrackBoardDice().getDiceList().get(value1).size()){
+
+                            playerMove.setTrackBoardIndex(value1,value2);
+                            setNextCommandType(playerMove);
+                            return "OK MESSAGE";
+                        }
+                        return "COMANDO ERRATO";
+
+                    case DICESCHEMAWHERETOTAKE:
+                        if (value1 >= 0 && value1 < NUMBEROFSCHEMAROW && value2 >=0 && value2 < NUMBEROFSCHEMACOL){
+
+                            playerMove.insertDiceSchemaWhereToTake(new Position(value1,value2));
+                            setNextCommandType(playerMove);
+                            return "OK MESSAGE";
+                        }
+                        return "COMANDO ERRATO";
+
+                    case DICESCHEMAWHERETOLEAVE:
+                        if (value1 >= 0 && value1 < NUMBEROFSCHEMAROW && value2 >=0 && value2 < NUMBEROFSCHEMACOL){
+
+                            playerMove.insertDiceSchemaWhereToLeave(new Position(value1,value2));
+                            setNextCommandType(playerMove);
+                            return "OK MESSAGE";
+                        }
+                        return "COMANDO ERRATO";
+
+                    default:
+                        return "COMANDO ERRATO";
+                }
+
         }
-
-        int value1 = Integer.parseInt(message.split(" ")[0]);
-        int value2 = Integer.parseInt(message.split(" ")[1]);
-
-        switch (nextCommandType) {
-
-            case TRACKBOARDINDEX:
-                if (value1 >= 0 && value1 < gameBoard.getTrackBoardDice().getDiceList().size() && value2 >=0 &&
-                        value2 < gameBoard.getTrackBoardDice().getDiceList().get(value1).size()){
-
-                    playerMove.setTrackBoardIndex(value1,value2);
-                    setNextCommandType(playerMove);
-                    return "OK MESSAGE";
-                }
-                return "COMANDO ERRATO";
-
-            case DICESCHEMAWHERETOTAKE:
-                if (value1 >= 0 && value1 < NUMBEROFSCHEMAROW && value2 >=0 && value2 < NUMBEROFSCHEMACOL){
-
-                    playerMove.insertDiceSchemaWhereToTake(new Position(value1,value2));
-                    setNextCommandType(playerMove);
-                    return "OK MESSAGE";
-                }
-                return "COMANDO ERRATO";
-
-            case DICESCHEMAWHERETOLEAVE:
-                if (value1 >= 0 && value1 < NUMBEROFSCHEMAROW && value2 >=0 && value2 < NUMBEROFSCHEMACOL){
-
-                    playerMove.insertDiceSchemaWhereToLeave(new Position(value1,value2));
-                    setNextCommandType(playerMove);
-                    return "OK MESSAGE";
-                }
-                return "COMANDO ERRATO";
-        }
-
-        return "COMANDO ERRATO";
     }
 
     /**

@@ -1,4 +1,4 @@
-package it.polimi.se2018.model.cards.public_card;
+package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.cards.SchemaCard;
 

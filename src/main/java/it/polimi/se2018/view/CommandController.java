@@ -5,7 +5,7 @@ import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.PlayerMove;
 
 /**
- * View's Class: Command Controller
+ * view's Class: Command Controller
  *
  * @author Davide Gioiosa
  */

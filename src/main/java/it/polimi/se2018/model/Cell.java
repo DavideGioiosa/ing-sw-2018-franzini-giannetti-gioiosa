@@ -1,26 +1,27 @@
 package it.polimi.se2018.model;
 
 /**
- * Public Class Cell
+ * Cell class represent a single cell of SchemaCard
  * @author Davide Gioiosa
  */
 
 public class Cell {
 
     /**
-     * limitation die value that a cell accepts
+     * Limitation die value that a cell accepts
      */
     private int value;
     /**
-     * limitation die colour that a cell accepts
+     * Limitation die colour that a cell accepts
      */
     private ColourEnum colour;
     /**
-     * die placed in the cell
+     * Die placed in the cell
      */
     private Die die;
 
     /**
+     * Constructor creates a new cell with value and colour restriction
      * @param value value limitation that a cell may have, 0 if there's not limitation
      * @param colour limitation that a cell may have, null if there's not limitation
      */
@@ -41,6 +42,7 @@ public class Cell {
     }
 
     /**
+     * Insert a die in the cell
      * @param die to place in the cell, if the cell it's empty
      */
     public void insertDice(Die die) {
@@ -54,6 +56,7 @@ public class Cell {
     }
 
     /**
+     * Gets die placed in the cell
      * @return the die placed in the cell
      */
     public Die getDie() {
@@ -61,6 +64,7 @@ public class Cell {
     }
 
     /**
+     * Gets cell's Value limitation
      * @return the value limitation that a cell may have
      */
     public int getValue() {
@@ -68,6 +72,7 @@ public class Cell {
     }
 
     /**
+     * Gets cell's colour limitation
      * @return the colour limitation that a cell may have
      */
     public ColourEnum getColour() {
@@ -76,7 +81,6 @@ public class Cell {
 
     /**
      * Remove the die in the cell
-     * used by Toolcard 2,3,4,12
      * @return die removed from the Scheme
      */
     public Die pickDice(){
