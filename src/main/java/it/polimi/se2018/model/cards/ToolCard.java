@@ -50,11 +50,7 @@ public class ToolCard extends Card {
         if (this.token < 0) {
             throw new RuntimeException("ERROR: Negative number of token on a ToolCard");
         }
-        if (this.token > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.token > 0;
     }
 
     /**

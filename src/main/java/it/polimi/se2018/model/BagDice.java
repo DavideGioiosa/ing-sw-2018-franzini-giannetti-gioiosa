@@ -26,7 +26,7 @@ public class BagDice {
         int i;
         dieList = new ArrayList<>();
 
-        for (i = 0; i < NUMBEROFDICEPERCOLOUR; i++) {
+        for (i = 0; i < NUMBER_OF_DICE_PER_COLOUR; i++) {
             for (ColourEnum colourEnum : ColourEnum.values())
             insertDice(new Die(colourEnum));
         }

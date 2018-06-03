@@ -65,7 +65,7 @@ public class GameStarter implements Observer<PlayerChoice> {
             throw new RuntimeException("ERROR: not enough players");
         }
 
-        for(int i = 0; i < getNumberOfToolCardOnBoard(); i++){
+        for(int i = 0; i < getNumberOfPublicObjCardOnBoard(); i++){
             try{
                 publicObjCardList.add((PublicObjCard)extractCard(gameLoader.getPublicObjDeck()));
             }catch(RuntimeException e){

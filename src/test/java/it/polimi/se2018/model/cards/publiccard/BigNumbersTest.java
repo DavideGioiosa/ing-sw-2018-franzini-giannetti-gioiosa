@@ -1,11 +1,7 @@
-package it.polimi.se2018.model.cards.public_card;
+package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
-import it.polimi.se2018.model.cards.ToolCard;
-import it.polimi.se2018.model.cards.publiccard.BigNumbers;
-import it.polimi.se2018.model.player.Player;
-import it.polimi.se2018.model.player.PrivatePlayer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
+
+/**
+ * Test Model's Class Public card: BigNumbers
+ * @author Davide Gioiosa
+ */
+
 
 public class BigNumbersTest {
     private SchemaCard schemaCard;

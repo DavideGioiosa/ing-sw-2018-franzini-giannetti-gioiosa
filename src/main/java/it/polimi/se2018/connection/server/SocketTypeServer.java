@@ -28,6 +28,7 @@ public class SocketTypeServer {
     }
 
     public void send (PlayerMessage playerMessage){
-        //invio
+        //to check
+      //  controllerSocket.sendUpdate(playerMessage);
     }
 }

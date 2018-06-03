@@ -12,32 +12,32 @@ import java.util.List;
  */
 public class PlayerChoice extends PlayerMessage {
     /**
-     * User
+     * User referred to the choices
      */
     private User user;
     /**
-     *
+     * List of SchemaCard that the User can choice
      */
     private List<SchemaCard> schemaCardList;
     /**
-     *
+     * List of Window Frame colour that the User can choice
      */
     private List<ColourEnum> colourEnumList;
     /**
-     *
-     */
-    private SchemaCard chosenSchema;
-    /**
-     *
+     * Chosen Window Frame chosen
      */
     private ColourEnum chosenColour;
+    /**
+     * Chosen SchemaCard
+     */
+    private SchemaCard chosenSchema;
 
     /**
      * Builder method of PlayerChoice class
      * @param user User making choices
      */
     public PlayerChoice(User user){
-        this.user=user;
+        this.user = user;
         schemaCardList = new ArrayList<>();
         colourEnumList = new ArrayList<>();
         chosenColour = null;
@@ -57,7 +57,8 @@ public class PlayerChoice extends PlayerMessage {
      * @param schemaCardList list of Schema Cards
      */
     public void setSchemaCardList(List<SchemaCard> schemaCardList){
-        this.schemaCardList= schemaCardList;
+        if (schemaCardList == null) throw new NullPointerException("Invalid List of Schema Card");
+        this.schemaCardList = schemaCardList;
     }
 
     /**
@@ -73,6 +74,7 @@ public class PlayerChoice extends PlayerMessage {
      * @param colourEnumList list of available colours
      */
     public void setColourEnumList(List<ColourEnum> colourEnumList) {
+        if (colourEnumList == null) throw new NullPointerException("Invalid List of colour");
         this.colourEnumList = colourEnumList;
     }
 
@@ -89,6 +91,7 @@ public class PlayerChoice extends PlayerMessage {
      * @param chosenColour Colour chosen by the User
      */
     public void setChosenColour(ColourEnum chosenColour) {
+        if (chosenColour == null) throw new NullPointerException("Invalid colour");
         this.chosenColour = chosenColour;
     }
 
@@ -105,6 +108,7 @@ public class PlayerChoice extends PlayerMessage {
      * @param chosenSchema Window pattern chosen by the User
      */
     public void setChosenSchema(SchemaCard chosenSchema) {
+        if (chosenSchema == null) throw new NullPointerException("Invalid Schema");
         this.chosenSchema = chosenSchema;
     }
 

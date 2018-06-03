@@ -24,7 +24,7 @@ public class BagDiceTest {
         int numOfPurple = 0;
 
         BagDice bagDice = new BagDice();
-        for (int i = 0; i < NUMBEROFDICEPERCOLOUR * 5; i++) {
+        for (int i = 0; i < NUMBER_OF_DICE_PER_COLOUR * 5; i++) {
             Die die = bagDice.extractDice();
             switch (die.getColour()) {
                 case BLUE:

@@ -52,15 +52,17 @@ public class GameLoader {
     /**
      * Name of Card tag in XML file
      */
-    private static final String CARDTAG = "card";
+    private static final String CARD_TAG = "card";
     /**
      * Name of Name tag in XML file
      */
-    private static final String NAMETAG = "name";
+    private static final String NAME_TAG = "name";
     /**
      * Name of Description tag in XML file
      */
-    private static final String DESCRIPTIONTAG = "description";
+    private static final String DESCRIPTION_TAG = "description";
+
+    private static final String FILE_ERROR_MESSAGE = "FILE ERROR";
 
     /**
      * The constructor creates all type of Deck and the list of frame colour
@@ -118,7 +120,7 @@ public class GameLoader {
      */
     private void createPrivateObjDeck(){
 
-        int id = IDFIRSTPRIVATEOBJCARD;
+        int id = ID_FIRST_PRIVATE_OBJ_CARD;
         String name;
         String description;
         ColourEnum colour;
@@ -126,8 +128,8 @@ public class GameLoader {
 
         try {
 
-            NodeList nodeList = getNodeList(pathName, CARDTAG);
-            if (nodeList == null) throw new RuntimeException("ERRORE FILE");
+            NodeList nodeList = getNodeList(pathName, CARD_TAG);
+            if (nodeList == null) throw new RuntimeException(FILE_ERROR_MESSAGE);
 
             privateObjDeck = new CardDeck(CardTypeEnum.PRIVATEOBJCARD);
 
@@ -136,8 +138,8 @@ public class GameLoader {
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) node;
-                    name = eElement.getElementsByTagName(NAMETAG).item(0).getTextContent();
-                    description = eElement.getElementsByTagName(DESCRIPTIONTAG).item(0).getTextContent();
+                    name = eElement.getElementsByTagName(NAME_TAG).item(0).getTextContent();
+                    description = eElement.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
                     colour = ColourEnum.valueOf(eElement.getElementsByTagName("colour").item(0).getTextContent());
 
                     PrivateObjCard card = new PrivateObjCard(id, name, description, colour);
@@ -157,7 +159,7 @@ public class GameLoader {
      */
     private void createPublicObjDeck(){
 
-        int id = IDFIRSTPUBLICOBJCARD;
+        int id = ID_FIRST_PUBLIC_OBJ_CARD;
         String name;
         String description;
         int bonus;
@@ -166,8 +168,8 @@ public class GameLoader {
 
         try {
 
-            NodeList nodeList = getNodeList(pathName, CARDTAG);
-            if (nodeList == null) throw new RuntimeException("ERRORE FILE");
+            NodeList nodeList = getNodeList(pathName, CARD_TAG);
+            if (nodeList == null) throw new RuntimeException(FILE_ERROR_MESSAGE);
 
             publicObjDeck = new CardDeck(CardTypeEnum.PUBLICOBJCARD);
 
@@ -177,8 +179,8 @@ public class GameLoader {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element element = (Element) node;
-                    name = element.getElementsByTagName(NAMETAG).item(0).getTextContent();
-                    description = element.getElementsByTagName(DESCRIPTIONTAG).item(0).getTextContent();
+                    name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
+                    description = element.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
                     strategy = element.getElementsByTagName("typeofcalculation").item(0).getTextContent();
                     bonus = valueOf(element.getElementsByTagName("bonus").item(0).getTextContent());
 
@@ -198,7 +200,7 @@ public class GameLoader {
      * Creates Schema Cards Deck
      */
     private void createSchemaCard(){
-        int id = IDFIRSTSCHEMACARD;
+        int id = ID_FIRST_SCHEMA_CARD;
         String name;
         int difficulty;
         List<Cell> cellList;
@@ -208,8 +210,8 @@ public class GameLoader {
 
         try {
 
-            NodeList nodeList = getNodeList(pathName, CARDTAG);
-            if (nodeList == null) throw new NullPointerException("ERRORE FILE");
+            NodeList nodeList = getNodeList(pathName, CARD_TAG);
+            if (nodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
 
             schemaDeck = new CardDeck(CardTypeEnum.SCHEMACARD);
 
@@ -218,7 +220,7 @@ public class GameLoader {
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    name = element.getElementsByTagName(NAMETAG).item(0).getTextContent();
+                    name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
                     difficulty = valueOf(element.getElementsByTagName(DIFFICULTYTAG).item(0).getTextContent());
 
                     cellList = extractCells(0, element);
@@ -227,10 +229,10 @@ public class GameLoader {
 
                     id ++;
 
-                    name = element.getElementsByTagName(NAMETAG).item(1).getTextContent();
+                    name = element.getElementsByTagName(NAME_TAG).item(1).getTextContent();
                     difficulty = valueOf(element.getElementsByTagName(DIFFICULTYTAG).item(1).getTextContent());
 
-                    cellList = extractCells(NUMBEROFSCHEMACOL * NUMBEROFSCHEMAROW, element);
+                    cellList = extractCells(NUMBER_OF_SCHEMA_COL * NUMBER_OF_SCHEMA_ROW, element);
 
                     SchemaCard backCard = new SchemaCard(id, name, "", difficulty, cellList);
                     id ++;
@@ -252,7 +254,7 @@ public class GameLoader {
      */
     private void createToolDeck(){
 
-        int id = IDFIRSTTOOLCARDS;
+        int id = ID_FIRST_TOOL_CARD;
         String name;
         String description;
         ColourEnum colour;
@@ -260,8 +262,8 @@ public class GameLoader {
 
         try {
 
-            NodeList nodeList = getNodeList(pathName, CARDTAG);
-            if (nodeList == null) throw new NullPointerException("ERRORE FILE");
+            NodeList nodeList = getNodeList(pathName, CARD_TAG);
+            if (nodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
 
             toolDeck = new CardDeck(CardTypeEnum.TOOLCARD);
 
@@ -270,8 +272,8 @@ public class GameLoader {
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    name = element.getElementsByTagName(NAMETAG).item(0).getTextContent();
-                    description = element.getElementsByTagName(DESCRIPTIONTAG).item(0).getTextContent();
+                    name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
+                    description = element.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
                     colour = ColourEnum.valueOf(element.getElementsByTagName("colour").item(0).getTextContent());
 
                     ToolCard card = new ToolCard(id, name, description, colour);
@@ -358,10 +360,10 @@ public class GameLoader {
         Cell cell;
         String restriction;
 
-        for (int row = 0; row < NUMBEROFSCHEMAROW; row++) {
-            for (int col = 0; col < NUMBEROFSCHEMACOL; col++) {
+        for (int row = 0; row < NUMBER_OF_SCHEMA_ROW; row++) {
+            for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col++) {
 
-                restriction = element.getElementsByTagName(CELLTAG).item(startingIndex + row * NUMBEROFSCHEMACOL + col).getTextContent();
+                restriction = element.getElementsByTagName(CELLTAG).item(startingIndex + row * NUMBER_OF_SCHEMA_COL + col).getTextContent();
                 cell = parseCell(restriction);
                 cellList.add(cell);
 

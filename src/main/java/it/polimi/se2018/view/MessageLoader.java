@@ -1,16 +1,9 @@
 package it.polimi.se2018.view;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import it.polimi.se2018.model.CardTypeEnum;
-import it.polimi.se2018.model.ColourEnum;
-import it.polimi.se2018.model.cards.CardDeck;
-import it.polimi.se2018.model.cards.PrivateObjCard;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
