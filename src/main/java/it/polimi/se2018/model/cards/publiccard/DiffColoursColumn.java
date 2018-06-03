@@ -24,11 +24,12 @@ public class DiffColoursColumn implements ScoreStrategy {
     public int getScore(SchemaCard schema){
 
         int score = 0;
-        PublicColour pub = new PublicColour();
         for(int i=0; i<COL; i++){
+            PublicColour pub = new PublicColour();
             HashMap<ColourEnum,Integer> colCell = pub.differentColours(schema.getCellCol(i));
+            colCell.entrySet().removeIf(entry -> entry.getValue().equals(0));
 
-            if( colCell.values().stream().allMatch(c -> c.equals(1))){
+            if(colCell.size()== 4 && colCell.values().stream().allMatch(c -> c.equals(1))){
                 score += 1;
             }
         }

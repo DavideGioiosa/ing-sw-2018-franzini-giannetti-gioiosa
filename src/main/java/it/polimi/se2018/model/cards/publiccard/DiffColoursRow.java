@@ -24,8 +24,9 @@ public class DiffColoursRow implements ScoreStrategy {
     public int getScore(SchemaCard schema){
 
         int score = 0;
-        PublicColour pub = new PublicColour();
+
         for(int i=0; i<ROW; i++){
+            PublicColour pub = new PublicColour();
             HashMap<ColourEnum,Integer> rowCell = pub.differentColours(schema.getCellRow(i));
 
             if(rowCell.values().stream().allMatch(c -> c.equals(1))){

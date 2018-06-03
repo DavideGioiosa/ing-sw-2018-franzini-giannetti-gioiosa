@@ -22,11 +22,13 @@ public class DiffNumbersColumn implements ScoreStrategy {
     public int getScore(SchemaCard schema){
 
         int score = 0;
-        PublicNumber pub = new PublicNumber();
-        for(int i=0; i<COL; i++){
-            List<Integer> colCell = pub.differentNumbers(schema.getCellCol(i));
 
-            if(colCell.stream().allMatch(c -> c.equals(1))){
+        for(int i=0; i<COL; i++){
+            PublicNumber pub = new PublicNumber();
+            List<Integer> colCell = pub.differentNumbers(schema.getCellCol(i));
+            colCell.removeIf(c -> c.equals(0));
+
+            if(colCell.size()== 4 && colCell.stream().allMatch(c -> c.equals(1))){
                 score += 1;
             }
         }
