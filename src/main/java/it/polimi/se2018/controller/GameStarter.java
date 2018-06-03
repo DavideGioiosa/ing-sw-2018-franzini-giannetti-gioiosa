@@ -37,7 +37,7 @@ public class GameStarter implements Observer<PlayerChoice> {
         playerChoiceList = new ArrayList<>();
         this.userList = userList;
         playerChoiceSaved = new ArrayList<>();
-        remoteView = new RemoteView();
+        //remoteView = new RemoteView();
         colourEnumList = gameLoader.getWindowFrame();
         if(userList.iterator().hasNext()){
             sendColours(userList.iterator().next(),colourEnumList);

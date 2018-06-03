@@ -88,6 +88,7 @@ public class TurnTest {
         GameBoard gameBoardEmpty = null;
         try {
             turn = new Turn(gameBoardEmpty);
+            fail();
         }catch (NullPointerException e){
         }
     }
@@ -190,6 +191,7 @@ public class TurnTest {
         PlayerMove playerMoveNull = null;
         try {
             turn.runTurn(playerMoveNull);
+            fail();
         }catch (RuntimeException e){
         }
     }

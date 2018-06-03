@@ -8,12 +8,11 @@ import java.util.List;
 public class SocketTypeServer {
     private int networkPort;
     private List<ClientListener> clientListenerList;
-   // private ControllerSocket controllerSocke;
+   // private ControllerSocket controllerSocket;
 
     public SocketTypeServer(){
 
         clientListenerList = new ArrayList<>();
-
     }
 
     public void addClient(ClientListener clientListener){
@@ -26,5 +25,9 @@ public class SocketTypeServer {
 
     public void receive (PlayerMessage playerMessage){
         //richiama il Global Controller per notificare l'invio
+    }
+
+    public void send (PlayerMessage playerMessage){
+        //invio
     }
 }

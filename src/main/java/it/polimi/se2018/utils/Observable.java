@@ -26,4 +26,11 @@ public class Observable<T> {
         }
     }
 
+    public synchronized void addObserver(Observer o) {
+        if (o == null)
+            throw new NullPointerException();
+        if (!observerList.contains(o)) {
+            observerList.add(o);
+        }
+    }
 }

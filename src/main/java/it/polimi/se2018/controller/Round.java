@@ -67,7 +67,7 @@ public class Round implements Observer<PlayerMove>{
      * and creates the list of Turns belonging to each player
      */
     private void initializeRound(int indexRound) {
-        turnsList = new ArrayList<Turn> ();
+        turnsList = new ArrayList<> ();
         setRoundPlayerOrder(indexRound);
         turn = new Turn(gameBoard);
         turnsList.add(turn);
@@ -78,7 +78,7 @@ public class Round implements Observer<PlayerMove>{
      * starting from the list of player in the match and the current Round index
      */
     private void setRoundPlayerOrder (int indexRound){
-        roundPlayerOrder = new ArrayList<Player>();
+        roundPlayerOrder = new ArrayList<>();
 
         for (int i = indexRound; i < indexRound + playerList.size(); i++){
             roundPlayerOrder.add(playerList.get(i % playerList.size()));

@@ -52,7 +52,7 @@ public class Turn {
      * Creates the list of Action belonging the player for each Turn
      */
     private void startTurn() {
-        turnsActionsList = new ArrayList<Action>();
+        turnsActionsList = new ArrayList<>();
     }
 
     /**

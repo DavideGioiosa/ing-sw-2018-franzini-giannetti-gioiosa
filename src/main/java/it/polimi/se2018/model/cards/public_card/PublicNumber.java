@@ -16,7 +16,10 @@ public class PublicNumber {
      * Buider method of PublicNumber class
      */
     public PublicNumber() {
-        numbers = new ArrayList<>(6);
+        numbers = new ArrayList<>();
+        for(int i = 0; i < 6; i++){
+            numbers.add(0);
+        }
     }
 
     /**

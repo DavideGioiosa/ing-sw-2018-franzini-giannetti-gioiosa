@@ -16,7 +16,10 @@ public class PublicColour {
      * Builder method of PublicColour class
      */
     public PublicColour(){
-        colours= new ArrayList<>(5);
+        colours= new ArrayList<>();
+        for(int i = 0; i < 5; i++){
+            colours.add(0);
+        }
     }
 
     /**

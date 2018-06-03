@@ -116,6 +116,7 @@ public class RoundTest {
 
         try {
             round = new Round(gameBoardEmpty, 0);
+            fail();
         }catch (NullPointerException e){
         }
     }
@@ -127,6 +128,7 @@ public class RoundTest {
     public void Round_shouldCallExceptionForIndexNotPermitted() {
         try {
             round = new Round(gameBoard, -1);
+            fail();
         }catch (IllegalArgumentException e){
         }
     }
@@ -223,6 +225,7 @@ public class RoundTest {
         PlayerMove playerMoveNull = null;
         try {
             round.update(playerMoveNull);
+            fail();
         }
         catch (RuntimeException e){
         }

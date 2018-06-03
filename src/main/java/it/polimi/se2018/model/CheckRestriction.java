@@ -65,7 +65,8 @@ public class CheckRestriction {
      */
     public boolean cellValueRestriction(SchemaCard schemaCard, Die die, Position position) {
         validateParameters(schemaCard, die, position);
-        return schemaCard.getCellList().get(position.getIndexArrayPosition()).getValue() == die.getValue();
+        return (schemaCard.getCellList().get(position.getIndexArrayPosition()).getValue() == 0 ||
+                schemaCard.getCellList().get(position.getIndexArrayPosition()).getValue() == die.getValue());
     }
 
     /**
@@ -78,7 +79,8 @@ public class CheckRestriction {
      */
     public boolean cellColourRestriction(SchemaCard schemaCard, Die die, Position position) {
         validateParameters(schemaCard, die, position);
-        return schemaCard.getCellList().get(position.getIndexArrayPosition()).getColour() == die.getColour();
+        return (schemaCard.getCellList().get(position.getIndexArrayPosition()).getColour() == null ||
+                schemaCard.getCellList().get(position.getIndexArrayPosition()).getColour() == die.getColour());
     }
 
     /**

@@ -72,7 +72,7 @@ private MessageLoader messageLoader;
     public void updateSchema(PlayerMove playerMove){
         SchemaCard schemaCard = playerMove.getPlayer().getSchemaCard();
         Die die = moveMessage.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
-        schemaCard.setCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
+        schemaCard.setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
     }
 
     /**
