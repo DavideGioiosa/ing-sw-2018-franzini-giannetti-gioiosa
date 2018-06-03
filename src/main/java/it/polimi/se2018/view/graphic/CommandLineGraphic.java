@@ -69,7 +69,7 @@ public class CommandLineGraphic implements InputStrategy{
      * Constructor
      */
     public CommandLineGraphic(){
-        hashMapColours = new EnumMap<ColourEnum, Color>(ColourEnum.class);
+        hashMapColours = new EnumMap<>(ColourEnum.class);
         hashMapColours.put(ColourEnum.BLUE, Color.BLUE);
         hashMapColours.put(ColourEnum.GREEN, Color.GREEN);
         hashMapColours.put(ColourEnum.PURPLE, Color.MAGENTA);

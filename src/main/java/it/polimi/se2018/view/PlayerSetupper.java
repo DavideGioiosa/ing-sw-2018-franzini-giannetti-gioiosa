@@ -54,7 +54,7 @@ public class PlayerSetupper {
             if (colourToCheck == colour) playerChoice.setChosenColour(colour);
         }
 
-        if (playerChoice.getChosenSchema() == null) return "Impossibile impostare il colore scelto";
+        if (playerChoice.getChosenColour() == null) return "Impossibile impostare il colore scelto";
         return "Window Frame inserito correttamente";
     }
 

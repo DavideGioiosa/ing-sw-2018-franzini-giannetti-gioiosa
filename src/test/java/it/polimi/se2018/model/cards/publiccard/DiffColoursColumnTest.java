@@ -96,7 +96,7 @@ public class DiffColoursColumnTest {
      */
     @Test
     public void getScore_shouldReturnTheCorrectScore() {
-        int score = diffColoursColumn.getScore(emptySchemaCard);
+        int score = diffColoursColumn.getScore(schemaCard);
 
         assertEquals(10, score);
     }

@@ -74,7 +74,7 @@ public class DiffNumbersColumnTest {
         Position position_8 = new Position(13);
         schemaCard.setDiceIntoCell(position_8, die_8);
         Die die_9 = new Die(ColourEnum.GREEN);
-        die_9.setValue(4);
+        die_9.setValue(5);
         Position position_9 = new Position(18);
         schemaCard.setDiceIntoCell(position_9, die_9);
 
