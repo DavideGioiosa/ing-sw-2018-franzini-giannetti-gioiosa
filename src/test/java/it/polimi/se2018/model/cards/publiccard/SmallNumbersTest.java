@@ -1,12 +1,10 @@
-package it.polimi.se2018.model.cards.public_card;
+package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
-import it.polimi.se2018.model.cards.publiccard.DiffColours;
-import it.polimi.se2018.model.player.Player;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,10 +13,16 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class DiffColoursTest {
+
+/**
+ * Test Model's Class Public card: SmallNumbers
+ * @author Davide Gioiosa
+ */
+
+public class SmallNumbersTest {
     private SchemaCard schemaCard;
     private SchemaCard emptySchemaCard;
-    private DiffColours diffColours;
+    private SmallNumbers smallNumbers;
 
     /**
      * Create and set of a Scheme with some dice placed
@@ -39,32 +43,31 @@ public class DiffColoursTest {
         emptySchemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList_2);
 
         Die die_1 = new Die(ColourEnum.BLUE);
-        die_1.setValue(5);
+        die_1.setValue(1);
         Position position_1 = new Position(0);
         schemaCard.setDiceIntoCell(position_1, die_1);
         Die die_2 = new Die(ColourEnum.YELLOW);
-        die_2.setValue(6);
+        die_2.setValue(3);
         Position position_2 = new Position(1);
         schemaCard.setDiceIntoCell(position_2, die_2);
         Die die_3 = new Die(ColourEnum.GREEN);
         die_3.setValue(2);
-        Position position_3 = new Position(2);
+        Position position_3 = new Position(5);
         schemaCard.setDiceIntoCell(position_3, die_3);
         Die die_4 = new Die(ColourEnum.RED);
-        die_4.setValue(5);
-        Position position_4 = new Position(3);
+        die_4.setValue(2);
+        Position position_4 = new Position(2);
         schemaCard.setDiceIntoCell(position_4, die_4);
         Die die_5 = new Die(ColourEnum.PURPLE);
         die_5.setValue(1);
-        Position position_5 = new Position(4);
+        Position position_5 = new Position(11);
         schemaCard.setDiceIntoCell(position_5, die_5);
-        Die die_6 = new Die(ColourEnum.PURPLE);
-        die_6.setValue(4);
-        Position position_6 = new Position(6);
+        Die die_6 = new Die(ColourEnum.BLUE);
+        die_6.setValue(2);
+        Position position_6 = new Position(15);
         schemaCard.setDiceIntoCell(position_6, die_6);
 
-
-        diffColours = new DiffColours();
+        smallNumbers = new SmallNumbers();
     }
 
     /**
@@ -72,18 +75,19 @@ public class DiffColoursTest {
      */
     @Test
     public void getScore_shouldReturnTheZeroScore() {
-        int score = diffColours.getScore(emptySchemaCard);
+        int score = smallNumbers.getScore(emptySchemaCard);
 
         assertEquals(0, score);
     }
 
     /**
-     * Test the correct evaluation of the score
+     * Test check the correct evaluation of the score
      */
     @Test
     public void getScore_shouldReturnTheCorrectScore() {
-        int score = diffColours.getScore(schemaCard);
+        int score = smallNumbers.getScore(schemaCard);
 
         assertEquals(4, score);
     }
+
 }
