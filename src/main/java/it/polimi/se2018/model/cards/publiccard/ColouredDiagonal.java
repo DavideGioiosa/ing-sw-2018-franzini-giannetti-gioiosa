@@ -4,7 +4,6 @@ import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
 
-
 import java.util.List;
 
 /**

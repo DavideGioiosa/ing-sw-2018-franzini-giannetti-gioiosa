@@ -4,6 +4,7 @@ import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,9 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class SchemaCard extends Card {
+public class SchemaCard extends Card implements Serializable {
     /**
-     * List of the cells componing the scheme
+     * List of the cells that make up the scheme
      */
     private List<Cell> cellList;
     /**

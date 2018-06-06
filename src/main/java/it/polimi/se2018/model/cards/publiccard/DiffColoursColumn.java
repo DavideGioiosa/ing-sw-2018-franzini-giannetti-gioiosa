@@ -3,9 +3,7 @@ package it.polimi.se2018.model.cards.publiccard;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.SchemaCard;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Public Objective Card Column with Different Colours
@@ -24,7 +22,7 @@ public class DiffColoursColumn implements ScoreStrategy {
     public int getScore(SchemaCard schema){
 
         int score = 0;
-        for(int i=0; i<COL; i++){
+        for(int i = 0; i < COL; i++){
             PublicColour pub = new PublicColour();
             HashMap<ColourEnum,Integer> colCell = pub.differentColours(schema.getCellCol(i));
             colCell.entrySet().removeIf(entry -> entry.getValue().equals(0));
@@ -33,7 +31,7 @@ public class DiffColoursColumn implements ScoreStrategy {
                 score += 1;
             }
         }
-        return score*COL;
+        return score;
     }
 }
 

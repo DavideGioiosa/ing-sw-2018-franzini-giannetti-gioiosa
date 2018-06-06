@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.player.Player;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,17 +10,36 @@ import java.util.List;
  * may need to know
  * @author Silvia Franzini
  */
-public class MoveMessage  {
+public class MoveMessage implements Serializable {
+    /**
+     * Player of the game
+     */
     private List<Player> playerList;
+    /**
+     * Actual Draft Pool
+     */
     private BoardDice boardDice;
+    /**
+     * Public and tool cards on board
+     */
     private BoardCard boardCard;
+    /**
+     * Actual status of trackboard
+     */
     private TrackBoard trackboard;
 
+    /**
+     *
+     * @param playerList
+     * @param boardDice
+     * @param boardCard
+     * @param trackboard
+     */
     public MoveMessage(List<Player> playerList, BoardDice boardDice, BoardCard boardCard, TrackBoard trackboard){
-        this.boardCard=boardCard;
-        this.boardDice=boardDice;
-        this.playerList=playerList;
-        this.trackboard=trackboard;
+        this.boardCard = boardCard;
+        this.boardDice = boardDice;
+        this.playerList = playerList;
+        this.trackboard = trackboard;
     }
 
     /**

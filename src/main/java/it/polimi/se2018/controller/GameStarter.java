@@ -29,15 +29,18 @@ public class GameStarter implements Observer<PlayerChoice> {
     private List<ColourEnum> colourEnumList;
     private List<PlayerChoice> playerChoiceSaved;
     private GameBoard gameBoard;
+    private Config config;
 
     /**
      * Builder method for GameStarter class
      */
     public GameStarter(List<User> userList, GameManager gameManager){
+
         gameLoader = new GameLoader();
         playerList = new ArrayList<>();
         playerChoiceList = new ArrayList<>();
         this.userList = userList;
+        config = new Config(userList.size(), NUMBER_OF_PUBLIC_OBJ_CARD_ON_BOARD_IN_MULTIPLAYER, NUMBER_OF_TOOL_CARD_ON_BOARD_IN_MULTIPLAYER);
         playerChoiceSaved = new ArrayList<>();
         remoteView = new RemoteView(userList);
         colourEnumList = gameLoader.getWindowFrame();
@@ -65,7 +68,7 @@ public class GameStarter implements Observer<PlayerChoice> {
             throw new RuntimeException("ERROR: not enough players");
         }
 
-        for(int i = 0; i < getNumberOfPublicObjCardOnBoard(); i++){
+        for(int i = 0; i < config.getNumberOfPublicObjCardOnBoard(); i++){
             try{
                 publicObjCardList.add((PublicObjCard)extractCard(gameLoader.getPublicObjDeck()));
             }catch(RuntimeException e){
@@ -73,7 +76,7 @@ public class GameStarter implements Observer<PlayerChoice> {
             }
         }
 
-        for (int i = 0; i < getNumberOfToolCardOnBoard(); i++){
+        for (int i = 0; i < config.getNumberOfToolCardOnBoard(); i++){
             try{
                 toolCardList.add((ToolCard)extractCard(gameLoader.getToolDeck()));
             }catch(RuntimeException e){

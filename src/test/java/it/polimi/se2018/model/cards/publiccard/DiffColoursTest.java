@@ -1,11 +1,13 @@
 package it.polimi.se2018.model.cards.publiccard;
 
+import it.polimi.se2018.controller.GameLoader;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,7 +23,19 @@ import static org.junit.Assert.*;
 public class DiffColoursTest {
     private SchemaCard schemaCard;
     private SchemaCard emptySchemaCard;
-    private DiffColours diffColours;
+    private static PublicObjCard publicObjCard;
+
+    /**
+     * Loads MiddleNumbers Public Objective Card
+     */
+    @BeforeClass
+    public static void beforeClass(){
+        String NAME = "Varietà di Colore";
+        GameLoader gameLoader = new GameLoader();
+        do{
+            publicObjCard = (PublicObjCard) gameLoader.getPublicObjDeck().extractCard();
+        }while(!publicObjCard.getName().equals(NAME));
+    }
 
     /**
      * Create and set of a Scheme with some dice placed
@@ -65,9 +79,6 @@ public class DiffColoursTest {
         die_6.setValue(4);
         Position position_6 = new Position(6);
         schemaCard.setDiceIntoCell(position_6, die_6);
-
-
-        diffColours = new DiffColours();
     }
 
     /**
@@ -75,7 +86,7 @@ public class DiffColoursTest {
      */
     @Test
     public void getScore_shouldReturnTheZeroScore() {
-        int score = diffColours.getScore(emptySchemaCard);
+        int score = publicObjCard.scoreCalculation(emptySchemaCard);
 
         assertEquals(0, score);
     }
@@ -85,7 +96,7 @@ public class DiffColoursTest {
      */
     @Test
     public void getScore_shouldReturnTheCorrectScore() {
-        int score = diffColours.getScore(schemaCard);
+        int score = publicObjCard.scoreCalculation(schemaCard);
 
         assertEquals(4, score);
     }

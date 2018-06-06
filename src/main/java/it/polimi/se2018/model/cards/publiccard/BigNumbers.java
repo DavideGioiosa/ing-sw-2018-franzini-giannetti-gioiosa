@@ -2,7 +2,6 @@ package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.cards.SchemaCard;
 
-
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class BigNumbers implements ScoreStrategy {
     public int getScore(SchemaCard schema){
         Shades shad= new Shades();
         List<Integer> numbers = shad.operate(schema.getCellList(),5,6);
-        return Collections.min(numbers)*2;
+        return Collections.min(numbers);
     }
 }
 

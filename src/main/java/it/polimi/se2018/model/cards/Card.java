@@ -1,11 +1,13 @@
 package it.polimi.se2018.model.cards;
 
+import java.io.Serializable;
+
 /**
  * Card class indicates a generic Card with particular ID, name and description
  * @author Cristian Giannetti
  */
 
-public class Card {
+public class Card implements Serializable {
 
     /**
      * Card's identifier

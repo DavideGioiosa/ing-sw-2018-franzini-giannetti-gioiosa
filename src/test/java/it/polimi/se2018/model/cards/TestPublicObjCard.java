@@ -26,7 +26,7 @@ public class TestPublicObjCard {
     private final String DESCRIPTION = "Description";
 
     private final ColourEnum colour = ColourEnum.BLUE;
-    private final int BONUS = 5;
+    private final int BONUS = 1;
     private final int ID = 1;
 
     /**
@@ -116,7 +116,7 @@ public class TestPublicObjCard {
         try {
             assertEquals(4, publicObjCard.scoreCalculation(null));
             fail();
-        }catch(NullPointerException e){}
+        }catch(NullPointerException e){ }
     }
 
 }

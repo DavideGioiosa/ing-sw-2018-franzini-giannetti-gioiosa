@@ -3,13 +3,14 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Contains a list of the cards extracted
  * @author Silvia Franzini
  */
-public class BoardCard {
+public class BoardCard implements Serializable {
     private List<PublicObjCard> publicObjCardList;
     private List<ToolCard> toolCardList;
 

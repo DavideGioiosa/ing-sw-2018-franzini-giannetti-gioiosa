@@ -3,13 +3,15 @@ package it.polimi.se2018.model.player;
 
 import it.polimi.se2018.model.cards.PrivateObjCard;
 
+import java.io.Serializable;
+
 
 /**
 * Class used to save the Private Objective Card
 * in order not to allow the other players to find it out
 * @author Silvia Franzini
 */
-public class PrivatePlayer {
+public class PrivatePlayer implements Serializable {
     private PrivateObjCard privateObj;
     private Player player;
 

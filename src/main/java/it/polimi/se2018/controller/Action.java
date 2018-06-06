@@ -12,6 +12,7 @@ public class Action {
     private GameBoard gameBoard;
     private CheckRestriction checkRestriction;
     private PlayerMove playerMove;
+    private final String errorParametersString = "ERROR: incorrect parameters";
 
     /**
      * Builder method of Action class
@@ -65,7 +66,7 @@ public class Action {
                 }
                 break;
             case EXTRACT:
-                for(int i=0; i<gameBoard.getPlayerList().size()*2 +1; i++){
+                for(int i = 0; i < gameBoard.getPlayerList().size() * 2 + 1; i++){
                     //try{}catch da implementare nella classe BoardDice
                     Die die;
                     try{
@@ -94,31 +95,31 @@ public class Action {
         try{
             success = checkRestriction.adjacentColourRestriction(actualPlayer.getSchemaCard(), die, position);
         }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
+            throw new IllegalArgumentException(errorParametersString);
         }
         if(!success){return false;}
         try{
             success = checkRestriction.adjacentRestriction(actualPlayer.getSchemaCard(), die, position);
         }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
+            throw new IllegalArgumentException(errorParametersString);
         }
         if(!success){return false;}
         try{
             success = checkRestriction.adjacentValueRestriction(actualPlayer.getSchemaCard(), die, position);
         }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
+            throw new IllegalArgumentException(errorParametersString);
         }
         if(!success){return false;}
         try{
             success = checkRestriction.cellColourRestriction(actualPlayer.getSchemaCard(), die, position);
         }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
+            throw new IllegalArgumentException(errorParametersString);
         }
         if(!success){return false;}
         try{
             success = checkRestriction.cellValueRestriction(actualPlayer.getSchemaCard(), die, position);
         }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
+            throw new IllegalArgumentException(errorParametersString);
         }
         if(!success){return false;}
 

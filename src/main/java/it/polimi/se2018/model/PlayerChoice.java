@@ -3,6 +3,7 @@ package it.polimi.se2018.model;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.player.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * Class used to send user's choices during match setup
  * @author Silvia Franzini
  */
-public class PlayerChoice extends PlayerMessage {
+public class PlayerChoice extends PlayerMessage implements Serializable {
     /**
      * User referred to the choices
      */

@@ -7,6 +7,7 @@ import it.polimi.se2018.model.PlayerMove;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
+import it.polimi.se2018.utils.Observable;
 
 import java.util.List;
 
@@ -20,6 +21,14 @@ public class RemoteView extends View {
 //private SocketTypeServer socketTypeServer;
 //private RMITypeServer rmiTypeServer;
 //TODO inserire server con cui far comunicare la view
+
+
+
+    private class MessageUpdater extends Observable<String> {
+
+
+
+    }
 
     /**
      * Builder method of the class
