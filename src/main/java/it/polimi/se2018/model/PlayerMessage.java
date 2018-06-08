@@ -1,36 +1,47 @@
 package it.polimi.se2018.model;
 
 
+import it.polimi.se2018.model.player.User;
+
 import java.io.Serializable;
 
 public class PlayerMessage implements Serializable {
-    private int id;
+    private PlayerMessageTypeEnum id;
     private PlayerMove playerMove;
     private PlayerChoice playerChoice;
     private MoveMessage moveMessage;
     private boolean closure;
+    private User user;
 
     public PlayerMessage(){
         playerMove=null;
         playerChoice=null;
         moveMessage=null;
-        id=0;
         closure = false;
     }
 
     public void setMove(PlayerMove playerMove) {
         this.playerMove = playerMove;
-        id=1;
+        id = PlayerMessageTypeEnum.MOVE;
     }
 
     public void setChoice(PlayerChoice playerChoice) {
         this.playerChoice = playerChoice;
-        id=2;
+        id = PlayerMessageTypeEnum.CHOICE;
     }
 
     public void setMessage(MoveMessage moveMessage) {
         this.moveMessage = moveMessage;
-        id=3;
+        id = PlayerMessageTypeEnum.UPDATE;
+    }
+
+     public void setUser(User user){
+        this.user = user;
+         id = PlayerMessageTypeEnum.USER;
+     }
+
+    public User getUser() {
+        return user;
     }
 
     public void setClosure() {
@@ -41,7 +52,7 @@ public class PlayerMessage implements Serializable {
         return closure;
     }
 
-    public int getId() {
+    public PlayerMessageTypeEnum getId(){
         return id;
     }
 

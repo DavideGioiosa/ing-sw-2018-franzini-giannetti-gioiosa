@@ -1,13 +1,9 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.player.Player;
 
-/**
- * Manages the single player's move
- *
- * @author Silvia Franzini
- */
 public class Action {
     private GameBoard gameBoard;
     private CheckRestriction checkRestriction;
@@ -15,10 +11,10 @@ public class Action {
 
     /**
      * Builder method of Action class
-     * @param gameBoard the game board of the match with all the elements on the board
+     * @param gameboard the game board of the match with all the elements on the board
      */
-    public Action(GameBoard gameBoard){
-        this.gameBoard=gameBoard;
+    public Action(GameBoard gameboard){
+        this.gameBoard=gameboard;
         checkRestriction = new CheckRestriction();
     }
 
@@ -37,48 +33,46 @@ public class Action {
      */
     public boolean selectAction(PlayerMove playerMove){
         this.playerMove = playerMove;
-        switch (playerMove.getTypeOfChoice()){
-            case PICK:
-                try{
-                    Die dieExtracted = gameBoard.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
-                    placeDice(playerMove.getPlayer(), dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
-                }catch(IllegalArgumentException e){
-                    return false;
-                }
-                break;
-            case TOOL:
-                try{
-                    useTool(playerMove);
-                }catch(IllegalArgumentException e){
-                    return false;
-                }
-                break;
-            case PASS:
-                break;
-            case ROLL:
-                for(Die die : gameBoard.getBoardDice().getDieList()){
-                    try{
-                        die.firstRoll();
-                    }catch(RuntimeException e){
-                        return false;
-                    }
-                }
-                break;
-            case EXTRACT:
-                for(int i=0; i<gameBoard.getPlayerList().size()*2 +1; i++){
-                    //try{}catch da implementare nella classe BoardDice
-                    Die die;
-                    try{
-                        die = gameBoard.getBagDice().extractDice();
-                    }catch(RuntimeException e){
-                        return false;
-                    }
-                    gameBoard.getBoardDice().insertDice(die);
-                } break;
-            default:
-                break;
-        }
-        return true;
+      switch (playerMove.getTypeOfChoice()){
+          case PICK: try{
+              Die dieExtracted = gameBoard.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
+              Player player = playerMove.getPlayer();
+              Player playerGameBoard = gameBoard.getPlayerList().get(gameBoard.getPlayerList().indexOf(player));
+             if(player.getNickname().equals(playerGameBoard.getNickname()))
+             {
+                 placeDice(playerGameBoard, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
+             }
+
+          }catch(IllegalArgumentException e){
+              return false;
+          }
+              break;
+          case TOOL: try{
+              useTool(playerMove);
+          }catch(IllegalArgumentException e){
+              return false;
+          }
+          break;
+          case PASS: break;
+          case ROLL: for(Die die : gameBoard.getBoardDice().getDieList()){
+              try{
+                  die.firstRoll();
+              }catch(RuntimeException e){return false;}
+
+          }; break;
+          case EXTRACT: for(int i=0; i<gameBoard.getPlayerList().size()*2 +1; i++){
+
+              Die die;
+              try{
+                 die = gameBoard.getBagDice().extractDice();
+              }catch(RuntimeException e){
+                  return false;
+              }
+             gameBoard.getBoardDice().insertDice(die);
+          } break;
+          default: break;
+      }
+      return true;
     }
 
     /**

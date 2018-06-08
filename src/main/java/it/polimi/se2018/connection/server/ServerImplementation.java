@@ -1,45 +1,62 @@
 package it.polimi.se2018.connection.server;
 
 import it.polimi.se2018.connection.client.ClientRemoteIterface;
+import it.polimi.se2018.model.PlayerChoice;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.player.TypeOfConnection;
+import it.polimi.se2018.model.player.User;
+import it.polimi.se2018.utils.Observable;
 
-import java.rmi.ConnectException;
+
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerImplementation implements ServerRemoteInterface {
-    private List<ClientRemoteIterface> clientList= new ArrayList<>();
+    private HashMap<String,ClientRemoteIterface> clientList = new HashMap<>();
+    private HashMap<User, ClientListener> userClientListenerList = new HashMap<>();
+    private List<String> codeList = new ArrayList<>();
+    private Observable<PlayerMessage> obs = new Observable<>();
 
-    public ServerImplementation(){ //da completare
+    ServerImplementation(){} //costruttore da rivedere
+
+    public Observable<PlayerMessage> getObs() {
+        return obs;
     }
 
-    @Override
-    public void sendToClient(PlayerMessage playerMessage) throws RemoteException {
-        Iterator<ClientRemoteIterface> clientRemoteIterfaceIterator = clientList.iterator();
-        while(clientRemoteIterfaceIterator.hasNext()){
-            try{
-                 clientRemoteIterfaceIterator.next().receiveFromServer(playerMessage);
-            }catch(ConnectException e ){
-                //gestire rimozione
-            }
-        }
+    public void sendToClient(String code,PlayerMessage playerMessage) throws RemoteException {
+
+         ClientRemoteIterface clientRemoteIterface = clientList.get(code);
+         clientRemoteIterface.receiveFromServer(playerMessage);
     }
 
-    public List<ClientRemoteIterface> getClientList() {
-        return clientList;
-    }
 
     @Override
     public void addClient(ClientRemoteIterface client){
-        this.clientList.add(client);
+
+        User user = new User(TypeOfConnection.RMI);
+        String code = user.getUniqueCode();
+        while(codeList.contains(code)){
+            user = new User(TypeOfConnection.RMI);
+            code = user.getUniqueCode();
+        }
+        codeList.add(code);
+        clientList.put(code, client);
+        PlayerMessage playerMessage = new PlayerMessage();
+        playerMessage.setUser(user);
+        try {
+
+            client.receiveFromServer(playerMessage);
+        } catch (RemoteException e) {
+            Logger.getGlobal().log(Level.SEVERE, e.toString());
+        }
     }
+
 
     @Override
     public void receive(PlayerMessage playerMessage) {
-        //passare a classe che invii a controller
-
-
+        obs.notify(playerMessage);
     }
+
 }

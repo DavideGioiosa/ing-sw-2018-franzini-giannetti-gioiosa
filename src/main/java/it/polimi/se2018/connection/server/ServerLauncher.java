@@ -1,29 +1,35 @@
 package it.polimi.se2018.connection.server;
 
 
-//GlobalLauncher
+import it.polimi.se2018.controller.GameCreator;
+import it.polimi.se2018.controller.GameStarter;
+import it.polimi.se2018.view.RemoteView;
+
+
 public class ServerLauncher {
+
     private ServerManager serverManager;
-    private GameCreator gameCreator;
+    private SocketTypeServer socketTypeServer;
+    private RMITypeServer rmiTypeServer;
+    private RemoteView remoteView;
+
 
     public ServerLauncher (){
-        initialize();
-        addObsServerManager();
+
+        remoteView = new RemoteView();
+        socketTypeServer = new SocketTypeServer();
+        rmiTypeServer = new RMITypeServer();
+        serverManager = new ServerManager(remoteView, socketTypeServer,rmiTypeServer);
+
+
     }
 
-    private void initialize (){
-        serverManager = new ServerManager();
-        gameCreator = new GameCreator ();
+    //TODO: main
+
+    public static void main(String args[]){
+
+
     }
 
-    private void addObsServerManager (){
-        serverManager.addObserver(gameCreator.getGameManager());
-        //serverManager.addObserver(gameCreator.getGameManager().getGamestarter());
-    }
-
-    //per remote view
-    public ServerManager getGlobalController() {
-        return serverManager;
-    }
 
 }

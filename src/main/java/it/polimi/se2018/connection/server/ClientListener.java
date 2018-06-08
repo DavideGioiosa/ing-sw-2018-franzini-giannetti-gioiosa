@@ -3,10 +3,13 @@ package it.polimi.se2018.connection.server;
 import com.google.gson.Gson;
 import it.polimi.se2018.connection.client.ClientSocketInterface;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.PlayerMessageTypeEnum;
+import it.polimi.se2018.utils.Observable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,15 +17,18 @@ import java.util.logging.Logger;
 public class ClientListener extends Thread implements ClientSocketInterface {
 
     private Socket clientSocket;
-    private SocketTypeServer socketTypeServer;
     private Gson gson;
+    private Observable<PlayerMessage> obs;
 
-    public ClientListener(SocketTypeServer socketTypeServer, Socket clientSocket){
+    ClientListener(Socket clientSocket){
         this.clientSocket = clientSocket;
-        this.socketTypeServer = socketTypeServer;
         gson = new Gson();
+        obs = new Observable<>();
     }
 
+    public Observable<PlayerMessage> getObs() {
+        return obs;
+    }
 
     @Override
     public void run(){
@@ -39,8 +45,20 @@ public class ClientListener extends Thread implements ClientSocketInterface {
 
     }
 
-    @Override
+    public synchronized void send(PlayerMessage playerMessage){
+        try {
+            OutputStreamWriter output = new OutputStreamWriter(clientSocket.getOutputStream());
+            String jsonInString = gson.toJson(playerMessage);
+            output.write(jsonInString);
+            output.flush();
+        } catch (IOException e) {
+            Logger.getGlobal().log(Level.SEVERE, e.toString());
+        }
+    }
+
+
     public synchronized void receive(PlayerMessage playerMessage) {
-        socketTypeServer.receive(playerMessage);
+
+        obs.notify(playerMessage);
     }
 }

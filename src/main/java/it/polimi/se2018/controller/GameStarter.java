@@ -6,6 +6,7 @@ import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.model.player.User;
+import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.RemoteView;
 
@@ -19,7 +20,7 @@ import static it.polimi.se2018.model.Config.*;
  * Controller's Class GameStarter
  * @author Silvia Franzini
  */
-public class GameStarter implements Observer<PlayerChoice> {
+public class GameStarter {
 
     private GameLoader gameLoader;
     private List<Player> playerList;
@@ -33,17 +34,17 @@ public class GameStarter implements Observer<PlayerChoice> {
     /**
      * Builder method for GameStarter class
      */
-    public GameStarter(List<User> userList, GameManager gameManager){
+    public GameStarter(List<User> userList, RemoteView remoteView){
         gameLoader = new GameLoader();
         playerList = new ArrayList<>();
         playerChoiceList = new ArrayList<>();
         this.userList = userList;
         playerChoiceSaved = new ArrayList<>();
-        remoteView = new RemoteView(userList);
         colourEnumList = gameLoader.getWindowFrame();
         if(userList.iterator().hasNext()){
             sendColours(userList.iterator().next(),colourEnumList);
         }
+        this.remoteView = remoteView;
 
     }
 
@@ -96,6 +97,7 @@ public class GameStarter implements Observer<PlayerChoice> {
         }catch(NullPointerException e){
             remoteView.reportError();
         }
+
     }
 
     public GameBoard getGameBoard() {
@@ -202,7 +204,7 @@ public class GameStarter implements Observer<PlayerChoice> {
      * Update method for Observer implementation
      * @param playerChoice
      */
-    public void update(PlayerChoice playerChoice){
+    public boolean newChoice(PlayerChoice playerChoice){
 
         for(PlayerChoice choiceSaved: playerChoiceSaved){
             if(choiceSaved.getUser().equals(playerChoice.getUser())){
@@ -244,7 +246,8 @@ public class GameStarter implements Observer<PlayerChoice> {
 
         if(playerChoiceList.size() == userList.size()){
             startGame(playerChoiceList);
-        }
+            return true;
+        }else return false;
     }
 
 }
