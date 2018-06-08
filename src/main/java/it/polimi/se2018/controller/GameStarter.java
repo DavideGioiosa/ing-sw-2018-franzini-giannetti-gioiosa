@@ -19,7 +19,7 @@ import static it.polimi.se2018.model.Config.*;
  * Controller's Class GameStarter
  * @author Silvia Franzini
  */
-public class GameStarter implements Observer<PlayerChoice> {
+public class GameStarter {
 
     private GameLoader gameLoader;
     private List<Player> playerList;
@@ -29,21 +29,23 @@ public class GameStarter implements Observer<PlayerChoice> {
     private List<ColourEnum> colourEnumList;
     private List<PlayerChoice> playerChoiceSaved;
     private GameBoard gameBoard;
+    private Config config;
 
     /**
      * Builder method for GameStarter class
      */
-    public GameStarter(List<User> userList, GameManager gameManager){
+    public GameStarter(List<User> userList){
         gameLoader = new GameLoader();
         playerList = new ArrayList<>();
         playerChoiceList = new ArrayList<>();
         this.userList = userList;
         playerChoiceSaved = new ArrayList<>();
-        remoteView = new RemoteView(userList);
+        remoteView = new RemoteView();
         colourEnumList = gameLoader.getWindowFrame();
         if(userList.iterator().hasNext()){
             sendColours(userList.iterator().next(),colourEnumList);
         }
+        config = new Config();
 
     }
 
@@ -65,7 +67,7 @@ public class GameStarter implements Observer<PlayerChoice> {
             throw new RuntimeException("ERROR: not enough players");
         }
 
-        for(int i = 0; i < getNumberOfPublicObjCardOnBoard(); i++){
+        for(int i = 0; i < config.getNumberOfPublicObjCardOnBoard(); i++){
             try{
                 publicObjCardList.add((PublicObjCard)extractCard(gameLoader.getPublicObjDeck()));
             }catch(RuntimeException e){
@@ -73,7 +75,7 @@ public class GameStarter implements Observer<PlayerChoice> {
             }
         }
 
-        for (int i = 0; i < getNumberOfToolCardOnBoard(); i++){
+        for (int i = 0; i < config.getNumberOfToolCardOnBoard(); i++){
             try{
                 toolCardList.add((ToolCard)extractCard(gameLoader.getToolDeck()));
             }catch(RuntimeException e){
@@ -202,7 +204,7 @@ public class GameStarter implements Observer<PlayerChoice> {
      * Update method for Observer implementation
      * @param playerChoice
      */
-    public void update(PlayerChoice playerChoice){
+    public boolean newChoice(PlayerChoice playerChoice){
 
         for(PlayerChoice choiceSaved: playerChoiceSaved){
             if(choiceSaved.getUser().equals(playerChoice.getUser())){
@@ -237,14 +239,19 @@ public class GameStarter implements Observer<PlayerChoice> {
                         sendColours(userList.iterator().next(), colourEnumList);
                     }
 
-                }else remoteView.reportError();
+                }else {
+                    remoteView.reportError();
+                    return false;
+                }
+
 
             }
         }
 
         if(playerChoiceList.size() == userList.size()){
             startGame(playerChoiceList);
-        }
+            return  true;
+        }else return false;
     }
 
 }

@@ -1,8 +1,6 @@
 package it.polimi.se2018.connection.server;
 
 
-import it.polimi.se2018.controller.GameCreator;
-import it.polimi.se2018.controller.GameStarter;
 import it.polimi.se2018.view.RemoteView;
 
 
@@ -28,7 +26,7 @@ public class ServerLauncher {
 
     public static void main(String args[]){
 
-
+        ServerLauncher serverLauncher = new ServerLauncher();
     }
 
 
