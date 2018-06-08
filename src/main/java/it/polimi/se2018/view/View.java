@@ -56,11 +56,11 @@ private MoveMessage moveMessage;
      * Method used to identify the type of message received by the Server
      * @param playerMessage message received
      */
-    public void receive(PlayerMessage playerMessage){
+   public void receive(PlayerMessage playerMessage){
         switch (playerMessage.getId()){
-            case '1': updateSchema(playerMessage.getPlayerMove());break;
-            case '2': inputStrategy.showChoice(playerMessage.getPlayerChoice()); break;
-            case '3': updateTable(playerMessage.getMoveMessage()); break;
+            case MOVE:break;
+            case CHOICE: break;
+            case UPDATE: break;
             default: throw new IllegalArgumentException("ERROR: Message not set");
         }
     }
