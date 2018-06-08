@@ -31,7 +31,7 @@ public class TestPlayerSetupper {
         List<ColourEnum> colourList = new ArrayList<>();
         colourList.add(ColourEnum.BLUE);
         colourList.add(ColourEnum.RED);
-        user = new User("nickname", TypeOfConnection.RMI);
+        user = new User(TypeOfConnection.RMI);
         playerChoice = new PlayerChoice(user);
         playerChoice.setColourEnumList(colourList);
         GameLoader gameLoader = new GameLoader();

@@ -12,6 +12,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+
+/**
+ * Test Model's Class: PrivateObjCard
+ * @author Davide Gioiosa
+ */
+
 public class PrivateObjCardTest {
     private static final String NAME = "Name";
     private static final String DESCRIPTION = "Description";

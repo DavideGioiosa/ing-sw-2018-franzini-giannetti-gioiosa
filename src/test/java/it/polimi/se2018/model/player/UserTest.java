@@ -16,11 +16,11 @@ import static org.junit.Assert.*;
  * Tests User class
  *
  * @author Silvia Franzini
+ * @author Davide Gioiosa
  */
 public class UserTest {
 
     private User user;
-    private String nick;
     private Player player;
 
     /**
@@ -28,7 +28,6 @@ public class UserTest {
      */
     @Before
     public void setUp() {
-        nick = "nick";
         String desc = "desc";
         String name = "name";
         int id = 2;
@@ -40,10 +39,19 @@ public class UserTest {
             cellList.add(new Cell(d.getValue(), d.getColour()));
         }
         SchemaCard schemaCard = new SchemaCard(id, name,desc,token,cellList);
-        player = new Player( nick,false,ColourEnum.BLUE,schemaCard,token);
-        user = new User(nick, TypeOfConnection.SOCKET);
+        player = new Player( "nick",false,ColourEnum.BLUE,schemaCard,token);
+        user = new User( TypeOfConnection.SOCKET);
 
     }
+
+
+    /**
+     * Check user's type of connection
+     */
+    @Test
+    public void getTypeOfConnection() {
+        assertEquals(TypeOfConnection.SOCKET, user.getTypeOfConnection());
+}
 
     /**
      * Tests setPlayer method
@@ -56,12 +64,31 @@ public class UserTest {
     }
 
     /**
-     * Tests getNickname method
+     * Tests correct setting of the nickname
      */
     @Test
-    public void getNickname() {
-        assertEquals(nick, user.getNickname());
+    public void setNickname() {
+        user.setNickname("nickname");
+        assertEquals("nickname", user.getNickname());
     }
 
+    /**
+     * Check state of the boolean connection
+     */
+    @Test
+    public void isConnected() {
+        assertTrue(user.isConnected());
+    }
+
+
+    /**
+     * Tests correct creation of the unique code id
+     */
+    @Test
+    public void getUniqueCode() {
+        String code = user.getUniqueCode();
+
+        assertEquals(8, code.length());
+    }
 
 }

@@ -11,6 +11,12 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+
+/**
+ * Test Model's Class: PlayerChoice
+ * @author Davide Gioiosa
+ */
+
 public class PlayerChoiceTest {
     private PlayerChoice playerChoice;
     private User user;
@@ -19,7 +25,7 @@ public class PlayerChoiceTest {
 
     @Before
     public void setUp() throws Exception {
-        user = new User("Nickname", TypeOfConnection.SOCKET);
+        user = new User(TypeOfConnection.SOCKET);
         playerChoice = new PlayerChoice(user);
         List<Cell> cellList = new ArrayList<>();
         for(int i = 0; i<20; i++){
@@ -65,6 +71,18 @@ public class PlayerChoiceTest {
     }
 
     /**
+     * Incorrect setting of the list of Schema Cards in the PlayerChoice, expecting an exception call for null parameter
+     */
+    @Test
+    public void setSchemaCardList_shouldCallException() {
+        try {
+            playerChoice.setSchemaCardList(null);
+            fail();
+        } catch (NullPointerException e){}
+    }
+
+
+    /**
      * Correct setting of the list of Colour Enum available in the PlayerChoice
      */
     @Test
@@ -79,6 +97,17 @@ public class PlayerChoiceTest {
     }
 
     /**
+     * Incorrect setting of the list of Colour Enum in the PlayerChoice, expecting an exception call for null parameter
+     */
+    @Test
+    public void setColourEnumList_shouldCallException() {
+        try {
+            playerChoice.setColourEnumList(null);
+            fail();
+        } catch (NullPointerException e){}
+    }
+
+    /**
      * Correct setting of the chosen colour in the PlayerChoice
      */
     @Test
@@ -89,6 +118,18 @@ public class PlayerChoiceTest {
     }
 
     /**
+     * Incorrect setting of chosen colour in the PlayerChoice, expecting an exception call for null parameter
+     */
+    @Test
+    public void setChosenColour_shouldCallException() {
+        try {
+            playerChoice.setChosenColour(null);
+            fail();
+        } catch (NullPointerException e){}
+    }
+
+
+    /**
      * Correct setting of the chosen Schema card in the PlayerChoice
      */
     @Test
@@ -96,5 +137,16 @@ public class PlayerChoiceTest {
         playerChoice.setChosenSchema(schemaCard);
 
         assertEquals(schemaCard, playerChoice.getChosenSchema());
+    }
+
+    /**
+     * Incorrect setting of the list of Colour Enum in the PlayerChoice, expecting an exception call for null parameter
+     */
+    @Test
+    public void setChosenSchema_shouldCallException() {
+        try {
+            playerChoice.setChosenSchema(null);
+            fail();
+        } catch (NullPointerException e){}
     }
 }

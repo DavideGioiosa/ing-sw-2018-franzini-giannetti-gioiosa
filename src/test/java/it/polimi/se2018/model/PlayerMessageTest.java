@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
  * @author Davide Gioiosa
  */
 
-
 public class PlayerMessageTest {
     private PlayerMessage playerMessage;
 
@@ -34,7 +33,7 @@ public class PlayerMessageTest {
         assertEquals(null, playerMessage.getPlayerMove());
         assertEquals(null, playerMessage.getPlayerChoice());
         assertEquals(null, playerMessage.getMoveMessage());
-        assertEquals(0, playerMessage.getId());
+        assertEquals(null, playerMessage.getId());
         assertFalse(playerMessage.isClosed());
     }
 
@@ -46,7 +45,7 @@ public class PlayerMessageTest {
         PlayerMove playerMove = new PlayerMove();
         playerMessage.setMove(playerMove);
 
-        assertEquals(1, playerMove.getId());
+        assertEquals(PlayerMessageTypeEnum.MOVE, playerMessage.getId());
         assertEquals(playerMove, playerMessage.getPlayerMove());
     }
 
@@ -66,11 +65,11 @@ public class PlayerMessageTest {
      */
     @Test
     public void setChoice() {
-        User user = new User("Nickname", TypeOfConnection.SOCKET);
+        User user = new User(TypeOfConnection.SOCKET);
         PlayerChoice playerChoice = new PlayerChoice(user);
         playerMessage.setChoice(playerChoice);
 
-        assertEquals(2, playerMessage.getId());
+        assertEquals(PlayerMessageTypeEnum.CHOICE, playerMessage.getId());
         assertEquals(playerChoice, playerMessage.getPlayerChoice());
     }
 
@@ -102,7 +101,7 @@ public class PlayerMessageTest {
         MoveMessage moveMessage = new MoveMessage(playerList, boardDice, boardCard, trackboard);
         playerMessage.setMessage(moveMessage);
 
-        assertEquals(3, playerMessage.getId());
+        assertEquals(PlayerMessageTypeEnum.UPDATE, playerMessage.getId());
         assertEquals(moveMessage, playerMessage.getMoveMessage());
     }
 
@@ -116,6 +115,29 @@ public class PlayerMessageTest {
             fail();
         } catch (NullPointerException e){}
     }
+
+    /**
+     * Correct setting of the user in the PlayerMessage
+     */
+    @Test
+    public void setUser_shouldBeCorrect() {
+        User user = new User(TypeOfConnection.SOCKET);
+        playerMessage.setUser(user);
+
+        assertEquals(user, playerMessage.getUser());
+    }
+
+    /**
+     * Incorrect setting of the moveMessage in the PlayerMessage, catches the exception for a null parameter
+     */
+    @Test
+    public void setUser_shouldCallException() {
+        try {
+            playerMessage.setUser(null);
+            fail();
+        } catch (NullPointerException e){}
+    }
+
 
     /**
      * Check state of the boolean closure, first is false and then true
