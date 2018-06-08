@@ -119,7 +119,7 @@ public class SchemaCard extends Card {
             throw new IllegalArgumentException("Insert index value out of the range permitted");
         }
 
-        List<Cell> rowList = new ArrayList<Cell>();
+        List<Cell> rowList = new ArrayList<>();
         int firstCellRow = index * 5;
 
         for(int i=0; i <= 4; i++){

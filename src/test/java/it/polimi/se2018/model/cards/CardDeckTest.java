@@ -20,6 +20,7 @@ public class CardDeckTest {
     public void CardDeck_shouldCatchExceptionIfNullParameter() {
         try {
             cardDeck = new CardDeck(cardType);
+            //fail();
         }
         catch (NullPointerException e){
         }

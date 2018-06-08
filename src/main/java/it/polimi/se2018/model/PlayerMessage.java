@@ -19,18 +19,27 @@ public class PlayerMessage implements Serializable {
     }
 
     public void setMove(PlayerMove playerMove) {
+        if(playerMove == null){
+            throw new NullPointerException("Sent a null playerMove");
+        }
         this.playerMove = playerMove;
-        id=1;
+        id = 1;
     }
 
     public void setChoice(PlayerChoice playerChoice) {
+        if(playerChoice == null){
+            throw new NullPointerException("Sent a null playerChoice");
+        }
         this.playerChoice = playerChoice;
-        id=2;
+        id = 2;
     }
 
     public void setMessage(MoveMessage moveMessage) {
+        if(moveMessage == null){
+            throw new NullPointerException("Sent a null moveMessage");
+        }
         this.moveMessage = moveMessage;
-        id=3;
+        id = 3;
     }
 
     public void setClosure() {
