@@ -9,3 +9,4 @@ public interface ClientRemoteIterface extends Remote {
 
     void receiveFromServer(PlayerMessage playerMessage) throws RemoteException;
 }
+

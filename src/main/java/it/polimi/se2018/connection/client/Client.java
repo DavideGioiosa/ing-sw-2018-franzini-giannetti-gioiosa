@@ -44,3 +44,4 @@ public class Client implements Observer<PlayerMessage> {
         clientStrategy.close();
     }
 }
+

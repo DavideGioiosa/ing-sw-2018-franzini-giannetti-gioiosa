@@ -97,3 +97,4 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
         obs.notify(playerMessage);
     }
 }
+
