@@ -2,16 +2,15 @@ package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.cards.SchemaCard;
 
-import java.util.Collections;
 import java.util.List;
+
+import static it.polimi.se2018.model.Config.NUMBER_OF_SCHEMA_COL;
 
 /**
  * Public Objective Card Column with Different Numbers
  * @author Silvia Franzini
  */
 public class DiffNumbersColumn implements ScoreStrategy {
-    private static final int COL = 5;
-    private static final int OFFSET = 4;
     /**
      * Class implementing pattern Strategy for the evaluation of the player's score
      * due to the Public Objective Cards
@@ -22,14 +21,17 @@ public class DiffNumbersColumn implements ScoreStrategy {
     public int getScore(SchemaCard schema){
 
         int score = 0;
-        PublicNumber pub = new PublicNumber();
-        for(int i=0; i<COL; i++){
+
+        for(int i=0; i< NUMBER_OF_SCHEMA_COL; i++){
+            PublicNumber pub = new PublicNumber();
             List<Integer> colCell = pub.differentNumbers(schema.getCellCol(i));
-            if(Collections.max(colCell)<1){
+            colCell.removeIf(c -> c.equals(0));
+
+            if(colCell.size()== 4 && colCell.stream().allMatch(c -> c.equals(1))){
                 score += 1;
             }
         }
-        return score*OFFSET;
+        return score;
     }
 }
 

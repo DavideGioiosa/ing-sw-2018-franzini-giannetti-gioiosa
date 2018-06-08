@@ -2,6 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +13,12 @@ import java.util.List;
  * @author Cristian Giannetti
  */
 
-public class PlayerMove extends PlayerMessage {
+public class PlayerMove extends PlayerMessage implements Serializable {
 
     /**
      * Progressive identifier of the Player Move
      */
-    private int id;
+    private int identifier;
     /**
      * Player whom the action is referred
      */
@@ -57,7 +58,7 @@ public class PlayerMove extends PlayerMessage {
      * Constructor sets the identifier to 0 and it resets all value of Player Move
      */
     public PlayerMove() {
-        this.id = 0;
+        this.identifier = 0;
         newPlayerMove();
     }
 
@@ -80,15 +81,15 @@ public class PlayerMove extends PlayerMessage {
      * Increments the identifier of the Player Move.
      */
     private void updateId() {
-        this.id++;
+        this.identifier++;
     }
 
     /**
      * Gets the identifier of the Player Move.
      * @return the identifier
      */
-    public int getId() {
-        return id;
+    public int getIdentifier() {
+        return identifier;
     }
 
     /**

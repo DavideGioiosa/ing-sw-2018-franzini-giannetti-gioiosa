@@ -5,6 +5,6 @@ import it.polimi.se2018.model.PlayerMessage;
 public interface ClientStrategy {
 
     void sendToServer(PlayerMessage playerMessage);
-    void receive(PlayerMessage playerMessage);
     void close();
+    void addObserver(Client client);
 }

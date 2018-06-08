@@ -14,19 +14,17 @@ public class PlayerSetupper {
      * Contains the first choices made by the player at the beginning of the game
      */
     PlayerChoice playerChoice;
-    //CommandController commandController;
-
     /**
      * Constructor sets the PlayerChoice to check
      * @param playerChoice Contains the value to check
      */
-    public void PlayerSetupper(PlayerChoice playerChoice){
+    public PlayerSetupper(PlayerChoice playerChoice){
         if (playerChoice == null) throw new NullPointerException("Impossible to set a null PlayerChoice");
         this.playerChoice = playerChoice;
     }
 
     /**
-     * Gets the PlayerChoice o be checked
+     * Gets the PlayerChoice to be checked
      * @return PlayerChoice to be checked
      */
     public PlayerChoice getPlayerChoice() {
@@ -50,9 +48,10 @@ public class PlayerSetupper {
 
         for (ColourEnum colour : playerChoice.getColourEnumList()) {
             if (colourToCheck == colour) playerChoice.setChosenColour(colour);
+
         }
 
-        if (playerChoice.getChosenSchema() == null) return "Impossibile impostare il colore scelto";
+        if (playerChoice.getChosenColour() == null) return "Impossibile impostare il colore scelto";
         return "Window Frame inserito correttamente";
     }
 

@@ -1,14 +1,15 @@
 package it.polimi.se2018.model.cards;
 
-import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.ColourEnum;
+
+import java.io.Serializable;
 
 /**
  * Public Class Toolcard
  * @author Davide Gioiosa
  */
 
-public class ToolCard extends Card {
+public class ToolCard extends Card implements Serializable {
     private ColourEnum colour;
     private int token;
 
@@ -50,11 +51,7 @@ public class ToolCard extends Card {
         if (this.token < 0) {
             throw new RuntimeException("ERROR: Negative number of token on a ToolCard");
         }
-        if (this.token > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.token > 0;
     }
 
     /**

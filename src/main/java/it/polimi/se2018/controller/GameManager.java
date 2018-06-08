@@ -18,7 +18,7 @@ import java.util.List;
  * @author Silvia Franzini
  */
 
-public class GameManager implements Observer<Round>{
+public class GameManager {
 
     /**
      * Status of the Board Table
@@ -104,7 +104,7 @@ public class GameManager implements Observer<Round>{
      * Update method for Observer pattern implementation
      * @param round round just completed
      */
-    public void update(Round round){
+    public void update(Round round){//TODO: da adattare a nuovo UML
         if(roundList.size() == 10){
             calculateGameScore();
             setGameWinner();

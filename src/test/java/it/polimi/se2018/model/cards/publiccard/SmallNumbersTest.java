@@ -1,11 +1,13 @@
 package it.polimi.se2018.model.cards.publiccard;
 
+import it.polimi.se2018.controller.GameLoader;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -23,10 +25,20 @@ public class SmallNumbersTest {
     private SchemaCard schemaCard;
     private SchemaCard emptySchemaCard;
     private SmallNumbers smallNumbers;
-
+    private static PublicObjCard publicObjCard;
     /**
      * Create and set of a Scheme with some dice placed
      */
+
+    @BeforeClass
+    public static void beforeClass(){
+        String NAME = "Sfumature Chiare";
+        GameLoader gameLoader = new GameLoader();
+        do{
+            publicObjCard = (PublicObjCard) gameLoader.getPublicObjDeck().extractCard();
+        }while(!publicObjCard.getName().equals(NAME));
+    }
+
     @Before
     public void init(){
         List<Cell> cellList = new ArrayList<>();
@@ -69,7 +81,7 @@ public class SmallNumbersTest {
      */
     @Test
     public void getScore_shouldReturnTheZeroScore() {
-        int score = smallNumbers.getScore(emptySchemaCard);
+        int score = publicObjCard.scoreCalculation(emptySchemaCard);
 
         assertEquals(0, score);
     }
@@ -79,7 +91,7 @@ public class SmallNumbersTest {
      */
     @Test
     public void getScore_shouldReturnTheCorrectScore() {
-        int score = smallNumbers.getScore(schemaCard);
+        int score = publicObjCard.scoreCalculation(schemaCard);
 
         assertEquals(4, score);
     }

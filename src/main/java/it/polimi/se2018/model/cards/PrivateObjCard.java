@@ -2,11 +2,14 @@ package it.polimi.se2018.model.cards;
 
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
+
+import java.io.Serializable;
+
 /**
  * Private Objective Cards
  * @author Silvia Franzini
  */
-public class PrivateObjCard extends Card {
+public class PrivateObjCard extends Card implements Serializable {
     private ColourEnum colour;
 
     /**

@@ -1,11 +1,13 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * Public Class Position
  * @author Davide Gioiosa
  */
 
-public class Position {
+public class Position implements Serializable {
 
     /**
      * row of the Scheme in matrix form

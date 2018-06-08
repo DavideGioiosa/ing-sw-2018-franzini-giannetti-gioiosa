@@ -8,16 +8,17 @@ import it.polimi.se2018.view.InputStrategy;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
-//import java.util.Scanner;
+import java.util.Scanner;
 
 import static org.fusesource.jansi.Ansi.*;
 import org.fusesource.jansi.AnsiConsole;
 
 
-import static it.polimi.se2018.model.Config.NUMBEROFSCHEMACOL;
-import static it.polimi.se2018.model.Config.NUMBEROFSCHEMAROW;
+import static it.polimi.se2018.model.Config.NUMBER_OF_SCHEMA_COL;
+import static it.polimi.se2018.model.Config.NUMBER_OF_SCHEMA_ROW;
 
 /**
  * Manages input and output in Command Line
@@ -28,7 +29,7 @@ public class CommandLineGraphic implements InputStrategy{
     /**
      * Standard string for invalid input
      */
-    private final String INVALIDINPUT = "Invalid input";
+    private final String invalidInput = "Invalid input";
     /**
      * Character used for Card frames
      */
@@ -36,23 +37,23 @@ public class CommandLineGraphic implements InputStrategy{
     /**
      * Length of card's margin
      */
-    private static final int CARDLENGTH = 35;
+    private static final int CARD_LENGTH = 35;
     /**
      * Number of rows used for displaying card's title
      */
-    private final int CARDTITLEHEIGHT = 4;
+    private final int cardTitleHeight = 4;
     /**
      * Number of rows used for displaying card's description
      */
-    private final int CARDDESCRIPTIONHEIGHT = 9;
+    private final int cardDescriptionHeight = 9;
     /**
      * Number of rows used for displaying card's details
      */
-    private final int CARDDETAILSHEIGHT = 4;
+    private final int cardDetailsHeight = 4;
     /**
      * HashMap for converting ColourEnum in Colour for coloured output
      */
-    private HashMap<ColourEnum, Color> hashMapColours;
+    private EnumMap<ColourEnum, Color> hashMapColours;
 
     /**
      * Standard String for display colours of cards
@@ -68,13 +69,12 @@ public class CommandLineGraphic implements InputStrategy{
      * Constructor
      */
     public CommandLineGraphic(){
-        hashMapColours = new HashMap();
+        hashMapColours = new EnumMap<>(ColourEnum.class);
         hashMapColours.put(ColourEnum.BLUE, Color.BLUE);
         hashMapColours.put(ColourEnum.GREEN, Color.GREEN);
         hashMapColours.put(ColourEnum.PURPLE, Color.MAGENTA);
         hashMapColours.put(ColourEnum.RED, Color.RED);
         hashMapColours.put(ColourEnum.YELLOW, Color.YELLOW);
-
     }
 
     /**
@@ -83,25 +83,20 @@ public class CommandLineGraphic implements InputStrategy{
      * @return Input written by user
      */
     public String getInput(Integer idMessage){
-        //Scanner input = new Scanner(System.in);
+
+        Scanner scanner = new Scanner(System.in);
 
         boolean okMessage = false;
         String message = null;
-        java.io.BufferedReader console = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
-
-        showMessage(idMessage.toString());
 
         while(!okMessage) {
-            try {
-                //message = input.nextLine();
-                message = console.readLine();
-                okMessage = true;
-            } catch (IOException e) {
-                showMessage(INVALIDINPUT);
-            }
+            showMessage(idMessage.toString());
+
+            message = scanner.nextLine();
+            okMessage = true;
+            showMessage(invalidInput);
         }
         return message;
-
     }
 
     /**
@@ -132,7 +127,6 @@ public class CommandLineGraphic implements InputStrategy{
         for (SchemaCard schema: playerChoice.getSchemaCardList()){
             showSchemaCard(schema);
         }
-
     }
 
     /**
@@ -149,8 +143,8 @@ public class CommandLineGraphic implements InputStrategy{
      * @param card Card to display
      */
     public void showBasicCard(Card card){
-        printCardDetails(card.getName().toUpperCase(), CARDTITLEHEIGHT);
-        printCardDetails(card.getDescription(), CARDDESCRIPTIONHEIGHT);
+        printCardDetails(card.getName().toUpperCase(), cardTitleHeight);
+        printCardDetails(card.getDescription(), cardDescriptionHeight);
 
     }
 
@@ -161,7 +155,7 @@ public class CommandLineGraphic implements InputStrategy{
     public void showPublicObjCard(PublicObjCard publicObjCard){
         printCardUpperFrame();
         showBasicCard(publicObjCard);
-        printCardDetails(publicObjCardValueString + publicObjCard.getBonus(), CARDDETAILSHEIGHT);
+        printCardDetails(publicObjCardValueString + publicObjCard.getBonus(), cardDetailsHeight);
         printCardUpperFrame();
     }
 
@@ -171,8 +165,8 @@ public class CommandLineGraphic implements InputStrategy{
      */
     public void showPrivateObjCard(PrivateObjCard card){
         printCardUpperFrame();
-        printCardDetails(card.getName().toUpperCase(), CARDTITLEHEIGHT);
-        printCardDetails(card.getDescription(), CARDDESCRIPTIONHEIGHT);
+        printCardDetails(card.getName().toUpperCase(), cardTitleHeight);
+        printCardDetails(card.getDescription(), cardDescriptionHeight);
         printCardColour(card.getColour());
         printCardUpperFrame();
     }
@@ -194,10 +188,10 @@ public class CommandLineGraphic implements InputStrategy{
      */
     public void showSchemaCard(SchemaCard schemaCard){
         String cellsRow;
-        for (int row = 0; row < NUMBEROFSCHEMAROW; row++){
+        for (int row = 0; row < NUMBER_OF_SCHEMA_ROW; row++){
             cellsRow = "";
-            for (int col = 0; col < NUMBEROFSCHEMACOL; col ++){
-                cellsRow = cellsRow.concat( " " + schemaCard.getCellList().get(row * NUMBEROFSCHEMACOL + col).getDie().toString());
+            for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
+                cellsRow = cellsRow.concat( " " + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getDie().toString());
             }
             println(cellsRow);
         }
@@ -213,7 +207,7 @@ public class CommandLineGraphic implements InputStrategy{
         AnsiConsole.systemInstall();
         Color color = selectColour(cardColour);
 
-        for(int i = 0; i < CARDDETAILSHEIGHT - 1; i++) {
+        for(int i = 0; i < cardDetailsHeight - 1; i++) {
             print(preCardDescription(colourString));
             System.out.print(ansi().eraseScreen().fg(color).a(colourString).reset());
             print(postCardDescription(colourString));
@@ -258,7 +252,7 @@ public class CommandLineGraphic implements InputStrategy{
      * @return List of strings with a maximum size possible
      */
     private List<String> separateString(String string){
-        int rowMaxLength = CARDLENGTH - 4;
+        int rowMaxLength = CARD_LENGTH - 4;
 
         String[] stringSplitted = string.split(" ");
         List<String> stringList = new ArrayList<>();
@@ -280,7 +274,7 @@ public class CommandLineGraphic implements InputStrategy{
      * Print the upper (or lower) frame of the card
      */
     private void printCardUpperFrame(){
-        for (int i = 0; i < CARDLENGTH; i ++) print(frameCardCharacter);
+        for (int i = 0; i < CARD_LENGTH; i ++) print(frameCardCharacter);
         print("\n");
     }
 
@@ -289,7 +283,7 @@ public class CommandLineGraphic implements InputStrategy{
      */
     private void printCardEmptyLine(){
         print(frameCardCharacter);
-        for (int j = 0; j < CARDLENGTH - 2; j++) print(" ");
+        for (int j = 0; j < CARD_LENGTH - 2; j++) print(" ");
         print(frameCardCharacter);
         print('\n');
     }
@@ -312,9 +306,9 @@ public class CommandLineGraphic implements InputStrategy{
 
             string = string.concat(frameCardCharacter + " ");
 
-            while(string.length() < (CARDLENGTH - stringList.get(i).length()) / 2) string = string.concat(" ");
+            while(string.length() < (CARD_LENGTH - stringList.get(i).length()) / 2) string = string.concat(" ");
             string = string.concat(stringList.get(i));
-            while(string.length() < CARDLENGTH - 2) string = string.concat(" ");
+            while(string.length() < CARD_LENGTH - 2) string = string.concat(" ");
 
             string = string.concat(" " + frameCardCharacter );
             print(string + '\n');
@@ -348,7 +342,7 @@ public class CommandLineGraphic implements InputStrategy{
         String startingString;
         startingString = frameCardCharacter + " ";
 
-        while(startingString.length() < (CARDLENGTH - string.length()) / 2){
+        while(startingString.length() < (CARD_LENGTH - string.length()) / 2){
             startingString = startingString.concat(" ");
         }
         return startingString;
@@ -363,7 +357,7 @@ public class CommandLineGraphic implements InputStrategy{
         String startingString;
         startingString =  " " + frameCardCharacter;
 
-        while(startingString.length() < (CARDLENGTH - string.length() + 1) / 2){
+        while(startingString.length() < (CARD_LENGTH - string.length() + 1) / 2){
             startingString = " ".concat(startingString);
         }
         return startingString;

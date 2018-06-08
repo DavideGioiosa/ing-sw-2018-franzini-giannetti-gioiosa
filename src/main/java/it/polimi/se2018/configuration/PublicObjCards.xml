@@ -17,7 +17,6 @@
         <description>Righe senza sfumature ripetute</description>
         <typeofcalculation>DiffNumbersRow</typeofcalculation>
         <bonus>5</bonus>
-
     </card>
     <card>
         <name>Sfumature Diverse - Colonna</name>

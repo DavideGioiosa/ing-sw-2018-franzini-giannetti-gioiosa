@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class TrackBoard {
+public class TrackBoard implements Serializable {
     /**
      * List of dice in surplus placed in each round
      */

@@ -2,7 +2,6 @@ package it.polimi.se2018.model.cards.publiccard;
 
 import it.polimi.se2018.model.cards.SchemaCard;
 
-
 import java.util.Collections;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class DiffNumbers implements ScoreStrategy {
 
         PublicNumber pub = new PublicNumber();
         List<Integer> numbers = pub.differentNumbers(schema.getCellList());
-        return Collections.min(numbers)*5;
+        return Collections.min(numbers);
     }
 }
 

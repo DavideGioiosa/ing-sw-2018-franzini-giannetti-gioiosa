@@ -18,7 +18,7 @@ public class DieTest {
      * Tests the creation of a Die with good parameters
      */
     @Test
-    public void creationDiceGoodTest(){
+    public void creationDieGoodTest(){
         Die die = new Die(colour);
         assertEquals(colour, die.getColour());
         assertEquals(0, die.getValue());
@@ -28,7 +28,7 @@ public class DieTest {
      * Tests the creation of a Die with bad parameters
      */
     @Test
-    public void creationDiceBadTest(){
+    public void creationDieBadTest(){
         try{
             Die die = new Die(null);
             fail();
@@ -37,7 +37,7 @@ public class DieTest {
     }
 
     /**
-     * Sets a correct value on a dice
+     * Sets a correct value on a Die
      */
     @Test
     public void setValueGoodTest(){
@@ -48,7 +48,7 @@ public class DieTest {
     }
 
     /**
-     * Try to set an incorrect value on a dice
+     * Try to set an incorrect value on a Die
      */
     @Test
     public void setValueBadTest(){
@@ -69,7 +69,7 @@ public class DieTest {
     }
 
     /**
-     * Increase the value of a dice that can be increased
+     * Increase the value of a Die that can be increased
      */
     @Test
     public void IncreaseValueGoodTest(){
@@ -88,18 +88,15 @@ public class DieTest {
         final int value = 6;
         Die die = new Die(colour);
         die.setValue(value);
+
         try{
             die.increaseValue();
             fail();
-
-        }catch(RuntimeException e){
-
-        }
-
+        }catch(RuntimeException e){ }
     }
 
     /**
-     * Decrease the value of a dice that can be increased
+     * Decrease the value of a Die that can be increased
      */
     @Test
     public void DecreaseValueGoodTest(){
@@ -112,7 +109,7 @@ public class DieTest {
     }
 
     /**
-     * Try to decrease the value of a dice that cannot be increased
+     * Try to decrease the value of a Die that cannot be increased
      */
     @Test
     public void DecreaseValueBadTest(){
@@ -129,7 +126,7 @@ public class DieTest {
     }
 
     /**
-     * Sets the opposite value on a setted dice
+     * Sets the opposite value on a set Die
      */
     @Test
     public void oppositeValueGoodTest(){
@@ -141,18 +138,56 @@ public class DieTest {
     }
 
     /**
-     * Try to set the opposite value on a unsetted dice
+     * Try to set the opposite value on a not set Die
      */
     @Test
     public void oppositeValueBadTest(){
         Die die = new Die(colour);
+
         try{
             die.oppositeValue();
             fail();
-
-        }catch(RuntimeException e){
-
-        }
+        }catch(RuntimeException e){ }
     }
 
+    /**
+     * Roll die
+     */
+    @Test
+    public void rollDieTest(){
+        Die die = new Die(colour);
+
+        assertEquals(0,die.getValue());
+        die.firstRoll();
+        assertNotEquals(0,die.getValue());
+    }
+
+    /**
+     * ReRoll die
+     */
+    @Test
+    public void rerollDieTest(){
+        Die die = new Die(colour);
+
+        assertEquals(0,die.getValue());
+        die.firstRoll();
+        die.reRoll();
+        assertNotEquals(0,die.getValue());
+    }
+
+    /**
+     * ReRoll die
+     */
+    @Test
+    public void firstRollBadTest() {
+        Die die = new Die(colour);
+
+        assertEquals(0, die.getValue());
+        die.firstRoll();
+        try {
+            die.firstRoll();
+            fail();
+        } catch (RuntimeException e) {
+        }
+    }
 }

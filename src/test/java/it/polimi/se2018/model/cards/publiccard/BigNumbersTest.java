@@ -20,7 +20,19 @@ import static org.junit.Assert.*;
 public class BigNumbersTest {
     private SchemaCard schemaCard;
     private SchemaCard emptySchemaCard;
-    private BigNumbers bigNumbers;
+    private static PublicObjCard publicObjCard;
+
+    /**
+     * Loads MiddleNumbers Public Objective Card
+     */
+    @BeforeClass
+    public static void beforeClass(){
+        String NAME = "Sfumature Scure";
+        GameLoader gameLoader = new GameLoader();
+        do{
+            publicObjCard = (PublicObjCard) gameLoader.getPublicObjDeck().extractCard();
+        }while(!publicObjCard.getName().equals(NAME));
+    }
 
     /**
      * Create and set of a Scheme with some dice placed
@@ -52,8 +64,6 @@ public class BigNumbersTest {
         Die die_4 = new Die(ColourEnum.RED);
         die_4.setValue(5);
         schemaCard.setDiceIntoCell(new Position(2), die_4);
-
-        bigNumbers = new BigNumbers();
     }
 
     /**
@@ -61,7 +71,7 @@ public class BigNumbersTest {
      */
     @Test
     public void getScore_shouldReturnTheZeroScore() {
-        int score = bigNumbers.getScore(emptySchemaCard);
+        int score = publicObjCard.scoreCalculation(emptySchemaCard);
 
         assertEquals(0, score);
     }
@@ -75,7 +85,7 @@ public class BigNumbersTest {
         die_5.setValue(5);
         schemaCard.setDiceIntoCell(new Position(10), die_5);
 
-        int score = bigNumbers.getScore(schemaCard);
+        int score = publicObjCard.scoreCalculation(schemaCard);
 
         assertEquals(2, score);
     }
@@ -95,8 +105,7 @@ public class BigNumbersTest {
         die_7.setValue(6);
         schemaCard.setDiceIntoCell(new Position(12), die_7);
 
-
-        int score = bigNumbers.getScore(schemaCard);
+        int score = publicObjCard.scoreCalculation(schemaCard);
 
         assertEquals(6, score);
     }

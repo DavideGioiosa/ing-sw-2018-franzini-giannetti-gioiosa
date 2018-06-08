@@ -1,5 +1,8 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.connection.server.RMITypeServer;
+import it.polimi.se2018.connection.server.ServerManager;
+import it.polimi.se2018.connection.server.SocketTypeServer;
 import it.polimi.se2018.model.MoveMessage;
 import it.polimi.se2018.model.PlayerChoice;
 import it.polimi.se2018.model.PlayerMessage;
@@ -7,6 +10,7 @@ import it.polimi.se2018.model.PlayerMove;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
+import it.polimi.se2018.utils.Observable;
 
 import java.util.List;
 
@@ -14,19 +18,24 @@ import java.util.List;
  * Remote view class (contained in the Server)
  * @author Silvia Franzini
  */
-public class RemoteView extends View {
+public class RemoteView extends Observable<PlayerMessage> {
 
  private List<User> userList;  //necessario per sapere parametri connessione
-//private SocketTypeServer socketTypeServer;
-//private RMITypeServer rmiTypeServer;
+ private ServerManager serverManager;
 //TODO inserire server con cui far comunicare la view
+
+
+
+    private class MessageUpdater extends Observable<String> {
+
+
+
+    }
 
     /**
      * Builder method of the class
      */
-    public RemoteView(List<User> userList){
-
-        this.userList=userList;
+    public RemoteView(){
 
     }
 
@@ -38,19 +47,8 @@ public class RemoteView extends View {
         return userList;
     }
 
-
-    public void getServer(PlayerMessage playerMessage, Player player){
-
-        //gestione errore player inesistente?
-        for(User user : userList){
-            if(user.getPlayer().equals(player))
-            {
-                /*switch (user.getTypeOfConnection()){
-                    case RMI: rmiTypeServer.send(playerMessage);
-                    case SOCKET: socketTypeServer.send(playerMessage);
-                }*/
-            }
-        }
+    public void setServerManager(ServerManager serverManager) {
+        this.serverManager = serverManager;
     }
 
     /**
@@ -77,5 +75,11 @@ public class RemoteView extends View {
 
     }
 
+    public void reportError(){
+
+    }
+    public void receiveMessage(PlayerMessage playerMessage){
+        //controllo su variabile
+    }
 
 }

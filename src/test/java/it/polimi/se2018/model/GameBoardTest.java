@@ -89,7 +89,7 @@ public class GameBoardTest {
     }
 
     /**
-     * Try to create a new GameBoard with unvalid values
+     * Try to create a new GameBoard with null PlayerList
      */
     @Test
     public void creationDiceBadTest_NullPlayerList(){
@@ -100,6 +100,9 @@ public class GameBoardTest {
         }catch(NullPointerException e){}
     }
 
+    /**
+     * Try to create a GameBoard with null BagDice
+     */
     @Test
     public void creationDiceBadTest_NullBagDice() {
         try{
@@ -108,6 +111,9 @@ public class GameBoardTest {
         }catch(NullPointerException e){}
     }
 
+    /**
+     * Try to create a GameBoard with null BoardDice
+     */
     @Test
     public void creationDiceBadTest_NullBoardDice() {
         try{
@@ -116,6 +122,9 @@ public class GameBoardTest {
         }catch(NullPointerException e){}
     }
 
+    /**
+     * Try to create a GameBoard with null BoardCard
+     */
     @Test
     public void creationDiceBadTest_NullBoardCard() {
         try{
@@ -124,6 +133,9 @@ public class GameBoardTest {
         }catch(NullPointerException e){}
     }
 
+    /**
+     * Try to create a GameBoard with null TrackBoard
+     */
     @Test
     public void creationDiceBadTest_NullTrackBoard() {
         try{
@@ -132,6 +144,9 @@ public class GameBoardTest {
         }catch(NullPointerException e){}
     }
 
+    /**
+     * Try to create a GameBoard with null PrivatePlayer List
+     */
     @Test
     public void creationDiceBadTest_NullPrivatePlayerList() {
         try{
@@ -140,6 +155,9 @@ public class GameBoardTest {
         }catch(NullPointerException e){}
     }
 
+    /**
+     * Creates a GameBoard with valid parameters
+     */
     public GameBoard newGameBoard(){
         setUp();
         return new GameBoard(playerList, bagDice,boardDice, trackBoardDice, boardCard, privatePlayerList);

@@ -9,7 +9,6 @@ import java.rmi.RemoteException;
 
 public interface ServerRemoteInterface extends Remote {
 
-    void sendToClient(PlayerMessage playerMessage)throws RemoteException;
     void addClient(ClientRemoteIterface client) throws RemoteException;
     void receive(PlayerMessage playerMessage) throws RemoteException;
 }

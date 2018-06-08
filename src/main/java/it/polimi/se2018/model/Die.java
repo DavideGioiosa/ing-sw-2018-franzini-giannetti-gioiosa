@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import static it.polimi.se2018.model.Config.*;
@@ -10,7 +11,7 @@ import static it.polimi.se2018.model.Config.*;
  * @author Cristian Giannetti
  */
 
-public class Die {
+public class Die implements Serializable {
 
     /**
      * Indicates the colour of the dice
@@ -53,7 +54,7 @@ public class Die {
      */
     private void roll(){
         Random randomGenerator = new Random();
-        value = 1 + randomGenerator.nextInt(DIEMAXVALUE);
+        value = 1 + randomGenerator.nextInt(DIE_MAX_VALUE);
     }
 
     /**
@@ -61,7 +62,7 @@ public class Die {
      * @param val value to set on a die
      */
     public void setValue(int val){
-        if (val > DIEMAXVALUE || val < DIEMINVALUE) throw new IllegalArgumentException("ERROR: Incorrect value of dice");
+        if (val > DIE_MAX_VALUE || val < DIE_MIN_VALUE) throw new IllegalArgumentException("ERROR: Incorrect value of dice");
 
         this.value = val;
     }
@@ -70,7 +71,7 @@ public class Die {
      * Increases the value of the die by one unit
      */
     public void increaseValue(){
-        if (this.value >= DIEMAXVALUE) throw new RuntimeException("ERROR: Cannot increase the value of this dice");
+        if (this.value >= DIE_MAX_VALUE) throw new RuntimeException("ERROR: Cannot increase the value of this dice");
         this.value++;
     }
 
@@ -78,12 +79,12 @@ public class Die {
      * Decreases the value of the die by one unit
      */
     public void decreaseValue(){
-        if (this.value <= DIEMINVALUE) throw new RuntimeException("ERROR: Cannot decrease the value of this dice");
+        if (this.value <= DIE_MIN_VALUE) throw new RuntimeException("ERROR: Cannot decrease the value of this dice");
         this.value--;
     }
 
     /**
-     * Is possible only if a particular toolCard is active
+     * Possible only if a particular toolCard is active
      */
     public void reRoll(){
         //TODO check if the toolcard is active
@@ -103,7 +104,7 @@ public class Die {
      */
     public void oppositeValue(){
         if(this.value == 0) throw new RuntimeException("ERROR: This dice is not rolled");
-        this.setValue(DIEMINVALUE + DIEMAXVALUE - value);
+        this.setValue(DIE_MIN_VALUE + DIE_MAX_VALUE - value);
     }
 
 }

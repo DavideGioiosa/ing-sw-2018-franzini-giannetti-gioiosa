@@ -1,7 +1,12 @@
 package it.polimi.se2018.model.cards;
 
 import it.polimi.se2018.model.CardTypeEnum;
+import it.polimi.se2018.model.cards.publiccard.DiffColoursRow;
+import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Test CardDeck Class
@@ -13,39 +18,40 @@ public class CardDeckTest {
     private static final String DESCRIPTION = "Description";
     private static final int ID = 1;
     private CardDeck cardDeck;
-    private Card card;
     private CardTypeEnum cardType;
+    private PublicObjCard publicObjCard;
 
     @Test
     public void CardDeck_shouldCatchExceptionIfNullParameter() {
         try {
             cardDeck = new CardDeck(cardType);
-            //fail();
+            fail();
         }
         catch (NullPointerException e){
         }
     }
 
     //TODO: check downclass cast in CardDeck before running this test + adding extraction test
-/*    @Test
+    @Test
     public void insertCard_shouldReturnTrueifCorrectInsertionOfACard() {
         cardType = CardTypeEnum.PUBLICOBJCARD;
         cardDeck = new CardDeck(cardType);
-        card = new Card(ID, NAME, DESCRIPTION);
-        cardDeck.insertCard(card);
+        publicObjCard = new PublicObjCard(ID, NAME, DESCRIPTION, 2, "DiffColoursRow");
+        cardDeck.insertCard(publicObjCard);
 
         Card cardExtracted = cardDeck.extractCard();
 
-        assertEquals(card, cardExtracted);
+        assertEquals(publicObjCard, cardExtracted);
     }
-*/
+
 
     @Test
     public void insertCard_shouldCatchNullPointerException() {
         cardType = CardTypeEnum.PUBLICOBJCARD;
         cardDeck = new CardDeck(cardType);
         try {
-            cardDeck.insertCard(card);
+            cardDeck.insertCard(publicObjCard);
+            fail();
         }
         catch (NullPointerException e){
         }
@@ -57,6 +63,7 @@ public class CardDeckTest {
         cardDeck = new CardDeck(cardType);
         try{
             cardDeck.extractCard();
+            fail();
         }
         catch (RuntimeException e){
         }

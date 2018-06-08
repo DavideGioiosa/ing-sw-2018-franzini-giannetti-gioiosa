@@ -1,11 +1,13 @@
 package it.polimi.se2018.model.cards.publiccard;
 
+import it.polimi.se2018.controller.GameLoader;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -23,7 +25,19 @@ import static org.junit.Assert.*;
 public class MiddleNumbersTest {
     private SchemaCard schemaCard;
     private SchemaCard emptySchemaCard;
-    private MiddleNumbers middleNumbers;
+    private static PublicObjCard publicObjCard;
+
+    /**
+     * Loads MiddleNumbers Public Objective Card
+     */
+    @BeforeClass
+    public static void beforeClass(){
+        String NAME = "Sfumature Medie";
+        GameLoader gameLoader = new GameLoader();
+        do{
+            publicObjCard = (PublicObjCard) gameLoader.getPublicObjDeck().extractCard();
+        }while(!publicObjCard.getName().equals(NAME));
+    }
 
     /**
      * Create and set of a Scheme with some dice placed
@@ -61,16 +75,14 @@ public class MiddleNumbersTest {
         Die die_6 = new Die(ColourEnum.BLUE);
         die_6.setValue(4);
         schemaCard.setDiceIntoCell(new Position(15), die_6);
-
-        middleNumbers = new MiddleNumbers();
-    }
+        }
 
     /**
      * Test with an empty scheme, expecting score 0
      */
     @Test
     public void getScore_shouldReturnTheZeroScore() {
-        int score = middleNumbers.getScore(emptySchemaCard);
+        int score = publicObjCard.scoreCalculation(emptySchemaCard);
 
         assertEquals(0, score);
     }
@@ -80,7 +92,7 @@ public class MiddleNumbersTest {
      */
     @Test
     public void getScore_shouldReturnTheCorrectScore() {
-        int score = middleNumbers.getScore(schemaCard);
+        int score = publicObjCard.scoreCalculation(schemaCard);
 
         assertEquals(4, score);
     }

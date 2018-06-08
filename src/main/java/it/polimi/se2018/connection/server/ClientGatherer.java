@@ -1,7 +1,8 @@
 package it.polimi.se2018.connection.server;
 
-import it.polimi.se2018.connection.client.ClientRemoteIterface;
-import it.polimi.se2018.connection.client.ClientSocketInterface;
+import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.player.TypeOfConnection;
+import it.polimi.se2018.model.player.User;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,21 +13,17 @@ import java.util.logging.Logger;
 public class ClientGatherer extends Thread{
 
     private SocketTypeServer server;
-    private ClientListener clientListener;
-    private int networkPort;
     private ServerSocket serverSocket;
 
 
-    public ClientGatherer(SocketTypeServer server, int port){
+    public ClientGatherer(SocketTypeServer server){
 
         this.server = server;
-        this.networkPort = port;
         try {
             this.serverSocket = new ServerSocket();
         } catch (IOException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
-
     }
 
     @Override
@@ -36,8 +33,21 @@ public class ClientGatherer extends Thread{
         try {
             clientSocket = serverSocket.accept();
 
-            clientListener = new ClientListener(server, clientSocket);
-            server.addClient(clientListener);
+            ClientListener clientListener = new ClientListener(clientSocket);
+            clientListener.getObs().addObserver(server);
+            User user = new User(TypeOfConnection.SOCKET);
+            String code = user.getUniqueCode();
+            while(server.getCodeList().contains(code)){
+                user = new User(TypeOfConnection.RMI);
+                code = user.getUniqueCode();
+            }
+            server.addCode(code);
+            server.addClient(code, clientListener);
+            PlayerMessage playerMessage = new PlayerMessage();
+            playerMessage.setUser(user);
+            clientListener.send(playerMessage);
+
+
 
         } catch (IOException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());

@@ -2,6 +2,7 @@ package it.polimi.se2018.connection.client;
 
 import com.google.gson.Gson;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.utils.Observable;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,30 +10,40 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class NetworkHandler extends Thread{
+public class NetworkHandler extends Thread implements ClientSocketInterface{
 
     private Socket socket;
     private BufferedReader bufferedReader;
-    private SocketTypeClient socketTypeClient;
     private OutputStreamWriter out;
     private boolean quit;
     private Gson gson;
+    private Observable<PlayerMessage> obs;
 
 
-    public NetworkHandler(String host, int port, SocketTypeClient socketTypeClient){
-        gson = new Gson();
-        quit=false;
-        this.socketTypeClient=socketTypeClient;
-        try {
-            socket = new Socket(host, port);
-            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
-        }
+     NetworkHandler(String host, int port){
+         obs = new Observable<>();
+         gson = new Gson();
+         quit = false;
+         try {
+             socket = new Socket(host, port);
+             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+         } catch (IOException e) {
+             Logger.getGlobal().log(Level.SEVERE, e.toString());
+         }
+
     }
 
-    public synchronized void setQuit() {// viene invocato da SocketTypeClient
+    public Observable<PlayerMessage> getObs() {
+        return obs;
+    }
+
+    synchronized void setQuit() {// viene invocato da SocketTypeClient
         this.quit = true;
+    }
+
+    @Override
+    public void receive(PlayerMessage playerMessage) {
+        obs.notify(playerMessage);
     }
 
     @Override
@@ -42,7 +53,7 @@ public class NetworkHandler extends Thread{
             try{
                 String message = bufferedReader.readLine();
                 PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
-                socketTypeClient.receive(playerMessage);
+                receive(playerMessage);
 
             }catch (IOException e){
                 Logger.getGlobal().log(Level.SEVERE, e.toString());
@@ -69,7 +80,7 @@ public class NetworkHandler extends Thread{
 
     }
 
-    public synchronized void closeConnection() throws IOException{
+     private synchronized void closeConnection() throws IOException{
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setClosure();
 
@@ -93,4 +104,6 @@ public class NetworkHandler extends Thread{
         }
     }
 
-  }
+
+}
+
