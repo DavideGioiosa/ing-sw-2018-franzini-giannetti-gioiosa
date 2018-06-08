@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import static it.polimi.se2018.model.Config.*;
@@ -10,7 +11,7 @@ import static it.polimi.se2018.model.Config.*;
  * @author Cristian Giannetti
  */
 
-public class Die {
+public class Die implements Serializable {
 
     /**
      * Indicates the colour of the dice

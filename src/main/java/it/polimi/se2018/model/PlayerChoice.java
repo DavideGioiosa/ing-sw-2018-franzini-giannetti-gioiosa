@@ -10,7 +10,7 @@ import java.util.List;
  * Class used to send user's choices during match setup
  * @author Silvia Franzini
  */
-public class PlayerChoice {
+public class PlayerChoice extends PlayerMessage {
     /**
      * User referred to the choices
      */

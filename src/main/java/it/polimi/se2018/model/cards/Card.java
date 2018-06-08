@@ -1,11 +1,13 @@
 package it.polimi.se2018.model.cards;
 
+import java.io.Serializable;
+
 /**
  * Card class indicates a generic Card with particular ID, name and description
  * @author Cristian Giannetti
  */
 
-public class Card {
+public class Card implements Serializable {
 
     /**
      * Card's identifier
@@ -30,7 +32,7 @@ public class Card {
      * @param description Description of the Card
      */
     public Card(int id, String name, String description){
-        if (id == 0) throw new IllegalArgumentException("ERROR: Invalid Card ID");
+        if (id <= 0) throw new IllegalArgumentException("ERROR: Invalid Card ID");
         if (name == null) throw new NullPointerException("ERROR: Invalid Card Name");
         if (name == "") throw new IllegalArgumentException("ERROR: Invalid Card Name");
 

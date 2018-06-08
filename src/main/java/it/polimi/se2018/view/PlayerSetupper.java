@@ -15,10 +15,6 @@ public class PlayerSetupper {
      */
     PlayerChoice playerChoice;
     /**
-     *
-     */
-    CommandController commandController;
-    /**
      * Constructor sets the PlayerChoice to check
      * @param playerChoice Contains the value to check
      */
@@ -52,9 +48,10 @@ public class PlayerSetupper {
 
         for (ColourEnum colour : playerChoice.getColourEnumList()) {
             if (colourToCheck == colour) playerChoice.setChosenColour(colour);
+
         }
 
-        if (playerChoice.getChosenSchema() == null) return "Impossibile impostare il colore scelto";
+        if (playerChoice.getChosenColour() == null) return "Impossibile impostare il colore scelto";
         return "Window Frame inserito correttamente";
     }
 

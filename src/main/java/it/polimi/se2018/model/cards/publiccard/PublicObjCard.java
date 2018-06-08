@@ -8,10 +8,13 @@ import it.polimi.se2018.model.cards.SchemaCard;
  * @author Silvia Franzini
  */
 public class PublicObjCard extends Card {
-
+    /**
+     * Scoring method
+     */
     private ScoreStrategy scoreStrategy;
-
-    //TODO: SETTARE BONUS SU CALCOLO
+    /**
+     * Bonus points for each satisfied requirement
+     */
     private int bonus;
 
     /**
@@ -39,9 +42,13 @@ public class PublicObjCard extends Card {
         if(schemaCard == null){
             throw new NullPointerException("ERROR: Schema Card not existing");
         }
-        return scoreStrategy.getScore(schemaCard);
+        return this.bonus * scoreStrategy.getScore(schemaCard);
     }
 
+    /**
+     * Setter method for Scoring strategy
+     * @param strategy String that describes the type of Scoring strategy
+     */
     private void setScoreStrategy(String strategy) {
         switch(strategy){
             case "DiffColoursRow":

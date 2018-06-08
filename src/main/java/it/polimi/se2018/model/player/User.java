@@ -1,14 +1,11 @@
 package it.polimi.se2018.model.player;
 
-import java.util.Random;
-
 /**
  * Public Class User
  * @author Davide Gioiosa
  */
 
 public class User {
-    private String uniqueCode;
     private String nickname;
     private Player player;
     private boolean connection;
@@ -16,20 +13,12 @@ public class User {
 
     /**
      * Builder: create a user with the id and the connection
-     * @param typeOfConnection the chosen type of connection
+     * @param nickname chosen by the user
      */
-    public User (TypeOfConnection typeOfConnection){
+    public User (String nickname, TypeOfConnection typeOfConnection){
+        this.nickname = nickname;
         this.connection = true;
         this.typeOfConnection = typeOfConnection;
-    }
-
-
-    public String getUniqueCode() {
-        return uniqueCode;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     /**
@@ -64,21 +53,5 @@ public class User {
 
     public TypeOfConnection getTypeOfConnection() {
         return typeOfConnection;
-    }
-
-    /**
-     * Method used to create an identifier for the user to setup a connection
-     * @return the identifier
-     */
-    public void createCode(){
-        String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-        StringBuilder sb = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < 8; i++) {
-            sb.append(candidateChars.charAt(random.nextInt(candidateChars.length())));
-        }
-
-        this.uniqueCode = sb.toString();
     }
 }

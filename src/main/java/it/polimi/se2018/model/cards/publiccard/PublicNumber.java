@@ -1,10 +1,12 @@
 package it.polimi.se2018.model.cards.publiccard;
 
-
 import it.polimi.se2018.model.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static it.polimi.se2018.model.Config.*;
+
 /**
 * Used by DiffNumbersColumn, DiffNumbersRow, DiffNumbers to calculate the score
 * @author Silvia Franzini
@@ -17,7 +19,7 @@ public class PublicNumber {
      */
     public PublicNumber() {
         numbers = new ArrayList<>();
-        for(int i = 0; i < 6; i++){
+        for(int i = DIE_MIN_VALUE; i <= DIE_MAX_VALUE; i++){
             numbers.add(0);
         }
     }
@@ -33,7 +35,6 @@ public class PublicNumber {
         }
         for (Cell c : cellList) {
             if (!c.isEmpty()) {
-
                 numbers.set(c.getDie().getValue()-1, numbers.get(c.getDie().getValue()-1)+1);
             }
         }

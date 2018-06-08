@@ -24,6 +24,14 @@ public class RemoteView extends Observable<PlayerMessage> {
  private ServerManager serverManager;
 //TODO inserire server con cui far comunicare la view
 
+
+
+    private class MessageUpdater extends Observable<String> {
+
+
+
+    }
+
     /**
      * Builder method of the class
      */

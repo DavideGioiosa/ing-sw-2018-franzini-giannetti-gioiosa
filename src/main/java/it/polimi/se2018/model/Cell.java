@@ -1,11 +1,13 @@
 package it.polimi.se2018.model;
 
+import java.io.Serializable;
+
 /**
  * Cell class represent a single cell of SchemaCard
  * @author Davide Gioiosa
  */
 
-public class Cell {
+public class Cell implements Serializable {
 
     /**
      * Limitation die value that a cell accepts

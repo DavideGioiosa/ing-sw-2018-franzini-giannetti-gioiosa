@@ -33,7 +33,7 @@ public class SyntaxController {
      */
     private PlayerMove playerMove;
 
-    private final String okmessage = "OK MESSAGE";
+    private final String okMessage = "OK MESSAGE";
     private final String errorMessage = "ERROR MESSAGE";
     /**
      * Constructor sets the first nextCommandType
@@ -58,7 +58,8 @@ public class SyntaxController {
 
         if (message.equals(RESET_COMMAND)){
             newSyntaxController();
-            return "OK MESSAGE";
+
+            return okMessage;
 
         }
 
@@ -67,7 +68,7 @@ public class SyntaxController {
                 try {
                     playerMove.setTypeOfChoice(TypeOfChoiceEnum.valueOf(message));
                     setNextCommandType(playerMove);
-                    return "OK MESSAGE";
+                    return okMessage;
                 } catch (IllegalArgumentException e) {
                     return errorMessage;
                 }
@@ -77,7 +78,7 @@ public class SyntaxController {
                     if (Integer.valueOf(message) == toolCard.getId()) {
                         playerMove.setIdToolCard(Integer.valueOf(message));
                         setNextCommandType(playerMove);
-                        return okmessage;
+                        return okMessage;
                     }
                 }
                 return errorMessage;
@@ -86,14 +87,14 @@ public class SyntaxController {
                 if (Integer.valueOf(message) >= 0 && Integer.valueOf(message) < gameBoard.getBoardDice().getDieList().size()) {
                     playerMove.setDiceBoardIndex(Integer.valueOf(message));
                     setNextCommandType(playerMove);
-                    return okmessage;
+                    return okMessage;
                 }
                 return errorMessage;
 
             case VALUE:
                 playerMove.setValue(Integer.valueOf(message));
                 setNextCommandType(playerMove);
-                return okmessage;
+                return okMessage;
             default:
                 int value1 = Integer.parseInt(message.split(" ")[0]);
                 int value2 = Integer.parseInt(message.split(" ")[1]);
@@ -105,7 +106,7 @@ public class SyntaxController {
 
                             playerMove.setTrackBoardIndex(value1,value2);
                             setNextCommandType(playerMove);
-                            return okmessage;
+                            return okMessage;
                         }
                         return errorMessage;
 
@@ -114,7 +115,7 @@ public class SyntaxController {
 
                             playerMove.insertDiceSchemaWhereToTake(new Position(value1,value2));
                             setNextCommandType(playerMove);
-                            return okmessage;
+                            return okMessage;
                         }
                         return errorMessage;
 
@@ -123,7 +124,7 @@ public class SyntaxController {
 
                             playerMove.insertDiceSchemaWhereToLeave(new Position(value1,value2));
                             setNextCommandType(playerMove);
-                            return okmessage;
+                            return okMessage;
                         }
                         return errorMessage;
 
@@ -199,7 +200,7 @@ public class SyntaxController {
      * Resets Command
      */
     public void newSyntaxController(){
-        nextCommandType = CommandTypeEnum.TYPEOFCHOICE;
+        this.nextCommandType = CommandTypeEnum.TYPEOFCHOICE;
         this.playerMove = new PlayerMove();
         this.playerMove.setPlayer(this.player);
     }

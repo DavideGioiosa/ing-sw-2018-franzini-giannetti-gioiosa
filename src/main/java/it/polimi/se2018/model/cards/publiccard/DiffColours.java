@@ -6,7 +6,6 @@ import it.polimi.se2018.model.cards.SchemaCard;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,8 +24,7 @@ public class DiffColours implements ScoreStrategy {
 
         PublicColour pub = new PublicColour();
         HashMap<ColourEnum,Integer> colours = pub.differentColours(schema.getCellList());
-        Integer i = Collections.min(colours.entrySet(), Map.Entry.comparingByValue()).getValue();
+        return Collections.min(colours.entrySet(), Map.Entry.comparingByValue()).getValue();
 
-        return 4*i;
     }
 }

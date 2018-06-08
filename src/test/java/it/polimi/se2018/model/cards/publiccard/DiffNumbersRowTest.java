@@ -1,11 +1,13 @@
 package it.polimi.se2018.model.cards.publiccard;
 
+import it.polimi.se2018.controller.GameLoader;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.Position;
 import it.polimi.se2018.model.cards.SchemaCard;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,18 +23,30 @@ import static org.junit.Assert.*;
 public class DiffNumbersRowTest {
     private SchemaCard schemaCard;
     private SchemaCard emptySchemaCard;
-    private DiffNumbersRow diffNumbersRow;
+    private static PublicObjCard publicObjCard;
+
+    /**
+     * Loads MiddleNumbers Public Objective Card
+     */
+    @BeforeClass
+    public static void beforeClass(){
+        String NAME = "Sfumature Diverse - Riga";
+        GameLoader gameLoader = new GameLoader();
+        do{
+            publicObjCard = (PublicObjCard) gameLoader.getPublicObjDeck().extractCard();
+        }while(!publicObjCard.getName().equals(NAME));
+    }
 
     /**
      * Create and set of a Scheme with some dice placed
      */
     @Before
     public void init() {
-        List<Cell> cellList = new ArrayList<Cell>();
+        List<Cell> cellList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             cellList.add(new Cell(0, null));
         }
-        List<Cell> cellList_2 = new ArrayList<Cell>();
+        List<Cell> cellList_2 = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             cellList_2.add(new Cell(0, null));
         }
@@ -85,8 +99,6 @@ public class DiffNumbersRowTest {
         die_11.setValue(2);
         Position position_11 = new Position(19);
         schemaCard.setDiceIntoCell(position_11, die_11);
-
-        diffNumbersRow = new DiffNumbersRow();
     }
 
     /**
@@ -94,7 +106,7 @@ public class DiffNumbersRowTest {
      */
     @Test
     public void getScore_shouldReturnTheZeroScore() {
-        int score = diffNumbersRow.getScore(emptySchemaCard);
+        int score = publicObjCard.scoreCalculation(emptySchemaCard);
 
         assertEquals(0, score);
     }
@@ -104,7 +116,7 @@ public class DiffNumbersRowTest {
      */
     @Test
     public void getScore() {
-        int score = diffNumbersRow.getScore(schemaCard);
+        int score = publicObjCard.scoreCalculation(schemaCard);
 
         assertEquals(5, score);
     }

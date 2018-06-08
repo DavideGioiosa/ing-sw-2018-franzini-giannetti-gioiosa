@@ -7,6 +7,9 @@ package it.polimi.se2018.model;
  */
 
 public class Config {
+    public static final int NUMBER_OF_TOOL_CARD_ON_BOARD_IN_MULTIPLAYER = 3;
+    public static final int NUMBER_OF_PUBLIC_OBJ_CARD_ON_BOARD_IN_MULTIPLAYER = 3;
+
     public static final int NUMBER_OF_ROUND = 10;
 
     public static final int NUMBER_OF_DICE_PER_COLOUR = 18;
@@ -16,9 +19,6 @@ public class Config {
     public static final int NUMBER_OF_TOOL_CARD = 12;
     public static final int NUMBER_OF_PUBLIC_OBJC_ARD = 10;
     public static final int NUMBER_OF_PRIVATE_OBJ_CARD = 5;
-
-    private static int numberOfToolCardOnBoard;
-    private static int numberOfPublicObjCardOnBoard;
 
     public static final int ID_FIRST_PUBLIC_OBJ_CARD = 100;
     public static final int ID_FIRST_PRIVATE_OBJ_CARD = 200;
@@ -32,10 +32,12 @@ public class Config {
     public static final String RESET_COMMAND = "CANCEL";
 
     private int numberOfPlayer;
+    private int numberOfToolCardOnBoard;
+    private int numberOfPublicObjCardOnBoard;
 
-    public Config(int numberOfPlayer, int numberOfPublicObjCardOnBoard, int numberOfToolCardOnBoard){
+    public Config(int numberOfPlayer, int numberOfPublicObjCard, int numberOfToolCardOnBoard){
         this.numberOfPlayer = numberOfPlayer;
-        this.numberOfPublicObjCardOnBoard = numberOfPublicObjCardOnBoard;
+        numberOfPublicObjCardOnBoard = numberOfPublicObjCard;
         this.numberOfToolCardOnBoard = numberOfToolCardOnBoard;
     }
 
@@ -45,11 +47,11 @@ public class Config {
         this.numberOfPublicObjCardOnBoard = 3;
     }
 
-    public static int getNumberOfPublicObjCardOnBoard() {
+    public int getNumberOfPublicObjCardOnBoard() {
         return numberOfPublicObjCardOnBoard;
     }
 
-    public static int getNumberOfToolCardOnBoard(){
+    public int getNumberOfToolCardOnBoard(){
         return numberOfToolCardOnBoard;
     }
 

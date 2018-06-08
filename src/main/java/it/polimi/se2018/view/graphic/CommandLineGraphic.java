@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
-//import java.util.Scanner;
+import java.util.Scanner;
 
 import static org.fusesource.jansi.Ansi.*;
 import org.fusesource.jansi.AnsiConsole;
@@ -69,13 +69,12 @@ public class CommandLineGraphic implements InputStrategy{
      * Constructor
      */
     public CommandLineGraphic(){
-        hashMapColours = new EnumMap<ColourEnum, Color>(ColourEnum.class);
+        hashMapColours = new EnumMap<>(ColourEnum.class);
         hashMapColours.put(ColourEnum.BLUE, Color.BLUE);
         hashMapColours.put(ColourEnum.GREEN, Color.GREEN);
         hashMapColours.put(ColourEnum.PURPLE, Color.MAGENTA);
         hashMapColours.put(ColourEnum.RED, Color.RED);
         hashMapColours.put(ColourEnum.YELLOW, Color.YELLOW);
-
     }
 
     /**
@@ -84,25 +83,20 @@ public class CommandLineGraphic implements InputStrategy{
      * @return Input written by user
      */
     public String getInput(Integer idMessage){
-        //Scanner input = new Scanner(System.in);
+
+        Scanner scanner = new Scanner(System.in);
 
         boolean okMessage = false;
         String message = null;
-        java.io.BufferedReader console = new java.io.BufferedReader(new java.io.InputStreamReader(System.in));
-
-        showMessage(idMessage.toString());
 
         while(!okMessage) {
-            try {
-                //message = input.nextLine();
-                message = console.readLine();
-                okMessage = true;
-            } catch (IOException e) {
-                showMessage(invalidInput);
-            }
+            showMessage(idMessage.toString());
+
+            message = scanner.nextLine();
+            okMessage = true;
+            showMessage(invalidInput);
         }
         return message;
-
     }
 
     /**
@@ -133,7 +127,6 @@ public class CommandLineGraphic implements InputStrategy{
         for (SchemaCard schema: playerChoice.getSchemaCardList()){
             showSchemaCard(schema);
         }
-
     }
 
     /**

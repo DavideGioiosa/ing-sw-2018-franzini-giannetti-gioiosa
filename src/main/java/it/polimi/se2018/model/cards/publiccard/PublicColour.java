@@ -3,7 +3,6 @@ package it.polimi.se2018.model.cards.publiccard;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class PublicColour {
         hashMapColours.put(ColourEnum.PURPLE, 0);
         hashMapColours.put(ColourEnum.RED, 0);
         hashMapColours.put(ColourEnum.YELLOW, 0);
-
 
     }
 
