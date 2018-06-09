@@ -42,11 +42,11 @@ public class DiffNumbersTest {
      */
     @Before
     public void init(){
-        List<Cell> cellList = new ArrayList<Cell>();
+        List<Cell> cellList = new ArrayList<>();
         for(int i = 0; i<20; i++){
             cellList.add(new Cell(0, null));
         }
-        List<Cell> cellList_2 = new ArrayList<Cell>();
+        List<Cell> cellList_2 = new ArrayList<>();
         for(int i = 0; i<20; i++){
             cellList_2.add(new Cell(0, null));
         }
@@ -57,28 +57,22 @@ public class DiffNumbersTest {
 
         Die die_1 = new Die(ColourEnum.BLUE);
         die_1.setValue(5);
-        Position position_1 = new Position(0);
-        schemaCard.setDiceIntoCell(position_1, die_1);
+        schemaCard.setDiceIntoCell(new Position(0), die_1);
         Die die_2 = new Die(ColourEnum.YELLOW);
         die_2.setValue(6);
-        Position position_2 = new Position(1);
-        schemaCard.setDiceIntoCell(position_2, die_2);
+        schemaCard.setDiceIntoCell(new Position(1), die_2);
         Die die_3 = new Die(ColourEnum.GREEN);
         die_3.setValue(2);
-        Position position_3 = new Position(2);
-        schemaCard.setDiceIntoCell(position_3, die_3);
+        schemaCard.setDiceIntoCell(new Position(2), die_3);
         Die die_4 = new Die(ColourEnum.RED);
         die_4.setValue(3);
-        Position position_4 = new Position(3);
-        schemaCard.setDiceIntoCell(position_4, die_4);
+        schemaCard.setDiceIntoCell(new Position(3), die_4);
         Die die_5 = new Die(ColourEnum.PURPLE);
         die_5.setValue(1);
-        Position position_5 = new Position(4);
-        schemaCard.setDiceIntoCell(position_5, die_5);
+        schemaCard.setDiceIntoCell(new Position(4), die_5);
         Die die_6 = new Die(ColourEnum.PURPLE);
         die_6.setValue(4);
-        Position position_6 = new Position(6);
-        schemaCard.setDiceIntoCell(position_6, die_6);
+        schemaCard.setDiceIntoCell(new Position(6), die_6);
 
     }
 

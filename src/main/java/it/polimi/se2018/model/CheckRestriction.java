@@ -12,9 +12,6 @@ import java.util.List;
 
 public class CheckRestriction {
 
-    public CheckRestriction() {
-    }
-
     /**
      * @param schemaCard of the currentPlayer
      * @param die selected in the Draft Pool

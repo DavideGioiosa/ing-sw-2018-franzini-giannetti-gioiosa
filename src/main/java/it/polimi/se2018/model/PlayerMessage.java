@@ -22,21 +22,33 @@ public class PlayerMessage implements Serializable {
     }
 
     public void setMove(PlayerMove playerMove) {
+        if(playerMove == null){
+            throw new NullPointerException("Sent a null playerMove");
+        }
         this.playerMove = playerMove;
         id = PlayerMessageTypeEnum.MOVE;
     }
 
     public void setChoice(PlayerChoice playerChoice) {
+        if(playerChoice == null){
+            throw new NullPointerException("Sent a null playerChoice");
+        }
         this.playerChoice = playerChoice;
         id = PlayerMessageTypeEnum.CHOICE;
     }
 
     public void setMessage(MoveMessage moveMessage) {
+        if(moveMessage == null){
+            throw new NullPointerException("Sent a null moveMessage");
+        }
         this.moveMessage = moveMessage;
         id = PlayerMessageTypeEnum.UPDATE;
     }
 
      public void setUser(User user){
+        if(user == null){
+            throw new NullPointerException("Insertion of null user parameter");
+        }
         this.user = user;
          id = PlayerMessageTypeEnum.USER;
      }

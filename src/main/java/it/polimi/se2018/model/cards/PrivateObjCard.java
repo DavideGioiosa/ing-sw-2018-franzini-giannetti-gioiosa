@@ -44,7 +44,7 @@ public class PrivateObjCard extends Card implements Serializable {
         int sum = 0;
         for(Cell cell : schemaCard.getCellList()) {
 
-            if(cell.getDie().getColour().equals(colour)){
+            if(cell.getDie()!= null && cell.getDie().getColour().equals(colour)){
                 sum += cell.getDie().getValue();
             }
         }

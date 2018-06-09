@@ -29,8 +29,7 @@ public class TestPlayerChoice {
      */
     @Before
     public void setUp(){
-        final String NICKNAME = "nickname";
-        user = new User(NICKNAME,SOCKET);
+        user = new User(SOCKET);
 
         colourList = new ArrayList<>();
         colourList.add(ColourEnum.BLUE);

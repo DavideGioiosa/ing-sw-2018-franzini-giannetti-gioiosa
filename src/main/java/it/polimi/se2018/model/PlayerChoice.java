@@ -37,6 +37,10 @@ public class PlayerChoice extends PlayerMessage {
      * @param user User making choices
      */
     public PlayerChoice(User user){
+        if(user == null){
+            throw new NullPointerException("Insertion of a null user");
+        }
+
         this.user = user;
         schemaCardList = new ArrayList<>();
         colourEnumList = new ArrayList<>();
