@@ -14,10 +14,11 @@ public class PlayerMessage implements Serializable {
     private User user;
 
     public PlayerMessage(){
-        playerMove=null;
-        playerChoice=null;
-        moveMessage=null;
+        playerMove = null;
+        playerChoice = null;
+        moveMessage = null;
         closure = false;
+        user = null;
     }
 
     public void setMove(PlayerMove playerMove) {

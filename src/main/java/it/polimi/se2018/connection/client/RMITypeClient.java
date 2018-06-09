@@ -3,6 +3,7 @@ package it.polimi.se2018.connection.client;
 
 import it.polimi.se2018.connection.server.ServerRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
@@ -28,19 +29,19 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
         ClientImplementation clientImplementation = new ClientImplementation();
         clientImplementation.getObs().addObserver(this);
 
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
+
         try {
              LocateRegistry.getRegistry();
+
         } catch (RemoteException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
 
         try {
                 ClientRemoteIterface remoteRef = (ClientRemoteIterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
-                this.stub = (ServerRemoteInterface) Naming.lookup("//localhost"); //riferimento a server non sarà statico
+                this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
                 stub.addClient(remoteRef);
+
 
 
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
@@ -95,6 +96,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
     @Override
     public void update(PlayerMessage playerMessage) {
         obs.notify(playerMessage);
+
     }
 }
 

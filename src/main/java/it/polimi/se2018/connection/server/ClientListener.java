@@ -3,7 +3,6 @@ package it.polimi.se2018.connection.server;
 import com.google.gson.Gson;
 import it.polimi.se2018.connection.client.ClientSocketInterface;
 import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
 
 import java.io.BufferedReader;
@@ -26,7 +25,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         obs = new Observable<>();
     }
 
-    public Observable<PlayerMessage> getObs() {
+    Observable<PlayerMessage> getObs() {
         return obs;
     }
 

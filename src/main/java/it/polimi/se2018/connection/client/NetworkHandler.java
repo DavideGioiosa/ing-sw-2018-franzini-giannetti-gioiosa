@@ -33,7 +33,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
 
     }
 
-    public Observable<PlayerMessage> getObs() {
+    Observable<PlayerMessage> getObs() {
         return obs;
     }
 
@@ -51,6 +51,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
 
         while(!socket.isClosed() && !quit){
             try{
+
                 String message = bufferedReader.readLine();
                 PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
                 receive(playerMessage);

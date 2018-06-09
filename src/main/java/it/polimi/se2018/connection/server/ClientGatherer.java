@@ -16,11 +16,12 @@ public class ClientGatherer extends Thread{
     private ServerSocket serverSocket;
 
 
-    public ClientGatherer(SocketTypeServer server){
+    public ClientGatherer(SocketTypeServer server, int port){
+
 
         this.server = server;
         try {
-            this.serverSocket = new ServerSocket();
+            this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
@@ -30,28 +31,31 @@ public class ClientGatherer extends Thread{
     public void run(){
 
         Socket clientSocket = null;
-        try {
-            clientSocket = serverSocket.accept();
+        while(!serverSocket.isClosed()){
+            try {
+                clientSocket = serverSocket.accept();
+                ClientListener clientListener = new ClientListener(clientSocket);
+                clientListener.getObs().addObserver(server);
+                clientListener.start();
+                User user = new User(TypeOfConnection.SOCKET);
+                String code = user.getUniqueCode();
+                while(server.getCodeList().contains(code)){
+                    user = new User(TypeOfConnection.SOCKET);
+                    code = user.getUniqueCode();
+                }
+                server.addCode(code);
+                server.addClient(code, clientListener);
+                PlayerMessage playerMessage = new PlayerMessage();
+                playerMessage.setUser(user);
+                clientListener.send(playerMessage);
 
-            ClientListener clientListener = new ClientListener(clientSocket);
-            clientListener.getObs().addObserver(server);
-            User user = new User(TypeOfConnection.SOCKET);
-            String code = user.getUniqueCode();
-            while(server.getCodeList().contains(code)){
-                user = new User(TypeOfConnection.RMI);
-                code = user.getUniqueCode();
+
+
+            } catch (IOException e) {
+                Logger.getGlobal().log(Level.SEVERE,e.toString());
             }
-            server.addCode(code);
-            server.addClient(code, clientListener);
-            PlayerMessage playerMessage = new PlayerMessage();
-            playerMessage.setUser(user);
-            clientListener.send(playerMessage);
-
-
-
-        } catch (IOException e) {
-            Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
+
 
     }
 }

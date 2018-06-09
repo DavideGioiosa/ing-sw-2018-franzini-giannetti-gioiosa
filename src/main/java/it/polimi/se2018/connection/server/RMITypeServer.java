@@ -1,7 +1,7 @@
 package it.polimi.se2018.connection.server;
 
 
-import it.polimi.se2018.view.RemoteView;
+import it.polimi.se2018.model.PlayerMessage;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -14,12 +14,13 @@ import java.util.logging.Logger;
 
 
 public class RMITypeServer {
-    private static int PORT;
+    private static int port=1099; // verrà presa da file
+    private ServerImplementation serverImplementation;
 
      RMITypeServer(){
 
         try {
-            LocateRegistry.createRegistry(PORT);
+            LocateRegistry.createRegistry(port);
 
         } catch (RemoteException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
@@ -27,11 +28,18 @@ public class RMITypeServer {
         }
         try {
 
-            ServerImplementation serverImplementation = new ServerImplementation();
-            ServerRemoteInterface stub = (ServerRemoteInterface) UnicastRemoteObject.exportObject(serverImplementation, 0);
-            Naming.bind("//localhost", stub); //nome del server verrà passato
+            this.serverImplementation = new ServerImplementation();
+            Naming.bind("RMIServer", serverImplementation); //nome del server verrà passato
 
         } catch (RemoteException | AlreadyBoundException | MalformedURLException e) {
+            Logger.getGlobal().log(Level.SEVERE,e.toString());
+        }
+    }
+
+    public void send(PlayerMessage playerMessage){
+        try {
+            serverImplementation.sendToClient(playerMessage);
+        } catch (RemoteException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
     }

@@ -15,14 +15,15 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
 
     private List<String> codeList;
     private HashMap<String, ClientListener> clientListenerList;
-    private HashMap<User, ClientListener> userClientListenerList;
     private Observable<PlayerMessage> obs;
+    private static int PORT = 1111;
 
     public SocketTypeServer(){
         codeList = new ArrayList<>();
         clientListenerList = new HashMap<>();
-        userClientListenerList = new HashMap<>();
         obs = new Observable<>();
+        ClientGatherer clientGatherer = new ClientGatherer(this, PORT);
+        clientGatherer.start();
     }
 
     public Observable<PlayerMessage> getObs() {
@@ -46,10 +47,20 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     }
 
 
-    public void send (String code, PlayerMessage playerMessage){
+    public void send (PlayerMessage playerMessage){
 
-       ClientListener clientListener = clientListenerList.get(code);
-        clientListener.send(playerMessage);
+        if(playerMessage.getUser().equals(null)){
+            for(ClientListener clientListener : clientListenerList.values()){
+                clientListener.send(playerMessage);
+            }
+        }else {
+            if(clientListenerList.containsKey(playerMessage.getUser().getUniqueCode()))
+            {
+                ClientListener clientListener = clientListenerList.get(playerMessage.getUser().getUniqueCode());
+                clientListener.send(playerMessage);
+            } //else: gestire disconnessione
+        }
+
     }
 
     @Override

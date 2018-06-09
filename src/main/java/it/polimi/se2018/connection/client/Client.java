@@ -15,10 +15,14 @@ public class Client implements Observer<PlayerMessage> {
     private View view;
     private String nickname;
 
-    public Client(ClientStrategy clientStrategy, View view, String nickname){
+    public Client(ClientStrategy clientStrategy){
         this.clientStrategy = clientStrategy;
         clientStrategy.addObserver(this);
         this.view = view;
+        this.nickname = nickname;
+    }
+
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 

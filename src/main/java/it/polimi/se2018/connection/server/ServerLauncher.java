@@ -14,10 +14,10 @@ public class ServerLauncher {
 
     public ServerLauncher (){
 
-        remoteView = new RemoteView();
-        socketTypeServer = new SocketTypeServer();
+        //remoteView = new RemoteView();
+        //socketTypeServer = new SocketTypeServer();
         rmiTypeServer = new RMITypeServer();
-        serverManager = new ServerManager(remoteView, socketTypeServer,rmiTypeServer);
+        //serverManager = new ServerManager(remoteView, socketTypeServer,rmiTypeServer);
 
 
     }

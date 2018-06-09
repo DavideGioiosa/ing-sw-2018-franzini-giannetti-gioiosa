@@ -11,6 +11,7 @@ public class ClientLauncher {
     public static void main(String args[]){
 
         //manca classe che faccia login iniziale
+        Client client = new Client(new RMITypeClient());
 
 
     }

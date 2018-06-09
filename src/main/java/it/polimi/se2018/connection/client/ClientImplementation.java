@@ -18,11 +18,10 @@ public class ClientImplementation implements ClientRemoteIterface{
         return obs;
     }
 
+
     @Override
     public void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
         obs.notify(playerMessage);
     }
-
-
 }
 
