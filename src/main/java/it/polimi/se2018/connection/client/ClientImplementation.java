@@ -6,7 +6,7 @@ import it.polimi.se2018.utils.Observable;
 import java.rmi.RemoteException;
 
 
-public class ClientImplementation implements ClientRemoteIterface{
+public class ClientImplementation implements ClientRemoteInterface {
 
     private Observable<PlayerMessage> obs;
 

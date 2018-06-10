@@ -1,8 +1,6 @@
 package it.polimi.se2018.connection.server;
 
 import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.PlayerMessageTypeEnum;
-import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
@@ -16,13 +14,13 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     private List<String> codeList;
     private HashMap<String, ClientListener> clientListenerList;
     private Observable<PlayerMessage> obs;
-    private static int PORT = 1111;
+    private static int port = 1111; // verrà preso da file config
 
     public SocketTypeServer(){
         codeList = new ArrayList<>();
         clientListenerList = new HashMap<>();
         obs = new Observable<>();
-        ClientGatherer clientGatherer = new ClientGatherer(this, PORT);
+        ClientGatherer clientGatherer = new ClientGatherer(this, port);
         clientGatherer.start();
     }
 
@@ -34,11 +32,11 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         return codeList;
     }
 
-    public void addCode(String code){
+    void addCode(String code){
         this.codeList.add(code);
     }
 
-    public void addClient(String code, ClientListener clientListener){
+    void addClient(String code, ClientListener clientListener){
         this.clientListenerList.put(code,clientListener);
     }
 
@@ -49,7 +47,7 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
 
     public void send (PlayerMessage playerMessage){
 
-        if(playerMessage.getUser().equals(null)){
+        if(playerMessage.getUser() == null){
             for(ClientListener clientListener : clientListenerList.values()){
                 clientListener.send(playerMessage);
             }

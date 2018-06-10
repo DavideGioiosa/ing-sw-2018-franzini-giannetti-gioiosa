@@ -1,6 +1,6 @@
 package it.polimi.se2018.connection.server;
 
-import it.polimi.se2018.connection.client.ClientRemoteIterface;
+import it.polimi.se2018.connection.client.ClientRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServerImplementation extends UnicastRemoteObject implements ServerRemoteInterface {
-    private HashMap<String,ClientRemoteIterface> clientList = new HashMap<>();
+    private HashMap<String,ClientRemoteInterface> clientList = new HashMap<>();
     private List<String> codeList = new ArrayList<>();
     private transient Observable<PlayerMessage> obs = new Observable<>();
 
@@ -29,14 +29,14 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
     void sendToClient(PlayerMessage playerMessage) throws RemoteException {
 
-        if(playerMessage.getUser().equals(null)){//da rivedere
-            for(ClientRemoteIterface clientRemoteIterface : clientList.values()){
-                clientRemoteIterface.receiveFromServer(playerMessage);
+        if(playerMessage.getUser()== null){//da rivedere
+            for(ClientRemoteInterface clientRemoteInterface : clientList.values()){
+                clientRemoteInterface.receiveFromServer(playerMessage);
             }
         }else{
             if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
-                ClientRemoteIterface clientRemoteIterface = clientList.get(playerMessage.getUser().getUniqueCode());
-                clientRemoteIterface.receiveFromServer(playerMessage);
+                ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
+                clientRemoteInterface.receiveFromServer(playerMessage);
 
             }//else: gestire disconnessione
         }
@@ -45,7 +45,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
 
     @Override
-    public void addClient(ClientRemoteIterface client){
+    public void addClient(ClientRemoteInterface client){
 
         User user = new User(TypeOfConnection.RMI);
         String code = user.getUniqueCode();

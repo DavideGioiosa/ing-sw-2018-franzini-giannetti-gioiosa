@@ -16,7 +16,7 @@ public class ServerLauncher {
 
         //remoteView = new RemoteView();
         //socketTypeServer = new SocketTypeServer();
-        rmiTypeServer = new RMITypeServer();
+        //rmiTypeServer = new RMITypeServer();
         //serverManager = new ServerManager(remoteView, socketTypeServer,rmiTypeServer);
 
 

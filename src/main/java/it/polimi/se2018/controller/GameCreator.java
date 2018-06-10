@@ -31,7 +31,6 @@ public class GameCreator implements Observer<PlayerMessage> {
     @Override
     public void update(PlayerMessage playerMessage) {
 
-
         if(!gameStatus){
 
             if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHOICE)){

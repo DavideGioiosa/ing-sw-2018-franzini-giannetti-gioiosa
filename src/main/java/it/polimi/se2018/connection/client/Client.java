@@ -18,31 +18,35 @@ public class Client implements Observer<PlayerMessage> {
     public Client(ClientStrategy clientStrategy){
         this.clientStrategy = clientStrategy;
         clientStrategy.addObserver(this);
-        this.view = view;
-        this.nickname = nickname;
+        //nel costruttore verrà assegnata la view scelta
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public void setThisUser(User thisUser) {
+    private void setThisUser(User thisUser) {
         this.thisUser = thisUser;
     }
 
 
     @Override
-    public void update(PlayerMessage playerMessage){ //da classi Client
+    public void update(PlayerMessage playerMessage){
 
-        //controllo che messaggio sia destinato a me
        if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
             playerMessage.getUser().setNickname(nickname);
             setThisUser(playerMessage.getUser());
             clientStrategy.sendToServer(playerMessage);
-       }else view.receive(playerMessage);
+       }else if(playerMessage.getUser().equals(thisUser) || playerMessage.getUser() == null){
+           view.receive(playerMessage);
+       }
+
 
     }
 
+    public void send(PlayerMessage playerMessage){
+        clientStrategy.sendToServer(playerMessage);
+    }
 
     public void close(){
         clientStrategy.close();

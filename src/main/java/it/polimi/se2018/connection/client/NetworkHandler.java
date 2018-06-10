@@ -28,6 +28,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
              socket = new Socket(host, port);
              bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
          } catch (IOException e) {
+             //TODO: gestire assenza di server a cui connettersi
              Logger.getGlobal().log(Level.SEVERE, e.toString());
          }
 

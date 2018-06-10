@@ -3,10 +3,7 @@ package it.polimi.se2018.connection.server;
 
 import it.polimi.se2018.controller.GameCreator;
 import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.player.TypeOfConnection;
-import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
-import it.polimi.se2018.view.RemoteView;
 
 
 //link tra connessione e gioco, messaggi server e controller

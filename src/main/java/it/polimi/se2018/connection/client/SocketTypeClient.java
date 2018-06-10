@@ -12,23 +12,17 @@ public class SocketTypeClient implements ClientStrategy, Observer<PlayerMessage>
     private Observable<PlayerMessage> obs;
 
     public SocketTypeClient(String host, int port){
-        System.out.println("creato SocketTypeClient");
         obs = new Observable<>();
-        this.host=host;
+        this.host = host;
         this.networkPort = port;
         this.networkHandler = new NetworkHandler(this.host, this.networkPort);
         networkHandler.getObs().addObserver(this);
         networkHandler.start();
-        send("pluto\n");
     }
-
-public void send(String string){
-        networkHandler.send(string);
-}
 
     @Override
     public void sendToServer(PlayerMessage playerMessage){
-        //networkHandler.send(playerMessage);
+        networkHandler.send(playerMessage);
     }
 
 
