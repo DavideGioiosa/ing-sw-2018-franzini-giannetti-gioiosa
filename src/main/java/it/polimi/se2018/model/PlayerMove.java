@@ -13,7 +13,7 @@ import java.util.List;
  * @author Cristian Giannetti
  */
 
-public class PlayerMove extends PlayerMessage implements Serializable {
+public class PlayerMove implements Serializable {
 
     /**
      * Progressive identifier of the Player Move

@@ -34,7 +34,7 @@ public class PrivatePlayerTest {
         int id = 1;
         String name = "name";
         String desc = "desc";
-        List<Cell> cellList = new ArrayList<Cell>();
+        List<Cell> cellList = new ArrayList<>();
         Die d = new Die(ColourEnum.RED);
         d.firstRoll();
         for(int i = 0; i<10; i++){
