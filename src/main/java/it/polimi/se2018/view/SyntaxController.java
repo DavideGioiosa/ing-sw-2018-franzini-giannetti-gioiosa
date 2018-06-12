@@ -35,6 +35,7 @@ public class SyntaxController {
 
     private final String okMessage = "OK MESSAGE";
     private final String errorMessage = "ERROR MESSAGE";
+
     /**
      * Constructor sets the first nextCommandType
      * @param gameBoard Game Board for the move checks

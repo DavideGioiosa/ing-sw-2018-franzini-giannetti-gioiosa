@@ -22,6 +22,7 @@ public class PublicObjCard extends Card {
      * @param id identifier of the card
      * @param name name of the card
      * @param description description of the card
+     * @param bonus number of points for each completed objective
      * @param scoreStrategy used for Strategy Pattern
      */
     public PublicObjCard(int id, String name, String description, int bonus, String scoreStrategy){

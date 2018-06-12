@@ -29,11 +29,11 @@ public class MoveMessage implements Serializable {
     private TrackBoard trackboard;
 
     /**
-     *
-     * @param playerList
-     * @param boardDice
-     * @param boardCard
-     * @param trackboard
+     * Constructor assigns the public objects
+     * @param playerList List of Player of the game
+     * @param boardDice Status of Draft Pool
+     * @param boardCard Cards on board
+     * @param trackboard Status of TrackBoard
      */
     public MoveMessage(List<Player> playerList, BoardDice boardDice, BoardCard boardCard, TrackBoard trackboard){
         this.boardCard = boardCard;

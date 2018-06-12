@@ -66,6 +66,7 @@ public class Turn {
     /**
      * Start run creating the action and adding to the list of Action if it can be done
      * Check if the action PICK has already done or not, it can be done once for Turn
+     * @param playerMove Move that the player wants to make
      * @return boolean to communicate the result of the action
      */
     public boolean runTurn (PlayerMove playerMove){
@@ -99,9 +100,6 @@ public class Turn {
      * @return boolean to communicate the end of the Turn for the current player
      */
     public boolean endTurn (){
-        if(turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS)){
-            return true;
-        }
-        return false;
+        return turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS);
     }
 }

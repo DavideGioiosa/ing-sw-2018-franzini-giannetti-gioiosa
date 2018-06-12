@@ -16,7 +16,7 @@ public class User implements Serializable {
 
     /**
      * Builder: create a user with the id and the connection
-     *
+     * @param typeOfConnection Type of connection chosen by user: RMI or Socket
      */
     public User (TypeOfConnection typeOfConnection){
         this.connection = true;

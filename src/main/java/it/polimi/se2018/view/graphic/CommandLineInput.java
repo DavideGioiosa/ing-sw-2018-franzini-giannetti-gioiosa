@@ -33,7 +33,25 @@ public class CommandLineInput implements InputStrategy {
 
             message = scanner.nextLine();
             okMessage = true;
-            println(invalidInput);
+            if (!okMessage) println(invalidInput);
+        }
+        return message;
+    }
+
+    public String getInput(String requestMessage) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        boolean okMessage = false;
+        String message = null;
+
+        while (!okMessage) {
+            print(requestMessage);
+
+            message = scanner.nextLine();
+            okMessage = true;
+            if (!okMessage) println(invalidInput);
+
         }
         return message;
     }

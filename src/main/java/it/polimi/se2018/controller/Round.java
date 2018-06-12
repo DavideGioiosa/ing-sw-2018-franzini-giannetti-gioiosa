@@ -65,7 +65,8 @@ public class Round implements Observer<PlayerMove>{
     /**
      * Start of the round sets the list of players ordered by priority for the current Round
      * and creates the list of Turns belonging to each player
-     */
+     * @param indexRound Index of actual round
+     * */
     private void initializeRound(int indexRound) {
         turnsList = new ArrayList<> ();
         setRoundPlayerOrder(indexRound);
@@ -76,6 +77,7 @@ public class Round implements Observer<PlayerMove>{
     /**
      * Creates and sets the list of players ordered by priority for the current Round
      * starting from the list of player in the match and the current Round index
+     * @param indexRound Index of actual round
      */
     private void setRoundPlayerOrder (int indexRound){
         roundPlayerOrder = new ArrayList<>();

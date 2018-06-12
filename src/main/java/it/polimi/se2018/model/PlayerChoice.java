@@ -1,5 +1,6 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.cards.PrivateObjCard;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.player.User;
 
@@ -32,6 +33,10 @@ public class PlayerChoice implements Serializable {
      * Chosen SchemaCard
      */
     private SchemaCard chosenSchema;
+    /**
+     * User's Private Objective Card
+     */
+    private PrivateObjCard privateObjCard;
 
     /**
      * Builder method of PlayerChoice class
@@ -47,6 +52,7 @@ public class PlayerChoice implements Serializable {
         colourEnumList = new ArrayList<>();
         chosenColour = null;
         chosenSchema = null;
+        privateObjCard = null;
     }
 
     /**
@@ -125,4 +131,19 @@ public class PlayerChoice implements Serializable {
         return chosenSchema;
     }
 
+    /**
+     * Setter method for Private Objective Card
+     * @param privateObjCard Private Objective Card assigned to the User
+     */
+    public void setPrivateObjCard(PrivateObjCard privateObjCard) {
+        this.privateObjCard = privateObjCard;
+    }
+
+    /**
+     * Getter method for Private Objective Card
+     * @return Private Objective Card assigned to the User
+     */
+    public PrivateObjCard getPrivateObjCard() {
+        return privateObjCard;
+    }
 }

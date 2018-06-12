@@ -10,33 +10,16 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class GameBoard {
+public class GameBoard extends ClientBoard{
     /**
-     * list of players in the match
-     */
-    private List<Player> playerList;
-    /**
-     * bag containing all the 90 dice
+     * Bag containing all the 90 dice
      */
     private BagDice bagDice;
-    /**
-     * dice in the Draft Pool
-     */
-    private BoardDice boardDice;
-    /**
-     * dice placed on the trackboard
-     */
-    private TrackBoard trackBoardDice;
-    /**
-     * public and tool cards usable in the match
-     */
-    private BoardCard cardOnBoard;
 
     /**
      * List of Private Objective Card referred to every Player
      */
     private List<PrivatePlayer> privatePlayerList;
-
 
     /**
      * Creation of the GameBoard of the match
@@ -48,38 +31,18 @@ public class GameBoard {
      * @param privatePlayerList List of Private Objective Card referred to every Player
      */
     public GameBoard(List<Player> playerList, BagDice bagDice, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard, List<PrivatePlayer> privatePlayerList){
-        if(playerList == null){
-            throw new NullPointerException("Insertion of a null playerList");
-        }
+
+        super(playerList, boardDice, trackBoardDice, boardCard);
+
         if(bagDice == null){
             throw new NullPointerException("Insertion of a null bagDice");
-        }
-        if(boardDice == null){
-            throw new NullPointerException("Insertion of a null boardDice");
-        }
-        if(trackBoardDice == null){
-            throw new NullPointerException("Insertion of a null trackBoardDice");
-        }
-        if(boardCard == null){
-            throw new NullPointerException("Insertion of a null boardCard");
         }
         if(privatePlayerList == null){
             throw new NullPointerException("Insertion of a null privatePlayerList");
         }
 
-        this.playerList = playerList;
         this.bagDice = bagDice;
-        this.boardDice = boardDice;
-        this.trackBoardDice = trackBoardDice;
-        this.cardOnBoard = boardCard;
         this.privatePlayerList = privatePlayerList;
-    }
-
-    /**
-     * @return list of the player in the match
-     */
-    public List<Player> getPlayerList() {
-        return playerList;
     }
 
     /**
@@ -89,26 +52,6 @@ public class GameBoard {
         return bagDice;
     }
 
-    /**
-     * @return the dice available to use in the action
-     */
-    public BoardDice getBoardDice() {
-        return boardDice;
-    }
-
-    /**
-     * @return TrackBoard containing dice placed in each round
-     */
-    public TrackBoard getTrackBoardDice() {
-        return trackBoardDice;
-    }
-
-    /**
-     * @return cards available in the match
-     */
-    public BoardCard getCardOnBoard() {
-        return cardOnBoard;
-    }
 
     public List<PrivatePlayer> getPrivatePlayerList() {
         return privatePlayerList;

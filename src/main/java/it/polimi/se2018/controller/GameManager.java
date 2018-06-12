@@ -39,6 +39,8 @@ public class GameManager {
 
     /**
      * Builder method of GameManager class
+     * @param view View's class that talks with Controller
+     * @param gameBoard Starting GameBoard
      */
     public GameManager(RemoteView view, GameBoard gameBoard){
         if(view == null){

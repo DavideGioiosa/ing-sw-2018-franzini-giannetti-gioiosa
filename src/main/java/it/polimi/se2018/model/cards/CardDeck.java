@@ -32,6 +32,7 @@ public class CardDeck {
 
     /**
      * Constructor sets an empty Deck
+     * @param cardType Type of deck
      */
     public CardDeck(CardTypeEnum cardType) {
         if (cardType == null) throw new NullPointerException("ERROR: Cannot create a null type deck");
@@ -102,6 +103,7 @@ public class CardDeck {
         }
 
         cardList = mixedCards;
+        shuffled = true;
     }
 
 }

@@ -16,7 +16,7 @@ public class PrivateObjCard extends Card implements Serializable {
      * Builder Method of Private Objective Card class
      * @param id identifier of the card
      * @param name name of the card
-     * @param description descriprion of the card
+     * @param description description of the card
      * @param colour aim colour
      */
     public PrivateObjCard(int id, String name, String description, ColourEnum colour) {
