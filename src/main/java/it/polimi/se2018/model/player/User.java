@@ -1,5 +1,6 @@
 package it.polimi.se2018.model.player;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Random;
  * @author Davide Gioiosa
  */
 
-public class User {
+public class User implements Serializable {
     private String nickname;
     private Player player;
     private boolean connection;

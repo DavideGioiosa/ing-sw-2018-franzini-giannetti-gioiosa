@@ -6,13 +6,13 @@ import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.view.InputStrategy;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import static it.polimi.se2018.view.graphic.CommandLinePrint.print;
+import static it.polimi.se2018.view.graphic.CommandLinePrint.println;
 import static org.fusesource.jansi.Ansi.*;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -24,12 +24,8 @@ import static it.polimi.se2018.model.Config.NUMBER_OF_SCHEMA_ROW;
  * Manages input and output in Command Line
  * @author Cristian Giannetti
  */
-public class CommandLineGraphic implements InputStrategy{
+public class CommandLineGraphic{
 
-    /**
-     * Standard string for invalid input
-     */
-    private final String invalidInput = "Invalid input";
     /**
      * Character used for Card frames
      */
@@ -64,7 +60,6 @@ public class CommandLineGraphic implements InputStrategy{
      */
     private final String publicObjCardValueString = "Valore della carta: ";
 
-
     /**
      * Constructor
      */
@@ -75,28 +70,6 @@ public class CommandLineGraphic implements InputStrategy{
         hashMapColours.put(ColourEnum.PURPLE, Color.MAGENTA);
         hashMapColours.put(ColourEnum.RED, Color.RED);
         hashMapColours.put(ColourEnum.YELLOW, Color.YELLOW);
-    }
-
-    /**
-     * Get input from Command Line
-     * @param idMessage id message to show - needs to load from file
-     * @return Input written by user
-     */
-    public String getInput(Integer idMessage){
-
-        Scanner scanner = new Scanner(System.in);
-
-        boolean okMessage = false;
-        String message = null;
-
-        while(!okMessage) {
-            showMessage(idMessage.toString());
-
-            message = scanner.nextLine();
-            okMessage = true;
-            showMessage(invalidInput);
-        }
-        return message;
     }
 
     /**
@@ -187,11 +160,21 @@ public class CommandLineGraphic implements InputStrategy{
      * @param schemaCard Schema Card to display
      */
     public void showSchemaCard(SchemaCard schemaCard){
+        println(schemaCard.getName());
         String cellsRow;
         for (int row = 0; row < NUMBER_OF_SCHEMA_ROW; row++){
             cellsRow = "";
             for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
-                cellsRow = cellsRow.concat( " " + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getDie().toString());
+                if (schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).isEmpty()){
+                    cellsRow = cellsRow.concat(" \t|Empty: ");
+                    cellsRow = cellsRow.concat( "\t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getValue());
+                    cellsRow = cellsRow.concat( " \t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getColour());
+                }
+                else {
+                    cellsRow = cellsRow.concat(" \t|Full:  ");
+                    cellsRow = cellsRow.concat("\t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getDie().getValue());
+                    cellsRow = cellsRow.concat(" \t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getDie().getColour());
+                }
             }
             println(cellsRow);
         }
@@ -363,36 +346,5 @@ public class CommandLineGraphic implements InputStrategy{
         return startingString;
     }
 
-    /**
-     * Print String
-     * @param string String to print
-     */
-    private void print(String string){
-        System.out.print(string);
-    }
-
-    /**
-     * Print char
-     * @param character char to print
-     */
-    private void print(char character){
-        System.out.print(character);
-    }
-
-    /**
-     * Print entire line
-     * @param string String to print
-     */
-    private void println(String string){
-        System.out.println(string);
-    }
-
-    /**
-     * Print line with an Integer
-     * @param num Integer to print
-     */
-    private void println(int num){
-        System.out.println(num);
-    }
 }
 

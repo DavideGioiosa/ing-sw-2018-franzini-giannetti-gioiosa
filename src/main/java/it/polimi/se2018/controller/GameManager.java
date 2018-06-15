@@ -87,9 +87,7 @@ public class GameManager {
      * Method finds out the game winner
      */
     private void setGameWinner(){
-
        winner = Collections.max(gameBoard.getPlayerList(), Comparator.comparingInt(Player :: getScore));
-
     }
 
     /**

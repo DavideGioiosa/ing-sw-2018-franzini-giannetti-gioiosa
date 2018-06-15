@@ -12,7 +12,7 @@ public class ClientLauncher {
 
         //manca classe che faccia login iniziale
         //Client client = new Client(new RMITypeClient());
-        //Client client = new Client(new SocketTypeClient("localhost", 1111));
+        Client client = new Client(new SocketTypeClient("localhost", 1111));
 
 
     }

@@ -1,7 +1,10 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.connection.client.Client;
+import it.polimi.se2018.connection.client.ClientStrategy;
 import it.polimi.se2018.model.CheckRestriction;
 import it.polimi.se2018.model.GameBoard;
+import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMove;
 
 /**
@@ -12,12 +15,20 @@ import it.polimi.se2018.model.PlayerMove;
 
 public class CommandController {
 
+    /**
+     * Checks the validity of the Player Move
+     */
     private CheckRestriction checkRestriction;
+    /**
+     * Client for sending of valid move
+     */
+    private Client client;
 
     /**
      * Builder of the class, creates a checkRestriction object
      */
-    public CommandController (){
+    public CommandController (Client client){
+        this.client = client;
         checkRestriction = new CheckRestriction();
     }
 
@@ -27,7 +38,8 @@ public class CommandController {
      * 2 - All the CheckRestriction except cellColourRestriction (2)
      * 3 - All the CheckRestriction except cellValueRestriction (3)
      * 4 - All the CheckRestriction except adjacentRestriction (9)
-     * @param playerMove contains the complete action of the current player
+     * @param playerMove Contains the complete action of the current player
+     * @param gameBoard Board with actual game status
      * @return 0 if the action is correct, else the ID code of the error why the action can't be done
      */
     public int checkMoveValidity (PlayerMove playerMove, GameBoard gameBoard){
@@ -70,6 +82,9 @@ public class CommandController {
             return 6;
         }
 
+        PlayerMessage playerMessage = new PlayerMessage();
+        playerMessage.setMove(playerMove);
+        client.send(playerMessage);
         return 0;
     }
         //chiama ClientStrategy per inviare la playermove

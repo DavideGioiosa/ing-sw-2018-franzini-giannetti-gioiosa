@@ -33,6 +33,7 @@ public class GameStarter {
 
     /**
      * Builder method for GameStarter class
+     * @param userList List of User connected to the game
      */
     public GameStarter(List<User> userList){
         gameLoader = new GameLoader();
@@ -126,7 +127,6 @@ public class GameStarter {
         }
         return cardDeck.extractCard();
     }
-
 
     /**
      * Method distributes PrivateObj cards to the players
@@ -243,7 +243,6 @@ public class GameStarter {
                     remoteView.reportError();
                     return false;
                 }
-
 
             }
         }

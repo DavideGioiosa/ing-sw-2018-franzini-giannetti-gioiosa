@@ -22,7 +22,7 @@ public class PlayerTest {
 
     private Player player;
     private SchemaCard schemaCard;
-    private Die d;
+    private Die die;
     private Position pos;
 
     /**
@@ -35,11 +35,11 @@ public class PlayerTest {
         String name = "name";
         int id = 2;
         int token = 3;
-        List<Cell> cellList = new ArrayList<Cell>();
-        d = new Die(ColourEnum.RED);
-        d.firstRoll();
+        List<Cell> cellList = new ArrayList<>();
+        die = new Die(ColourEnum.RED);
+        die.firstRoll();
         for(int i = 0; i<10; i++){
-            cellList.add(new Cell(d.getValue(), d.getColour()));
+            cellList.add(new Cell(die.getValue(), die.getColour()));
         }
         schemaCard = new SchemaCard(id,name,desc,token,cellList);
         player = new Player(nick, false, ColourEnum.BLUE,schemaCard,token);
@@ -74,8 +74,8 @@ public class PlayerTest {
     @Test
     public void updateSchema() {
         try{
-            player.updateSchema(d,pos);
-            assertEquals(player.getSchemaCard().getCellList().get(pos.getIndexArrayPosition()).getDie(), d);
+            player.updateSchema(die,pos);
+            assertEquals(player.getSchemaCard().getCellList().get(pos.getIndexArrayPosition()).getDie(), die);
         }catch(IllegalArgumentException e){
             fail();
         }
