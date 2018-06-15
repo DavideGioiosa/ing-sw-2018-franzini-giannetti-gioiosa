@@ -38,17 +38,16 @@ public class ClientGatherer extends Thread{
                 clientListener.getObs().addObserver(server);
                 clientListener.start();
                 User user = new User(TypeOfConnection.SOCKET);
-                String code = user.getUniqueCode();
+                String code = user.createUniqueCode();
                 while(server.getCodeList().contains(code)){
                     user = new User(TypeOfConnection.SOCKET);
-                    code = user.getUniqueCode();
+                    code = user.createUniqueCode();
                 }
                 server.addCode(code);
                 server.addClient(code, clientListener);
                 PlayerMessage playerMessage = new PlayerMessage();
                 playerMessage.setUser(user);
                 clientListener.send(playerMessage);
-
 
 
             } catch (IOException e) {

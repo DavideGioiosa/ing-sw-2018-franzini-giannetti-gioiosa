@@ -2,6 +2,7 @@ package it.polimi.se2018.connection.server;
 
 
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.player.Player;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -34,6 +35,12 @@ public class RMITypeServer {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
     }
+
+    public void receive(PlayerMessage playerMessage){
+
+         serverImplementation.receive(playerMessage);
+    }
+
 
     public void send(PlayerMessage playerMessage){
         try {

@@ -29,7 +29,9 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
              bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
          } catch (IOException e) {
              //TODO: gestire assenza di server a cui connettersi
-             Logger.getGlobal().log(Level.SEVERE, e.toString());
+             PlayerMessage playerMessage = new PlayerMessage();
+             playerMessage.setError();
+             receive(playerMessage);
          }
 
     }
@@ -74,6 +76,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
         try {
             out = new OutputStreamWriter(socket.getOutputStream());
             String jsonInString = gson.toJson(playerMessage);
+            jsonInString.concat("\n");
             out.write(jsonInString);
             out.flush();
         } catch (IOException e) {

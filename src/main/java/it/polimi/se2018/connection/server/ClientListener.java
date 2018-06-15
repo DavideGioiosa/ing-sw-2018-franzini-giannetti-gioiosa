@@ -19,6 +19,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
     private Gson gson;
     private Observable<PlayerMessage> obs;
 
+
     ClientListener(Socket clientSocket){
         this.clientSocket = clientSocket;
         gson = new Gson();
@@ -39,6 +40,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
             receive(playerMessage);
 
         } catch (IOException e) {
+            //gestire disconnessione
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
 
@@ -46,10 +48,14 @@ public class ClientListener extends Thread implements ClientSocketInterface {
 
     public synchronized void send(PlayerMessage playerMessage){
         try {
+
             OutputStreamWriter output = new OutputStreamWriter(clientSocket.getOutputStream());
             String jsonInString = gson.toJson(playerMessage);
+            jsonInString.concat("\n");
             output.write(jsonInString);
             output.flush();
+
+
         } catch (IOException e) {
             Logger.getGlobal().log(Level.SEVERE, e.toString());
         }

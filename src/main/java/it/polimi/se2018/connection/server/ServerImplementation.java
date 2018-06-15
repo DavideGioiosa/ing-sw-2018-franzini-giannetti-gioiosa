@@ -34,12 +34,14 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
                 clientRemoteInterface.receiveFromServer(playerMessage);
             }
         }else{
-            if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
-                ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
+            if(clientList.containsKey(playerMessage.getUser().createUniqueCode())){
+                ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().createUniqueCode());
                 clientRemoteInterface.receiveFromServer(playerMessage);
 
-            }//else: gestire disconnessione
+            }
+
         }
+
 
     }
 
@@ -48,10 +50,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
     public void addClient(ClientRemoteInterface client){
 
         User user = new User(TypeOfConnection.RMI);
-        String code = user.getUniqueCode();
+        String code = user.createUniqueCode();
         while(codeList.contains(code)){
             user = new User(TypeOfConnection.RMI);
-            code = user.getUniqueCode();
+            code = user.createUniqueCode();
         }
         codeList.add(code);
         clientList.put(code, client);

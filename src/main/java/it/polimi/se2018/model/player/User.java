@@ -12,6 +12,7 @@ public class User {
     private Player player;
     private boolean connection;
     private TypeOfConnection typeOfConnection;
+    private String uniqueCode;
 
     /**
      * Builder: create a user with the id and the connection
@@ -22,6 +23,10 @@ public class User {
         this.typeOfConnection = typeOfConnection;
     }
 
+
+    public String getUniqueCode() {
+        return uniqueCode;
+    }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -58,7 +63,7 @@ public class User {
     }
 
 
-    public String getUniqueCode(){
+    public String createUniqueCode(){
 
         String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder stringBuilder = new StringBuilder();
@@ -67,7 +72,8 @@ public class User {
             stringBuilder.append(candidateChars.charAt(random.nextInt(candidateChars.length())));
         }
 
-       return stringBuilder.toString();
+        uniqueCode = stringBuilder.toString();
+       return uniqueCode;
     }
 
     public TypeOfConnection getTypeOfConnection() {

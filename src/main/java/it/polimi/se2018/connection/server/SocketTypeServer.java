@@ -24,6 +24,10 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         clientGatherer.start();
     }
 
+    public void addObserver(Observer<PlayerMessage> observer){
+        obs.addObserver(observer);
+    }
+
     public Observable<PlayerMessage> getObs() {
         return obs;
     }

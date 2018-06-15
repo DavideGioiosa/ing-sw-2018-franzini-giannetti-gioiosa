@@ -1,17 +1,14 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.controller.GameManager;
-import it.polimi.se2018.controller.GameStarter;
-import it.polimi.se2018.model.GameBoard;
+
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.User;
-import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.RemoteView;
 
 import java.util.List;
 
-public class GameCreator implements Observer<PlayerMessage> {
+public class GameCreator {
     private GameManager gameManager;
     private GameStarter gameStarter;
     private boolean gameStatus;
@@ -28,8 +25,7 @@ public class GameCreator implements Observer<PlayerMessage> {
     }
 
 
-    @Override
-    public void update(PlayerMessage playerMessage) {
+    public void receiveFromClient(PlayerMessage playerMessage) {
 
         if(!gameStatus){
 

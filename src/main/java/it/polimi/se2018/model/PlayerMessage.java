@@ -21,6 +21,10 @@ public class PlayerMessage implements Serializable {
         user = null;
     }
 
+    public void setError(){
+        id = PlayerMessageTypeEnum.ERROR;
+    }
+
     public void setMove(PlayerMove playerMove) {
         if(playerMove == null){
             throw new NullPointerException("Sent a null playerMove");

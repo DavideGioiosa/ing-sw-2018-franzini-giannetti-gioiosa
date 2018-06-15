@@ -44,7 +44,9 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
 
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
+            PlayerMessage playerMessage = new PlayerMessage();
+            playerMessage.setError();
+            update(playerMessage);
         }
     }
 
@@ -94,6 +96,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
     @Override
     public void update(PlayerMessage playerMessage) {
+
         obs.notify(playerMessage);
 
     }
