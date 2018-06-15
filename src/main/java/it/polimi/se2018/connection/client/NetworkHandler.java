@@ -75,8 +75,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
     public synchronized void send(PlayerMessage playerMessage){
         try {
             out = new OutputStreamWriter(socket.getOutputStream());
-            String jsonInString = gson.toJson(playerMessage);
-            jsonInString.concat("\n");
+            String jsonInString = gson.toJson(playerMessage) + "\n";
             out.write(jsonInString);
             out.flush();
         } catch (IOException e) {

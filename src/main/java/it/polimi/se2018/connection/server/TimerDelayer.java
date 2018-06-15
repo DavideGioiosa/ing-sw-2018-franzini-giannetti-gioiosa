@@ -14,14 +14,14 @@ public class TimerDelayer extends TimerTask {
     private PlayerMessage playerMessage;
     private RMITypeServer rmiTypeServer;
 
-    public TimerDelayer(PlayerMessage playerMessage, SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
+     TimerDelayer(PlayerMessage playerMessage, SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
         this.playerMessage = playerMessage;
         this.socketTypeServer = socketTypeServer;
         this.rmiTypeServer = rmiTypeServer;
         thisHasStarted = true;
     }
 
-    public boolean isStarted(){
+    boolean isStarted(){
         return thisHasStarted;
     }
 

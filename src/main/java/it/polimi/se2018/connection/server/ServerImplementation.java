@@ -39,22 +39,20 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
                 clientRemoteInterface.receiveFromServer(playerMessage);
 
             }
-
         }
-
-
     }
-
 
     @Override
     public void addClient(ClientRemoteInterface client){
 
-        User user = new User(TypeOfConnection.RMI);
-        String code = user.createUniqueCode();
-        while(codeList.contains(code)){
+        User user;
+        String code;
+
+        do{
             user = new User(TypeOfConnection.RMI);
             code = user.createUniqueCode();
-        }
+        }while(codeList.contains(code));
+
         codeList.add(code);
         clientList.put(code, client);
         PlayerMessage playerMessage = new PlayerMessage();
@@ -65,7 +63,6 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
             Logger.getGlobal().log(Level.SEVERE, e.toString());
         }
     }
-
 
     @Override
     public void receive(PlayerMessage playerMessage) {

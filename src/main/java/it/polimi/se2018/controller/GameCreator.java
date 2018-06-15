@@ -35,8 +35,8 @@ public class GameCreator {
         }else if(gameManager==null){
             gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
         }
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.MOVE) || playerMessage.getId().equals(PlayerMessageTypeEnum.UPDATE)){
-
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.MOVE)){
+            //chiamata a metodo gameManager non ancora definito
         }
 
 

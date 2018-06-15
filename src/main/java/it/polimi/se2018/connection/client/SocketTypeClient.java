@@ -35,6 +35,7 @@ public class SocketTypeClient implements ClientStrategy, Observer<PlayerMessage>
         obs.addObserver(client);
     }
 
+    @Override
     public void update(PlayerMessage playerMessage) {
         obs.notify(playerMessage);
     }

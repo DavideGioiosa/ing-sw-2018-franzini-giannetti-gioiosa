@@ -8,13 +8,13 @@ public class UsersDelayer extends TimerTask {
     private ServerManager serverManager;
 
 
-    public UsersDelayer(ServerManager serverManager){
+     UsersDelayer(ServerManager serverManager){
 
         this.isStarted = true;
         this.serverManager = serverManager;
     }
 
-    public boolean isStarted() {
+    boolean isStarted() {
         return isStarted;
     }
 

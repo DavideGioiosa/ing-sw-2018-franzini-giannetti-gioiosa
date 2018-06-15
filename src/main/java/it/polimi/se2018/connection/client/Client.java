@@ -38,7 +38,7 @@ public class Client implements Observer<PlayerMessage> {
     @Override
     public void update(PlayerMessage playerMessage){
 
-         if(playerMessage.getUser().equals(thisUser) || playerMessage.getUser() == null){
+         if(playerMessage.getUser().getNickname().equals(nickname) || playerMessage.getUser() == null){
                view.receive(playerMessage);
          }
 

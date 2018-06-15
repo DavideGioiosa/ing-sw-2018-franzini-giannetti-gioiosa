@@ -11,7 +11,6 @@ import it.polimi.se2018.view.RemoteView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 //link tra connessione e gioco, messaggi server e controller
@@ -35,6 +34,7 @@ public class ServerManager implements Observer<PlayerMessage> {
         userList = new ArrayList<>();
         userSetupTimer = new Timer();
         senderTimer = new Timer();
+        gameCreator = null;
     }
 
     public void sendMessage(PlayerMessage playerMessage) {
@@ -71,12 +71,12 @@ public class ServerManager implements Observer<PlayerMessage> {
     }
 
 
-    public void addUser(User user){
+    private void addUser(User user){
         userList.add(user);
         if(userList.size()==2){
             usersDelayer = new UsersDelayer(this);
             userSetupTimer.schedule(usersDelayer, 90*1000);
-        }else if(userList.size()==4){
+        }else if(userList.size()==4 && usersDelayer.isStarted()){
             createGame();
         }
     }
@@ -94,9 +94,7 @@ public class ServerManager implements Observer<PlayerMessage> {
     public void update(PlayerMessage playerMessage) {
         if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
             addUser(playerMessage.getUser());
-        }
-
-        gameCreator.receiveFromClient(playerMessage);
+        }else gameCreator.receiveFromClient(playerMessage);
     }
 
     //TODO: disconnessione
