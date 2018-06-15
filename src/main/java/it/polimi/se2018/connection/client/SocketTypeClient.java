@@ -25,7 +25,7 @@ public class SocketTypeClient implements ClientStrategy, Observer<PlayerMessage>
         networkHandler.send(playerMessage);
     }
 
-
+    @Override
     public void close(){
         networkHandler.setQuit();
     }

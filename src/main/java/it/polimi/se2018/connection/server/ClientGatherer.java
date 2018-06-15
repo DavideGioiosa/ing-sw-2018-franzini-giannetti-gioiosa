@@ -30,6 +30,8 @@ public class ClientGatherer extends Thread{
     @Override
     public void run(){
 
+        User user;
+        String code;
         Socket clientSocket = null;
         while(!serverSocket.isClosed()){
             try {
@@ -37,19 +39,18 @@ public class ClientGatherer extends Thread{
                 ClientListener clientListener = new ClientListener(clientSocket);
                 clientListener.getObs().addObserver(server);
                 clientListener.start();
-                User user = new User(TypeOfConnection.SOCKET);
-                String code = user.getUniqueCode();
-                while(server.getCodeList().contains(code)){
-                    user = new User(TypeOfConnection.SOCKET);
-                    code = user.getUniqueCode();
-                }
+
+                do{
+                     user = new User(TypeOfConnection.SOCKET);
+                     code = user.createUniqueCode();
+
+                }while(server.getCodeList().contains(code));
+
                 server.addCode(code);
                 server.addClient(code, clientListener);
                 PlayerMessage playerMessage = new PlayerMessage();
                 playerMessage.setUser(user);
                 clientListener.send(playerMessage);
-
-
 
             } catch (IOException e) {
                 Logger.getGlobal().log(Level.SEVERE,e.toString());

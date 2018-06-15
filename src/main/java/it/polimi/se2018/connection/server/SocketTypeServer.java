@@ -24,11 +24,15 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         clientGatherer.start();
     }
 
+    public void addObserver(Observer<PlayerMessage> observer){
+        obs.addObserver(observer);
+    }
+
     public Observable<PlayerMessage> getObs() {
         return obs;
     }
 
-    public List<String> getCodeList() {
+    List<String> getCodeList() {
         return codeList;
     }
 
@@ -41,6 +45,8 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     }
 
     public void removeClient(String code){
+        ClientListener clientListener = clientListenerList.get(code);
+        clientListener.setQuit();
         this.clientListenerList.remove(code);
     }
 

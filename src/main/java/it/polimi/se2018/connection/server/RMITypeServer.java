@@ -35,6 +35,12 @@ public class RMITypeServer {
         }
     }
 
+    public void receive(PlayerMessage playerMessage){
+
+         serverImplementation.receive(playerMessage);
+    }
+
+
     public void send(PlayerMessage playerMessage){
         try {
             serverImplementation.sendToClient(playerMessage);

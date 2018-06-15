@@ -16,40 +16,54 @@ import java.util.logging.Logger;
 public class ClientListener extends Thread implements ClientSocketInterface {
 
     private Socket clientSocket;
+    private boolean quit;
     private Gson gson;
     private Observable<PlayerMessage> obs;
+
 
     ClientListener(Socket clientSocket){
         this.clientSocket = clientSocket;
         gson = new Gson();
         obs = new Observable<>();
+        quit = false;
     }
 
     Observable<PlayerMessage> getObs() {
         return obs;
     }
 
+    public void setQuit() {
+        this.quit = true;
+    }
+
     @Override
     public void run(){
-        try {
-            //TODO mettere controllo su keep alive client
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            String message = bufferedReader.readLine();
-            PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
-            receive(playerMessage);
 
-        } catch (IOException e) {
-            Logger.getGlobal().log(Level.SEVERE,e.toString());
+        while(!clientSocket.isClosed() && !quit){
+            try {
+                //TODO mettere controllo su keep alive client
+
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String message = bufferedReader.readLine();
+                PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
+                receive(playerMessage);
+
+            } catch (IOException e) {
+                //gestire disconnessione
+                Logger.getGlobal().log(Level.SEVERE,e.toString());
+            }
         }
 
     }
 
     public synchronized void send(PlayerMessage playerMessage){
         try {
+
             OutputStreamWriter output = new OutputStreamWriter(clientSocket.getOutputStream());
-            String jsonInString = gson.toJson(playerMessage);
+            String jsonInString = gson.toJson(playerMessage) + "\n";
             output.write(jsonInString);
             output.flush();
+
         } catch (IOException e) {
             Logger.getGlobal().log(Level.SEVERE, e.toString());
         }
