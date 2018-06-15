@@ -13,7 +13,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class SchemaCard extends Card implements Serializable {
+public class SchemaCard extends Card implements Serializable, Cloneable {
     /**
      * List of the cells that make up the scheme
      */

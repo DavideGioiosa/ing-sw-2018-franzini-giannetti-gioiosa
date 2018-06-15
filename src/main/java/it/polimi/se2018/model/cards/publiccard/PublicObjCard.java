@@ -3,15 +3,17 @@ package it.polimi.se2018.model.cards.publiccard;
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.SchemaCard;
 
+import java.io.Serializable;
+
 /**
  * Public Objective Cards
  * @author Silvia Franzini
  */
-public class PublicObjCard extends Card {
+public class PublicObjCard extends Card implements Serializable, Cloneable {
     /**
      * Scoring method
      */
-    private ScoreStrategy scoreStrategy;
+    transient private ScoreStrategy scoreStrategy;
     /**
      * Bonus points for each satisfied requirement
      */

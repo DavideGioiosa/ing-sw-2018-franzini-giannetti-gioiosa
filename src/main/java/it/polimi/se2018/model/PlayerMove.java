@@ -13,7 +13,7 @@ import java.util.List;
  * @author Cristian Giannetti
  */
 
-public class PlayerMove implements Serializable {
+public class PlayerMove implements Serializable, Cloneable {
 
     /**
      * Progressive identifier of the Player Move
@@ -224,5 +224,13 @@ public class PlayerMove implements Serializable {
         return value;
     }
 
+    /**
+     * Gets a copy of PlayerMove
+     * @return copy of PlayerMove
+     * @throws CloneNotSupportedException Throws exception if it isn't possible to create a copy
+     */
+    public PlayerMove getClone() throws CloneNotSupportedException{
+        return (PlayerMove)this.clone();
+    }
 }
 

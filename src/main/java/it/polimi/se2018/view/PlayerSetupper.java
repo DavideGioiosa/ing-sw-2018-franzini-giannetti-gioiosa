@@ -3,70 +3,98 @@ package it.polimi.se2018.view;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.PlayerChoice;
 import it.polimi.se2018.model.cards.SchemaCard;
+import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.view.graphic.cli.CommandLineInput;
+
+import static java.lang.Integer.valueOf;
 
 /**
  * Manages the setup of the player at the beginning of the game
  * @author Cristian Giannetti
  */
-public class PlayerSetupper {
+public class PlayerSetupper extends Observable<PlayerChoice>{
 
     /**
-     * Contains the first choices made by the player at the beginning of the game
+     *
      */
-    PlayerChoice playerChoice;
+    private CommandLineInput commandLineInput;
 
     /**
-     * Constructor sets the PlayerChoice to check
-     * @param playerChoice Contains the value to check
+     *
      */
-    public PlayerSetupper(PlayerChoice playerChoice){
-        if (playerChoice == null) throw new NullPointerException("Impossible to set a null PlayerChoice");
-        this.playerChoice = playerChoice;
-    }
-
-    /**
-     * Gets the PlayerChoice to be checked
-     * @return PlayerChoice to be checked
-     */
-    public PlayerChoice getPlayerChoice() {
-        return playerChoice;
+    public PlayerSetupper(){
+        commandLineInput = new CommandLineInput();
     }
 
     /**
      * Checks the Colour Frame choice made by the player
-     * @param message String containing the choice to be validated
-     * @return Error or ok message
+     * @return Error or Ok message
      */
-    public String validCommand(String message){
+    public PlayerChoice validCommand(PlayerChoice playerChoice){
+
+        try {
+            if (playerChoice.getUser().getNickname() == null) {
+                choseNickname(playerChoice);
+            }
+        }catch (NullPointerException e){
+        }
+
+        if(playerChoice.getColourEnumList()!= null && !playerChoice.getColourEnumList().isEmpty() && playerChoice.getChosenColour() == null) {
+            chosePatternColour(playerChoice);
+        }
+
+        if(playerChoice.getSchemaCardList()!= null && !playerChoice.getSchemaCardList().isEmpty() && playerChoice.getChosenSchema() == null) {
+            choseSchema(playerChoice);
+        }
+        return playerChoice;
+    }
+
+    /**
+     *
+     * @param playerChoice
+     */
+    public void choseNickname(PlayerChoice playerChoice){
+        playerChoice.getUser().setNickname(commandLineInput.getInput("Inserisci un nickname\n"));
+    }
+
+    /**
+     *
+     * @param playerChoice
+     */
+    private void chosePatternColour(PlayerChoice playerChoice){
+        String message = commandLineInput.getInput("Inserisci colore: " + playerChoice.getColourEnumList().toString() + "\n");
         message = message.toUpperCase();
         ColourEnum colourToCheck;
 
         try{
             colourToCheck = ColourEnum.valueOf(message);
         }catch (IllegalArgumentException e){
-            return "Il colore scelto non è valido";
+            return;
         }
 
         for (ColourEnum colour : playerChoice.getColourEnumList()) {
             if (colourToCheck == colour) playerChoice.setChosenColour(colour);
         }
-
-        if (playerChoice.getChosenColour() == null) return "Impossibile impostare il colore scelto";
-        return "Window Frame inserito correttamente";
     }
 
     /**
      * Checks the Schema Card choice made by the player
-     * @param idSchema ID of the Schema chosen by the player
      * @return Error or ok message
      */
-    public String validCommand(int idSchema){
+    public void choseSchema(PlayerChoice playerChoice){
+
+        String availableSchema = "";
+        for(SchemaCard schemaCard: playerChoice.getSchemaCardList()){
+            availableSchema = availableSchema.concat(schemaCard.getId() + " " + schemaCard.getBackSchema().getId() + " ");
+        }
+
+        String message = commandLineInput.getInput("Schemi disponibili: " + availableSchema + "Inserisci id schema: \n");
+        int idSchema = Integer.parseInt(message);
+
         for(SchemaCard schema: playerChoice.getSchemaCardList()){
             if (schema.getId() == idSchema) playerChoice.setChosenSchema(schema);
         }
-        if (playerChoice.getChosenSchema() == null) return "Impossibile impostare lo schema scelto";
-        return "Schema inserito correttamente";
-    }
 
+    }
 
 }

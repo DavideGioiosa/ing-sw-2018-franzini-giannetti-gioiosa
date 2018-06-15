@@ -11,7 +11,7 @@ import static it.polimi.se2018.model.Config.*;
  * @author Cristian Giannetti
  */
 
-public class Die implements Serializable {
+public class Die implements Serializable, Cloneable {
 
     /**
      * Indicates the colour of the dice

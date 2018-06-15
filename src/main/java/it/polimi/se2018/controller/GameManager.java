@@ -50,7 +50,7 @@ public class GameManager {
             this.view.reportError();
         }else this.gameBoard = gameBoard;
         roundList = new ArrayList<>();
-        Round round = new Round(gameBoard, 0 );
+        Round round = new Round(gameBoard, 0 , view);
         roundList.add(round);
     }
 
@@ -110,9 +110,13 @@ public class GameManager {
             setGameWinner();
 
         }else {
-            Round newRound = new Round(gameBoard, roundList.size() );
+            Round newRound = new Round(gameBoard, roundList.size(), view);
             roundList.add(newRound);
         }
+    }
+
+    public void tryMove(PlayerMove playerMove){
+        roundList.get(roundList.size() - 1).update(playerMove);
     }
 
 }

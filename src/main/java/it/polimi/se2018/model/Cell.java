@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author Davide Gioiosa
  */
 
-public class Cell implements Serializable {
+public class Cell implements Serializable, Cloneable {
 
     /**
      * Limitation die value that a cell accepts

@@ -1,11 +1,11 @@
 package it.polimi.se2018.controller;
 
-import it.polimi.se2018.model.GameBoard;
-import it.polimi.se2018.model.PlayerMove;
-import it.polimi.se2018.model.TypeOfChoiceEnum;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.view.RemoteView;
 
+import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +43,13 @@ public class Round implements Observer<PlayerMove>{
      */
     private boolean isDraftPoolSet;
 
+    private RemoteView view;
     /**
      * Builder of Round which composes the match
      * @param gameBoard full table of the game
      * @param indexRound index of the current Round created
      */
-    public Round (GameBoard gameBoard, int indexRound){
+    public Round (GameBoard gameBoard, int indexRound, RemoteView view){
         if (gameBoard == null){
             throw new NullPointerException("Insertion of null parameter gameBoard");
         }
@@ -60,6 +61,7 @@ public class Round implements Observer<PlayerMove>{
         this.gameBoard = gameBoard;
         this.isDraftPoolSet = false;
         initializeRound(indexRound);
+        this.view = view;
     }
 
     /**
@@ -129,7 +131,9 @@ public class Round implements Observer<PlayerMove>{
     private boolean setDraftPoolDice (PlayerMove playerMove) {
         if (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.EXTRACT)){
             for (int i = 0; i < playerList.size() * 2 + 1; i++) {
-                gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+                Die die = gameBoard.getBagDice().extractDice();
+                die.firstRoll();
+                gameBoard.getBoardDice().insertDice(die);
             }
             return true;
         }
@@ -146,10 +150,12 @@ public class Round implements Observer<PlayerMove>{
             throw new RuntimeException("Empty playerMove action to execute");
         }
 
-        if (playerMove.getPlayer().equals(getCurrPlayer())) {
+        if (playerMove.getPlayer().getNickname().equals(getCurrPlayer().getNickname())) {
             if (!isDraftPoolSet) {
                 if (setDraftPoolDice(playerMove)) {
                     this.isDraftPoolSet = true;
+                    view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+                    view.isYourTurn(playerMove.getPlayer());
                 }
                 else {
                     //set errore da restituire

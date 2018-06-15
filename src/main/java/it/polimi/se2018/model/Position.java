@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author Davide Gioiosa
  */
 
-public class Position implements Serializable {
+public class Position implements Serializable, Cloneable {
 
     /**
      * row of the Scheme in matrix form

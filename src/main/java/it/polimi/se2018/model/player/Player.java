@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Class used to save the status of the player during the game
  * @author Silvia Franzini
  */
-public class Player implements Serializable {
+public class Player implements Serializable, Cloneable {
     private final String nickname;
     private boolean connectionStatus;
     private ColourEnum frameColour;

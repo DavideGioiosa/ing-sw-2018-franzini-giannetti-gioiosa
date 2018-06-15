@@ -1,4 +1,4 @@
-package it.polimi.se2018.view.graphic;
+package it.polimi.se2018.view.graphic.cli;
 
 public class CommandLinePrint {
 

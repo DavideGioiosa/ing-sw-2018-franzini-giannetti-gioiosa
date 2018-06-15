@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Board with information available for Players
  */
-public class ClientBoard {
+public class ClientBoard implements Cloneable{
 
     /**
      * list of players in the match
@@ -33,7 +33,7 @@ public class ClientBoard {
      * @param trackBoardDice dice placed on the trackboard
      * @param boardCard public and tool cards usable in the match
      */
-    public ClientBoard(List<Player> playerList, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard){
+    public ClientBoard(List<Player> playerList, BoardDice boardDice, TrackBoard trackBoardDice, BoardCard boardCard) {
 
         if(playerList == null){
             throw new NullPointerException("Insertion of a null playerList");
@@ -83,4 +83,12 @@ public class ClientBoard {
         return playerList;
     }
 
+    /**
+     * Clone method
+     * @return Copy of the element
+     * @throws CloneNotSupportedException Throws exception if clone method isn't possible
+     */
+    public ClientBoard getClone() throws CloneNotSupportedException{
+        return (ClientBoard)this.clone();
+    }
 }

@@ -64,5 +64,4 @@ public class Card implements Serializable {
     public String getDescription() {
         return description;
     }
-
 }

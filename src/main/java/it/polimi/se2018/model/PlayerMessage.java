@@ -12,6 +12,7 @@ public class PlayerMessage implements Serializable {
     private MoveMessage moveMessage;
     private boolean closure;
     private User user;
+    private int idError;
 
     public PlayerMessage(){
         playerMove = null;
@@ -21,12 +22,20 @@ public class PlayerMessage implements Serializable {
         user = null;
     }
 
-    public void setMove(PlayerMove playerMove) {
+    public void setCheckMove(PlayerMove playerMove) {
         if(playerMove == null){
             throw new NullPointerException("Sent a null playerMove");
         }
         this.playerMove = playerMove;
-        id = PlayerMessageTypeEnum.MOVE;
+        id = PlayerMessageTypeEnum.CHECK_MOVE;
+    }
+
+    public void setApplyMove(PlayerMove playerMove) {
+        if(playerMove == null){
+            throw new NullPointerException("Sent a null playerMove");
+        }
+        this.playerMove = playerMove;
+        id = PlayerMessageTypeEnum.APPLY_MOVE;
     }
 
     public void setChoice(PlayerChoice playerChoice) {
@@ -80,4 +89,18 @@ public class PlayerMessage implements Serializable {
     public MoveMessage getMoveMessage() {
         return moveMessage;
     }
+
+    public void setId(PlayerMessageTypeEnum id) {
+        this.id = id;
+    }
+
+    public void setError(int idError) {
+        this.idError = idError;
+        id = PlayerMessageTypeEnum.ERROR;
+    }
+
+    public int getIdError() {
+        return idError;
+    }
+
 }

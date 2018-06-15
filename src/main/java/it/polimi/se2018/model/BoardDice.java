@@ -10,7 +10,7 @@ import java.util.List;
  * @author Cristian Giannetti
  */
 
-public class BoardDice implements Serializable {
+public class BoardDice implements Serializable, Cloneable {
 
     /**
      * List of Die in the Draft Pool

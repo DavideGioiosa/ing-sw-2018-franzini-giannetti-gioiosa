@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author Davide Gioiosa
  */
 
-public class ToolCard extends Card implements Serializable {
+public class ToolCard extends Card implements Serializable, Cloneable {
     private ColourEnum colour;
     private int token;
 

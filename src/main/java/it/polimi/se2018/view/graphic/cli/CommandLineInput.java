@@ -1,11 +1,11 @@
-package it.polimi.se2018.view.graphic;
+package it.polimi.se2018.view.graphic.cli;
 
 import it.polimi.se2018.view.InputStrategy;
 
 import java.util.Scanner;
 
-import static it.polimi.se2018.view.graphic.CommandLinePrint.print;
-import static it.polimi.se2018.view.graphic.CommandLinePrint.println;
+import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.print;
+import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.println;
 
 
 public class CommandLineInput implements InputStrategy {

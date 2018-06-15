@@ -1,31 +1,36 @@
 package it.polimi.se2018.view;
 
 
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.MoveMessage;
-import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
+import it.polimi.se2018.utils.*;
+import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Used for interaction with the player
  * @author Silvia Franzini
  */
-public class View  {
-protected InputStrategy inputStrategy;
-protected ConnectionStrategy connectionStrategy;
-private MoveMessage moveMessage;
-//private MessageLoader messageLoader;
+public class View extends Observable implements Observer<ClientBoard> {
+    protected InputStrategy inputStrategy;
+    protected ConnectionStrategy connectionStrategy;
+    private MoveMessage moveMessage;
+    private CommandLineInput commandLineInput;
+    private boolean gameStarted = false;
+    //private MessageLoader messageLoader;
 
+    private SyntaxController syntaxController;
+    private PlayerSetupper playerSetupper;
+
+    private ClientBoard clientBoard;
 
     /**
      * Builder method of the class
      */
     public View() {
+        commandLineInput = new CommandLineInput();
+        playerSetupper = new PlayerSetupper();
+        syntaxController = new SyntaxController(commandLineInput);
         /*moveMessage = null;
         try{
             messageLoader = new MessageLoader();
@@ -56,13 +61,44 @@ private MoveMessage moveMessage;
      * Method used to identify the type of message received by the Server
      * @param playerMessage message received
      */
-   public void receive(PlayerMessage playerMessage){
-        switch (playerMessage.getId()){
-            case MOVE:break;
-            case CHOICE: break;
-            case UPDATE: break;
-            default: throw new IllegalArgumentException("ERROR: Message not set");
+    public void receive(PlayerMessage playerMessage){
+
+        if (playerMessage == null){
+            reportError(28031993);
+            return;
         }
+
+        switch (playerMessage.getId()){
+            case YOUR_TURN:
+                PlayerMove playerMove = syntaxController.validCommand("Fai la tua mossa: ", playerMessage.getPlayerMove(), clientBoard);
+                playerMessage = new PlayerMessage();
+                playerMessage.setCheckMove(playerMove);
+                notify(playerMessage);
+                break;
+            case CHOICE:
+                PlayerChoice playerChoice = playerSetupper.validCommand(playerMessage.getPlayerChoice());
+                playerMessage = new PlayerMessage();
+                playerMessage.setChoice(playerChoice);
+                notify(playerMessage);
+                break;
+
+            case ERROR:
+                reportError(playerMessage.getIdError());
+                break;
+
+            case MESSAGE:
+                showMessage(playerMessage.getIdError());
+                break;
+
+            case UPDATE:
+                notify(playerMessage);
+                break;
+
+            default:
+                reportError(28031993);
+                throw new IllegalArgumentException("ERROR: Invalid PlayerMessage");
+        }
+
     }
 
     /**
@@ -80,16 +116,42 @@ private MoveMessage moveMessage;
      * @param moveMessage class containing the several elements of the table
      */
     public void updateTable(MoveMessage moveMessage){
-
         this.moveMessage = moveMessage;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public PlayerSetupper getPlayerSetupper() {
+        return playerSetupper;
     }
 
     /**
      * Method used to understand the error notify received
      */
-    public void reportError(){//TODO inserire id come parametro
-        //TODO necessario definire tipologie errore
-
+    public void reportError(int idError){
+        System.out.println("ERROR: " + idError);
     }
 
+    /**
+     *
+     * @param message
+     */
+    public void showMessage(int message){
+        System.out.println("MESSAGE: " + message);
+    }
+
+    public SyntaxController getSyntaxController() {
+        return syntaxController;
+    }
+
+    public void setSyntaxController(SyntaxController syntaxController) {
+        this.syntaxController = syntaxController;
+    }
+
+    @Override
+    public void update(ClientBoard clientBoard){
+        this.clientBoard = clientBoard;
+    }
 }

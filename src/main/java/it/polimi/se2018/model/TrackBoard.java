@@ -10,7 +10,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class TrackBoard implements Serializable {
+public class TrackBoard implements Serializable, Cloneable {
     /**
      * List of dice in surplus placed in each round
      */
