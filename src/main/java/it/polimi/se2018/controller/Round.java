@@ -193,6 +193,7 @@ public class Round implements Observer<PlayerMove>{
 
                     if (roundPlayerOrder.isEmpty()) {
                         endRound();
+                        view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
                     }
                 }
 

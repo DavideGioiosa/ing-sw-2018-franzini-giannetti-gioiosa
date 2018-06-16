@@ -161,7 +161,7 @@ public class CommandLineGraphic{
         println(schemaCard.getName());
         String cellsRow;
         for (int row = 0; row < NUMBER_OF_SCHEMA_ROW; row++){
-            cellsRow = "";
+            cellsRow = row + " ";
             for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
                 if (schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).isEmpty()){
                     cellsRow = cellsRow.concat(" \t|Empty: ");
@@ -192,7 +192,7 @@ public class CommandLineGraphic{
             print(preCardDescription(colourString));
             System.out.print(ansi().eraseScreen().fg(color).a(colourString).reset());
             print(postCardDescription(colourString));
-            print('\n');
+            println("");
         }
         printCardEmptyLine();
 
@@ -200,12 +200,22 @@ public class CommandLineGraphic{
 
     /**
      * Shows entire Game Board
-     * @param gameBoard Game Board to display
+     * @param clientBoard Game Board to display
      */
-    public void showGameBoard(GameBoard gameBoard){
-        for(Player player: gameBoard.getPlayerList()) {
+    public void showGameBoard(ClientBoard clientBoard){
+        for(PublicObjCard publicObjCard: clientBoard.getCardOnBoard().getPublicObjCardList()) showPublicObjCard(publicObjCard);
+        for(ToolCard toolCard: clientBoard.getCardOnBoard().getToolCardList()) showToolCard(toolCard);
+
+        showTrackBoard(clientBoard.getTrackBoardDice());
+        println("");
+        for(Player player: clientBoard.getPlayerList()) {
+            println(player.getNickname());
             showSchemaCard(player.getSchemaCard());
+            println("");
         }
+
+        showBoardDice(clientBoard.getBoardDice());
+
     }
 
     /**
@@ -213,8 +223,11 @@ public class CommandLineGraphic{
      * @param boardDice Draft Pool to display
      */
     public void showBoardDice(BoardDice boardDice){
+        int i = 0;
         for(Die die: boardDice.getDieList()){
+            print(i + " - ");
             showDie(die);
+            i++;
         }
     }
 
@@ -223,8 +236,22 @@ public class CommandLineGraphic{
      * @param die Die to display
      */
     private void showDie(Die die){
-        println(die.getValue());
-        println(die.getColour().toString());
+        println(die.getValue() + " " + die.getColour().toString());
+    }
+
+    /**
+     * Shows TrackBoard
+     * @param trackBoard TrackBoard to display
+     */
+    private void showTrackBoard(TrackBoard trackBoard){
+        int i = 1;
+        for(List<Die> dieList: trackBoard.getDiceList()){
+            println("Round " + i);
+            for(Die die: dieList){
+                showDie(die);
+            }
+            i++;
+        }
     }
 
     /**

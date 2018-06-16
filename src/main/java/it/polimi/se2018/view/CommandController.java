@@ -1,6 +1,5 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.connection.client.Client;
 import it.polimi.se2018.model.*;
 
 /**
@@ -108,6 +107,12 @@ public class CommandController{
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setCheckMove(playerMove);
         return 0;
+    }
+
+    public PlayerMove getResetPlayerMove(PlayerMove playerMove){
+        PlayerMove newPlayerMove = new PlayerMove();
+        newPlayerMove.setPlayer(playerMove.getPlayer());
+        return newPlayerMove;
     }
 
 }

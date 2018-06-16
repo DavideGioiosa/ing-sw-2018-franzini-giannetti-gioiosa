@@ -1,9 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.connection.client.Client;
-import it.polimi.se2018.model.ClientBoard;
-import it.polimi.se2018.model.MoveMessage;
-import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.*;
 
 import it.polimi.se2018.utils.Observer;
 
@@ -65,6 +63,12 @@ public class ClientController implements Observer<PlayerMessage> {
 
             case CHECK_MOVE:
                 idError = commandController.checkMoveValidity(playerMessage.getPlayerMove(), clientModel.getClientBoard());
+                if(idError != 0) {
+                    view.reportError(idError);
+                    playerMessage.setCheckMove(commandController.getResetPlayerMove(playerMessage.getPlayerMove()));
+                    playerMessage.setId(PlayerMessageTypeEnum.YOUR_TURN);
+                    view.receive(playerMessage);
+                }
                 break;
 
             case APPLY_MOVE:
@@ -84,7 +88,7 @@ public class ClientController implements Observer<PlayerMessage> {
                 break;
         }
         if (idError == 0) client.send(playerMessage);
-        else view.reportError(idError);
+        //TODO: Gestione errori nelle varie mosse
     }
 
     /**

@@ -23,6 +23,8 @@ public class CheckRestriction {
     public boolean adjacentRestriction(SchemaCard schemaCard, Die die, Position position) {
         validateParameters(schemaCard, die, position);
 
+        if(schemaCard.isEmpty()) return true;
+
         List<Cell> adjList = schemaCard.getAdjacents(position);
         for (Cell c : adjList) {
             if (c.getDie() != null) {

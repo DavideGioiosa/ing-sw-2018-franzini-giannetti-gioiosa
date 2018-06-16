@@ -5,7 +5,6 @@ import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.view.*;
-import it.polimi.se2018.utils.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,7 +104,7 @@ public class GameManager {
      */
     private void endRound(){
         //TODO: da adattare a nuovo UML
-        if(roundList.size() == 10){
+        if(roundList.size() == 4){
             calculateGameScore();
             setGameWinner();
 

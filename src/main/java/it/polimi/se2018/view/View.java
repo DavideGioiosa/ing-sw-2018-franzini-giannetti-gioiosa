@@ -4,6 +4,7 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.*;
+import it.polimi.se2018.view.graphic.cli.CommandLineGraphic;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 
 /**
@@ -22,6 +23,8 @@ public class View extends Observable implements Observer<ClientBoard> {
 
     private ClientBoard clientBoard;
 
+    private PlayerMessage lastPlayerMessage;
+    private CommandLineGraphic commandLineGraphic;
     /**
      * Builder method of the class
      */
@@ -29,6 +32,7 @@ public class View extends Observable implements Observer<ClientBoard> {
         commandLineInput = new CommandLineInput();
         playerSetupper = new PlayerSetupper();
         syntaxController = new SyntaxController(commandLineInput);
+        commandLineGraphic = new CommandLineGraphic();
         /*moveMessage = null;
         try{
             messageLoader = new MessageLoader();
@@ -60,7 +64,6 @@ public class View extends Observable implements Observer<ClientBoard> {
      * @param playerMessage message received
      */
     public void receive(PlayerMessage playerMessage){
-        PlayerChoice playerChoice;
 
         if (playerMessage == null){
             reportError(28031993);
@@ -84,7 +87,7 @@ public class View extends Observable implements Observer<ClientBoard> {
                 break;
 
             case CHOICE:
-                playerChoice = playerSetupper.validCommand(playerMessage.getPlayerChoice());
+                PlayerChoice playerChoice = playerSetupper.validCommand(playerMessage.getPlayerChoice());
                 playerMessage = new PlayerMessage();
                 playerMessage.setChoice(playerChoice);
                 notify(playerMessage);
@@ -161,5 +164,6 @@ public class View extends Observable implements Observer<ClientBoard> {
     @Override
     public void update(ClientBoard clientBoard){
         this.clientBoard = clientBoard;
+        commandLineGraphic.showGameBoard(clientBoard);
     }
 }

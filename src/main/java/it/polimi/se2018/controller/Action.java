@@ -40,8 +40,13 @@ public class Action {
         switch (playerMove.getTypeOfChoice()){
             case PICK:
                 try{
-                    Die dieExtracted = gameBoard.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
-                    placeDice(playerMove.getPlayer(), dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
+                    for(Player player: gameBoard.getPlayerList()) {
+                        if (player.getNickname().equals(playerMove.getPlayer().getNickname())){
+                            Die dieExtracted = gameBoard.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
+                            Boolean placed = placeDice(player, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
+                            if(!placed) gameBoard.getBoardDice().insertDice(dieExtracted);
+                        }
+                    }
                 }catch(IllegalArgumentException e){
                     return false;
                 }
@@ -122,7 +127,7 @@ public class Action {
         }
         if(!success){return false;}
 
-        actualPlayer.getSchemaCard().getCellList().get(position.getIndexArrayPosition()).insertDice(die);
+        actualPlayer.getSchemaCard().setDiceIntoCell(position,die);
         return true;
     }
 

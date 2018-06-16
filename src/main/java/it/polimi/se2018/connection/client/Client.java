@@ -5,8 +5,6 @@ import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.View;
 
-
-
 public class Client implements Observer<PlayerMessage> {
 
     private User thisUser;
@@ -38,9 +36,9 @@ public class Client implements Observer<PlayerMessage> {
     @Override
     public void update(PlayerMessage playerMessage){
 
-         if(playerMessage.getUser().getNickname().equals(nickname) || playerMessage.getUser() == null){
-               view.receive(playerMessage);
-         }
+        //if(playerMessage.getUser() == null || playerMessage.getUser().getNickname() == nickname){
+        view.receive(playerMessage);
+        //}
 
     }
 
