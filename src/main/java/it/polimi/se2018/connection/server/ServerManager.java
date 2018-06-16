@@ -50,7 +50,9 @@ public class ServerManager implements Observer<PlayerMessage> {
                 serverRMI.send(playerMessage);
 
                 timerDelayer = new TimerDelayer(playerMessage, serverSocket, serverRMI);
-                senderTimer.schedule(timerDelayer, 90*1000);
+                senderTimer = new Timer();
+
+                senderTimer.schedule(timerDelayer, (long)90*1000);
             }
         }
         else{
@@ -58,7 +60,7 @@ public class ServerManager implements Observer<PlayerMessage> {
             serverRMI.send(playerMessage);
 
             timerDelayer = new TimerDelayer(playerMessage, serverSocket, serverRMI);
-            senderTimer.schedule(timerDelayer, 90*1000);
+            senderTimer.schedule(timerDelayer, (long)90*1000);
         }
     }
 
@@ -66,17 +68,17 @@ public class ServerManager implements Observer<PlayerMessage> {
 
         userSetupTimer.cancel();
         userSetupTimer.purge();
-        RemoteView remoteView = new RemoteView();
+        RemoteView remoteView = new RemoteView(this);
         gameCreator = new GameCreator(userList,remoteView);
     }
 
 
     private void addUser(User user){
         userList.add(user);
-        if(userList.size()==2){
+        if(userList.size()==1){
             usersDelayer = new UsersDelayer(this);
-            userSetupTimer.schedule(usersDelayer, 90*1000);
-        }else if(userList.size()==4 && usersDelayer.isStarted()){
+            userSetupTimer.schedule(usersDelayer, (long)90*1000);
+        }else if(userList.size() == 4 && usersDelayer.isStarted()){
             createGame();
         }
     }
@@ -95,6 +97,11 @@ public class ServerManager implements Observer<PlayerMessage> {
         if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
             addUser(playerMessage.getUser());
         }else gameCreator.receiveFromClient(playerMessage);
+
+    }
+
+    public List<User> getUserList(){
+        return userList;
     }
 
     //TODO: disconnessione

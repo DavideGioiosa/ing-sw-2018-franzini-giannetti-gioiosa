@@ -30,7 +30,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
          } catch (IOException e) {
              //TODO: gestire assenza di server a cui connettersi
              PlayerMessage playerMessage = new PlayerMessage();
-             playerMessage.setError();
+             playerMessage.setError(1000);
              receive(playerMessage);
          }
 
@@ -57,6 +57,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
 
                 String message = bufferedReader.readLine();
                 PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
+                System.out.println("NetworkHandler: Nuovo Messaggio ricevuto dal server");
                 receive(playerMessage);
 
             }catch (IOException e){

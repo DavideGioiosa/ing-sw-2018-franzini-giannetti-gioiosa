@@ -1,13 +1,11 @@
 package it.polimi.se2018.view;
 
-import com.sun.deploy.security.ValidationState;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 
 import static it.polimi.se2018.model.Config.*;
-import static it.polimi.se2018.view.CommandTypeEnum.COMPLETE;
-import static it.polimi.se2018.view.CommandTypeEnum.TYPEOFCHOICE;
+import static it.polimi.se2018.view.CommandTypeEnum.*;
 
 /**
  * Controls the Syntax of message received and sets PlayerMove's attributes

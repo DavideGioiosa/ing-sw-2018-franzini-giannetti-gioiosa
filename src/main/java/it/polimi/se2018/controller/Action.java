@@ -65,7 +65,7 @@ public class Action {
                 }
                 break;
             case EXTRACT:
-                for(int i=0; i<gameBoard.getPlayerList().size()*2 +1; i++){
+                for(int i = 0; i < gameBoard.getPlayerList().size()*2 +1; i++){
                     //try{}catch da implementare nella classe BoardDice
                     Die die;
                     try{

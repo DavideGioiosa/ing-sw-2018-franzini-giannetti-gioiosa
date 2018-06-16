@@ -13,7 +13,7 @@ public class PublicObjCard extends Card implements Serializable, Cloneable {
     /**
      * Scoring method
      */
-    transient private ScoreStrategy scoreStrategy;
+    private transient ScoreStrategy scoreStrategy;
     /**
      * Bonus points for each satisfied requirement
      */

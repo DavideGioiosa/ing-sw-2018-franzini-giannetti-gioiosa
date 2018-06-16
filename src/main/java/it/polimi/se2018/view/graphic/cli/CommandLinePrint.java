@@ -2,7 +2,9 @@ package it.polimi.se2018.view.graphic.cli;
 
 public class CommandLinePrint {
 
+    public CommandLinePrint(){
 
+    }
     /**
      * Print String
      * @param string String to print

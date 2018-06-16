@@ -20,7 +20,7 @@ public class GameCreator {
         this.remoteView = remoteView;
         gameStatus = false;
         this.gameManager = null;
-        this.gameStarter = new GameStarter(userList);
+        this.gameStarter = new GameStarter(userList, remoteView);
 
     }
 
@@ -35,10 +35,9 @@ public class GameCreator {
         }else if(gameManager==null){
             gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
         }
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.MOVE)){
-            //chiamata a metodo gameManager non ancora definito
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHECK_MOVE)){
+            gameManager.tryMove(playerMessage.getPlayerMove());
         }
-
 
 
     }

@@ -1,11 +1,10 @@
 package it.polimi.se2018.view;
 
-
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
+import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
-
 
 /**
  * Used for interaction with the player
@@ -16,7 +15,6 @@ public class View extends Observable implements Observer<ClientBoard> {
     protected ConnectionStrategy connectionStrategy;
     private MoveMessage moveMessage;
     private CommandLineInput commandLineInput;
-    private boolean gameStarted = false;
     //private MessageLoader messageLoader;
 
     private SyntaxController syntaxController;
@@ -62,6 +60,7 @@ public class View extends Observable implements Observer<ClientBoard> {
      * @param playerMessage message received
      */
     public void receive(PlayerMessage playerMessage){
+        PlayerChoice playerChoice;
 
         if (playerMessage == null){
             reportError(28031993);
@@ -75,8 +74,17 @@ public class View extends Observable implements Observer<ClientBoard> {
                 playerMessage.setCheckMove(playerMove);
                 notify(playerMessage);
                 break;
+
+            case USER:
+                User user = playerMessage.getUser();
+                user = playerSetupper.choseNickname(user);
+                playerMessage = new PlayerMessage();
+                playerMessage.setUser(user);
+                notify(playerMessage);
+                break;
+
             case CHOICE:
-                PlayerChoice playerChoice = playerSetupper.validCommand(playerMessage.getPlayerChoice());
+                playerChoice = playerSetupper.validCommand(playerMessage.getPlayerChoice());
                 playerMessage = new PlayerMessage();
                 playerMessage.setChoice(playerChoice);
                 notify(playerMessage);

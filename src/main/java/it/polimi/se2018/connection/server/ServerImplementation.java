@@ -34,8 +34,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
                 clientRemoteInterface.receiveFromServer(playerMessage);
             }
         }else{
-            if(clientList.containsKey(playerMessage.getUser().createUniqueCode())){
-                ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().createUniqueCode());
+            if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
+                ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
                 clientRemoteInterface.receiveFromServer(playerMessage);
 
             }

@@ -48,7 +48,7 @@ public class PlayerMove implements Serializable, Cloneable {
     /**
      * Position of dice in Track Board from where the player wants to pick a die.
      */
-    private int trackBoardIndexArray[];
+    private int[] trackBoardIndexArray;
     /**
      * Generic value used by different Tool Cards
      */

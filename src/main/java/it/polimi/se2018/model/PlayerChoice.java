@@ -32,7 +32,7 @@ public class PlayerChoice implements Serializable {
     /**
      * Chosen SchemaCard
      */
-    private SchemaCard chosenSchema;
+    private int idChosenSchema;
     /**
      * User's Private Objective Card
      */
@@ -51,7 +51,7 @@ public class PlayerChoice implements Serializable {
         schemaCardList = new ArrayList<>();
         colourEnumList = new ArrayList<>();
         chosenColour = null;
-        chosenSchema = null;
+        idChosenSchema = 0;
         privateObjCard = null;
     }
 
@@ -116,19 +116,19 @@ public class PlayerChoice implements Serializable {
 
     /**
      * Setter method for the window pattern card
-     * @param chosenSchema Window pattern chosen by the User
+     * @param idChosenSchema ID of window pattern chosen by the User
      */
-    public void setChosenSchema(SchemaCard chosenSchema) {
-        if (chosenSchema == null) throw new NullPointerException("Invalid Schema");
-        this.chosenSchema = chosenSchema;
+    public void setIdChosenSchema(int idChosenSchema) {
+        if (idChosenSchema == 0) throw new NullPointerException("Invalid Schema");
+        this.idChosenSchema = idChosenSchema;
     }
 
     /**
      * Getter method for chosen SchemaCard
      * @return SchemaCard chosen by the User
      */
-    public SchemaCard getChosenSchema() {
-        return chosenSchema;
+    public int getIdChosenSchema() {
+        return idChosenSchema;
     }
 
     /**

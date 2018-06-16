@@ -33,7 +33,6 @@ public class CommandLineInput implements InputStrategy {
 
             message = scanner.nextLine();
             okMessage = true;
-            if (!okMessage) println(invalidInput);
         }
         return message;
     }
@@ -50,8 +49,6 @@ public class CommandLineInput implements InputStrategy {
 
             message = scanner.nextLine();
             okMessage = true;
-            if (!okMessage) println(invalidInput);
-
         }
         return message;
     }

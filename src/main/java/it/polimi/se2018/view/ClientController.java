@@ -45,7 +45,7 @@ public class ClientController implements Observer<PlayerMessage> {
         this.view.addObserver(this);
         clientModel = new ClientModel();
         clientModel.addObserver(view);
-        commandController = new CommandController(client, view);
+        commandController = new CommandController(view);
         choiceController = new ChoiceController(client, null, view);
     }
 
@@ -55,11 +55,12 @@ public class ClientController implements Observer<PlayerMessage> {
      */
     @Override
     public void update(PlayerMessage playerMessage){
-        boolean validCommand = false;
-        int idError = -1;
+
+        int idError;
+
         switch (playerMessage.getId()){
             case CHOICE:
-                idError = choiceController.update(playerMessage.getPlayerChoice());
+                idError = choiceController.checkChoice(playerMessage.getPlayerChoice());
                 break;
 
             case CHECK_MOVE:
@@ -68,13 +69,18 @@ public class ClientController implements Observer<PlayerMessage> {
 
             case APPLY_MOVE:
                 applyMove(playerMessage);
-                break;
+                return;
 
             case UPDATE:
                 updateBoard(playerMessage.getMoveMessage());
+                return;
+
+            case USER:
+                idError = choiceController.checkNickname(playerMessage.getUser());
                 break;
 
             default:
+                idError = 0;
                 break;
         }
         if (idError == 0) client.send(playerMessage);
@@ -86,7 +92,7 @@ public class ClientController implements Observer<PlayerMessage> {
      * @param playerMessage Move approved by the Server
      */
     private void applyMove(PlayerMessage playerMessage){
-
+        System.out.println("Ho ricevuto una mossa da effettuare");
     }
 
     /**
@@ -96,6 +102,7 @@ public class ClientController implements Observer<PlayerMessage> {
     private void updateBoard(MoveMessage moveMessage){
         ClientBoard clientBoard = new ClientBoard(moveMessage.getPlayerList(),  moveMessage.getBoardDice(), moveMessage.getTrackboard(), moveMessage.getBoardCard());
         clientModel.setClientBoard(clientBoard);
+        System.out.println("Board Aggiornato");
     }
 
 }

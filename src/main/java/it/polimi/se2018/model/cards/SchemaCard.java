@@ -25,7 +25,7 @@ public class SchemaCard extends Card implements Serializable, Cloneable {
     /**
      * Other scheme of the schemeCard, composed by 2 schemes
      */
-    private SchemaCard backSchema;
+    private transient SchemaCard backSchema;
 
     /**
      * Builder: create a Scheme card

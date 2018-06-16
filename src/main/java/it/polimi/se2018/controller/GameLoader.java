@@ -303,7 +303,7 @@ public class GameLoader {
     /**
      * Parses the restriction from string to values
      * @param restriction String containing the description of the restriction
-     * @return New Cell with restriction setted
+     * @return New Cell with restriction set
      */
     private Cell parseCell(String restriction){
 

@@ -14,7 +14,7 @@ public class TimerDelayer extends TimerTask {
     private PlayerMessage playerMessage;
     private RMITypeServer rmiTypeServer;
 
-     TimerDelayer(PlayerMessage playerMessage, SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
+    TimerDelayer(PlayerMessage playerMessage, SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
         this.playerMessage = playerMessage;
         this.socketTypeServer = socketTypeServer;
         this.rmiTypeServer = rmiTypeServer;
@@ -27,12 +27,12 @@ public class TimerDelayer extends TimerTask {
 
     @Override
     public void run() {
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.MOVE) || playerMessage.getId().equals(PlayerMessageTypeEnum.CHOICE)){
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHECK_MOVE) || playerMessage.getId().equals(PlayerMessageTypeEnum.CHOICE)){
             PlayerMessage pass = new PlayerMessage();
             PlayerMove playerMove = new PlayerMove();
             playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
             pass.setUser(playerMessage.getUser());
-            pass.setMove(playerMove);
+            pass.setCheckMove(playerMove);
             socketTypeServer.update(playerMessage);
             rmiTypeServer.receive(playerMessage);
         }

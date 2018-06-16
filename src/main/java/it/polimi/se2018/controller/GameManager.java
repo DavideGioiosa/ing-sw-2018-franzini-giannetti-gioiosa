@@ -47,7 +47,7 @@ public class GameManager {
             throw new NullPointerException("ERROR: view not initialized");
         }else this.view = view;
         if(gameBoard == null){
-            this.view.reportError();
+            this.view.reportError(1000, null);
         }else this.gameBoard = gameBoard;
         roundList = new ArrayList<>();
         Round round = new Round(gameBoard, 0 , view);
@@ -65,7 +65,7 @@ public class GameManager {
                 try{
                     score += publicObjCard.scoreCalculation(player.getSchemaCard());
                 }catch (NullPointerException e){
-                    view.reportError();
+                    view.reportError(1000, null);
                 }
 
             }
@@ -102,9 +102,9 @@ public class GameManager {
 
     /**
      * Update method for Observer pattern implementation
-     * @param round round just completed
      */
-    public void update(Round round){//TODO: da adattare a nuovo UML
+    private void endRound(){
+        //TODO: da adattare a nuovo UML
         if(roundList.size() == 10){
             calculateGameScore();
             setGameWinner();
@@ -116,6 +116,9 @@ public class GameManager {
     }
 
     public void tryMove(PlayerMove playerMove){
+        if(roundList.get(roundList.size() - 1).isEnded()){
+            endRound();
+        }
         roundList.get(roundList.size() - 1).update(playerMove);
     }
 

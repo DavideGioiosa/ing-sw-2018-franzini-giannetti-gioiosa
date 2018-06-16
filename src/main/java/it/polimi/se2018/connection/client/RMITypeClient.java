@@ -1,6 +1,5 @@
 package it.polimi.se2018.connection.client;
 
-
 import it.polimi.se2018.connection.server.ServerRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.utils.Observable;
@@ -16,7 +15,6 @@ import java.rmi.server.UnicastRemoteObject;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
@@ -45,7 +43,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
             PlayerMessage playerMessage = new PlayerMessage();
-            playerMessage.setError();
+            playerMessage.setError(1000);
             update(playerMessage);
         }
     }

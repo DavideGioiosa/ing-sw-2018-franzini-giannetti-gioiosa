@@ -5,10 +5,8 @@ import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.RemoteView;
 
-import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Controller's Class Round
@@ -43,6 +41,8 @@ public class Round implements Observer<PlayerMove>{
      */
     private boolean isDraftPoolSet;
 
+    private Player nextRoundFirstPlayer;
+
     private RemoteView view;
     /**
      * Builder of Round which composes the match
@@ -72,6 +72,7 @@ public class Round implements Observer<PlayerMove>{
     private void initializeRound(int indexRound) {
         turnsList = new ArrayList<> ();
         setRoundPlayerOrder(indexRound);
+        nextRoundFirstPlayer = roundPlayerOrder.get(1);
         turn = new Turn(gameBoard);
         turnsList.add(turn);
     }
@@ -100,6 +101,10 @@ public class Round implements Observer<PlayerMove>{
         return roundPlayerOrder.get(0);
     }
 
+    public boolean isEnded(){
+        return roundPlayerOrder.isEmpty();
+    }
+
     /**
      * List of the turns componing the Round
      * @return list of turns
@@ -119,7 +124,11 @@ public class Round implements Observer<PlayerMove>{
      * Placement of the surplus dice in the Draft Pool on the Trackboard
      */
     private void endRound (){
-        gameBoard.getTrackBoardDice().insertDice(gameBoard.getBoardDice().getDieList());
+        List<Die> dieList = new ArrayList<>();
+        while(!gameBoard.getBoardDice().getDieList().isEmpty()){
+            dieList.add(gameBoard.getBoardDice().takeDice(0));
+        }
+        gameBoard.getTrackBoardDice().insertDice(dieList);
         //notify(); //TODO: CHECK CORRECT
     }
 
@@ -149,23 +158,28 @@ public class Round implements Observer<PlayerMove>{
         if(playerMove == null){
             throw new RuntimeException("Empty playerMove action to execute");
         }
+        if(playerMove.getPlayer() == null){
+            throw new RuntimeException("Empty Player in PlayerMove received");
+        }
 
         if (playerMove.getPlayer().getNickname().equals(getCurrPlayer().getNickname())) {
             if (!isDraftPoolSet) {
                 if (setDraftPoolDice(playerMove)) {
                     this.isDraftPoolSet = true;
                     view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
-                    view.isYourTurn(playerMove.getPlayer());
                 }
                 else {
-                    //set errore da restituire
-                    //System.out.println("La prima mossa da fare per il primo player del Round è l'extract");
+                    view.reportError(1000, getCurrPlayer().getNickname());
                 }
+                view.isYourTurn(getCurrPlayer());
+
             }
 
             else {
-                if (!turn.runTurn(playerMove)) {
-                    //Notifica al server che la playerMove non è corretta
+                if (turn.runTurn(playerMove)) {
+                    view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+                }else{
+                    view.reportError(1000, getCurrPlayer().getNickname());
                 }
 
                 if (turn.endTurn()) {
@@ -181,6 +195,11 @@ public class Round implements Observer<PlayerMove>{
                         endRound();
                     }
                 }
+
+                if(roundPlayerOrder.isEmpty()){
+                    view.isYourTurn(nextRoundFirstPlayer);
+                }else view.isYourTurn(getCurrPlayer());
+
             }
         }
     }

@@ -46,6 +46,7 @@ public class Turn {
         this.isPick = false;
         this.isToolCardUsed = false;
         startTurn();
+
     }
 
     /**

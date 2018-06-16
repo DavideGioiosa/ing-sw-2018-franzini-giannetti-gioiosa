@@ -112,10 +112,8 @@ public class Player implements Serializable, Cloneable {
      * @param score the sum of the points scored by the player
      */
     public void setScore(int score){
-        if(score < 0){
-            throw new IllegalArgumentException("ERROR: Score cannot be negative");
-        }
-        this.score=score;
+        if(score < 0) this.score = 0;
+        else this.score=score;
     }
 
     /**

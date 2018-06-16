@@ -95,11 +95,7 @@ public class CheckRestriction {
 
         List<Cell> adjList = schemaCard.getAdjacents(position);
         for (Cell c : adjList) {
-            if(!c.isEmpty()) {
-                if (c.getDie().getColour() == die.getColour()) {
-                    return false;
-                }
-            }
+            if(!c.isEmpty() && c.getDie().getColour() == die.getColour())  return false;
         }
         return true;
     }
@@ -119,11 +115,7 @@ public class CheckRestriction {
 
         List<Cell> adjList = schemaCard.getAdjacents(position);
         for (Cell c : adjList) {
-            if(!c.isEmpty()) {
-                if (c.getDie().getValue() == die.getValue()) {
-                    return false;
-                }
-            }
+            if(!c.isEmpty() && c.getDie().getValue() == die.getValue()) return false;
         }
         return true;
     }
