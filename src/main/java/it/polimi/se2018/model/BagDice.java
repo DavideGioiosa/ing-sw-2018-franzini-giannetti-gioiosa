@@ -8,7 +8,6 @@ import static it.polimi.se2018.model.Config.*;
 
 /**
  * BagDice represents the bag from which the dice are extracted.
- *
  * @author Cristian Giannetti
  */
 

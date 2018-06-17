@@ -13,12 +13,10 @@ public class Card implements Serializable {
      * Card's identifier
      */
     private final int id;
-
     /**
      * Name of the Card
      */
     private final String name;
-
     /**
      * Description of the Card
      */

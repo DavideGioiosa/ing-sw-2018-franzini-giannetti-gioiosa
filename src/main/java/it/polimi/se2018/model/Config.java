@@ -2,7 +2,6 @@ package it.polimi.se2018.model;
 
 /**
  * Contains the configuration parameters of the game
- *
  * @author Cristian Giannetti
  */
 

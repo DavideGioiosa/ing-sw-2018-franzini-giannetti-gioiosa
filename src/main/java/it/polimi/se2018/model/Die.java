@@ -7,7 +7,6 @@ import static it.polimi.se2018.model.Config.*;
 
 /**
  * Die class represents every single dice of the game
- *
  * @author Cristian Giannetti
  */
 

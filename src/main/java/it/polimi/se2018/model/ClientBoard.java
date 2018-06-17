@@ -2,12 +2,13 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.player.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Board with information available for Players
  */
-public class ClientBoard implements Cloneable{
+public class ClientBoard{
 
     /**
      * list of players in the match
@@ -53,6 +54,21 @@ public class ClientBoard implements Cloneable{
         this.trackBoardDice = trackBoardDice;
         this.cardOnBoard = boardCard;
 
+    }
+
+    /**
+     * Copy Constructor
+     * @param clientBoard ClientBoard to be cloned
+     */
+    public ClientBoard(ClientBoard clientBoard){
+        if (clientBoard == null) throw new NullPointerException("ERROR: Tried to create a null ClientBoard");
+
+        this.playerList = new ArrayList<>();
+        for(Player player: clientBoard.playerList) this.playerList.add(new Player(player));
+
+        this.boardDice = new BoardDice(clientBoard.boardDice);
+        this.trackBoardDice = new TrackBoard(clientBoard.trackBoardDice);
+        this.cardOnBoard = new BoardCard(clientBoard.cardOnBoard);
     }
 
     /**

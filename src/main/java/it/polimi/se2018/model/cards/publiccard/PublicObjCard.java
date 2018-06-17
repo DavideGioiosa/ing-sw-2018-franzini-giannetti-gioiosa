@@ -10,6 +10,7 @@ import java.io.Serializable;
  * @author Silvia Franzini
  */
 public class PublicObjCard extends Card implements Serializable {
+
     /**
      * Scoring method
      */
@@ -43,7 +44,7 @@ public class PublicObjCard extends Card implements Serializable {
     public PublicObjCard(PublicObjCard publicObjCard){
         super(publicObjCard);
         this.bonus = publicObjCard.bonus;
-        this.scoreStrategy = publicObjCard.scoreStrategy;
+        this.scoreStrategy = null;
     }
 
     /**

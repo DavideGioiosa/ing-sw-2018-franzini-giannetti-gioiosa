@@ -13,11 +13,11 @@ import java.util.List;
 public class CheckRestriction {
 
     /**
+     * Checks adjacent cells (also diagonal ones) of the position requested
+     * to get if there are any die inside and
      * @param schemaCard of the currentPlayer
      * @param die selected in the Draft Pool
      * @param position where the currentPlayer wants to put the die
-     * Check adjacents cells (also diagonal ones) of the position requested
-     * to get if there are any die inside and
      * @return true if there's at least one adj die
      */
     public boolean adjacentRestriction(SchemaCard schemaCard, Die die, Position position) {

@@ -52,7 +52,10 @@ public class GameBoard extends ClientBoard{
         return bagDice;
     }
 
-
+    /**
+     * Gets method for List of Private Objective card assigned to players
+     * @return List of PrivatePlayer
+     */
     public List<PrivatePlayer> getPrivatePlayerList() {
         return privatePlayerList;
     }

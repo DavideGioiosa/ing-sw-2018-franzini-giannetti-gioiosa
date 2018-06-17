@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class TrackBoard implements Serializable, Cloneable {
+public class TrackBoard implements Serializable {
     /**
      * List of dice in surplus placed in each round
      */
@@ -22,6 +21,27 @@ public class TrackBoard implements Serializable, Cloneable {
     public TrackBoard(){
         this.diceList = new ArrayList<>();
     }
+
+    /**
+     * Copy Constructor
+     * @param trackBoard TrackBoard to be cloned
+     */
+    public TrackBoard(TrackBoard trackBoard) {
+        if (trackBoard == null) throw new NullPointerException("ERROR: Tried to create a null TrackBoard");
+
+        this.diceList = new ArrayList<>();
+
+        for (List<Die> dieList : trackBoard.diceList){
+            List<Die> tempDieList = new ArrayList<>();
+
+            for (Die die : dieList){
+                tempDieList.add(new Die(die));
+            }
+
+            this.diceList.add(tempDieList);
+        }
+    }
+
 
     /**
      * Insertion of one or more dice on the Trackboard

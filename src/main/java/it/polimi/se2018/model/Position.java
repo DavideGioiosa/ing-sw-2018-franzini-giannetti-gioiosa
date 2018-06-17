@@ -7,25 +7,27 @@ import java.io.Serializable;
  * @author Davide Gioiosa
  */
 
-public class Position implements Serializable, Cloneable {
+public class Position implements Serializable {
 
     /**
-     * row of the Scheme in matrix form
+     * Row index of the Scheme in matrix form
      */
     private int row;
     /**
-     * col of the Scheme in matrix form
+     * Column index of the Scheme in matrix form
      */
     private int col;
 
     /**
-     * Builder: create an empty position to use methods of the class
+     * Constructor: create an empty position to use methods of the class
      */
     public Position (){
+        this.row = 0;
+        this.col = 0;
     }
 
     /**
-     * Builder: sets row and col of Position
+     * Constructor: sets row and col of Position
      * @param row of the Scheme in matrix form
      * @param col of the Scheme in matrix form
      */
@@ -41,6 +43,26 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
+     * Copy constructor
+     * @param position Position to be cloned
+     */
+    public Position(Position position){
+        if (position == null) throw new NullPointerException("ERROR: Tried to clone a null position");
+        this.row = position.row;
+        this.col = position.col;
+    }
+
+    /**
+     * Constructor: coord matrix (row and col) from index of Scheme in array form
+     * @param indexArrayPosition index of the Scheme in array form
+     */
+    public Position (int indexArrayPosition){
+        this.row = indexArrayPosition / 5;
+        this.col = indexArrayPosition % 5;
+    }
+
+    /**
+     * Sets row position
      * @param row sets the row of the Scheme in matrix form
      */
     public void setRow(int row) {
@@ -51,6 +73,7 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
+     * Sets column position
      * @param col sets the col of the Scheme in matrix form
      */
     public void setCol(int col) {
@@ -61,8 +84,8 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
+     * Sets row and col calculated started from indexArrayPosition
      * @param indexArrayPosition
-     * sets row and col calculated started from indexArrayPosition
      */
     public void setRowCol (int indexArrayPosition){
         if(indexArrayPosition < 0 || indexArrayPosition > 19){
@@ -73,15 +96,7 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
-     * Builder: coord matrix (row and col) from index of Scheme in array form
-     * @param indexArrayPosition index of the Scheme in array form
-     */
-    public Position (int indexArrayPosition){
-        this.row = indexArrayPosition / 5;
-        this.col = indexArrayPosition % 5;
-    }
-
-    /**
+     * Gets row position saved
      * @return row of the Scheme in matrix form
      */
     public int getRow() {
@@ -89,13 +104,15 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
-     * @return col of the Scheme in matrix form
+     * Gets column position saved
+     * @return Column of the Scheme in matrix form
      */
     public int getCol() {
         return col;
     }
 
     /**
+     * Gets row position from array index
      * @param indexArrayPosition index of the Scheme in array form
      * @return the row to which it belongs
      */
@@ -104,6 +121,7 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
+     * Gets column position from array index
      * @param indexArrayPosition index of the Scheme in array form
      * @return the col to which it belongs
      */
@@ -112,6 +130,7 @@ public class Position implements Serializable, Cloneable {
     }
 
     /**
+     * Gets array index from saved position
      * @return index of the Scheme in array form from the 2 coord of the matrix
      */
     public int getIndexArrayPosition (){

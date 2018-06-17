@@ -6,11 +6,10 @@ import java.util.List;
 
 /**
  * BoardDice represents the Draft Pool. It contains the dice extracted from the Die Bag at the beginning of the round
- *
  * @author Cristian Giannetti
  */
 
-public class BoardDice implements Serializable, Cloneable {
+public class BoardDice implements Serializable {
 
     /**
      * List of Die in the Draft Pool
@@ -22,6 +21,16 @@ public class BoardDice implements Serializable, Cloneable {
      */
     public BoardDice(){
         dieList = new ArrayList<>();
+    }
+
+    /**
+     * Copy Constructor
+     * @param boardDice BoardDice to be cloned
+     */
+    public BoardDice(BoardDice boardDice){
+        if (boardDice == null) throw new NullPointerException("ERROR: Try to clone a null BoardDice");
+        this.dieList = new ArrayList<>();
+        for(Die die: boardDice.dieList) this.dieList.add(new Die(die));
     }
 
     /**

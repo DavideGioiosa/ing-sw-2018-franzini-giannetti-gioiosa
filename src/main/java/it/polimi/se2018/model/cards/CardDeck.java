@@ -19,12 +19,10 @@ public class CardDeck {
      * List of Card inserted in the Deck
      */
     private List<Card> cardList;
-
     /**
      * Type of card contained in the Deck
      */
     private CardTypeEnum cardType;
-
     /**
      * Boolean indicating if the deck has been shuffled
      */

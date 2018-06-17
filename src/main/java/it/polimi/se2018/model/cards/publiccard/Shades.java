@@ -13,7 +13,7 @@ public class Shades {
     private List<Integer> numbers;
 
     /**
-     * Buider method of Shades Class, arraylist with 2 cells
+     * Constructor method of Shades Class, arraylist with 2 cells
      */
     public Shades(){
         numbers = new ArrayList<>();
