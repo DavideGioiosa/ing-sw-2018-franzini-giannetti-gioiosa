@@ -13,7 +13,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class SchemaCard extends Card implements Serializable, Cloneable {
+public class SchemaCard extends Card implements Serializable {
     /**
      * List of the cells that make up the scheme
      */
@@ -45,6 +45,18 @@ public class SchemaCard extends Card implements Serializable, Cloneable {
         }
         this.cellList = cellList;
         this.difficulty = token;
+    }
+
+    /**
+     * Copy Constructor
+     * @param schemaCard Schema Card to be cloned
+     */
+    public SchemaCard(SchemaCard schemaCard){
+        super(schemaCard);
+        this.difficulty = schemaCard.difficulty;
+        this.cellList = new ArrayList<>();
+        for(Cell cell: schemaCard.cellList) cellList.add(new Cell(cell));
+        this.backSchema = null;
     }
 
     /**

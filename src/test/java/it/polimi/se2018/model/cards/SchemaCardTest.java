@@ -352,6 +352,7 @@ public class SchemaCardTest {
 
     /**
      * Creates a schema with various cells
+     * @return SchemaCard with ID 400
      */
     public SchemaCard schemaWithId400(){
         GameLoader gameLoader = new GameLoader();

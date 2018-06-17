@@ -11,7 +11,7 @@ import static it.polimi.se2018.model.Config.*;
  * @author Cristian Giannetti
  */
 
-public class Die implements Serializable, Cloneable {
+public class Die implements Serializable {
 
     /**
      * Indicates the colour of the dice
@@ -31,6 +31,17 @@ public class Die implements Serializable, Cloneable {
         if (colour == null) throw new NullPointerException("ERROR: Cannot set a dice with no colour");
         this.colour = colour;
         this.value = 0;
+    }
+
+    /**
+     * Copy Constructor
+     * @param dieToClone Die to be cloned
+     */
+    Die (Die dieToClone){
+        if (dieToClone != null) {
+            this.colour = dieToClone.colour;
+            this.value = dieToClone.value;
+        }else throw new NullPointerException("ERROR: Try to clone a null die");
     }
 
     /**

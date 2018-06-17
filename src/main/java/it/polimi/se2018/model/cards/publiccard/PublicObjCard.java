@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Public Objective Cards
  * @author Silvia Franzini
  */
-public class PublicObjCard extends Card implements Serializable, Cloneable {
+public class PublicObjCard extends Card implements Serializable {
     /**
      * Scoring method
      */
@@ -34,6 +34,16 @@ public class PublicObjCard extends Card implements Serializable, Cloneable {
         if(this.scoreStrategy == null){
             throw new NullPointerException("ERROR: ScoreStrategy not existing");
         }
+    }
+
+    /**
+     * Copy Constructor
+     * @param publicObjCard Public Objective Card to be cloned
+     */
+    public PublicObjCard(PublicObjCard publicObjCard){
+        super(publicObjCard);
+        this.bonus = publicObjCard.bonus;
+        this.scoreStrategy = publicObjCard.scoreStrategy;
     }
 
     /**

@@ -54,8 +54,6 @@ public class GameLoaderTest {
         for (SchemaCard schema: schemaCardList) {
             schema = schema.getBackSchema();
             assertEquals(20, schema.getCellList().size());
-            schema = schema.getBackSchema();
-            assertEquals(20, schema.getCellList().size());
         }
     }
 

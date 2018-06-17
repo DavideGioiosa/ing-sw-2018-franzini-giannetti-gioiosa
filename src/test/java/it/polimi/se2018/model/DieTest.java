@@ -30,7 +30,7 @@ public class DieTest {
     @Test
     public void creationDieBadTest(){
         try{
-            Die die = new Die(null);
+            Die die = new Die((ColourEnum)null);
             fail();
         } catch (NullPointerException e){
         }
@@ -189,5 +189,30 @@ public class DieTest {
             fail();
         } catch (RuntimeException e) {
         }
+    }
+
+    /**
+     * Verify that one Die has same values of his clone
+     */
+    @Test
+    public void verifyValuesOfClonedDie(){
+        Die die = new Die(colour);
+        die.firstRoll();
+        Die clonedDie = new Die(die);
+        assertEquals(die.getValue(), clonedDie.getValue());
+        assertEquals(die.getColour(), clonedDie.getColour());
+    }
+
+    /**
+     * Clones a Die and changes his value. Verify that the values are different
+     */
+    @Test
+    public void cloneDieWithValidParameters(){
+        Die die = new Die(colour);
+        die.firstRoll();
+        Die clonedDie = new Die(die);
+        clonedDie.oppositeValue();
+        assertNotEquals(die.getValue(), clonedDie.getValue());
+        assertEquals(die.getColour(), clonedDie.getColour());
     }
 }

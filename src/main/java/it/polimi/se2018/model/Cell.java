@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author Davide Gioiosa
  */
 
-public class Cell implements Serializable, Cloneable {
+public class Cell implements Serializable {
 
     /**
      * Limitation die value that a cell accepts
@@ -33,6 +33,17 @@ public class Cell implements Serializable, Cloneable {
         }
         this.value = value;
         this.colour = colour;
+    }
+
+    /**
+     * Copy Constructor
+     * @param cell Cell to be cloned
+     */
+    public Cell(Cell cell){
+        this.value = cell.value;
+        this.colour = cell.colour;
+        if(cell.die == null) this.die = null;
+        else this.die = new Die(cell.die);
     }
 
     /**

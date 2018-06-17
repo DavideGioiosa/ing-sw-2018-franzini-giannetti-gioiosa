@@ -14,12 +14,12 @@ import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 public class PlayerSetupper extends Observable<PlayerChoice>{
 
     /**
-     *
+     * Class that manages the interaction with user
      */
     private CommandLineInput commandLineInput;
 
     /**
-     *
+     * Constructor sets input class
      */
     public PlayerSetupper(){
         commandLineInput = new CommandLineInput();
@@ -44,6 +44,7 @@ public class PlayerSetupper extends Observable<PlayerChoice>{
     /**
      * Sets nickname to User received
      * @param user User initialized
+     * @return User with nickname set
      */
     public User choseNickname(User user){
         user.setNickname(commandLineInput.getInput("Inserisci un nickname:\n"));
@@ -51,8 +52,8 @@ public class PlayerSetupper extends Observable<PlayerChoice>{
     }
 
     /**
-     *
-     * @param playerChoice
+     * Manages the choice of Pattern colour
+     * @param playerChoice PlayerChoice containing available colours
      */
     private void chosePatternColour(PlayerChoice playerChoice){
         String message = commandLineInput.getInput("Inserisci colore: " + playerChoice.getColourEnumList().toString() + "\n");
@@ -72,7 +73,6 @@ public class PlayerSetupper extends Observable<PlayerChoice>{
 
     /**
      * Checks the Schema Card choice made by the player
-     * @return Error or ok message
      */
     public void choseSchema(PlayerChoice playerChoice){
 

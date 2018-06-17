@@ -157,6 +157,7 @@ public class GameBoardTest {
 
     /**
      * Creates a GameBoard with valid parameters
+     * @return new GameBoard for tests
      */
     public GameBoard newGameBoard(){
         setUp();

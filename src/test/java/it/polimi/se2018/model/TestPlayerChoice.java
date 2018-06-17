@@ -56,7 +56,7 @@ public class TestPlayerChoice {
         assertEquals(user, playerChoice.getUser());
         assertEquals(0, playerChoice.getSchemaCardList().size());
         assertEquals(0, playerChoice.getColourEnumList().size());
-        assertEquals(null, playerChoice.getChosenSchema());
+        assertEquals(0, playerChoice.getIdChosenSchema());
         assertEquals(null, playerChoice.getChosenColour());
     }
 
@@ -135,9 +135,9 @@ public class TestPlayerChoice {
     @Test
     public void settingValidChosenSchemaInPlayerChoiceTest(){
         PlayerChoice playerChoice = new PlayerChoice(user);
-        playerChoice.setChosenSchema(schemaSelected);
+        playerChoice.setIdChosenSchema(schemaSelected.getId());
 
-        assertEquals(schemaSelected, playerChoice.getChosenSchema());
+        assertEquals(schemaSelected.getId(), playerChoice.getIdChosenSchema());
     }
 
     /**
@@ -147,7 +147,7 @@ public class TestPlayerChoice {
     public void settingInvalidChosenSchemaInPlayerChoiceTest(){
         PlayerChoice playerChoice = new PlayerChoice(user);
         try {
-            playerChoice.setChosenSchema(null);
+            playerChoice.setIdChosenSchema(0);
             fail();
         }catch(NullPointerException e){}
     }

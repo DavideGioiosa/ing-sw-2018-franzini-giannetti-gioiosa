@@ -42,6 +42,16 @@ public class Card implements Serializable {
     }
 
     /**
+     * Copy Constructor
+     * @param card Card to be cloned
+     */
+    public Card(Card card){
+        this.id = card.id;
+        this.name = card.name;
+        this.description = card.description;
+    }
+
+    /**
      * Gets the identifier of the Card
      * @return Identifier of the Card
      */
