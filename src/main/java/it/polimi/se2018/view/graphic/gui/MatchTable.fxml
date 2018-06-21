@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="552.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.graphic.gui.ControllerMatchTable">
+    <children>
+        <HBox prefHeight="104.0" prefWidth="615.0" spacing="5.0">
+            <children>
+                <ImageView fx:id="dieimg1" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg2" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg3" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg4" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg5" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg6" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg7" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg8" fitHeight="63.0" fitWidth="63.0" />
+                <ImageView fx:id="dieimg9" fitHeight="63.0" fitWidth="63.0" />
+            </children>
+            <padding>
+                <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+            </padding>
+        </HBox>
+        <Button layoutX="22.0" layoutY="426.0" mnemonicParsing="false" onAction="#initialize" text="Extract" />
+      <Button layoutX="22.0" layoutY="375.0" mnemonicParsing="false" text="Pass" />
+    </children>
+</AnchorPane>
