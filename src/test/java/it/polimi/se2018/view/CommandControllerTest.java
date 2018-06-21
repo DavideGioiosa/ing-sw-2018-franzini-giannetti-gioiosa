@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.client.CommandController;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.cards.ToolCard;
@@ -49,7 +50,7 @@ public class CommandControllerTest {
 
         final ColourEnum FRAMECOLOUR = ColourEnum.BLUE;
         player = new Player(NICKNAME, CONNECTION, FRAMECOLOUR, schemaCard, 2);
-        List<Player> playerList = new ArrayList<Player>();
+        List<Player> playerList = new ArrayList<>();
         playerList.add(player);
 
         final ColourEnum COLOUR = ColourEnum.BLUE;
@@ -71,22 +72,22 @@ public class CommandControllerTest {
         //Sets dice into the Draft Pool
         Die die = new Die(ColourEnum.BLUE);
         die.setValue(2);
-        gameBoard.getBoardDice().insertDice(die);   //0
+        gameBoard.getBoardDice().insertDie(die);   //0
         Die die2 = new Die(ColourEnum.RED);
         die2.setValue(5);
-        gameBoard.getBoardDice().insertDice(die2);  //1
+        gameBoard.getBoardDice().insertDie(die2);  //1
         Die die3 = new Die(ColourEnum.YELLOW);
         die3.setValue(6);
-        gameBoard.getBoardDice().insertDice(die3);  //2
+        gameBoard.getBoardDice().insertDie(die3);  //2
         Die die4 = new Die(ColourEnum.BLUE);
         die4.setValue(1);
-        gameBoard.getBoardDice().insertDice(die4);  //3
+        gameBoard.getBoardDice().insertDie(die4);  //3
         Die die5 = new Die(ColourEnum.BLUE);
         die5.setValue(4);
-        gameBoard.getBoardDice().insertDice(die5);  //4
+        gameBoard.getBoardDice().insertDie(die5);  //4
         Die die6 = new Die(ColourEnum.GREEN);
         die6.setValue(4);
-        gameBoard.getBoardDice().insertDice(die6);  //5
+        gameBoard.getBoardDice().insertDie(die6);  //5
 
         //PICK Move in Borders, BLUE colour 4 value
         playerMovePick = new PlayerMove();
@@ -95,7 +96,7 @@ public class CommandControllerTest {
         playerMovePick.setDiceBoardIndex(4);
         playerMovePick.insertDiceSchemaWhereToLeave(new Position(14));
 
-        commandController = new CommandController();
+        commandController = new CommandController(null);
     }
 
     /**
@@ -131,7 +132,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_positiveResultIsAdjacent() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move adj to a die (diagonal), RED colour 5 value
         PlayerMove playerMovePickAdj = new PlayerMove();
@@ -153,7 +154,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_negativeResultIsAdjacent() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK move to check Adjacent Die restriction
         PlayerMove pmAdjNegativeRestriction = new PlayerMove();
@@ -174,7 +175,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_positiveResultColourRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move to check colour Restriction, YELLOW colour 6 value
         PlayerMove pmPickColourRestriction = new PlayerMove();
@@ -195,7 +196,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_negativeResultColourRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move to check colour Restriction, RED colour 5 value
         PlayerMove pmPickNegativeColourRestriction = new PlayerMove();
@@ -215,7 +216,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_positiveResultValueRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move to check colour Restriction, RED colour 5 value
         PlayerMove pmPickValueRestriction = new PlayerMove();
@@ -235,7 +236,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_negativeResultValueRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move to check colour Restriction, BLUE colour 4 value
         PlayerMove pmPickNegativeValueRestriction = new PlayerMove();
@@ -256,7 +257,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_positiveResultAdjacentColourRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move to check ADJ-Colour Restriction, RED colour 5 value
         PlayerMove pmPickAdjColourRestriction = new PlayerMove();
@@ -277,7 +278,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_negativeResultAdjacentColourRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move to check ADJ-Colour Restriction, RED colour 5 value
         PlayerMove pmPickNegativeAdjColourRestriction = new PlayerMove();
@@ -298,7 +299,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_positiveResultAdjacentValueRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
 
         //PICK Move to check ADJ-Value Restriction, YELLOW colour 6 value
@@ -320,7 +321,7 @@ public class CommandControllerTest {
     @Test
     public void checkMoveValidity_negativeResultAdjacentValueRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
-                gameBoard.getBoardDice().takeDice(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
+                gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
 
         //PICK Move to check ADJ-Value Restriction, GREEN colour 4 value
         PlayerMove pmPickNegativeAdjValueRestriction = new PlayerMove();

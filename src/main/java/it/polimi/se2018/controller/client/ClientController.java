@@ -1,9 +1,11 @@
-package it.polimi.se2018.view;
+package it.polimi.se2018.controller.client;
 
 import it.polimi.se2018.connection.client.Client;
 import it.polimi.se2018.model.*;
 
 import it.polimi.se2018.utils.Observer;
+import it.polimi.se2018.model.ClientModel;
+import it.polimi.se2018.view.View;
 
 /**
  * Local Controller manages the controller classes that help the user to not make wrong choices
@@ -33,7 +35,7 @@ public class ClientController implements Observer<PlayerMessage> {
     private ClientModel clientModel;
 
     /**
-     * Constructor
+     * Constructor sets this ClientController as view's Observer
      * @param client
      * @param view
      */
@@ -104,7 +106,7 @@ public class ClientController implements Observer<PlayerMessage> {
      * @param moveMessage Actual status of Board
      */
     private void updateBoard(MoveMessage moveMessage){
-        ClientBoard clientBoard = new ClientBoard(moveMessage.getPlayerList(),  moveMessage.getBoardDice(), moveMessage.getTrackboard(), moveMessage.getBoardCard());
+        ClientBoard clientBoard = new ClientBoard(moveMessage.getPlayerList(),  moveMessage.getBoardDice(), moveMessage.getTrackBoard(), moveMessage.getBoardCard());
         clientModel.setClientBoard(clientBoard);
         System.out.println("Board Aggiornato");
     }

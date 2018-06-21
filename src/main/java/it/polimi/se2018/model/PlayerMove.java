@@ -80,21 +80,21 @@ public class PlayerMove implements Serializable {
      * Copy Constructor
      * @param playerMove PlayerMove to be cloned
      */
-    public PlayerMove(PlayerMove playerMove){
+    private PlayerMove(PlayerMove playerMove){
         if (playerMove == null) throw new NullPointerException("ERROR: Tried to clone a null PlayerMove");
 
         this.identifier = playerMove.identifier;
-        this.player = new Player(playerMove.player);
+        this.player = player.getClone();
         this.typeOfChoice = playerMove.typeOfChoice;
         this.idToolCard = playerMove.idToolCard;
         this.diceBoardIndex = playerMove.diceBoardIndex;
         this.diceSchemaWhereToTake = new ArrayList<>();
-        for(Position position: playerMove.diceSchemaWhereToTake) this.diceSchemaWhereToTake.add(new Position(position));
+        for(Position position: playerMove.diceSchemaWhereToTake) this.diceSchemaWhereToTake.add(position.getClone());
 
         this.diceSchemaWhereToLeave = new ArrayList<>();
-        for(Position position: playerMove.diceSchemaWhereToLeave) this.diceSchemaWhereToLeave.add(new Position(position));
+        for(Position position: playerMove.diceSchemaWhereToLeave) this.diceSchemaWhereToLeave.add(position.getClone());
 
-        for(int i = 0; i < playerMove.trackBoardIndexArray.length; i++) this.trackBoardIndexArray[i] = playerMove.trackBoardIndexArray[i];
+        if (playerMove.trackBoardIndexArray != null) for(int i = 0; i < playerMove.trackBoardIndexArray.length; i++) this.trackBoardIndexArray[i] = playerMove.trackBoardIndexArray[i];
 
         this.value = playerMove.value;
     }
@@ -248,11 +248,10 @@ public class PlayerMove implements Serializable {
 
     /**
      * Gets a copy of PlayerMove
-     * @return copy of PlayerMove
-     * @throws CloneNotSupportedException Throws exception if it isn't possible to create a copy
+     * @return Cloned PlayerMove
      */
-    public PlayerMove getClone() throws CloneNotSupportedException{
-        return (PlayerMove)this.clone();
+    public PlayerMove getClone(){
+        return new PlayerMove(this);
     }
 }
 

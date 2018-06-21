@@ -30,10 +30,10 @@ public class SchemaCard extends Card implements Serializable {
     /**
      * Builder: create a Scheme card
      * @param name name of the card
-     * @param description informations about the card
+     * @param description information about the card
      * @param id identifier of the scheme
      * @param token related to the difficulty of a scheme
-     * @param cellList 20 cells componing the scheme
+     * @param cellList 20 cells that compose the scheme
      */
     public SchemaCard (int id, String name, String description, int token, List<Cell> cellList){
         super(id, name, description);
@@ -51,11 +51,11 @@ public class SchemaCard extends Card implements Serializable {
      * Copy Constructor
      * @param schemaCard Schema Card to be cloned
      */
-    public SchemaCard(SchemaCard schemaCard){
+    private SchemaCard(SchemaCard schemaCard){
         super(schemaCard);
         this.difficulty = schemaCard.difficulty;
         this.cellList = new ArrayList<>();
-        for(Cell cell: schemaCard.cellList) cellList.add(new Cell(cell));
+        for(Cell cell: schemaCard.cellList) cellList.add(cell.getClone());
         this.backSchema = null;
     }
 
@@ -222,5 +222,14 @@ public class SchemaCard extends Card implements Serializable {
         if (position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition() > 19) {
             throw new IllegalArgumentException("ERROR: The position inserted is out of the range permitted");
         }
+    }
+
+    /**
+     * Gets a clone of Schema Card
+     * @return Cloned SchemaCard
+     */
+    @Override
+    public SchemaCard getClone(){
+        return new SchemaCard(this);
     }
 }

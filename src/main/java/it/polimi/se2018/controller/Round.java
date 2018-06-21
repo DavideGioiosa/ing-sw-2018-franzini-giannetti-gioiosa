@@ -126,7 +126,7 @@ public class Round implements Observer<PlayerMove>{
     private void endRound (){
         List<Die> dieList = new ArrayList<>();
         while(!gameBoard.getBoardDice().getDieList().isEmpty()){
-            dieList.add(gameBoard.getBoardDice().takeDice(0));
+            dieList.add(gameBoard.getBoardDice().takeDie(0));
         }
         gameBoard.getTrackBoardDice().insertDice(dieList);
         //notify(); //TODO: CHECK CORRECT
@@ -142,7 +142,7 @@ public class Round implements Observer<PlayerMove>{
             for (int i = 0; i < playerList.size() * 2 + 1; i++) {
                 Die die = gameBoard.getBagDice().extractDice();
                 die.firstRoll();
-                gameBoard.getBoardDice().insertDice(die);
+                gameBoard.getBoardDice().insertDie(die);
             }
             return true;
         }

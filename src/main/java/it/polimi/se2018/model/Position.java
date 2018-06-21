@@ -46,7 +46,7 @@ public class Position implements Serializable {
      * Copy constructor
      * @param position Position to be cloned
      */
-    public Position(Position position){
+    private Position(Position position){
         if (position == null) throw new NullPointerException("ERROR: Tried to clone a null position");
         this.row = position.row;
         this.col = position.col;
@@ -145,5 +145,13 @@ public class Position implements Serializable {
      */
     public int getIndexArrayPosition (int row, int col){
         return row * 5 + col;
+    }
+
+    /**
+     * Gets a clone of Position
+     * @return Cloned Position
+     */
+    public Position getClone(){
+        return new Position(this);
     }
 }

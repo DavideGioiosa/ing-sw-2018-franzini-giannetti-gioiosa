@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Public Class Trackboard
+ * TrackBoard class contains the discarded dice from every round
  * @author Davide Gioiosa
  */
 
@@ -26,7 +26,7 @@ public class TrackBoard implements Serializable {
      * Copy Constructor
      * @param trackBoard TrackBoard to be cloned
      */
-    public TrackBoard(TrackBoard trackBoard) {
+    private TrackBoard(TrackBoard trackBoard) {
         if (trackBoard == null) throw new NullPointerException("ERROR: Tried to create a null TrackBoard");
 
         this.diceList = new ArrayList<>();
@@ -35,13 +35,12 @@ public class TrackBoard implements Serializable {
             List<Die> tempDieList = new ArrayList<>();
 
             for (Die die : dieList){
-                tempDieList.add(new Die(die));
+                tempDieList.add(die.getClone());
             }
 
             this.diceList.add(tempDieList);
         }
     }
-
 
     /**
      * Insertion of one or more dice on the Trackboard
@@ -86,5 +85,13 @@ public class TrackBoard implements Serializable {
         diceList.get(indexTb).add(die);
 
         return diceList.get(indexTb).remove(indexTbCell);
+    }
+
+    /**
+     * Gets a clone of TrackBoard
+     * @return Cloned TrackBoard
+     */
+    public TrackBoard getClone(){
+        return new TrackBoard(this);
     }
 }

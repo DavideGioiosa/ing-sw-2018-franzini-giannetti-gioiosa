@@ -42,14 +42,14 @@ public class BoardCard implements Serializable {
      * Copy Constructor
      * @param boardCard BoardCard to be cloned
      */
-    public BoardCard(BoardCard boardCard){
+    private BoardCard(BoardCard boardCard){
         if(boardCard == null) throw new NullPointerException("ERROR: Try to clone a null BoardCard");
 
         this.publicObjCardList = new ArrayList<>();
-        for(PublicObjCard publicObjCard: boardCard.publicObjCardList) this.publicObjCardList.add(new PublicObjCard(publicObjCard));
+        for(PublicObjCard publicObjCard: boardCard.publicObjCardList) this.publicObjCardList.add(publicObjCard.getClone());
 
         this.toolCardList = new ArrayList<>();
-        for(ToolCard toolCard: boardCard.toolCardList) this.toolCardList.add(new ToolCard(toolCard));
+        for(ToolCard toolCard: boardCard.toolCardList) this.toolCardList.add(toolCard.getClone());
     }
 
     /**
@@ -66,5 +66,13 @@ public class BoardCard implements Serializable {
      */
     public List<ToolCard> getToolCardList() {
         return toolCardList;
+    }
+
+    /**
+     * Gets a clone of BoardCard
+     * @return Cloned BoardCard
+     */
+    public BoardCard getClone(){
+        return new BoardCard(this);
     }
 }

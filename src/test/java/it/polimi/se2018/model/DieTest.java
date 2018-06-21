@@ -4,10 +4,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
-
 /**
  * Tests methods of Die that don't use random functions
- *
  * @author Cristian Giannetti
  */
 public class DieTest {
@@ -198,7 +196,7 @@ public class DieTest {
     public void verifyValuesOfClonedDie(){
         Die die = new Die(colour);
         die.firstRoll();
-        Die clonedDie = new Die(die);
+        Die clonedDie = die.getClone();
         assertEquals(die.getValue(), clonedDie.getValue());
         assertEquals(die.getColour(), clonedDie.getColour());
     }
@@ -210,7 +208,7 @@ public class DieTest {
     public void cloneDieWithValidParameters(){
         Die die = new Die(colour);
         die.firstRoll();
-        Die clonedDie = new Die(die);
+        Die clonedDie = die.getClone();
         clonedDie.oppositeValue();
         assertNotEquals(die.getValue(), clonedDie.getValue());
         assertEquals(die.getColour(), clonedDie.getColour());

@@ -39,7 +39,7 @@ public class ToolCard extends Card implements Serializable {
      * Copy Constructor
      * @param toolCard ToolCard to be cloned
      */
-    public ToolCard(ToolCard toolCard){
+    private ToolCard(ToolCard toolCard){
         super(toolCard);
         this.colour = toolCard.colour;
         this.token = toolCard.token;
@@ -81,4 +81,12 @@ public class ToolCard extends Card implements Serializable {
         this.token += token;
     }
 
+    /**
+     * Gets a clone of Tool Card
+     * @return Cloned ToolCard
+     */
+    @Override
+    public ToolCard getClone(){
+        return new ToolCard(this);
+    }
 }

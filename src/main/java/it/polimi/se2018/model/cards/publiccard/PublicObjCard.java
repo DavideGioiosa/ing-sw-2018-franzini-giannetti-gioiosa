@@ -41,7 +41,7 @@ public class PublicObjCard extends Card implements Serializable {
      * Copy Constructor
      * @param publicObjCard Public Objective Card to be cloned
      */
-    public PublicObjCard(PublicObjCard publicObjCard){
+    private PublicObjCard(PublicObjCard publicObjCard){
         super(publicObjCard);
         this.bonus = publicObjCard.bonus;
         this.scoreStrategy = null;
@@ -105,5 +105,14 @@ public class PublicObjCard extends Card implements Serializable {
      */
     public int getBonus() {
         return bonus;
+    }
+
+    /**
+     * Gets a clone of Public Objective Card
+     * @return Cloned PublicObjCard
+     */
+    @Override
+    public PublicObjCard getClone() {
+        return new PublicObjCard(this);
     }
 }

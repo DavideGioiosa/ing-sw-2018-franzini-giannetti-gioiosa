@@ -5,7 +5,7 @@ import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 
 import static it.polimi.se2018.model.Config.*;
-import static it.polimi.se2018.view.CommandTypeEnum.*;
+import static it.polimi.se2018.model.CommandTypeEnum.*;
 
 /**
  * Controls the Syntax of message received and sets PlayerMove's attributes
@@ -178,7 +178,7 @@ public class SyntaxController {
     private CommandTypeEnum resetCommand(PlayerMove receivedPlayerMove){
         try{
             playerMove = receivedPlayerMove.getClone();
-        }catch (CloneNotSupportedException e){
+        }catch (NullPointerException e){
             playerMove = new PlayerMove();
         }
 

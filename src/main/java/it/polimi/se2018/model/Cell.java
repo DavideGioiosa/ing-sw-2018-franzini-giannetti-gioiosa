@@ -2,6 +2,9 @@ package it.polimi.se2018.model;
 
 import java.io.Serializable;
 
+import static it.polimi.se2018.model.Config.DIE_MAX_VALUE;
+import static it.polimi.se2018.model.Config.DIE_MIN_VALUE;
+
 /**
  * Cell class represent a single cell of SchemaCard
  * @author Davide Gioiosa
@@ -39,11 +42,11 @@ public class Cell implements Serializable {
      * Copy Constructor
      * @param cell Cell to be cloned
      */
-    public Cell(Cell cell){
+    private Cell(Cell cell){
         this.value = cell.value;
         this.colour = cell.colour;
         if(cell.die == null) this.die = null;
-        else this.die = new Die(cell.die);
+        else this.die = cell.die.getClone();
     }
 
     /**
@@ -61,6 +64,9 @@ public class Cell implements Serializable {
     public void insertDice(Die die) {
         if(die == null){
             throw new NullPointerException("ERROR: Try to insert a die null");
+        }
+        if (die.getValue() < DIE_MIN_VALUE || die.getValue() > DIE_MAX_VALUE) {
+            throw new RuntimeException("ERROR: Try to insert a die with invalid Value");
         }
         if (!isEmpty()) {
             throw new IllegalArgumentException("ERROR: Try to insert a die in a not empty cell");
@@ -104,5 +110,13 @@ public class Cell implements Serializable {
         this.die = null;
 
         return diePicked;
+    }
+
+    /**
+     * Gets a clone of Cell
+     * @return Cell cloned
+     */
+    public Cell getClone(){
+        return new Cell(this);
     }
 }
