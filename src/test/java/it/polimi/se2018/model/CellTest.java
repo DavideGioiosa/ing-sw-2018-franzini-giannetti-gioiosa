@@ -25,7 +25,6 @@ public class CellTest {
         die.setValue(value);
     }
 
-
     /**
      * Creation test with valid parameters
      */
@@ -82,6 +81,18 @@ public class CellTest {
     }
 
     /**
+     * Tries to insert a Die without value in a cell
+     */
+    @Test
+    public void insertDieNotRolledIntoCellTest() {
+        Cell cell = new Cell(0, ColourEnum.RED);
+        try{
+            cell.insertDice(new Die(ColourEnum.RED));
+            fail();
+        }catch(RuntimeException e){}
+    }
+
+    /**
      * Tests method pickDiee that returns the dice in that specific cell
      */
     @Test
@@ -130,7 +141,7 @@ public class CellTest {
     @Test
     public void insertDieInClonedCellTest(){
         Cell cell = new Cell(value, ColourEnum.BLUE);
-        Cell clonedCell = new Cell(cell);
+        Cell clonedCell = cell.getClone();
 
         assertTrue(cell.isEmpty());
         assertTrue(clonedCell.isEmpty());
@@ -148,7 +159,7 @@ public class CellTest {
     public void pickDieInClonedCellTest(){
         Cell cell = new Cell(value, ColourEnum.BLUE);
         cell.insertDice(die);
-        Cell clonedCell = new Cell(cell);
+        Cell clonedCell = cell.getClone();
 
         assertFalse(clonedCell.isEmpty());
         assertFalse(cell.isEmpty());

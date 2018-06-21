@@ -1,9 +1,11 @@
-package it.polimi.se2018.view;
+package it.polimi.se2018.controller.client;
 
 import it.polimi.se2018.connection.client.Client;
 import it.polimi.se2018.model.PlayerChoice;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.player.User;
+import it.polimi.se2018.view.PlayerSetupper;
+import it.polimi.se2018.view.View;
 
 public class ChoiceController {
 

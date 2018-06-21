@@ -6,24 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Board with information available for Players
+ * Board containing only information available for Players
  */
 public class ClientBoard{
 
     /**
-     * list of players in the match
+     * List of players in the match
      */
     private List<Player> playerList;
     /**
-     * dice in the Draft Pool
+     * Dice in the Draft Pool
      */
     private BoardDice boardDice;
     /**
-     * dice placed on the trackboard
+     * Dice placed on the Trackboard
      */
     private TrackBoard trackBoardDice;
     /**
-     * public and tool cards usable in the match
+     * Public and Tool cards usable in the match
      */
     private BoardCard cardOnBoard;
 
@@ -60,25 +60,27 @@ public class ClientBoard{
      * Copy Constructor
      * @param clientBoard ClientBoard to be cloned
      */
-    public ClientBoard(ClientBoard clientBoard){
+    private ClientBoard(ClientBoard clientBoard){
         if (clientBoard == null) throw new NullPointerException("ERROR: Tried to create a null ClientBoard");
 
         this.playerList = new ArrayList<>();
-        for(Player player: clientBoard.playerList) this.playerList.add(new Player(player));
+        for(Player player: clientBoard.playerList) this.playerList.add(player.getClone());
 
-        this.boardDice = new BoardDice(clientBoard.boardDice);
-        this.trackBoardDice = new TrackBoard(clientBoard.trackBoardDice);
-        this.cardOnBoard = new BoardCard(clientBoard.cardOnBoard);
+        this.boardDice = clientBoard.boardDice.getClone();
+        this.trackBoardDice = clientBoard.getTrackBoardDice().getClone();
+        this.cardOnBoard = clientBoard.getCardOnBoard().getClone();
     }
 
     /**
-     * @return the dice available to use in the action
+     * Getter method for Draft Pool
+     * @return Status of Draft Pool
      */
     public BoardDice getBoardDice() {
         return boardDice;
     }
 
     /**
+     * Getter method for status of Trackboard
      * @return TrackBoard containing dice placed in each round
      */
     public TrackBoard getTrackBoardDice() {
@@ -86,6 +88,7 @@ public class ClientBoard{
     }
 
     /**
+     * Getter method for Public and Tool cards available in the match
      * @return cards available in the match
      */
     public BoardCard getCardOnBoard() {
@@ -93,6 +96,7 @@ public class ClientBoard{
     }
 
     /**
+     * Getter method for list of Player in the match
      * @return list of the player in the match
      */
     public List<Player> getPlayerList() {
@@ -100,11 +104,10 @@ public class ClientBoard{
     }
 
     /**
-     * Clone method
-     * @return Copy of the element
-     * @throws CloneNotSupportedException Throws exception if clone method isn't possible
+     * Gets a clone of ClientBoard
+     * @return Cloned ClientBoard
      */
-    public ClientBoard getClone() throws CloneNotSupportedException{
-        return (ClientBoard)this.clone();
+    public ClientBoard getClone(){
+        return new ClientBoard(this);
     }
 }

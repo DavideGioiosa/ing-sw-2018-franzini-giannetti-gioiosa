@@ -1,6 +1,5 @@
-package it.polimi.se2018.view;
+package it.polimi.se2018.model;
 
-import it.polimi.se2018.model.ClientBoard;
 import it.polimi.se2018.utils.Observable;
 
 /**
@@ -22,14 +21,14 @@ public class ClientModel extends Observable<ClientBoard>{
     }
 
     /**
-     * Setter method for ClientBoard notify the change of the Board
+     * Setter method for ClientBoard notifies the change of the Board
      * @param clientBoard Board updated
      */
     public void setClientBoard(ClientBoard clientBoard) {
         this.clientBoard = clientBoard;
         try {
             notify(clientBoard.getClone());
-        }catch (CloneNotSupportedException e){
+        }catch (NullPointerException e){
 
         }
     }

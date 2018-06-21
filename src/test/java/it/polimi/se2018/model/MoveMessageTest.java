@@ -20,7 +20,6 @@ public class MoveMessageTest {
 
     /**
      * Initialization of MoveMessageTest
-     *
      * @author Silvia Franzini
      */
     @Before
@@ -62,7 +61,7 @@ public class MoveMessageTest {
      * Tests getTrackboard method
      */
     @Test
-    public void getTrackboard() {
-        assertEquals(moveMessage.getTrackboard(),trackBoard);
+    public void getTrackBoard() {
+        assertEquals(moveMessage.getTrackBoard(),trackBoard);
     }
 }

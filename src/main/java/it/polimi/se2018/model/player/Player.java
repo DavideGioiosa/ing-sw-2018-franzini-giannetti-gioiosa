@@ -43,13 +43,13 @@ public class Player implements Serializable {
      * Copy Constructor
      * @param player Player to be cloned
      */
-    public Player(Player player){
+    private Player(Player player){
         if (player == null) throw new NullPointerException("ERROR: Tried to clone a null Player");
 
         this.nickname = player.nickname;
         this.connectionStatus = player.connectionStatus;
         this.frameColour = player.frameColour;
-        this.schemaCard = new SchemaCard(player.schemaCard);
+        this.schemaCard = player.schemaCard.getClone();
         this.usableTokens = player.usableTokens;
         this.score = player.score;
     }
@@ -145,5 +145,13 @@ public class Player implements Serializable {
      */
     public String getNickname(){
         return nickname;
+    }
+
+    /**
+     * Gets a clone of Player
+     * @return Player Cloned
+     */
+    public Player getClone(){
+        return new Player(this);
     }
 }

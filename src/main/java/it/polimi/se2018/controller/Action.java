@@ -42,9 +42,9 @@ public class Action {
                 try{
                     for(Player player: gameBoard.getPlayerList()) {
                         if (player.getNickname().equals(playerMove.getPlayer().getNickname())){
-                            Die dieExtracted = gameBoard.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
+                            Die dieExtracted = gameBoard.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
                             Boolean placed = placeDice(player, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
-                            if(!placed) gameBoard.getBoardDice().insertDice(dieExtracted);
+                            if(!placed) gameBoard.getBoardDice().insertDie(dieExtracted);
                         }
                     }
                 }catch(IllegalArgumentException e){
@@ -78,7 +78,7 @@ public class Action {
                     }catch(RuntimeException e){
                         return false;
                     }
-                    gameBoard.getBoardDice().insertDice(die);
+                    gameBoard.getBoardDice().insertDie(die);
                 } break;
             default:
                 break;

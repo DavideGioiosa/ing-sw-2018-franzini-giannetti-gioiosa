@@ -26,20 +26,20 @@ public class MoveMessage implements Serializable {
     /**
      * Actual status of trackboard
      */
-    private TrackBoard trackboard;
+    private TrackBoard trackBoard;
 
     /**
      * Constructor assigns the public objects
      * @param playerList List of Player of the game
      * @param boardDice Status of Draft Pool
      * @param boardCard Cards on board
-     * @param trackboard Status of TrackBoard
+     * @param trackBoard Status of TrackBoard
      */
-    public MoveMessage(List<Player> playerList, BoardDice boardDice, BoardCard boardCard, TrackBoard trackboard){
+    public MoveMessage(List<Player> playerList, BoardDice boardDice, BoardCard boardCard, TrackBoard trackBoard){
         this.boardCard = boardCard;
         this.boardDice = boardDice;
         this.playerList = playerList;
-        this.trackboard = trackboard;
+        this.trackBoard = trackBoard;
     }
 
     /**
@@ -70,7 +70,7 @@ public class MoveMessage implements Serializable {
      * Allows the view to see the die on the TrackBoard
      * @return the TrackBoard
      */
-    public TrackBoard getTrackboard() {
-        return trackboard;
+    public TrackBoard getTrackBoard() {
+        return trackBoard;
     }
 }

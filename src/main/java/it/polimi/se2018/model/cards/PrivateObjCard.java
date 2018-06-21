@@ -32,7 +32,7 @@ public class PrivateObjCard extends Card implements Serializable {
      * Copy Constructor
      * @param privateObjCard Private Objective Card to be cloned
      */
-    public PrivateObjCard(PrivateObjCard privateObjCard){
+    private PrivateObjCard(PrivateObjCard privateObjCard){
         super(privateObjCard);
         this.colour = privateObjCard.colour;
     }
@@ -62,5 +62,14 @@ public class PrivateObjCard extends Card implements Serializable {
             }
         }
         return sum;
+    }
+
+    /**
+     * Gets a clone of Private Objective Card
+     * @return Cloned PrivateObjCard
+     */
+    @Override
+    public PrivateObjCard getClone(){
+        return new PrivateObjCard(this);
     }
 }

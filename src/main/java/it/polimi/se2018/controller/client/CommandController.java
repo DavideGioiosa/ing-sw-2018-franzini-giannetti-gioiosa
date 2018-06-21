@@ -1,6 +1,7 @@
-package it.polimi.se2018.view;
+package it.polimi.se2018.controller.client;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.view.View;
 
 /**
  * View's Class: Command Controller

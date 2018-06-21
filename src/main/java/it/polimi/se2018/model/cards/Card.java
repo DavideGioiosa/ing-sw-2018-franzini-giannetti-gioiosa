@@ -43,7 +43,7 @@ public class Card implements Serializable {
      * Copy Constructor
      * @param card Card to be cloned
      */
-    public Card(Card card){
+    protected Card(Card card){
         this.id = card.id;
         this.name = card.name;
         this.description = card.description;
@@ -71,5 +71,13 @@ public class Card implements Serializable {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Gets a clone of cCard
+     * @return Cloned Card
+     */
+    public Card getClone(){
+        return new Card(this);
     }
 }
