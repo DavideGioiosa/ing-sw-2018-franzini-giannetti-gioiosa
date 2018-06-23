@@ -1,8 +1,6 @@
 package it.polimi.se2018.model.cards;
 
-import it.polimi.se2018.model.Cell;
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.Position;
+import it.polimi.se2018.model.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class SchemaCard extends Card implements Serializable {
+public class SchemaCard extends Card implements Serializable, DiceContainer {
     /**
      * List of the cells that make up the scheme
      */
@@ -79,7 +77,12 @@ public class SchemaCard extends Card implements Serializable {
         }
         checkPosition(position);
 
-        cellList.get(position.getIndexArrayPosition()).insertDice(die);
+        cellList.get(position.getIndexArrayPosition()).insertDie(die);
+    }
+
+    public Die pickDieFromCell(Position position){
+        if(position == null) throw new NullPointerException("ERROR: Impossible to pick Die from null Position");
+        return this.cellList.get(position.getIndexArrayPosition()).pickDie();
     }
 
     /**
@@ -232,4 +235,48 @@ public class SchemaCard extends Card implements Serializable {
     public SchemaCard getClone(){
         return new SchemaCard(this);
     }
+
+    /**
+     *
+     * @param position
+     * @return
+     */
+    private Die pickDie(Position position){
+        return cellList.get(position.getIndexArrayPosition()).pickDie();
+    }
+
+    /**
+     *
+     * @param playerMove
+     * @return
+     */
+    @Override
+    public List<Die> pickDice(PlayerMove playerMove){
+        List<Die> dieList = new ArrayList<>();
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToTake().size(); i++) {
+            dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(i)));
+        }
+        return dieList;
+    }
+
+    @Override
+    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        List<Die> dieLeavedList = new ArrayList<>();
+
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            dieLeavedList.add(pickDie(playerMove.getDiceSchemaWhereToLeave().get(i)));
+            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
+        }
+
+        return dieLeavedList;
+    }
+
+    @Override
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
+        }
+    }
+
+
 }

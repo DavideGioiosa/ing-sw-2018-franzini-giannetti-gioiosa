@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Controller's Class Round
- * componing the the match
+ * Round is composed by a List of Turn. It starts with dice extraction and ends putting discarded dice in the TrackBoard
  * @author Davide Gioiosa
  */
 
 public class Round implements Observer<PlayerMove>{
+
     /**
      * list of Turns of each player componing the round
      */
@@ -44,6 +44,7 @@ public class Round implements Observer<PlayerMove>{
     private Player nextRoundFirstPlayer;
 
     private RemoteView view;
+
     /**
      * Builder of Round which composes the match
      * @param gameBoard full table of the game

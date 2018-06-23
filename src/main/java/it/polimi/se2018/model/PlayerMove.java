@@ -84,7 +84,7 @@ public class PlayerMove implements Serializable {
         if (playerMove == null) throw new NullPointerException("ERROR: Tried to clone a null PlayerMove");
 
         this.identifier = playerMove.identifier;
-        this.player = player.getClone();
+        this.player = playerMove.player.getClone();
         this.typeOfChoice = playerMove.typeOfChoice;
         this.idToolCard = playerMove.idToolCard;
         this.diceBoardIndex = playerMove.diceBoardIndex;
@@ -94,8 +94,7 @@ public class PlayerMove implements Serializable {
         this.diceSchemaWhereToLeave = new ArrayList<>();
         for(Position position: playerMove.diceSchemaWhereToLeave) this.diceSchemaWhereToLeave.add(position.getClone());
 
-        if (playerMove.trackBoardIndexArray != null) for(int i = 0; i < playerMove.trackBoardIndexArray.length; i++) this.trackBoardIndexArray[i] = playerMove.trackBoardIndexArray[i];
-
+        if (playerMove.trackBoardIndexArray != null) System.arraycopy(playerMove.trackBoardIndexArray, 0, this.trackBoardIndexArray, 0,playerMove.trackBoardIndexArray.length);
         this.value = playerMove.value;
     }
 

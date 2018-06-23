@@ -33,7 +33,7 @@ public class TrackBoardTest {
     }
 
     /**
-     * Tests the method insertDice by controlling if the List insert is in the last position
+     * Tests the method insertDie by controlling if the List insert is in the last position
      */
     @Test
     public void insertDice() {

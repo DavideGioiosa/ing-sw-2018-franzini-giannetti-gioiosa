@@ -7,7 +7,6 @@ import static org.junit.Assert.*;
 
 /**
  * Tests Cell class
- *
  * @author Cristian Giannetti
  */
 public class CellTest {
@@ -64,7 +63,7 @@ public class CellTest {
     @Test
     public void insertValidDieIntoCellTest() {
         Cell cell = new Cell(0, ColourEnum.RED);
-        cell.insertDice(die);
+        cell.insertDie(die);
         assertEquals(die, cell.getDie());
     }
 
@@ -75,7 +74,7 @@ public class CellTest {
     public void insertNullDieIntoCellTest() {
         Cell cell = new Cell(0, ColourEnum.RED);
         try{
-            cell.insertDice(null);
+            cell.insertDie(null);
             fail();
         }catch(NullPointerException e){}
     }
@@ -87,7 +86,7 @@ public class CellTest {
     public void insertDieNotRolledIntoCellTest() {
         Cell cell = new Cell(0, ColourEnum.RED);
         try{
-            cell.insertDice(new Die(ColourEnum.RED));
+            cell.insertDie(new Die(ColourEnum.RED));
             fail();
         }catch(RuntimeException e){}
     }
@@ -98,10 +97,10 @@ public class CellTest {
     @Test
     public void pickDieFromFullCellTest() {
         Cell cell = new Cell(value, ColourEnum.RED);
-        cell.insertDice(die);
+        cell.insertDie(die);
 
         assertEquals(die, cell.getDie());
-        Die pickedDie = cell.pickDice();
+        Die pickedDie = cell.pickDie();
 
         assertTrue(cell.isEmpty());
         assertEquals(die, pickedDie);
@@ -115,7 +114,7 @@ public class CellTest {
         Cell cell = new Cell(value, ColourEnum.RED);
         assertTrue(cell.isEmpty());
         try {
-            Die pickedDie = cell.pickDice();
+            Die pickedDie = cell.pickDie();
             fail();
         }catch(NullPointerException e){}
     }
@@ -126,11 +125,11 @@ public class CellTest {
     @Test
     public void insertDieInFullCell(){
         Cell cell = new Cell(value, null);
-        cell.insertDice(die);
+        cell.insertDie(die);
         Die die1 = new Die(ColourEnum.BLUE);
         die1.firstRoll();
         try {
-            cell.insertDice(die1);
+            cell.insertDie(die1);
             fail();
         }catch(IllegalArgumentException e){}
     }
@@ -146,7 +145,7 @@ public class CellTest {
         assertTrue(cell.isEmpty());
         assertTrue(clonedCell.isEmpty());
 
-        cell.insertDice(die);
+        cell.insertDie(die);
 
         assertFalse(cell.isEmpty());
         assertTrue(clonedCell.isEmpty());
@@ -158,13 +157,13 @@ public class CellTest {
     @Test
     public void pickDieInClonedCellTest(){
         Cell cell = new Cell(value, ColourEnum.BLUE);
-        cell.insertDice(die);
+        cell.insertDie(die);
         Cell clonedCell = cell.getClone();
 
         assertFalse(clonedCell.isEmpty());
         assertFalse(cell.isEmpty());
 
-        Die die = cell.pickDice();
+        Die die = cell.pickDie();
 
         assertTrue(cell.isEmpty());
         assertFalse(clonedCell.isEmpty());

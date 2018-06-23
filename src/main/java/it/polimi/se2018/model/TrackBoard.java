@@ -9,7 +9,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class TrackBoard implements Serializable {
+public class TrackBoard implements Serializable, DiceContainer {
     /**
      * List of dice in surplus placed in each round
      */
@@ -93,5 +93,34 @@ public class TrackBoard implements Serializable {
      */
     public TrackBoard getClone(){
         return new TrackBoard(this);
+    }
+
+    /**
+     *
+     * @param playerMove
+     * @return
+     */
+    @Override
+    public List<Die> pickDice(PlayerMove playerMove){
+
+        List<Die> dieList = new ArrayList<>();
+        dieList.add(this.diceList.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
+
+        return dieList;
+    }
+
+    @Override
+    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        List<Die> dieLeavedList = new ArrayList<>();
+
+        dieLeavedList.add(this.diceList.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
+        diceList.get(playerMove.getTrackBoardIndex()[0]).add(dieList.get(0));
+
+        return dieLeavedList;
+    }
+
+    @Override
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
+        for (Die die: dieList) this.diceList.get(playerMove.getTrackBoardIndex()[0]).add(die);
     }
 }

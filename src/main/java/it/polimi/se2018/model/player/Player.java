@@ -99,7 +99,7 @@ public class Player implements Serializable {
         if(position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition()> schemaCard.getCellList().size()) {
             throw new IndexOutOfBoundsException("ERROR: invalid position");
         }
-        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).insertDice(die);
+        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).insertDie(die);
 
     }
 

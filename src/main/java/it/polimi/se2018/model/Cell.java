@@ -61,7 +61,7 @@ public class Cell implements Serializable {
      * Insert a die in the cell
      * @param die to place in the cell, if the cell it's empty
      */
-    public void insertDice(Die die) {
+    public void insertDie(Die die) {
         if(die == null){
             throw new NullPointerException("ERROR: Try to insert a die null");
         }
@@ -102,7 +102,7 @@ public class Cell implements Serializable {
      * Remove the die in the cell
      * @return die removed from the Scheme
      */
-    public Die pickDice(){
+    public Die pickDie(){
         if(this.getDie() == null){
             throw new NullPointerException("ERROR: Tried to pick a die in an empty cell");
         }

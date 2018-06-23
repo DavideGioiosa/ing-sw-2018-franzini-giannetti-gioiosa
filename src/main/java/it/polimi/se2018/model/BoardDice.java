@@ -9,7 +9,7 @@ import java.util.List;
  * @author Cristian Giannetti
  */
 
-public class BoardDice implements Serializable {
+public class BoardDice implements Serializable, DiceContainer {
 
     /**
      * List of Die in the Draft Pool
@@ -27,10 +27,10 @@ public class BoardDice implements Serializable {
      * Copy Constructor
      * @param boardDice BoardDice to be cloned
      */
-    public BoardDice(BoardDice boardDice){
+    private BoardDice(BoardDice boardDice){
         if (boardDice == null) throw new NullPointerException("ERROR: Try to clone a null BoardDice");
         this.dieList = new ArrayList<>();
-        for(Die die: boardDice.dieList) this.dieList.add(new Die(die));
+        for(Die die: boardDice.dieList) this.dieList.add(die.getClone());
     }
 
     /**
@@ -45,7 +45,8 @@ public class BoardDice implements Serializable {
      * Inserts a die in the Draft Pool
      * @param die to be inserted in the Draft Pool
      */
-    public void insertDice(Die die){
+    public void insertDie(Die die){
+        if (die == null) throw new NullPointerException("ERROR: Impossible to insert a null Die");
         dieList.add(die);
     }
 
@@ -54,13 +55,50 @@ public class BoardDice implements Serializable {
      * @param index Position of dice to be taken from the Draft Pool
      * @return Die removed from the Draft Pool
      */
-    public Die takeDice(int index){
+    public Die takeDie(int index){
         if (dieList.isEmpty()) throw new RuntimeException("ERROR: Draft Pool is empty");
-        if (index < 0 || index >= dieList.size()) throw new RuntimeException("ERROR: A die with this index does not exist");
+        if (index < 0 || index >= dieList.size()) throw new IllegalArgumentException("ERROR: A die with this index does not exist");
 
-        Die die;
-        die = dieList.remove(index);
-        return die;
+        return dieList.remove(index);
     }
 
+    /**
+     * Gets a clone of Draft Pool
+     * @return Cloned BoardDice
+     */
+    public BoardDice getClone(){
+        return new BoardDice(this);
+    }
+
+    /**
+     *
+     * @param playerMove
+     * @return
+     */
+    @Override
+    public List<Die> pickDice(PlayerMove playerMove){
+
+        List<Die> diePickedList = new ArrayList<>();
+        if (playerMove.getDiceBoardIndex() == -1){
+            int numberOfDice = this.dieList.size();
+            for(int i = 0; i < numberOfDice; i++) diePickedList.add(takeDie(0));
+        }else diePickedList.add(takeDie(playerMove.getDiceBoardIndex()));
+
+        return diePickedList;
+    }
+
+    @Override
+    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
+
+        List<Die> diePickedList = new ArrayList<>();
+        diePickedList.add(takeDie(playerMove.getDiceBoardIndex()));
+        this.dieList.addAll(dieList);
+
+        return diePickedList;
+    }
+
+    @Override
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
+        this.dieList.addAll(dieList);
+    }
 }
