@@ -3,6 +3,11 @@ package it.polimi.se2018.connection.server;
 import com.google.gson.Gson;
 import it.polimi.se2018.connection.client.ClientSocketInterface;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.PlayerMessageTypeEnum;
+import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.TypeOfChoiceEnum;
+import it.polimi.se2018.model.player.TypeOfConnection;
+import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 
 import java.io.BufferedReader;
@@ -17,8 +22,10 @@ public class ClientListener extends Thread implements ClientSocketInterface {
 
     private Socket clientSocket;
     private boolean quit;
+    private boolean disconnection;
     private Gson gson;
     private Observable<PlayerMessage> obs;
+    private String code;
 
 
     ClientListener(Socket clientSocket){
@@ -26,22 +33,23 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         gson = new Gson();
         obs = new Observable<>();
         quit = false;
+        disconnection = false;
     }
 
     Observable<PlayerMessage> getObs() {
         return obs;
     }
 
-    public void setQuit() {
+
+    void setQuit() {
         this.quit = true;
     }
 
     @Override
     public void run(){
 
-        while(!clientSocket.isClosed() && !quit){
+        while(!disconnection && !quit){
             try {
-                //TODO mettere controllo su keep alive client
 
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String message = bufferedReader.readLine();
@@ -49,11 +57,32 @@ public class ClientListener extends Thread implements ClientSocketInterface {
                 receive(playerMessage);
 
             } catch (IOException e) {
-                //gestire disconnessione
-                Logger.getGlobal().log(Level.SEVERE,e.toString());
+                // disconnessione
+                handleDisconnection();
+                disconnection = true;
+
             }
         }
 
+    }
+
+     void handleDisconnection(){
+
+        User user = new User(TypeOfConnection.SOCKET);
+        user.setUniqueCode(code);
+        PlayerMessage disconnected = new PlayerMessage();
+        disconnected.setUser(user);
+        disconnected.setError(100);
+        disconnected.setId(PlayerMessageTypeEnum.DISCONNECTED);
+        obs.notify(disconnected);
+    }
+
+    public void setCode(String code){
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public synchronized void send(PlayerMessage playerMessage){
@@ -65,7 +94,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
             output.flush();
 
         } catch (IOException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
+            handleDisconnection();
         }
     }
 

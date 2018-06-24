@@ -1,26 +1,33 @@
 package it.polimi.se2018.connection.server;
 
+import it.polimi.se2018.connection.client.ClientImplementation;
 import it.polimi.se2018.connection.client.ClientRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.Observer;
 
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class ServerImplementation extends UnicastRemoteObject implements ServerRemoteInterface {
     private HashMap<String,ClientRemoteInterface> clientList = new HashMap<>();
+    private HashMap<String, Timer> pingMap = new HashMap<>();
+    private List<String> disconnected = new ArrayList<>();
     private List<String> codeList = new ArrayList<>();
     private transient Observable<PlayerMessage> obs = new Observable<>();
 
+
     ServerImplementation() throws RemoteException{
         super();
-
+    }
+    public void addObserver(Observer<PlayerMessage> observer){
+        obs.addObserver(observer);
     }
 
     public Observable<PlayerMessage> getObs() {
@@ -57,17 +64,52 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         clientList.put(code, client);
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setUser(user);
+        RMIServerPing rmiServerPing = new RMIServerPing(this, code, client);
+        Timer lifeLineTimer = new Timer();
+        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), 90*1000);
+        pingMap.put(code, lifeLineTimer);
         try {
             client.receiveFromServer(playerMessage);
         } catch (RemoteException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
+
+            //disconnessione
+
+            String string = clientList.entrySet().stream().filter(entry -> entry.getValue().equals(client)).map(Map.Entry::getKey).findFirst().orElse(null);
+            disconnectionHandler(string);
         }
+    }
+
+
+    void disconnectionHandler(String code){
+        if(!disconnected.contains(code)){
+            disconnected.add(code);
+            User user = new User(TypeOfConnection.RMI);
+            user.setUniqueCode(code);
+            PlayerMessage disconnect = new PlayerMessage();
+            disconnect.setUser(user);
+            disconnect.setError(100); //valore da individuare
+            disconnect.setId(PlayerMessageTypeEnum.DISCONNECTED);
+            obs.notify(disconnect);
+        }
+        Timer timer = pingMap.get(code);
+        timer.cancel();
+        timer.purge();
+        pingMap.remove(code);
+
     }
 
     @Override
     public void receive(PlayerMessage playerMessage) {
 
+        if(playerMessage.getIdError() == 100 ){
+            disconnectionHandler(playerMessage.getUser().getUniqueCode());
+        }
         obs.notify(playerMessage);
+    }
+
+    @Override
+    public void lifeLine() throws RemoteException {
+
     }
 
 }

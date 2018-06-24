@@ -1,6 +1,7 @@
 package it.polimi.se2018.connection.client;
 
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
@@ -15,9 +16,24 @@ public class SocketTypeClient implements ClientStrategy, Observer<PlayerMessage>
         obs = new Observable<>();
         this.host = host;
         this.networkPort = port;
+    }
+
+    @Override
+    public void connect(){
+
         this.networkHandler = new NetworkHandler(this.host, this.networkPort);
         networkHandler.getObs().addObserver(this);
         networkHandler.start();
+    }
+
+    @Override
+    public void reconnect(User user){
+        networkHandler.setQuit();
+        connect();
+        PlayerMessage playerMessage = new PlayerMessage();
+        playerMessage.setUser(user);
+        networkHandler.send(playerMessage);
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 package it.polimi.se2018.connection.server;
 
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
@@ -14,9 +15,11 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     private List<String> codeList;
     private HashMap<String, ClientListener> clientListenerList;
     private Observable<PlayerMessage> obs;
+    private List<String> disconnectedCodes;
     private static int port = 1111; // verrà preso da file config
 
     public SocketTypeServer(){
+        disconnectedCodes = new ArrayList<>();
         codeList = new ArrayList<>();
         clientListenerList = new HashMap<>();
         obs = new Observable<>();
@@ -62,15 +65,17 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
             {
                 ClientListener clientListener = clientListenerList.get(playerMessage.getUser().getUniqueCode());
                 clientListener.send(playerMessage);
-            } //else: gestire disconnessione
+            }
         }
-
     }
 
     @Override
     public void update(PlayerMessage playerMessage) {
 
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
+            disconnectedCodes.add(playerMessage.getUser().getUniqueCode());
+            clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit();
+        }
         obs.notify(playerMessage);
-
     }
 }
