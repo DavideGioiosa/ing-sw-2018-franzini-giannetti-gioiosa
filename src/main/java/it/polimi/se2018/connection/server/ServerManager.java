@@ -25,15 +25,20 @@ public class ServerManager implements Observer<PlayerMessage> {
     private Timer senderTimer;
     private TimerDelayer timerDelayer;
     private UsersDelayer usersDelayer;
+    private boolean setUp;
 
 
     public ServerManager (SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
+        setUp = true;
         this.serverSocket = socketTypeServer;
         this.serverRMI = rmiTypeServer;
         disconnectedUserList = new ArrayList<>();
         userList = new ArrayList<>();
-        userSetupTimer = new Timer();
-        senderTimer = new Timer();
+
+
+        serverSocket.addObserver(this);
+        serverRMI.addObserver(this);
+
         gameCreator = null;
     }
 
@@ -45,11 +50,10 @@ public class ServerManager implements Observer<PlayerMessage> {
                 serverRMI.send(playerMessage);
             } else{
                 senderTimer.cancel();
-                senderTimer.purge();
                 serverSocket.send(playerMessage);
                 serverRMI.send(playerMessage);
 
-                timerDelayer = new TimerDelayer(playerMessage, serverSocket, serverRMI);
+                timerDelayer = new TimerDelayer(playerMessage, this);
                 senderTimer = new Timer();
 
                 senderTimer.schedule(timerDelayer, (long)90*1000);
@@ -59,44 +63,84 @@ public class ServerManager implements Observer<PlayerMessage> {
             serverSocket.send(playerMessage);
             serverRMI.send(playerMessage);
 
-            timerDelayer = new TimerDelayer(playerMessage, serverSocket, serverRMI);
+            senderTimer = new Timer();
+            timerDelayer = new TimerDelayer(playerMessage, this);
             senderTimer.schedule(timerDelayer, (long)90*1000);
         }
     }
 
-    public void createGame(){
+     void createGame(){
 
-        userSetupTimer.cancel();
-        userSetupTimer.purge();
-        RemoteView remoteView = new RemoteView(this);
-        gameCreator = new GameCreator(userList,remoteView);
+         setUp = false;
+         userSetupTimer.cancel();
+         userSetupTimer.purge();
+         userSetupTimer = null;
+         usersDelayer.cancel();
+         RemoteView remoteView = new RemoteView(this);
+         gameCreator = new GameCreator(userList,remoteView);
     }
 
 
     private void addUser(User user){
+
         userList.add(user);
-        if(userList.size()==1){
-            usersDelayer = new UsersDelayer(this);
-            userSetupTimer.schedule(usersDelayer, (long)90*1000);
-        }else if(userList.size() == 4 && usersDelayer.isStarted()){
-            createGame();
+        if(gameCreator == null){
+            if(userList.size()== 2){
+                userSetupTimer = new Timer();
+                usersDelayer = new UsersDelayer(this);
+                userSetupTimer.schedule(usersDelayer, (long)90*1000);
+            }else if(userList.size() == 4 && userSetupTimer != null){
+                createGame();
+            }
+        }
+
+    }
+
+     private void removeUser(User user){
+
+         userList.remove(user);
+         if(gameCreator == null){
+             if(setUp && userList.size() < 2 && userSetupTimer!=null){
+                 userSetupTimer.cancel();
+                 userSetupTimer.purge();
+                 userSetupTimer = null;
+             }
+         }else disconnectedUserList.add(user);
+
+    }
+
+    private void reconnection(PlayerMessage playerMessage){
+
+        for(User user : disconnectedUserList){
+            if(user.getNickname().equals(playerMessage.getUser().getNickname()) && user.getUniqueCode().equals(playerMessage.getUser().getUniqueCode())){
+                disconnectedUserList.remove(user);
+                addUser(playerMessage.getUser());
+
+            }else {
+                PlayerMessage playerMessage1 = new PlayerMessage();
+                playerMessage1.setError(102);
+                sendMessage(playerMessage1);
+            }
         }
     }
 
-    public void removeUser(User user){
-        disconnectedUserList.add(user);
-        userList.remove(user);
-        if(userList.size()<2 && usersDelayer.isStarted()){
-            userSetupTimer.cancel();
-            userSetupTimer.purge();
-        }
-    }
 
     @Override
     public void update(PlayerMessage playerMessage) {
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
-            addUser(playerMessage.getUser());
-        }else gameCreator.receiveFromClient(playerMessage);
+
+        if(gameCreator == null){
+            if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
+                addUser(playerMessage.getUser());
+            }else if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED)){
+                removeUser(playerMessage.getUser());
+            }
+        }else{
+            if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
+                reconnection(playerMessage);
+            } else if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED)){
+                removeUser(playerMessage.getUser());
+            } else gameCreator.receiveFromClient(playerMessage);
+        }
 
     }
 
@@ -104,5 +148,4 @@ public class ServerManager implements Observer<PlayerMessage> {
         return userList;
     }
 
-    //TODO: disconnessione
 }

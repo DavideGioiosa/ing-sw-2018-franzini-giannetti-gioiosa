@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class DieTest {
 
-    public final ColourEnum colour = ColourEnum.BLUE;
+    private final ColourEnum colour = ColourEnum.BLUE;
 
     /**
      * Tests the creation of a Die with good parameters

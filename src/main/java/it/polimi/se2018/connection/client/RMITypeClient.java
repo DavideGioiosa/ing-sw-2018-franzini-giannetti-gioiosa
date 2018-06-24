@@ -2,6 +2,7 @@ package it.polimi.se2018.connection.client;
 
 import it.polimi.se2018.connection.server.ServerRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
@@ -13,6 +14,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
+import java.util.Date;
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,34 +23,67 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
     private ServerRemoteInterface stub;
     private Observable<PlayerMessage> obs;
+    private Timer timer;
+    private ClientImplementation clientImplementation;
+    private ClientRemoteInterface remoteRef;
 
     public RMITypeClient(){
         obs = new Observable<>();
-        ClientImplementation clientImplementation = new ClientImplementation();
+        clientImplementation = new ClientImplementation();
         clientImplementation.getObs().addObserver(this);
 
-
         try {
-             LocateRegistry.getRegistry();
+            LocateRegistry.getRegistry();
 
         } catch (RemoteException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
 
-        try {
-                ClientRemoteInterface remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
-                this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
-                stub.addClient(remoteRef);
+    }
 
+    public ServerRemoteInterface getStub() {
+        return stub;
+    }
+
+    public ClientRemoteInterface getRemoteRef() {
+        return remoteRef;
+    }
+
+    @Override
+    public void connect(){
+
+        try {
+
+            this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
+
+            remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
+
+            stub.addClient(remoteRef);
+
+            RMIClientPing rmiClientPing = new RMIClientPing(this, stub);
+            timer = new Timer();
+            timer.scheduleAtFixedRate(rmiClientPing, new Date(), 90*1000);
 
 
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
             PlayerMessage playerMessage = new PlayerMessage();
-            playerMessage.setError(1000);
+            playerMessage.setError(200);
             update(playerMessage);
         }
     }
 
+
+    @Override
+    public void reconnect(User user){
+
+        timer.cancel();
+        timer.purge();
+        connect();
+        PlayerMessage playerMessage = new PlayerMessage();
+        playerMessage.setUser(user);
+        sendToServer(playerMessage);
+
+    }
 
     @Override
     public void sendToServer(PlayerMessage playerMessage){
@@ -57,32 +93,29 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
             try {
                 stub.receive(playerMessage);
             } catch (RemoteException e) {
-                Logger.getGlobal().log(Level.SEVERE, e.toString());
+                disconnectionHandler();
             }
         }
     }
 
-
-     /*void sendUser(PlayerMessage playerMessage){
-        String name = client.getThisUser().getNickname();
-        playerMessage.getPlayerChoice().getUser().setNickname(name);
-        try {
-            stub.receive(playerMessage);
-        } catch (RemoteException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
-        }
-    }*/
-
+     void disconnectionHandler(){
+        PlayerMessage disconnect = new PlayerMessage();
+        disconnect.setError(201); //valore da individuare
+        obs.notify(disconnect);
+    }
 
 
     @Override
     public void close(){
         PlayerMessage playerMessage = new PlayerMessage();
+        timer.cancel();
+        timer.purge();
         playerMessage.setClosure();
         try {
             stub.receive(playerMessage);
         } catch (RemoteException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
+            disconnectionHandler();
+
         }
     }
 

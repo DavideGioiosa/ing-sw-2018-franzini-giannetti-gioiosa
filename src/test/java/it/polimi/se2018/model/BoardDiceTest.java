@@ -28,7 +28,6 @@ public class BoardDiceTest {
         die1.firstRoll();
     }
 
-
     /**
      * Constructor test
      */
@@ -39,7 +38,7 @@ public class BoardDiceTest {
     }
 
     /**
-     * Tests insertDice method
+     * Tests insertDie method
      */
     @Test
     public void insertDiceTest() {

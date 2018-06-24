@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.restriction.Restriction;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,7 +13,7 @@ import static it.polimi.se2018.model.Config.*;
  * @author Cristian Giannetti
  */
 
-public class BagDice {
+public class BagDice implements DiceContainer {
 
     /**
      * List of dices contained in the bag
@@ -37,7 +39,7 @@ public class BagDice {
      */
     public void insertDice(Die die){
         if(die == null) throw new NullPointerException("ERROR: Cannot insert a null Die");
-        dieList.add(die);
+        dieList.add(new Die(die.getColour()));
     }
 
     /**
@@ -61,4 +63,37 @@ public class BagDice {
         return dieList.size();
     }
 
+    /**
+     *
+     * @param playerMove
+     * @param dieList
+     */
+    @Override
+    public void pickDice(PlayerMove playerMove, List<Die> dieList){
+        dieList.add(extractDice());
+    }
+
+    @Override
+    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
+
+        int size = dieList.size();
+        for(int i = size ; i > 0; i--) {
+            insertDice(dieList.remove(0));
+        }
+
+        for(int i = 0; i < size; i++) {
+            dieList.add(extractDice());
+        }
+    }
+
+    @Override
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
+        for(Die die: dieList) {
+            insertDice(die);
+        }
+    }
+
+    public List<Die> getClonedDieList(){
+        return new ArrayList<>();
+    }
 }

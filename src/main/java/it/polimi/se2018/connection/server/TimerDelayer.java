@@ -10,14 +10,12 @@ import java.util.TimerTask;
 public class TimerDelayer extends TimerTask {
 
     private boolean thisHasStarted = false;
-    private SocketTypeServer socketTypeServer;
     private PlayerMessage playerMessage;
-    private RMITypeServer rmiTypeServer;
+    private ServerManager serverManager;
 
-    TimerDelayer(PlayerMessage playerMessage, SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
+    TimerDelayer(PlayerMessage playerMessage, ServerManager serverManager){
         this.playerMessage = playerMessage;
-        this.socketTypeServer = socketTypeServer;
-        this.rmiTypeServer = rmiTypeServer;
+        this.serverManager = serverManager;
         thisHasStarted = true;
     }
 
@@ -33,8 +31,7 @@ public class TimerDelayer extends TimerTask {
             playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
             pass.setUser(playerMessage.getUser());
             pass.setCheckMove(playerMove);
-            socketTypeServer.update(playerMessage);
-            rmiTypeServer.receive(playerMessage);
+            serverManager.update(pass);
         }
     }
 }

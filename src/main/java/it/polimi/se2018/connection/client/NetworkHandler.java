@@ -6,8 +6,7 @@ import it.polimi.se2018.utils.Observable;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 
 public class NetworkHandler extends Thread implements ClientSocketInterface{
@@ -28,9 +27,8 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
              socket = new Socket(host, port);
              bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
          } catch (IOException e) {
-             //TODO: gestire assenza di server a cui connettersi
              PlayerMessage playerMessage = new PlayerMessage();
-             playerMessage.setError(1000);
+             playerMessage.setError(200);
              receive(playerMessage);
          }
 
@@ -60,14 +58,14 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
                 receive(playerMessage);
 
             }catch (IOException e){
-                Logger.getGlobal().log(Level.SEVERE, e.toString());
+                disconnectionHandler();
             }
         }
 
         try{
             this.closeConnection();
         }catch (IOException e){
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
+            disconnectionHandler();
         }
 
     }
@@ -79,9 +77,15 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
             out.write(jsonInString);
             out.flush();
         } catch (IOException e) {
-            Logger.getGlobal().log(Level.SEVERE, e.toString());
+            disconnectionHandler();
         }
 
+    }
+
+    public void disconnectionHandler(){
+        PlayerMessage disconnect = new PlayerMessage();
+        disconnect.setError(201); //valore da individuare
+        obs.notify(disconnect);
     }
 
      private synchronized void closeConnection() throws IOException{

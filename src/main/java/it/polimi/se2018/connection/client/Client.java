@@ -17,8 +17,9 @@ public class Client implements Observer<PlayerMessage> {
         nickname = null;
         thisUser = null;
         this.view = view;
-        clientStrategy.addObserver(this);
+        this.clientStrategy.addObserver(this);
     }
+
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -28,18 +29,24 @@ public class Client implements Observer<PlayerMessage> {
         return nickname;
     }
 
-    private void setThisUser(User thisUser) {
+    public void setThisUser(User thisUser) {
         this.thisUser = thisUser;
     }
 
 
+     void connect(){
+        clientStrategy.connect();
+    }
+
     @Override
     public void update(PlayerMessage playerMessage){
 
-        //if(playerMessage.getUser() == null || playerMessage.getUser().getNickname() == nickname){
         view.receive(playerMessage);
-        //}
 
+    }
+
+    public void reconnect(){
+        clientStrategy.reconnect(thisUser);
     }
 
     public void send(PlayerMessage playerMessage){

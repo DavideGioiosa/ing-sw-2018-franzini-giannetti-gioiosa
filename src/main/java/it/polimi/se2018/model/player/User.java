@@ -24,6 +24,9 @@ public class User implements Serializable {
         this.typeOfConnection = typeOfConnection;
     }
 
+    public void setUniqueCode(String uniqueCode) {
+        this.uniqueCode = uniqueCode;
+    }
 
     public String getUniqueCode() {
         return uniqueCode;

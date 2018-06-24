@@ -1,6 +1,7 @@
 package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cards.SchemaCard;
+import it.polimi.se2018.model.restriction.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,18 +11,18 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Test CheckRestriction Class
+ * Test Restriction Class
  * @author Davide Gioiosa
  */
 
 public class CheckRestrictionTest {
-    public static final String NAME = "Name";
-    public static final String DESCRIPTION = "Description";
-    public static final int DIFFICULTY = 4;
-    public static final int ID = 1;
-    private CheckRestriction checkRestriction;
+    private static final String NAME = "Name";
+    private static final String DESCRIPTION = "Description";
+    private static final int DIFFICULTY = 4;
+    private static final int ID = 1;
     private List<Cell> cellList;
 
+    private Restriction restriction;
 
     /**
      * Check exceptions of the class, create a Scheme with 19 cells so that
@@ -29,8 +30,7 @@ public class CheckRestrictionTest {
      */
    @Before
     public void setUp(){
-       checkRestriction = new CheckRestriction();
-       cellList = new ArrayList<Cell>();
+       cellList = new ArrayList<>();
        for(int i = 0; i<19; i++){
            cellList.add(new Cell(0, null));
        }
@@ -43,25 +43,26 @@ public class CheckRestrictionTest {
      */
 
     @Test
-    public void adjacentRestriction_BadParametresSent() {
+    public void adjacentRestriction_BadParametersSent() {
+        restriction = new RestrictionAdjacent();
         cellList.add(new Cell(0, null));
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die = new Die(ColourEnum.BLUE);
         Position position = new Position(4);
         try {
-            checkRestriction.adjacentRestriction(schemaCard, die, null);
+            restriction.checkRestriction(schemaCard, die, null);
             fail();
         }
         catch (NullPointerException e){
         }
         try {
-            checkRestriction.adjacentRestriction(schemaCard, null, position);
+            restriction.checkRestriction(schemaCard, null, position);
             fail();
         }
         catch (NullPointerException e){
         }
         try {
-            checkRestriction.adjacentRestriction(null, die, position);
+            restriction.checkRestriction(null, die, position);
             fail();
         }
         catch (NullPointerException e){
@@ -75,6 +76,7 @@ public class CheckRestrictionTest {
      */
     @Test
     public void isOnTheBorder_shouldReturnTrueWhenThePositionIsOnTheEdge() {
+        restriction = new RestrictionFirstDieOnBorder();
         cellList.add(new Cell(0, null));
         SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
@@ -82,9 +84,9 @@ public class CheckRestrictionTest {
         die.firstRoll();
         Position position = new Position(3);
 
-        boolean result = checkRestriction.isOnTheBorder(position);
+        int result = restriction.checkRestriction(schemaCard, die, position);
 
-        assertTrue(result);
+        assertEquals(0, result);
     }
 
     /**
@@ -94,6 +96,7 @@ public class CheckRestrictionTest {
      */
     @Test
     public void isOnTheBorder_shouldReturnFalseWhenThePositionIsNotOnTheEdge() {
+        restriction = new RestrictionFirstDieOnBorder();
         cellList.add(new Cell(0, null));
         SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
@@ -101,9 +104,9 @@ public class CheckRestrictionTest {
         die.firstRoll();
         Position position = new Position(7);
 
-        boolean result = checkRestriction.isOnTheBorder (position);
+        int result = restriction.checkRestriction (schemaCard, die, position);
 
-        assertFalse(result);
+        assertEquals(1, result);
     }
 
     /**
@@ -114,12 +117,14 @@ public class CheckRestrictionTest {
      */
     @Test
     public void adjacentRestriction_shouldReturnTrueWhenThereIsAtLeastADiceAdjacent() {
+        restriction = new RestrictionAdjacent();
+
         cellList.add(new Cell(0, null));
         SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
         Die die1 = new Die(ColourEnum.BLUE);
         die1.firstRoll();
-        cellList.get(0).insertDice(die1);
+        cellList.get(0).insertDie(die1);
 
         Die die2 = new Die(ColourEnum.RED);
         die2.firstRoll();
@@ -129,12 +134,10 @@ public class CheckRestrictionTest {
         die3.firstRoll();
         Position position3 = new Position(7);
 
-        boolean resultHoriz = checkRestriction.adjacentRestriction(schemaCard, die2, position2);
-        cellList.get(1).insertDice(die2);
-        boolean resultDiag = checkRestriction.adjacentRestriction(schemaCard, die3, position3);
+        cellList.get(1).insertDie(die2);
 
-        assertTrue(resultHoriz);
-        assertTrue(resultDiag);
+        assertEquals(0, restriction.checkRestriction(schemaCard, die2, position2));
+        assertEquals(0, restriction.checkRestriction(schemaCard, die3, position3));
     }
 
     /**
@@ -144,20 +147,19 @@ public class CheckRestrictionTest {
      */
     @Test
     public void adjacentRestriction_shouldReturnFalseWhenNoAdjacent() {
+        restriction = new RestrictionAdjacent();
         cellList.add(new Cell(0, null));
         SchemaCard schemaCard = new SchemaCard(ID, NAME,DESCRIPTION, DIFFICULTY, cellList);
 
         Die die1 = new Die(ColourEnum.BLUE);
         die1.firstRoll();
-        cellList.get(0).insertDice(die1);
+        cellList.get(0).insertDie(die1);
 
         Die die2 = new Die(ColourEnum.RED);
         die2.firstRoll();
         Position position = new Position(4);
 
-        boolean result = checkRestriction.adjacentRestriction(schemaCard, die2, position);
-
-        assertFalse(result);
+        assertEquals(2, restriction.checkRestriction(schemaCard, die2, position));
     }
 
     /**
@@ -168,6 +170,7 @@ public class CheckRestrictionTest {
      */
     @Test
     public void cellValueRestriction_shouldReturnFalseIfDiceValueNotEqualsCellValue(){
+        restriction = new RestrictionCellValue();
         cellList.add(new Cell(5, null));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
@@ -175,9 +178,7 @@ public class CheckRestrictionTest {
         die.setValue(5);
         Position position = new Position(19);
 
-        boolean result = checkRestriction.cellValueRestriction(schemaCard, die, position);
-
-        assertTrue(result);
+        assertEquals(0, restriction.checkRestriction(schemaCard, die, position));
     }
 
     /**
@@ -188,6 +189,7 @@ public class CheckRestrictionTest {
      */
     @Test
     public void cellValueRestriction_shouldReturnTrueIfDiceValueEqualsCellValue(){
+        restriction = new RestrictionCellValue();
         cellList.add(new Cell(5, null));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
@@ -195,9 +197,8 @@ public class CheckRestrictionTest {
         die.setValue(2);
         Position position = new Position(19);
 
-        boolean result = checkRestriction.cellValueRestriction(schemaCard, die, position);
+        assertEquals(4, restriction.checkRestriction(schemaCard, die, position));
 
-        assertFalse(result);
     }
 
     /**
@@ -208,6 +209,7 @@ public class CheckRestrictionTest {
      */
     @Test
     public void cellColourRestriction_shouldReturnTrueIfDiceColourEqualsCellColour() {
+        restriction = new RestrictionCellColour();
         cellList.add(new Cell(0, ColourEnum.BLUE));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
@@ -215,9 +217,7 @@ public class CheckRestrictionTest {
         die.firstRoll();
         Position position = new Position(19);
 
-        boolean result = checkRestriction.cellColourRestriction(schemaCard, die, position);
-
-        assertTrue(result);
+        assertEquals(0, restriction.checkRestriction(schemaCard, die, position));
     }
 
     /**
@@ -228,6 +228,8 @@ public class CheckRestrictionTest {
      */
     @Test
     public void cellColourRestriction_shouldReturnFalseIfDiceColourEqualsCellColour() {
+        restriction = new RestrictionCellColour();
+
         cellList.add(new Cell(0, ColourEnum.BLUE));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
@@ -235,9 +237,7 @@ public class CheckRestrictionTest {
         die.firstRoll();
         Position position = new Position(19);
 
-        boolean result = checkRestriction.cellColourRestriction(schemaCard, die, position);
-
-        assertFalse(result);
+        assertEquals(3, restriction.checkRestriction(schemaCard, die, position));
     }
 
     /**
@@ -248,29 +248,28 @@ public class CheckRestrictionTest {
      */
     @Test
     public void adjacentColourRestriction_shouldReturnFalseIfThereIsAtLeastAnAdjDieOfTheSameColour() {
+        restriction = new RestrictionAdjacentColour();
+
         cellList.add(new Cell(0, null));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.firstRoll();
-        cellList.get(1).insertDice(die1);
+        cellList.get(1).insertDie(die1);
 
         Die die2 = new Die(ColourEnum.RED);
         die2.firstRoll();
-        cellList.get(7).insertDice(die2);
+        cellList.get(7).insertDie(die2);
 
         Die die3 = new Die(ColourEnum.GREEN);
         die3.firstRoll();
-        cellList.get(11).insertDice(die3);
+        cellList.get(11).insertDie(die3);
 
         Die die4 = new Die(ColourEnum.RED);
         die4.firstRoll();
         Position position = new Position(6);
 
-        boolean result = checkRestriction.adjacentColourRestriction(schemaCard, die4, position);
-
-        assertFalse(result);
-
+        assertEquals(5, restriction.checkRestriction(schemaCard, die4, position));
     }
 
     /**
@@ -281,32 +280,33 @@ public class CheckRestrictionTest {
      */
     @Test
     public void adjacentColourRestriction_shouldReturnTrueIfThereAreNoAdjDiceOfTheSameColour() {
+        restriction = new RestrictionAdjacentColour();
+
+
         cellList.add(new Cell(0, null));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.firstRoll();
-        cellList.get(1).insertDice(die1);
+        cellList.get(1).insertDie(die1);
 
         Die die2 = new Die(ColourEnum.RED);
         die2.firstRoll();
-        cellList.get(7).insertDice(die2);
+        cellList.get(7).insertDie(die2);
 
         Die die3 = new Die(ColourEnum.GREEN);
         die3.firstRoll();
-        cellList.get(11).insertDice(die3);
+        cellList.get(11).insertDie(die3);
 
         Die die4 = new Die(ColourEnum.BLUE);
         die4.firstRoll();
-        cellList.get(2).insertDice(die4);
+        cellList.get(2).insertDie(die4);
 
         Die die5 = new Die(ColourEnum.BLUE);
         die5.firstRoll();
         Position position = new Position(6);
 
-        boolean result = checkRestriction.adjacentColourRestriction(schemaCard, die5, position);
-
-        assertTrue(result);
+        assertEquals(0, restriction.checkRestriction(schemaCard, die5, position));
     }
 
     /**
@@ -317,35 +317,36 @@ public class CheckRestrictionTest {
      */
     @Test
     public void adjacentValueRestriction_shouldReturnTrueIfThereIsAtLeastAnAdjDieOfTheSameValue() {
+        restriction = new RestrictionAdjacentValue();
+
         cellList.add(new Cell(0, null));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.setValue(6);
-        cellList.get(1).insertDice(die1);
+        cellList.get(1).insertDie(die1);
 
         Die die2 = new Die(ColourEnum.RED);
         die2.setValue(2);
-        cellList.get(7).insertDice(die2);
+        cellList.get(7).insertDie(die2);
 
         Die die3 = new Die(ColourEnum.GREEN);
         die3.setValue(6);
-        cellList.get(11).insertDice(die3);
+        cellList.get(11).insertDie(die3);
 
         Die die4 = new Die(ColourEnum.BLUE);
         die4.setValue(1);
-        cellList.get(2).insertDice(die4);
+        cellList.get(2).insertDie(die4);
 
         Die die5 = new Die(ColourEnum.YELLOW);
         die5.setValue(6);
         Position position = new Position(6);
 
-        boolean result = checkRestriction.adjacentValueRestriction(schemaCard, die5, position);
         Position position2 = new Position(12);
-        boolean result2 = checkRestriction.adjacentValueRestriction(schemaCard, die5, position2);
 
-        assertFalse(result);
-        assertFalse(result2);
+        assertEquals(6, restriction.checkRestriction(schemaCard, die5, position));
+        assertEquals(6, restriction.checkRestriction(schemaCard, die5, position2));
+
     }
 
     /**
@@ -356,34 +357,36 @@ public class CheckRestrictionTest {
      */
     @Test
     public void adjacentValueRestriction_shouldReturnFalseIfThereAreNoAdjDiceOfTheSameValue() {
+        restriction = new RestrictionAdjacentValue();
+
         cellList.add(new Cell(0, null));
 
         SchemaCard schemaCard = new SchemaCard(ID, NAME, DESCRIPTION, DIFFICULTY, cellList);
         Die die1 = new Die(ColourEnum.RED);
         die1.setValue(6);
-        cellList.get(1).insertDice(die1);
+        cellList.get(1).insertDie(die1);
 
         Die die2 = new Die(ColourEnum.RED);
         die2.setValue(2);
-        cellList.get(7).insertDice(die2);
+        cellList.get(7).insertDie(die2);
 
         Die die3 = new Die(ColourEnum.GREEN);
         die3.setValue(6);
-        cellList.get(11).insertDice(die3);
+        cellList.get(11).insertDie(die3);
 
         Die die4 = new Die(ColourEnum.BLUE);
         die4.setValue(1);
-        cellList.get(2).insertDice(die4);
+        cellList.get(2).insertDie(die4);
 
         Die die5 = new Die(ColourEnum.YELLOW);
         die5.setValue(4);
         Position position = new Position(6);
 
-        boolean result = checkRestriction.adjacentValueRestriction(schemaCard, die5, position);
-        Position position2 = new Position(12);
-        boolean result2 = checkRestriction.adjacentValueRestriction(schemaCard, die5, position2);
 
-        assertTrue(result);
-        assertTrue(result2);
+        Position position2 = new Position(12);
+
+        assertEquals(0, restriction.checkRestriction(schemaCard, die5, position));
+        assertEquals(0, restriction.checkRestriction(schemaCard, die5, position2));
+
     }
 }
