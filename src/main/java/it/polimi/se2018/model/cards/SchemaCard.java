@@ -1,6 +1,7 @@
 package it.polimi.se2018.model.cards;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.restriction.Restriction;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -248,35 +249,46 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
     /**
      *
      * @param playerMove
-     * @return
+     * @param dieList
      */
     @Override
-    public List<Die> pickDice(PlayerMove playerMove){
-        List<Die> dieList = new ArrayList<>();
+    public void pickDice(PlayerMove playerMove, List<Die> dieList){
+
         for(int i = 0; i <playerMove.getDiceSchemaWhereToTake().size(); i++) {
             dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(i)));
         }
+    }
+
+    @Override
+    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
+
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.remove(i));
+            dieList.add(i, pickDie(playerMove.getDiceSchemaWhereToLeave().get(i)));
+        }
+    }
+
+    @Override
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
+
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            for(Restriction restriction: restrictionList) {
+                int errorId = restriction.checkRestriction(this, dieList.get(i), playerMove.getDiceSchemaWhereToLeave().get(i));
+                if (errorId != 0) return;
+                //TODO: ERROR O NEW EXCEPTION;
+            }
+        }
+
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
+        }
+    }
+
+    @Override
+    public List<Die> getClonedDieList(){
+        List<Die> dieList = new ArrayList<>();
+        for(Cell cell: cellList) if (!cell.isEmpty()) dieList.add(cell.getDie().getClone());
         return dieList;
     }
-
-    @Override
-    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
-        List<Die> dieLeavedList = new ArrayList<>();
-
-        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
-            dieLeavedList.add(pickDie(playerMove.getDiceSchemaWhereToLeave().get(i)));
-            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
-        }
-
-        return dieLeavedList;
-    }
-
-    @Override
-    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
-        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
-            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
-        }
-    }
-
 
 }

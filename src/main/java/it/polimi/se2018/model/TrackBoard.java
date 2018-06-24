@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.restriction.Restriction;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +15,13 @@ public class TrackBoard implements Serializable, DiceContainer {
     /**
      * List of dice in surplus placed in each round
      */
-    private List<List<Die>> diceList;
+    private List<List<Die>> diceLists;
 
     /**
      * Builder: create an empty TrackBoard
      */
     public TrackBoard(){
-        this.diceList = new ArrayList<>();
+        this.diceLists = new ArrayList<>();
     }
 
     /**
@@ -29,16 +31,16 @@ public class TrackBoard implements Serializable, DiceContainer {
     private TrackBoard(TrackBoard trackBoard) {
         if (trackBoard == null) throw new NullPointerException("ERROR: Tried to create a null TrackBoard");
 
-        this.diceList = new ArrayList<>();
+        this.diceLists = new ArrayList<>();
 
-        for (List<Die> dieList : trackBoard.diceList){
+        for (List<Die> dieList : trackBoard.diceLists){
             List<Die> tempDieList = new ArrayList<>();
 
             for (Die die : dieList){
                 tempDieList.add(die.getClone());
             }
 
-            this.diceList.add(tempDieList);
+            this.diceLists.add(tempDieList);
         }
     }
 
@@ -54,14 +56,14 @@ public class TrackBoard implements Serializable, DiceContainer {
         if (surplusDiceList.isEmpty()){
             throw new IllegalArgumentException("ERROR: No dice to put on the Trackboard");
         }
-        diceList.add(surplusDiceList);
+        diceLists.add(surplusDiceList);
     }
 
     /**
      * @return the TrackBoard with the dice placed on it
      */
     public List<List<Die>> getDiceList() {
-        return diceList;
+        return diceLists;
     }
 
     /**
@@ -76,15 +78,15 @@ public class TrackBoard implements Serializable, DiceContainer {
         if(indexTb < 0 || indexTb > 9){
             throw new IllegalArgumentException("ERROR: Insert indexTb out of the range permitted");
         }
-        if (indexTbCell < 0 || indexTbCell >= diceList.get(indexTb).size()){
+        if (indexTbCell < 0 || indexTbCell >= diceLists.get(indexTb).size()){
             throw new IllegalArgumentException("ERROR: Insert indexTbCell out of the range permitted");
         }
         if(die == null){
             throw new IllegalArgumentException("ERROR: Insert null die");
         }
-        diceList.get(indexTb).add(die);
+        diceLists.get(indexTb).add(die);
 
-        return diceList.get(indexTb).remove(indexTbCell);
+        return diceLists.get(indexTb).remove(indexTbCell);
     }
 
     /**
@@ -101,26 +103,25 @@ public class TrackBoard implements Serializable, DiceContainer {
      * @return
      */
     @Override
-    public List<Die> pickDice(PlayerMove playerMove){
-
-        List<Die> dieList = new ArrayList<>();
-        dieList.add(this.diceList.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
-
-        return dieList;
+    public void pickDice(PlayerMove playerMove, List<Die> dieList){
+        dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
     }
 
     @Override
-    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
-        List<Die> dieLeavedList = new ArrayList<>();
-
-        dieLeavedList.add(this.diceList.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
-        diceList.get(playerMove.getTrackBoardIndex()[0]).add(dieList.get(0));
-
-        return dieLeavedList;
+    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
+        this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(dieList.get(0));
     }
 
     @Override
-    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
-        for (Die die: dieList) this.diceList.get(playerMove.getTrackBoardIndex()[0]).add(die);
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
+        for (Die die: dieList) this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(die);
+    }
+
+    @Override
+    public List<Die> getClonedDieList(){
+        List<Die> dieClonedList = new ArrayList<>();
+        for(List<Die> dieList: this.diceLists) dieClonedList.addAll(dieList);
+        return dieClonedList;
     }
 }

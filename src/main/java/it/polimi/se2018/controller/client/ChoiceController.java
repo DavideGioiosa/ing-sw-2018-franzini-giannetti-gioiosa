@@ -25,7 +25,6 @@ public class ChoiceController {
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setChoice(message);
 
-
         return 0;
     }
 

@@ -1,5 +1,7 @@
 package it.polimi.se2018.model;
 
+import it.polimi.se2018.model.restriction.Restriction;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,29 +78,37 @@ public class BoardDice implements Serializable, DiceContainer {
      * @return
      */
     @Override
-    public List<Die> pickDice(PlayerMove playerMove){
+    public void pickDice(PlayerMove playerMove, List<Die> dieList){
 
-        List<Die> diePickedList = new ArrayList<>();
         if (playerMove.getDiceBoardIndex() == -1){
             int numberOfDice = this.dieList.size();
-            for(int i = 0; i < numberOfDice; i++) diePickedList.add(takeDie(0));
-        }else diePickedList.add(takeDie(playerMove.getDiceBoardIndex()));
+            for(int i = 0; i < numberOfDice; i++) dieList.add(takeDie(0));
+        }else dieList.add(takeDie(playerMove.getDiceBoardIndex()));
 
-        return diePickedList;
     }
 
     @Override
-    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
+    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
 
-        List<Die> diePickedList = new ArrayList<>();
-        diePickedList.add(takeDie(playerMove.getDiceBoardIndex()));
+        Die die;
+        for(int i = 0; i < dieList.size(); i++){
+            die = takeDie(playerMove.getDiceBoardIndex());
+            insertDie(dieList.remove(i));
+            dieList.add(die);
+        }
         this.dieList.addAll(dieList);
 
-        return diePickedList;
     }
 
     @Override
-    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
         this.dieList.addAll(dieList);
+    }
+
+    @Override
+    public List<Die> getClonedDieList(){
+        List<Die> clonedDieList = new ArrayList<>();
+        for(Die die: this.dieList) clonedDieList.add(die.getClone());
+        return clonedDieList;
     }
 }

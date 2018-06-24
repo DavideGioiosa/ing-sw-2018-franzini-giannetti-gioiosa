@@ -27,12 +27,14 @@ public class Turn {
      * informs if the action PICK has already done or not
      * it can be done once a Turn for each player
      */
-    private boolean isPick;
+    private int numberOfPicks;
     /**
      * informs if the action TOOL has already done or not
      * it can be done once a Turn for each player
      */
     private boolean isToolCardUsed;
+
+    private int numberOfPossiblePicks = 1;
 
     /**
      * Builder of Turn which composes the Round
@@ -43,7 +45,7 @@ public class Turn {
             throw new NullPointerException("Insertion of null parameter gameBoard");
         }
         this.gameBoard = gameBoard;
-        this.isPick = false;
+        this.numberOfPicks = 0;
         this.isToolCardUsed = false;
         startTurn();
 
@@ -74,7 +76,7 @@ public class Turn {
         if(playerMove == null){
             throw new RuntimeException("Insertion of a PlayerMove null");
         }
-        if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK) && isPick){
+        if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK) && !canPick()){
             return false;
         }
         if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL) && isToolCardUsed){
@@ -86,7 +88,7 @@ public class Turn {
         if(action.selectAction(playerMove)){
             turnsActionsList.add(action);
             if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK)){
-                this.isPick = true;
+                this.numberOfPicks++;
             }
             else if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL)){
                 this.isToolCardUsed = true;
@@ -102,5 +104,13 @@ public class Turn {
      */
     public boolean endTurn (){
         return turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS);
+    }
+
+    public void incrementPossiblePicks(){
+        numberOfPossiblePicks++;
+    }
+
+    private boolean canPick(){
+        return numberOfPossiblePicks != numberOfPicks;
     }
 }
