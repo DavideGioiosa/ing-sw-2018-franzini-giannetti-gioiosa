@@ -33,10 +33,11 @@ public class ClientGatherer extends Thread{
         User user;
         String code;
         Socket clientSocket = null;
+        ClientListener clientListener = null;
         while(!serverSocket.isClosed()){
             try {
                 clientSocket = serverSocket.accept();
-                ClientListener clientListener = new ClientListener(clientSocket);
+                clientListener = new ClientListener(clientSocket);
                 clientListener.getObs().addObserver(server);
                 clientListener.start();
 
@@ -48,12 +49,16 @@ public class ClientGatherer extends Thread{
 
                 server.addCode(code);
                 server.addClient(code, clientListener);
+                clientListener.setCode(code);
                 PlayerMessage playerMessage = new PlayerMessage();
                 playerMessage.setUser(user);
                 clientListener.send(playerMessage);
 
             } catch (IOException e) {
-                Logger.getGlobal().log(Level.SEVERE,e.toString());
+                if(clientListener != null){
+                    clientListener.handleDisconnection();
+                }else Logger.getGlobal().log(Level.SEVERE,e.toString());
+
             }
         }
 

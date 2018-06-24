@@ -1,5 +1,6 @@
 package it.polimi.se2018.connection.client;
 
+
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.utils.Observable;
 
@@ -22,6 +23,12 @@ public class ClientImplementation implements ClientRemoteInterface {
     @Override
     public void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
         obs.notify(playerMessage);
+    }
+
+
+    @Override
+    public void receiveLifeline() throws RemoteException {
+        //crea thread di risposta
     }
 }
 
