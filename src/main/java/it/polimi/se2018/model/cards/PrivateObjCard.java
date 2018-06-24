@@ -10,6 +10,10 @@ import java.io.Serializable;
  * @author Silvia Franzini
  */
 public class PrivateObjCard extends Card implements Serializable {
+
+    /**
+     * Colour of the Dice to be collected for bonus points
+     */
     private ColourEnum colour;
 
     /**
@@ -22,6 +26,15 @@ public class PrivateObjCard extends Card implements Serializable {
     public PrivateObjCard(int id, String name, String description, ColourEnum colour) {
         super(id, name, description);
         this.colour = colour;
+    }
+
+    /**
+     * Copy Constructor
+     * @param privateObjCard Private Objective Card to be cloned
+     */
+    private PrivateObjCard(PrivateObjCard privateObjCard){
+        super(privateObjCard);
+        this.colour = privateObjCard.colour;
     }
 
     /**
@@ -49,5 +62,14 @@ public class PrivateObjCard extends Card implements Serializable {
             }
         }
         return sum;
+    }
+
+    /**
+     * Gets a clone of Private Objective Card
+     * @return Cloned PrivateObjCard
+     */
+    @Override
+    public PrivateObjCard getClone(){
+        return new PrivateObjCard(this);
     }
 }

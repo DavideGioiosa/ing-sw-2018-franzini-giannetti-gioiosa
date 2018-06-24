@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Class used to save the status of the player during the game
  * @author Silvia Franzini
  */
-public class Player implements Serializable, Cloneable {
+public class Player implements Serializable {
     private final String nickname;
     private boolean connectionStatus;
     private ColourEnum frameColour;
@@ -31,12 +31,27 @@ public class Player implements Serializable, Cloneable {
         if(schemaCard == null){
             throw new NullPointerException("ERROR: SchemaCard not existing");
         }
-        this.nickname=nickname;
-        this.frameColour=frameColour;
-        this.schemaCard=schemaCard;
-        this.usableTokens=tokens;
-        this.score=0;
-        this.connectionStatus=true;
+        this.nickname = nickname;
+        this.frameColour = frameColour;
+        this.schemaCard = schemaCard;
+        this.usableTokens = tokens;
+        this.score = 0;
+        this.connectionStatus = true;
+    }
+
+    /**
+     * Copy Constructor
+     * @param player Player to be cloned
+     */
+    private Player(Player player){
+        if (player == null) throw new NullPointerException("ERROR: Tried to clone a null Player");
+
+        this.nickname = player.nickname;
+        this.connectionStatus = player.connectionStatus;
+        this.frameColour = player.frameColour;
+        this.schemaCard = player.schemaCard.getClone();
+        this.usableTokens = player.usableTokens;
+        this.score = player.score;
     }
 
     /**
@@ -84,7 +99,7 @@ public class Player implements Serializable, Cloneable {
         if(position.getIndexArrayPosition() < 0 || position.getIndexArrayPosition()> schemaCard.getCellList().size()) {
             throw new IndexOutOfBoundsException("ERROR: invalid position");
         }
-        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).insertDice(die);
+        this.schemaCard.getCellList().get(position.getIndexArrayPosition()).insertDie(die);
 
     }
 
@@ -130,5 +145,13 @@ public class Player implements Serializable, Cloneable {
      */
     public String getNickname(){
         return nickname;
+    }
+
+    /**
+     * Gets a clone of Player
+     * @return Player Cloned
+     */
+    public Player getClone(){
+        return new Player(this);
     }
 }

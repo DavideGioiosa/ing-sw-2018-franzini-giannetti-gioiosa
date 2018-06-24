@@ -5,12 +5,18 @@ import it.polimi.se2018.model.ColourEnum;
 import java.io.Serializable;
 
 /**
- * Public Class Toolcard
+ * ToolCard allows the player to get Die placement benefits using it
  * @author Davide Gioiosa
  */
 
-public class ToolCard extends Card implements Serializable, Cloneable {
+public class ToolCard extends Card implements Serializable {
+    /**
+     * Colour of Die to be used for using toolcard in single player mode
+     */
     private ColourEnum colour;
+    /**
+     * Number of Token used in the game
+     */
     private int token;
 
     /**
@@ -27,6 +33,16 @@ public class ToolCard extends Card implements Serializable, Cloneable {
         }
         this.colour = colour;
         this.token = 0;
+    }
+
+    /**
+     * Copy Constructor
+     * @param toolCard ToolCard to be cloned
+     */
+    private ToolCard(ToolCard toolCard){
+        super(toolCard);
+        this.colour = toolCard.colour;
+        this.token = toolCard.token;
     }
     
     /**
@@ -65,4 +81,12 @@ public class ToolCard extends Card implements Serializable, Cloneable {
         this.token += token;
     }
 
+    /**
+     * Gets a clone of Tool Card
+     * @return Cloned ToolCard
+     */
+    @Override
+    public ToolCard getClone(){
+        return new ToolCard(this);
+    }
 }

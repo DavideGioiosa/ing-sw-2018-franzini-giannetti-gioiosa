@@ -14,40 +14,145 @@ import static org.junit.Assert.*;
  */
 public class BoardDiceTest {
 
-    private BoardDice boardDice;
-    private List<Die> dieList;
-    private Die d;
-    private Die d1;
+    private Die die;
+    private Die die1;
 
     /**
      * Initialization of BoardDiceTest
      */
     @Before
     public void setUp(){
-        boardDice = new BoardDice();
-        d = new Die(ColourEnum.RED);
-        d.firstRoll();
-        d1 = new Die(ColourEnum.GREEN);
-        d1.firstRoll();
-
+        die = new Die(ColourEnum.RED);
+        die.firstRoll();
+        die1 = new Die(ColourEnum.GREEN);
+        die1.firstRoll();
     }
 
     /**
-     * Tests insertDice method
+     * Constructor test
      */
     @Test
-    public void insertDice() {
-        boardDice.insertDice(d);
-        assertEquals(boardDice.getDieList().get(boardDice.getDieList().size()-1), d);
+    public void boardDiceCreationTest(){
+        BoardDice boardDice = new BoardDice();
+        assertTrue(boardDice.getDieList().isEmpty());
     }
 
     /**
-     * Tests takeDice method
+     * Tests insertDie method
      */
     @Test
-    public void takeDice() {
-        boardDice.insertDice(d1);
-        Die die = boardDice.getDieList().get(boardDice.getDieList().size()-1);
-        assertEquals(boardDice.takeDice(boardDice.getDieList().size()-1), die);
+    public void insertDiceTest() {
+        BoardDice boardDice = new BoardDice();
+
+        boardDice.insertDie(die);
+        assertEquals(die, boardDice.getDieList().get(boardDice.getDieList().size()-1));
+    }
+
+    /**
+     * Tries to insert a null Die in BoardDice
+     */
+    @Test
+    public void insertNullDieTest(){
+        BoardDice boardDice = new BoardDice();
+        try{
+            boardDice.insertDie(null);
+            fail();
+        }catch (NullPointerException e){}
+    }
+
+    /**
+     * Tests takeDice method with valid parameter
+     */
+    @Test
+    public void takeDiceWithValidIndexTest() {
+        BoardDice boardDice = new BoardDice();
+        boardDice.insertDie(die1);
+        assertEquals(1, boardDice.getDieList().size());
+
+        assertEquals(die1, boardDice.takeDie(boardDice.getDieList().size()-1));
+    }
+
+    /**
+     * Tests takeDice method with invalid high index
+     */
+    @Test
+    public void takeDiceWithInvalidHighIndexTest() {
+        BoardDice boardDice = new BoardDice();
+        boardDice.insertDie(die);
+        boardDice.insertDie(die1);
+        assertEquals(2, boardDice.getDieList().size());
+
+        try{
+            boardDice.takeDie(3);
+            fail();
+        }catch(IllegalArgumentException e){}
+    }
+
+    /**
+     * Tests takeDice method with invalid low index
+     */
+    @Test
+    public void takeDiceWithInvalidLowIndexTest() {
+        BoardDice boardDice = new BoardDice();
+        boardDice.insertDie(die);
+        boardDice.insertDie(die1);
+        assertEquals(2, boardDice.getDieList().size());
+
+        try{
+            boardDice.takeDie(-1);
+            fail();
+        }catch(IllegalArgumentException e){}
+    }
+
+    /**
+     * Tests takeDice method in an empty DiceBoard
+     */
+    @Test
+    public void takeDiceInEmptyBoardTest() {
+        BoardDice boardDice = new BoardDice();
+        assertEquals(0, boardDice.getDieList().size());
+
+        try{
+            boardDice.takeDie(0);
+            fail();
+        }catch(RuntimeException e){}
+    }
+
+    /**
+     * Test clone method
+     */
+    @Test
+    public void cloneDiceBoardTest(){
+        BoardDice boardDice = new BoardDice();
+        Die die2 = new Die(ColourEnum.RED);
+        die2.firstRoll();
+        Die die3 = new Die(ColourEnum.BLUE);
+        die3.firstRoll();
+        boardDice.insertDie(die);
+        boardDice.insertDie(die1);
+        boardDice.insertDie(die2);
+        boardDice.insertDie(die3);
+
+        BoardDice clonedBoardDice = boardDice.getClone();
+        assertEquals(boardDice.getDieList().size(), clonedBoardDice.getDieList().size());
+
+        for(int i = 0; i<boardDice.getDieList().size(); i++){
+            assertNotEquals(boardDice.getDieList().get(i), clonedBoardDice.getDieList().get(i));
+            assertEquals(boardDice.getDieList().get(i).getColour(), clonedBoardDice.getDieList().get(i).getColour());
+            assertEquals(boardDice.getDieList().get(i).getValue(), clonedBoardDice.getDieList().get(i).getValue());
+        }
+    }
+
+    /**
+     * Test clone method
+     */
+    @Test
+    public void cloneNullDiceBoardTest(){
+        BoardDice boardDice = null;
+        try{
+            BoardDice clonedBoardDice = boardDice.getClone();
+            fail();
+        }catch(NullPointerException e){}
+
     }
 }

@@ -4,6 +4,7 @@ import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,11 +12,18 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class BoardCard implements Serializable {
+
+    /**
+     * List of Public Objective Card on board
+     */
     private List<PublicObjCard> publicObjCardList;
+    /**
+     * List of Tool Card on Board
+     */
     private List<ToolCard> toolCardList;
 
     /**
-     * Builder method of BoardCard class
+     * Constructor method of BoardCard class
      * @param publicObjCardList List of Public Objective Cards extracted
      * @param toolCardList List of Tool Cards extracted
      */
@@ -26,8 +34,22 @@ public class BoardCard implements Serializable {
         if(toolCardList == null){
             throw new NullPointerException("ERROR: Tool card not existing");
         }
-        this.publicObjCardList=publicObjCardList;
-        this.toolCardList=toolCardList;
+        this.publicObjCardList = publicObjCardList;
+        this.toolCardList = toolCardList;
+    }
+
+    /**
+     * Copy Constructor
+     * @param boardCard BoardCard to be cloned
+     */
+    private BoardCard(BoardCard boardCard){
+        if(boardCard == null) throw new NullPointerException("ERROR: Try to clone a null BoardCard");
+
+        this.publicObjCardList = new ArrayList<>();
+        for(PublicObjCard publicObjCard: boardCard.publicObjCardList) this.publicObjCardList.add(publicObjCard.getClone());
+
+        this.toolCardList = new ArrayList<>();
+        for(ToolCard toolCard: boardCard.toolCardList) this.toolCardList.add(toolCard.getClone());
     }
 
     /**
@@ -44,5 +66,13 @@ public class BoardCard implements Serializable {
      */
     public List<ToolCard> getToolCardList() {
         return toolCardList;
+    }
+
+    /**
+     * Gets a clone of BoardCard
+     * @return Cloned BoardCard
+     */
+    public BoardCard getClone(){
+        return new BoardCard(this);
     }
 }

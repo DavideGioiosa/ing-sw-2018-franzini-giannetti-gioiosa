@@ -7,17 +7,15 @@ import static it.polimi.se2018.model.Config.*;
 
 /**
  * Die class represents every single dice of the game
- *
  * @author Cristian Giannetti
  */
 
-public class Die implements Serializable, Cloneable {
+public class Die implements Serializable {
 
     /**
      * Indicates the colour of the dice
      */
     private final ColourEnum colour;
-
     /**
      * Indicates the value of the upper face of the die rolled. Value 0 indicates a die not rolled
      */
@@ -34,7 +32,18 @@ public class Die implements Serializable, Cloneable {
     }
 
     /**
-     * returns the colour of the die
+     * Copy Constructor
+     * @param dieToClone Die to be cloned
+     */
+    private Die (Die dieToClone){
+        if (dieToClone != null) {
+            this.colour = dieToClone.colour;
+            this.value = dieToClone.value;
+        }else throw new NullPointerException("ERROR: Try to clone a null die");
+    }
+
+    /**
+     * Returns the colour of the die
      * @return colour of the die
      */
     public ColourEnum getColour(){
@@ -42,7 +51,7 @@ public class Die implements Serializable, Cloneable {
     }
 
     /**
-     * returns the value of the die
+     * Returns the value of the die
      * @return the value of the dice front face on board
      */
     public int getValue() {
@@ -50,7 +59,7 @@ public class Die implements Serializable, Cloneable {
     }
 
     /**
-     * method assigns a value between 1 and 6 to a die
+     * Method assigns a value between 1 and 6 to a die
      */
     private void roll(){
         Random randomGenerator = new Random();
@@ -58,7 +67,7 @@ public class Die implements Serializable, Cloneable {
     }
 
     /**
-     * sets a specific value to a die
+     * Sets a specific value to a die
      * @param val value to set on a die
      */
     public void setValue(int val){
@@ -92,7 +101,7 @@ public class Die implements Serializable, Cloneable {
     }
 
     /**
-     * rolls the die for the first time
+     * Rolls the die for the first time
      */
     public void firstRoll(){
         if(this.value != 0) throw new RuntimeException("ERROR: This dice is already rolled");
@@ -107,4 +116,11 @@ public class Die implements Serializable, Cloneable {
         this.setValue(DIE_MIN_VALUE + DIE_MAX_VALUE - value);
     }
 
+    /**
+     * Gets a clone of Die
+     * @return Cloned Die
+     */
+    public Die getClone(){
+        return new Die(this);
+    }
 }

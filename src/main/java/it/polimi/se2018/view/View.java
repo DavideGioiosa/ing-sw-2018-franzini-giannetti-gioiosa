@@ -25,8 +25,9 @@ public class View extends Observable implements Observer<ClientBoard> {
 
     private PlayerMessage lastPlayerMessage;
     private CommandLineGraphic commandLineGraphic;
+
     /**
-     * Builder method of the class
+     * Constructor of the class
      */
     public View() {
         commandLineInput = new CommandLineInput();
@@ -118,7 +119,7 @@ public class View extends Observable implements Observer<ClientBoard> {
      */
     public void updateSchema(PlayerMove playerMove){
         SchemaCard schemaCard = playerMove.getPlayer().getSchemaCard();
-        Die die = moveMessage.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
+        Die die = moveMessage.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
         schemaCard.setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
     }
 

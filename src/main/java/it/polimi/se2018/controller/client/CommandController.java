@@ -1,10 +1,14 @@
-package it.polimi.se2018.view;
+package it.polimi.se2018.controller.client;
 
 import it.polimi.se2018.model.*;
+import it.polimi.se2018.model.restriction.*;
+import it.polimi.se2018.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * View's Class: Command Controller
- *
  * @author Davide Gioiosa
  */
 
@@ -13,19 +17,25 @@ public class CommandController{
     /**
      * Checks the validity of the Player Move
      */
-    private CheckRestriction checkRestriction;
+    private List<Restriction> restrictionList;
     /**
      *
      */
     private View view;
 
     /**
-     * Builder of the class, creates a checkRestriction object
+     * Constructor inserts standard Restrictions to check in the List
      * @param view
      */
     public CommandController (View view){
-        checkRestriction = new CheckRestriction();
         this.view = view;
+        restrictionList = new ArrayList<>();
+        restrictionList.add(new RestrictionFirstDieOnBorder());
+        restrictionList.add(new RestrictionAdjacent());
+        restrictionList.add(new RestrictionCellValue());
+        restrictionList.add(new RestrictionCellColour());
+        restrictionList.add(new RestrictionAdjacentColour());
+        restrictionList.add(new RestrictionAdjacentValue());
     }
 
     /**
@@ -66,42 +76,11 @@ public class CommandController{
 
     private int checkRestrictionValidity (PlayerMove playerMove, ClientBoard clientBoard) {
 
-        if (playerMove.getPlayer().getSchemaCard().isEmpty() &&
-                !checkRestriction.isOnTheBorder(playerMove.getDiceSchemaWhereToLeave().get(0))) {
-            return 1;
-        }
-
-        if(!playerMove.getPlayer().getSchemaCard().isEmpty() &&
-                playerMove.getIdToolCard() != 9 && !checkRestriction.adjacentRestriction(playerMove.getPlayer().getSchemaCard(),
-                clientBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
-                playerMove.getDiceSchemaWhereToLeave().get(0))){
-            return 2;
-        }
-
-        if(playerMove.getIdToolCard() != 2 && !checkRestriction.cellColourRestriction(playerMove.getPlayer().getSchemaCard(),
-                clientBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
-                playerMove.getDiceSchemaWhereToLeave().get(0))){
-            return 3;
-        }
-
-        if(playerMove.getIdToolCard() != 3 && !checkRestriction.cellValueRestriction(playerMove.getPlayer().getSchemaCard(),
-                clientBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
-                playerMove.getDiceSchemaWhereToLeave().get(0))){
-            return 4;
-        }
-
-        if(!playerMove.getPlayer().getSchemaCard().isEmpty() &&
-                !checkRestriction.adjacentColourRestriction(playerMove.getPlayer().getSchemaCard(),
-                        clientBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
-                        playerMove.getDiceSchemaWhereToLeave().get(0))){
-            return 5;
-        }
-
-        if(!playerMove.getPlayer().getSchemaCard().isEmpty() &&
-                !checkRestriction.adjacentValueRestriction(playerMove.getPlayer().getSchemaCard(),
-                        clientBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
-                        playerMove.getDiceSchemaWhereToLeave().get(0))){
-            return 6;
+        for(Restriction restriction: restrictionList){
+            int error = restriction.checkRestriction(playerMove.getPlayer().getSchemaCard(),
+                    clientBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
+                    playerMove.getDiceSchemaWhereToLeave().get(0));
+            if(error != 0) return error;
         }
 
         PlayerMessage playerMessage = new PlayerMessage();

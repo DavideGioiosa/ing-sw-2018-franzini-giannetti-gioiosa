@@ -1,9 +1,70 @@
 package it.polimi.se2018.view.graphic.cli;
 
+import static org.fusesource.jansi.Ansi.*;
+
+import it.polimi.se2018.model.ColourEnum;
+import org.fusesource.jansi.AnsiConsole;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+
+
 public class CommandLinePrint {
 
-    public CommandLinePrint(){
+    private static EnumMap<ColourEnum, Color> hashMapColours;
 
+    HashMap<Integer, String> dieRowString1;
+    HashMap<Integer, String> dieRowString2;
+    HashMap<Integer, String> dieRowString3;
+
+    List<HashMap<Integer, String>> dieRowStringList;
+
+
+    public CommandLinePrint(EnumMap<ColourEnum, Color> hashMapColours){
+        this.hashMapColours = hashMapColours;
+
+        dieRowString1 = new HashMap<>();
+        dieRowString2 = new HashMap<>();
+        dieRowString3 = new HashMap<>();
+
+        dieRowString1.put(0, "|       |");
+        dieRowString2.put(0, "|       |");
+        dieRowString3.put(0, "|       |");
+
+        dieRowString1.put(1, "|       |");
+        dieRowString2.put(1, "|   O   |");
+        dieRowString3.put(1, "|       |");
+
+        dieRowString1.put(2, "| O     |");
+        dieRowString2.put(2, "|       |");
+        dieRowString3.put(2, "|     O |");
+
+        dieRowString1.put(3, "| O     |");
+        dieRowString2.put(3, "|   O   |");
+        dieRowString3.put(3, "|     O |");
+
+        dieRowString1.put(4, "| O   O |");
+        dieRowString2.put(4, "|       |");
+        dieRowString3.put(4, "| O   O |");
+
+        dieRowString1.put(5, "| O   O |");
+        dieRowString2.put(5, "|   O   |");
+        dieRowString3.put(5, "| O   O |");
+
+        dieRowString1.put(6, "| O   O |");
+        dieRowString2.put(6, "| O   O |");
+        dieRowString3.put(6, "| O   O |");
+
+        dieRowString1.put(-1, "| # # # |");
+        dieRowString2.put(-1, "|# # # #|");
+        dieRowString3.put(-1, "| # # # |");
+
+         dieRowStringList = new ArrayList<>();
+         dieRowStringList.add(dieRowString1);
+         dieRowStringList.add(dieRowString2);
+         dieRowStringList.add(dieRowString3);
     }
     /**
      * Print String
@@ -35,5 +96,21 @@ public class CommandLinePrint {
      */
     static void println(int num){
         System.out.println(num);
+    }
+
+
+
+    public void colouredDiePrint(int row, ColourEnum colour, int value){
+        if (colour != null && value == 0) value = -1;
+        System.setProperty("jansi.passthrough", "true");
+        AnsiConsole.systemInstall();
+        if (colour == null){
+            print(dieRowStringList.get(row).get(value));
+        }
+        else System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(dieRowStringList.get(row).get(value)).reset());
+    }
+
+    static void colouredPrint(char character, ColourEnum colour){
+        System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(character).reset());
     }
 }

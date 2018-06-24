@@ -2,24 +2,35 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.player.Player;
+import it.polimi.se2018.model.restriction.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages the single player's move
- *
  * @author Silvia Franzini
  */
 public class Action {
     private GameBoard gameBoard;
-    private CheckRestriction checkRestriction;
     private PlayerMove playerMove;
+
+    private List<Restriction> restrictionList;
 
     /**
      * Builder method of Action class
      * @param gameBoard the game board of the match with all the elements on the board
      */
     public Action(GameBoard gameBoard){
-        this.gameBoard=gameBoard;
-        checkRestriction = new CheckRestriction();
+        this.gameBoard = gameBoard;
+
+        restrictionList = new ArrayList<>();
+        restrictionList.add(new RestrictionFirstDieOnBorder());
+        restrictionList.add(new RestrictionAdjacent());
+        restrictionList.add(new RestrictionCellValue());
+        restrictionList.add(new RestrictionCellColour());
+        restrictionList.add(new RestrictionAdjacentColour());
+        restrictionList.add(new RestrictionAdjacentValue());
     }
 
     /**
@@ -42,9 +53,10 @@ public class Action {
                 try{
                     for(Player player: gameBoard.getPlayerList()) {
                         if (player.getNickname().equals(playerMove.getPlayer().getNickname())){
-                            Die dieExtracted = gameBoard.getBoardDice().takeDice(playerMove.getDiceBoardIndex());
-                            Boolean placed = placeDice(player, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
-                            if(!placed) gameBoard.getBoardDice().insertDice(dieExtracted);
+                            Die dieExtracted = gameBoard.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
+                            int error = placeDice(player, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
+                            if(error == 0) gameBoard.getBoardDice().insertDie(dieExtracted);
+                            //TODO: else Notifica VIEW
                         }
                     }
                 }catch(IllegalArgumentException e){
@@ -78,7 +90,7 @@ public class Action {
                     }catch(RuntimeException e){
                         return false;
                     }
-                    gameBoard.getBoardDice().insertDice(die);
+                    gameBoard.getBoardDice().insertDie(die);
                 } break;
             default:
                 break;
@@ -93,42 +105,17 @@ public class Action {
      * @param position position where to put the die
      * @return true if action completed, false otherwise
      */
-    private boolean placeDice(Player actualPlayer, Die die, Position position){
-        boolean success = false;
+    private int placeDice(Player actualPlayer, Die die, Position position){
 
-        try{
-            success = checkRestriction.adjacentColourRestriction(actualPlayer.getSchemaCard(), die, position);
-        }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
+        for(Restriction restriction: restrictionList){
+            int error = restriction.checkRestriction(playerMove.getPlayer().getSchemaCard(),
+                    gameBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
+                    playerMove.getDiceSchemaWhereToLeave().get(0));
+            if(error != 0) return error;
         }
-        if(!success){return false;}
-        try{
-            success = checkRestriction.adjacentRestriction(actualPlayer.getSchemaCard(), die, position);
-        }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
-        }
-        if(!success){return false;}
-        try{
-            success = checkRestriction.adjacentValueRestriction(actualPlayer.getSchemaCard(), die, position);
-        }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
-        }
-        if(!success){return false;}
-        try{
-            success = checkRestriction.cellColourRestriction(actualPlayer.getSchemaCard(), die, position);
-        }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
-        }
-        if(!success){return false;}
-        try{
-            success = checkRestriction.cellValueRestriction(actualPlayer.getSchemaCard(), die, position);
-        }catch(IllegalArgumentException e){
-            throw new IllegalArgumentException("ERROR: incorrect parameters");
-        }
-        if(!success){return false;}
 
         actualPlayer.getSchemaCard().setDiceIntoCell(position,die);
-        return true;
+        return 0;
     }
 
     /**

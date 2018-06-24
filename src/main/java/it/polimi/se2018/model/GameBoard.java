@@ -11,11 +11,11 @@ import java.util.List;
  */
 
 public class GameBoard extends ClientBoard{
+
     /**
      * Bag containing all the 90 dice
      */
     private BagDice bagDice;
-
     /**
      * List of Private Objective Card referred to every Player
      */
@@ -46,13 +46,17 @@ public class GameBoard extends ClientBoard{
     }
 
     /**
-     * @return the Bag containing remaining dice
+     * Getter method for Dice Bag
+     * @return Bag containing remaining dice
      */
     public BagDice getBagDice() {
         return bagDice;
     }
 
-
+    /**
+     * Gets method for List of Private Objective card assigned to players
+     * @return List of PrivatePlayer
+     */
     public List<PrivatePlayer> getPrivatePlayerList() {
         return privatePlayerList;
     }

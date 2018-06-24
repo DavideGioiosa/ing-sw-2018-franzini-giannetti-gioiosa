@@ -13,12 +13,10 @@ public class Card implements Serializable {
      * Card's identifier
      */
     private final int id;
-
     /**
      * Name of the Card
      */
     private final String name;
-
     /**
      * Description of the Card
      */
@@ -39,6 +37,16 @@ public class Card implements Serializable {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    /**
+     * Copy Constructor
+     * @param card Card to be cloned
+     */
+    protected Card(Card card){
+        this.id = card.id;
+        this.name = card.name;
+        this.description = card.description;
     }
 
     /**
@@ -63,5 +71,13 @@ public class Card implements Serializable {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Gets a clone of cCard
+     * @return Cloned Card
+     */
+    public Card getClone(){
+        return new Card(this);
     }
 }

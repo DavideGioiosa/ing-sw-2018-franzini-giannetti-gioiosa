@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
-import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.print;
-import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.println;
+import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import static org.fusesource.jansi.Ansi.*;
 import org.fusesource.jansi.AnsiConsole;
 
@@ -58,6 +57,8 @@ public class CommandLineGraphic{
      */
     private final String publicObjCardValueString = "Valore della carta: ";
 
+    CommandLinePrint commandLinePrint;
+
     /**
      * Constructor
      */
@@ -68,6 +69,7 @@ public class CommandLineGraphic{
         hashMapColours.put(ColourEnum.PURPLE, Color.MAGENTA);
         hashMapColours.put(ColourEnum.RED, Color.RED);
         hashMapColours.put(ColourEnum.YELLOW, Color.YELLOW);
+        commandLinePrint = new CommandLinePrint(hashMapColours);
     }
 
     /**
@@ -158,24 +160,53 @@ public class CommandLineGraphic{
      * @param schemaCard Schema Card to display
      */
     public void showSchemaCard(SchemaCard schemaCard){
+        String frameCardCharacter = " # ";
+
+        Cell cell;
+        String upperFrame = " ------- ";
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i< 4 + 9*5; i++) stringBuilder.append('#');
+        String upperCardFrame = " " + stringBuilder.toString();
+
         println(schemaCard.getName());
-        String cellsRow;
-        for (int row = 0; row < NUMBER_OF_SCHEMA_ROW; row++){
-            cellsRow = row + " ";
-            for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
-                if (schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).isEmpty()){
-                    cellsRow = cellsRow.concat(" \t|Empty: ");
-                    cellsRow = cellsRow.concat( "\t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getValue());
-                    cellsRow = cellsRow.concat( " \t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getColour());
-                }
-                else {
-                    cellsRow = cellsRow.concat(" \t|Full:  ");
-                    cellsRow = cellsRow.concat("\t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getDie().getValue());
-                    cellsRow = cellsRow.concat(" \t" + schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).getDie().getColour());
-                }
-            }
-            println(cellsRow);
+
+        println("");
+
+        println(upperCardFrame);
+        print(frameCardCharacter);
+        for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
+            System.out.print(upperFrame);
         }
+
+        for (int row = 0; row < NUMBER_OF_SCHEMA_ROW; row++) {
+            print(frameCardCharacter + "\n" + frameCardCharacter);
+
+            for(int i = 0; i<3; i++) {
+
+                for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col++) {
+                    cell = schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col);
+
+                    if (schemaCard.getCellList().get(row * NUMBER_OF_SCHEMA_COL + col).isEmpty()) {
+                        commandLinePrint.colouredDiePrint(i, cell.getColour(), cell.getValue());
+                    } else {
+                        commandLinePrint.colouredDiePrint(i, cell.getDie().getColour(), cell.getDie().getValue());
+                    }
+
+                }
+
+                print(frameCardCharacter + "\n" + frameCardCharacter);
+
+            }
+
+            for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
+                System.out.print(upperFrame);
+            }
+        }
+        print(frameCardCharacter + "\n");
+
+        println(upperCardFrame);
+        println("");
 
     }
 

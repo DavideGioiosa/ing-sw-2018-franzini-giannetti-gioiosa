@@ -1,8 +1,6 @@
 package it.polimi.se2018.model.cards;
 
-import it.polimi.se2018.model.Cell;
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.Position;
+import it.polimi.se2018.model.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.List;
  * @author Davide Gioiosa
  */
 
-public class SchemaCard extends Card implements Serializable, Cloneable {
+public class SchemaCard extends Card implements Serializable, DiceContainer {
     /**
      * List of the cells that make up the scheme
      */
@@ -30,10 +28,10 @@ public class SchemaCard extends Card implements Serializable, Cloneable {
     /**
      * Builder: create a Scheme card
      * @param name name of the card
-     * @param description informations about the card
+     * @param description information about the card
      * @param id identifier of the scheme
      * @param token related to the difficulty of a scheme
-     * @param cellList 20 cells componing the scheme
+     * @param cellList 20 cells that compose the scheme
      */
     public SchemaCard (int id, String name, String description, int token, List<Cell> cellList){
         super(id, name, description);
@@ -45,6 +43,18 @@ public class SchemaCard extends Card implements Serializable, Cloneable {
         }
         this.cellList = cellList;
         this.difficulty = token;
+    }
+
+    /**
+     * Copy Constructor
+     * @param schemaCard Schema Card to be cloned
+     */
+    private SchemaCard(SchemaCard schemaCard){
+        super(schemaCard);
+        this.difficulty = schemaCard.difficulty;
+        this.cellList = new ArrayList<>();
+        for(Cell cell: schemaCard.cellList) cellList.add(cell.getClone());
+        this.backSchema = null;
     }
 
     /**
@@ -67,7 +77,12 @@ public class SchemaCard extends Card implements Serializable, Cloneable {
         }
         checkPosition(position);
 
-        cellList.get(position.getIndexArrayPosition()).insertDice(die);
+        cellList.get(position.getIndexArrayPosition()).insertDie(die);
+    }
+
+    public Die pickDieFromCell(Position position){
+        if(position == null) throw new NullPointerException("ERROR: Impossible to pick Die from null Position");
+        return this.cellList.get(position.getIndexArrayPosition()).pickDie();
     }
 
     /**
@@ -211,4 +226,57 @@ public class SchemaCard extends Card implements Serializable, Cloneable {
             throw new IllegalArgumentException("ERROR: The position inserted is out of the range permitted");
         }
     }
+
+    /**
+     * Gets a clone of Schema Card
+     * @return Cloned SchemaCard
+     */
+    @Override
+    public SchemaCard getClone(){
+        return new SchemaCard(this);
+    }
+
+    /**
+     *
+     * @param position
+     * @return
+     */
+    private Die pickDie(Position position){
+        return cellList.get(position.getIndexArrayPosition()).pickDie();
+    }
+
+    /**
+     *
+     * @param playerMove
+     * @return
+     */
+    @Override
+    public List<Die> pickDice(PlayerMove playerMove){
+        List<Die> dieList = new ArrayList<>();
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToTake().size(); i++) {
+            dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(i)));
+        }
+        return dieList;
+    }
+
+    @Override
+    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        List<Die> dieLeavedList = new ArrayList<>();
+
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            dieLeavedList.add(pickDie(playerMove.getDiceSchemaWhereToLeave().get(i)));
+            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
+        }
+
+        return dieLeavedList;
+    }
+
+    @Override
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
+        }
+    }
+
+
 }

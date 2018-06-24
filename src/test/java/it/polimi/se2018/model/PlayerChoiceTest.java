@@ -134,9 +134,9 @@ public class PlayerChoiceTest {
      */
     @Test
     public void setChosenSchema() {
-        playerChoice.setChosenSchema(schemaCard);
+        playerChoice.setIdChosenSchema(schemaCard.getId());
 
-        assertEquals(schemaCard, playerChoice.getChosenSchema());
+        assertEquals(schemaCard.getId(), playerChoice.getIdChosenSchema());
     }
 
     /**
@@ -145,7 +145,7 @@ public class PlayerChoiceTest {
     @Test
     public void setChosenSchema_shouldCallException() {
         try {
-            playerChoice.setChosenSchema(null);
+            playerChoice.setIdChosenSchema(0);
             fail();
         } catch (NullPointerException e){}
     }

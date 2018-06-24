@@ -4,15 +4,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
-
 /**
  * Tests methods of Die that don't use random functions
- *
  * @author Cristian Giannetti
  */
 public class DieTest {
 
-    public final ColourEnum colour = ColourEnum.BLUE;
+    private final ColourEnum colour = ColourEnum.BLUE;
 
     /**
      * Tests the creation of a Die with good parameters
@@ -30,7 +28,7 @@ public class DieTest {
     @Test
     public void creationDieBadTest(){
         try{
-            Die die = new Die(null);
+            Die die = new Die((ColourEnum)null);
             fail();
         } catch (NullPointerException e){
         }
@@ -189,5 +187,30 @@ public class DieTest {
             fail();
         } catch (RuntimeException e) {
         }
+    }
+
+    /**
+     * Verify that one Die has same values of his clone
+     */
+    @Test
+    public void verifyValuesOfClonedDie(){
+        Die die = new Die(colour);
+        die.firstRoll();
+        Die clonedDie = die.getClone();
+        assertEquals(die.getValue(), clonedDie.getValue());
+        assertEquals(die.getColour(), clonedDie.getColour());
+    }
+
+    /**
+     * Clones a Die and changes his value. Verify that the values are different
+     */
+    @Test
+    public void cloneDieWithValidParameters(){
+        Die die = new Die(colour);
+        die.firstRoll();
+        Die clonedDie = die.getClone();
+        clonedDie.oppositeValue();
+        assertNotEquals(die.getValue(), clonedDie.getValue());
+        assertEquals(die.getColour(), clonedDie.getColour());
     }
 }

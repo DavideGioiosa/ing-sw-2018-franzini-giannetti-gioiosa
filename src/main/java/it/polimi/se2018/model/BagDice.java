@@ -8,11 +8,10 @@ import static it.polimi.se2018.model.Config.*;
 
 /**
  * BagDice represents the bag from which the dice are extracted.
- *
  * @author Cristian Giannetti
  */
 
-public class BagDice {
+public class BagDice implements DiceContainer {
 
     /**
      * List of dices contained in the bag
@@ -60,6 +59,39 @@ public class BagDice {
 
     public int numberOfRemainingDice(){
         return dieList.size();
+    }
+
+    /**
+     *
+     * @param playerMove
+     * @return
+     */
+    @Override
+    public List<Die> pickDice(PlayerMove playerMove){
+        List<Die> diePickedList = new ArrayList<>();
+        diePickedList.add(extractDice());
+        return diePickedList;
+    }
+
+    @Override
+    public List<Die> exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        for(Die die: dieList) {
+            insertDice(die);
+        }
+
+        List<Die> dieLeavedList = new ArrayList<>();
+        for(Die die: dieList) {
+            dieLeavedList.add(extractDice());
+        }
+
+        return dieLeavedList;
+    }
+
+    @Override
+    public void leaveDice(PlayerMove playerMove, List<Die> dieList){
+        for(Die die: dieList) {
+            insertDice(die);
+        }
     }
 
 }

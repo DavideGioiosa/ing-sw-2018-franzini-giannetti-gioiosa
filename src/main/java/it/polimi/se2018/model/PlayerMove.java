@@ -9,11 +9,10 @@ import java.util.List;
 //TODO exceptions
 /**
  * PlayerMove contains the entire command representing the Action that the Player wants to do.
- *
  * @author Cristian Giannetti
  */
 
-public class PlayerMove implements Serializable, Cloneable {
+public class PlayerMove implements Serializable {
 
     /**
      * Progressive identifier of the Player Move
@@ -75,6 +74,28 @@ public class PlayerMove implements Serializable, Cloneable {
         this.diceSchemaWhereToLeave = new ArrayList<>();
         this.trackBoardIndexArray = null;
         this.value = 0;
+    }
+
+    /**
+     * Copy Constructor
+     * @param playerMove PlayerMove to be cloned
+     */
+    private PlayerMove(PlayerMove playerMove){
+        if (playerMove == null) throw new NullPointerException("ERROR: Tried to clone a null PlayerMove");
+
+        this.identifier = playerMove.identifier;
+        this.player = playerMove.player.getClone();
+        this.typeOfChoice = playerMove.typeOfChoice;
+        this.idToolCard = playerMove.idToolCard;
+        this.diceBoardIndex = playerMove.diceBoardIndex;
+        this.diceSchemaWhereToTake = new ArrayList<>();
+        for(Position position: playerMove.diceSchemaWhereToTake) this.diceSchemaWhereToTake.add(position.getClone());
+
+        this.diceSchemaWhereToLeave = new ArrayList<>();
+        for(Position position: playerMove.diceSchemaWhereToLeave) this.diceSchemaWhereToLeave.add(position.getClone());
+
+        if (playerMove.trackBoardIndexArray != null) System.arraycopy(playerMove.trackBoardIndexArray, 0, this.trackBoardIndexArray, 0,playerMove.trackBoardIndexArray.length);
+        this.value = playerMove.value;
     }
 
     /**
@@ -226,11 +247,10 @@ public class PlayerMove implements Serializable, Cloneable {
 
     /**
      * Gets a copy of PlayerMove
-     * @return copy of PlayerMove
-     * @throws CloneNotSupportedException Throws exception if it isn't possible to create a copy
+     * @return Cloned PlayerMove
      */
-    public PlayerMove getClone() throws CloneNotSupportedException{
-        return (PlayerMove)this.clone();
+    public PlayerMove getClone(){
+        return new PlayerMove(this);
     }
 }
 

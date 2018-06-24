@@ -101,7 +101,9 @@ public class TurnTest {
     public void runTurn_shouldReturnTrueIfCorrectPick(){
         turn = new Turn(gameBoard);
         for(int i = 0; i < 5; i++) {
-            gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+            Die die = gameBoard.getBagDice().extractDice();
+            die.firstRoll();
+            gameBoard.getBoardDice().insertDie(die);
         }
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.PICK);
         playerMove.setDiceBoardIndex(3);
@@ -120,7 +122,9 @@ public class TurnTest {
     public void runTurn_shouldReturnFalseBecauseOfPICKTwice(){
         turn = new Turn(gameBoard);
         for(int i = 0; i < 5; i++) {
-            gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+            Die die = gameBoard.getBagDice().extractDice();
+            die.firstRoll();
+            gameBoard.getBoardDice().insertDie(die);
         }
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.PICK);
         playerMove.setDiceBoardIndex(3);
@@ -145,7 +149,7 @@ public class TurnTest {
     public void runTurn_shouldReturnTrueIfCorrectTool(){
         turn = new Turn(gameBoard);
         for(int i = 0; i < 5; i++) {
-            gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+            gameBoard.getBoardDice().insertDie(gameBoard.getBagDice().extractDice());
         }
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.TOOL);
         playerMove.setDiceBoardIndex(3);
@@ -164,7 +168,7 @@ public class TurnTest {
     public void runTurn_shouldReturnFalseBecauseOfTOOLTwice(){
         turn = new Turn(gameBoard);
         for(int i = 0; i < 5; i++) {
-            gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+            gameBoard.getBoardDice().insertDie(gameBoard.getBagDice().extractDice());
         }
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.TOOL);
         playerMove.setDiceBoardIndex(3);
@@ -204,7 +208,7 @@ public class TurnTest {
     public void endTurn_shouldReturnTrueIfPASS(){
         turn = new Turn(gameBoard);
         for(int i = 0; i < 5; i++) {
-            gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+            gameBoard.getBoardDice().insertDie(gameBoard.getBagDice().extractDice());
         }
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
         turn.runTurn(playerMove);
@@ -221,7 +225,9 @@ public class TurnTest {
     public void endTurn_shouldReturnFalseIfNotPASS(){
         turn = new Turn(gameBoard);
         for(int i = 0; i < 5; i++) {
-            gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
+            Die die = gameBoard.getBagDice().extractDice();
+            die.firstRoll();
+            gameBoard.getBoardDice().insertDie(die);
         }
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.PICK);
         playerMove.setDiceBoardIndex(3);

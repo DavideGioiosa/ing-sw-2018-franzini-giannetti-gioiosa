@@ -43,9 +43,9 @@ public class PlayerMessageTest {
     @Test
     public void setMove() {
         PlayerMove playerMove = new PlayerMove();
-        playerMessage.setMove(playerMove);
+        playerMessage.setCheckMove(playerMove);
 
-        assertEquals(PlayerMessageTypeEnum.MOVE, playerMessage.getId());
+        assertEquals(PlayerMessageTypeEnum.CHECK_MOVE, playerMessage.getId());
         assertEquals(playerMove, playerMessage.getPlayerMove());
     }
 
@@ -55,7 +55,7 @@ public class PlayerMessageTest {
     @Test
     public void setMove_shouldCallException() {
         try {
-            playerMessage.setMove(null);
+            playerMessage.setCheckMove(null);
             fail();
         } catch (NullPointerException e){}
     }
