@@ -1,11 +1,14 @@
 it.polimi.se2018.connection.client
 it.polimi.se2018.connection.server
 it.polimi.se2018.controller
+it.polimi.se2018.controller.client
+it.polimi.se2018.controller.toolcardactions
 it.polimi.se2018.model
 it.polimi.se2018.model.cards
 it.polimi.se2018.model.cards.publiccard
 it.polimi.se2018.model.player
+it.polimi.se2018.model.restriction
 it.polimi.se2018.utils
 it.polimi.se2018.view
-it.polimi.se2018.view.graphic
 it.polimi.se2018.view.graphic.cli
+it.polimi.se2018.view.graphic.gui
