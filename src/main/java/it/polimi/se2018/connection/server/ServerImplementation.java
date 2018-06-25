@@ -1,6 +1,5 @@
 package it.polimi.se2018.connection.server;
 
-import it.polimi.se2018.connection.client.ClientImplementation;
 import it.polimi.se2018.connection.client.ClientRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
@@ -44,8 +43,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
             if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
                 ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
                 clientRemoteInterface.receiveFromServer(playerMessage);
-
             }
+
         }
     }
 
@@ -98,18 +97,26 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
     }
 
+    void transimit(PlayerMessage playerMessage){
+        obs.notify(playerMessage);
+    }
+
     @Override
     public void receive(PlayerMessage playerMessage) {
 
         if(playerMessage.getIdError() == 100 ){
             disconnectionHandler(playerMessage.getUser().getUniqueCode());
         }
-        obs.notify(playerMessage);
+        new Thread(new RMIServerThread(playerMessage, this)).start();
     }
 
+    /**
+     * Method used to detect client RMI disconnection
+     * @throws RemoteException
+     */
     @Override
     public void lifeLine() throws RemoteException {
-
+        //detects disconnection by throwing RemoteException
     }
 
 }

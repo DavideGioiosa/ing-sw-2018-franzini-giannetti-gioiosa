@@ -2,6 +2,7 @@ package it.polimi.se2018.connection.client;
 
 import it.polimi.se2018.connection.server.ServerRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
@@ -87,6 +88,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
     @Override
     public void sendToServer(PlayerMessage playerMessage){
+
 
         if(stub != null)
         {

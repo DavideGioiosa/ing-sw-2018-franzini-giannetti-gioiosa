@@ -37,11 +37,10 @@ public class Client implements Observer<PlayerMessage> {
      void connect(){
         clientStrategy.connect();
     }
-
     @Override
     public void update(PlayerMessage playerMessage){
 
-        view.receive(playerMessage);
+         view.receive(playerMessage);
 
     }
 

@@ -3,11 +3,12 @@ package it.polimi.se2018.connection.client;
 
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.utils.Observer;
 
 import java.rmi.RemoteException;
 
 
-public class ClientImplementation implements ClientRemoteInterface {
+public class ClientImplementation implements Observer<PlayerMessage>,ClientRemoteInterface {
 
     private Observable<PlayerMessage> obs;
 
@@ -22,9 +23,14 @@ public class ClientImplementation implements ClientRemoteInterface {
 
     @Override
     public void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
-        obs.notify(playerMessage);
+
+        new Thread(new RMIReceiveThread(playerMessage, this)).start();
     }
 
+    @Override
+    public void update(PlayerMessage playerMessage) {
+        obs.notify(playerMessage);
+    }
 
     @Override
     public void receiveLifeline() throws RemoteException {
