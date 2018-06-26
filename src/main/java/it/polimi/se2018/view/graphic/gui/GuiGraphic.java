@@ -2,6 +2,8 @@ package it.polimi.se2018.view.graphic.gui;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCombination;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -29,10 +31,17 @@ public class GuiGraphic extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        URL url = new File("src\\main\\java\\it\\polimi\\se2018\\view\\graphic\\gui\\GameboardMatch.fxml").toURI().toURL();
+        URL url = new File("src\\main\\java\\it\\polimi\\se2018\\view\\graphic\\gui\\Table.fxml").toURI().toURL();
         Parent root = FXMLLoader.load(url);
         primaryStage.setTitle("Sagrada");
-        primaryStage.setScene(new Scene(root, 750, 400));
+        int width = (int) Screen.getPrimary().getBounds().getWidth() ;
+        int height = (int) Screen.getPrimary().getBounds().getHeight() - 70;
+
+        //per settare il full screen senza barra di uscita sopra
+        //primaryStage.setFullScreen(true);
+        //primaryStage.setScene(new Scene(root));
+
+        primaryStage.setScene(new Scene(root, width, height));
         primaryStage.show();
     }
 

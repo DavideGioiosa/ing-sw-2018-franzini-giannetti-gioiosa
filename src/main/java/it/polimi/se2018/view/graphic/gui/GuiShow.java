@@ -78,7 +78,7 @@ public class GuiShow {
         String string = "src\\main\\java\\it\\polimi\\se2018\\img\\publicObjCard\\";
 
         switch (id) {
-            case 1: image = new Image(string + "PubObjColorDiagonals.jpg"); break;
+            case 1: image = new Image(string + "diagonalicolorate.jpg"); break;
             case 2: image = new Image(string + "PubObjColorVariety.jpg"); break;
             case 3: image = new Image(string + "PubObjColumnColorVariety.jpg"); break;
             case 4: image = new Image(string + "PubObjColumnShadeVariety.jpg"); break;
