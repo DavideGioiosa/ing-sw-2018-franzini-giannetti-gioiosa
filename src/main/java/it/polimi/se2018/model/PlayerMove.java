@@ -72,7 +72,7 @@ public class PlayerMove implements Serializable {
         this.diceBoardIndex = -1;
         this.diceSchemaWhereToTake = new ArrayList<>();
         this.diceSchemaWhereToLeave = new ArrayList<>();
-        this.trackBoardIndexArray = null;
+        this.trackBoardIndexArray = new int[] {-1, -1};
         this.value = 0;
     }
 

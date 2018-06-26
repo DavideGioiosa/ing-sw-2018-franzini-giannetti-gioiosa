@@ -16,8 +16,9 @@ public class Config {
     public static final int DIE_MAX_VALUE = 6;
 
     public static final int NUMBER_OF_TOOL_CARD = 12;
-    public static final int NUMBER_OF_PUBLIC_OBJC_ARD = 10;
+    public static final int NUMBER_OF_PUBLIC_OBJ_CARD = 10;
     public static final int NUMBER_OF_PRIVATE_OBJ_CARD = 5;
+    public static final int NUMBER_OF_SCHEMA_CARD = 12;
 
     public static final int ID_FIRST_PUBLIC_OBJ_CARD = 100;
     public static final int ID_FIRST_PRIVATE_OBJ_CARD = 200;

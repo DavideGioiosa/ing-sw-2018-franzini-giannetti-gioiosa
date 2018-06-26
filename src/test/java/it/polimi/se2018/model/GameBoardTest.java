@@ -18,7 +18,6 @@ import static org.junit.Assert.fail;
 
 /**
  * Tests all methods of GameBoard class
- *
  * @author Cristian Giannetti
  */
 public class GameBoardTest {
@@ -45,7 +44,9 @@ public class GameBoardTest {
     @Before
     public void setUp(){
         GameLoader gameLoader = new GameLoader();
-        schemaCard = (SchemaCard) gameLoader.getSchemaDeck().extractCard();
+        do {
+            schemaCard = (SchemaCard) gameLoader.getSchemaDeck().extractCard();
+        }while (schemaCard.getId() != 400);
 
         player = new Player(NICKNAME, CONNECTION, FRAMECOLOUR, schemaCard, 2);
         playerList = new ArrayList<>();

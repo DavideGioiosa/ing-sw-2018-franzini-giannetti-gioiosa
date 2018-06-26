@@ -17,7 +17,7 @@ public class OperationOppositeValue implements ToolOperation{
     @Override
     public boolean start(DiceContainer diceContainer, PlayerMove playerMove, List<Die> dieList, List<Player> roundPlayerOrder, Turn turn) {
 
-        for(Die die: dieList) die.setValue(playerMove.getValue());
+        for(Die die: dieList) die.setOppositeValue();
 
         return true;
     }

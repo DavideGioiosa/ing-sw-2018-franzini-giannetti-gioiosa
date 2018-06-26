@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNull;
 
 /**
  * Tests PlayerMove class
- *
  * @author Cristian Giannetti
  */
 public class TestPlayerMove {
@@ -31,7 +30,8 @@ public class TestPlayerMove {
         assertEquals(-1,playerMove.getDiceBoardIndex());
         assertEquals(0,playerMove.getDiceSchemaWhereToTake().size());
         assertEquals(0,playerMove.getDiceSchemaWhereToLeave().size());
-        assertNull(playerMove.getTrackBoardIndex());
+        assertEquals(-1, playerMove.getTrackBoardIndex()[0]);
+        assertEquals(-1, playerMove.getTrackBoardIndex()[1]);
         assertEquals(0,playerMove.getValue());
 
     }

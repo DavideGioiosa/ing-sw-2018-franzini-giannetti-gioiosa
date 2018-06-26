@@ -1,6 +1,8 @@
 package it.polimi.se2018.controller;
 
-public class OperationString {
+import java.io.Serializable;
+
+public class OperationString implements Serializable {
     private String operation;
     private String diceContainer;
 

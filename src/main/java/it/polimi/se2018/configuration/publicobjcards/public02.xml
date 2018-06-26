@@ -1,0 +1,6 @@
+<publicObjCard>
+    <name>Colori Diversi - Colonna</name>
+    <description>Colonne senza colori ripetuti</description>
+    <typeofcalculation>DiffColoursColumn</typeofcalculation>
+    <bonus>5</bonus>
+</publicObjCard>

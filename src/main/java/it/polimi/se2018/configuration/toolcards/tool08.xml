@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Tenaglia a Rotelle</name>
+    <description>Dopo il tuo primo turno scegli immediatamente un altro dado. Salta il tuo secondo turno in questo round.</description>
+    <colour>RED</colour>
+    <turn>1</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>1</maxQuantity>
+    <restriction></restriction>
+    <state>
+        <operation>
+            <action>doublepick</action>
+            <diceContainer></diceContainer>
+        </operation>
+    </state>
+</toolCard>

@@ -63,7 +63,7 @@ public class Die implements Serializable {
      */
     private void roll(){
         Random randomGenerator = new Random();
-        value = 1 + randomGenerator.nextInt(DIE_MAX_VALUE);
+        this.value = 1 + randomGenerator.nextInt(DIE_MAX_VALUE);
     }
 
     /**
@@ -96,7 +96,6 @@ public class Die implements Serializable {
      * Possible only if a particular toolCard is active
      */
     public void reRoll(){
-        //TODO check if the toolcard is active
         this.roll();
     }
 
@@ -111,7 +110,7 @@ public class Die implements Serializable {
     /**
      * Sets the value of the opposite face to the die
      */
-    public void oppositeValue(){
+    public void setOppositeValue(){
         if(this.value == 0) throw new RuntimeException("ERROR: This dice is not rolled");
         this.setValue(DIE_MIN_VALUE + DIE_MAX_VALUE - value);
     }

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Taglierina circolare</name>
+    <description>Dopo aver scelto un dado, scambia quel dado con un dado sul Tracciato dei Round.</description>
+    <colour>GREEN</colour>
+    <turn>0</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>1</maxQuantity>
+    <restriction></restriction>
+    <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+        <operation>
+            <action>exchange</action>
+            <diceContainer>trackboard</diceContainer>
+        </operation>
+        <operation>
+            <action>leave</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+    </state>
+</toolCard>
