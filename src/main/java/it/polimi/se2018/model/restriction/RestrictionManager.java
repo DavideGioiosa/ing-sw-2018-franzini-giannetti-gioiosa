@@ -9,12 +9,12 @@ public class RestrictionManager {
 
     private static final HashMap<String, Restriction> restrictionHashMap = new HashMap<>();
     static{
-        restrictionHashMap.put("Adjacent", new RestrictionAdjacent());
-        restrictionHashMap.put("AdjacentColour", new RestrictionAdjacentColour());
-        restrictionHashMap.put("AdjacentValue", new RestrictionAdjacentValue());
-        restrictionHashMap.put("CellColour", new RestrictionCellColour());
-        restrictionHashMap.put("CellValue", new RestrictionCellValue());
-        restrictionHashMap.put("FirstDieOnBoarder", new RestrictionFirstDieOnBorder());
+        restrictionHashMap.put("adjacent", new RestrictionAdjacent());
+        restrictionHashMap.put("adjacentcolour", new RestrictionAdjacentColour());
+        restrictionHashMap.put("adjacentvalue", new RestrictionAdjacentValue());
+        restrictionHashMap.put("cellcolour", new RestrictionCellColour());
+        restrictionHashMap.put("cellvalue", new RestrictionCellValue());
+        restrictionHashMap.put("firstdieonboarder", new RestrictionFirstDieOnBorder());
     }
 
     private static final List<Restriction> standardRestriction = new ArrayList<>();

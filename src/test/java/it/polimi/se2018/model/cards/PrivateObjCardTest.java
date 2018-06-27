@@ -12,7 +12,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-
 /**
  * Test Model's Class: PrivateObjCard
  * @author Davide Gioiosa

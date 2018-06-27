@@ -23,9 +23,11 @@ public class PrivateObjCard extends Card implements Serializable {
      * @param description description of the card
      * @param colour aim colour
      */
-    public PrivateObjCard(int id, String name, String description, ColourEnum colour) {
+    public PrivateObjCard(int id, String name, String description, ColourEnum colour){
         super(id, name, description);
-        this.colour = colour;
+        if (colour != null) this.colour = colour;
+        else throw new NullPointerException("ERROR: null Colour set");
+
     }
 
     /**
@@ -72,4 +74,5 @@ public class PrivateObjCard extends Card implements Serializable {
     public PrivateObjCard getClone(){
         return new PrivateObjCard(this);
     }
+
 }

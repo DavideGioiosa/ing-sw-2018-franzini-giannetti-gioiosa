@@ -72,11 +72,6 @@ public class BoardDice implements Serializable, DiceContainer {
         return new BoardDice(this);
     }
 
-    /**
-     *
-     * @param playerMove
-     * @return
-     */
     @Override
     public void pickDice(PlayerMove playerMove, List<Die> dieList){
 

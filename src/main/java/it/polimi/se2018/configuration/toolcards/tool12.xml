@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Taglierina Manuale</name>
+    <description>Muovi fino a due dadi dello stesso colore di un solo dado sul Tracciato dei Round. Devi rispettare tutte le restrizioni di piazzamento.</description>
+    <colour>BLUE</colour>
+    <turn>0</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>2</maxQuantity>
+    <restriction></restriction>
+    <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>schemacard</diceContainer>
+        </operation>
+        <operation>
+            <action>checksamecolours</action>
+            <diceContainer>trackboard</diceContainer>
+        </operation>
+        <operation>
+            <action>leave</action>
+            <diceContainer>schemacard</diceContainer>
+        </operation>
+    </state>
+</toolCard>

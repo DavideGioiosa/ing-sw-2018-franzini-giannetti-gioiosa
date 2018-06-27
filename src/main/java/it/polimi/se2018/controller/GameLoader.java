@@ -6,7 +6,6 @@ import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.*;
 import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,10 +50,6 @@ public class GameLoader {
      */
     private List<ColourEnum> windowFrame;
     /**
-     * Name of Card tag in XML file
-     */
-    private static final String CARD_TAG = "card";
-    /**
      * Name of Name tag in XML file
      */
     private static final String NAME_TAG = "name";
@@ -71,7 +66,7 @@ public class GameLoader {
     public GameLoader(){
         createPrivateObjDeck();
         createPublicObjDeck();
-        createSchemaCard();
+        createSchemaCardDeck();
         createToolDeck();
         createWindowFrame();
     }
@@ -121,76 +116,86 @@ public class GameLoader {
      */
     private void createPrivateObjDeck(){
 
+        String cardTag = "privateObjCard";
         int id = ID_FIRST_PRIVATE_OBJ_CARD;
-        String name;
-        String description;
-        ColourEnum colour;
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PrivateObjCard.xml";
+        String stringId;
+
+        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\privateobjcards\\private";
 
         try {
-
-            NodeList nodeList = getNodeList(pathName, CARD_TAG);
-            if (nodeList == null) throw new RuntimeException(FILE_ERROR_MESSAGE);
-
             privateObjDeck = new CardDeck(CardTypeEnum.PRIVATEOBJCARD);
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
+            for (int i = 1; i <= NUMBER_OF_PRIVATE_OBJ_CARD; i++) {
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) node;
-                    name = eElement.getElementsByTagName(NAME_TAG).item(0).getTextContent();
-                    description = eElement.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
-                    colour = ColourEnum.valueOf(eElement.getElementsByTagName("colour").item(0).getTextContent());
+                stringId = getTwoCharacterId(i);
+                NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
 
-                    PrivateObjCard card = new PrivateObjCard(id, name, description, colour);
-                    privateObjDeck.insertCard(card);
-                }
+                if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
+
+                Node node = cardNodeList.item(0);
+
+                PrivateObjCard card = loadPrivateObjCard(id, node);
+                if (card != null) privateObjDeck.insertCard(card);
+
                 id ++;
             }
-
         } catch (Exception e) {
             //TODO: Gestione Exceptions
         }
-
     }
+
+    /**
+     * Loads a single Private Objective Card
+     * @param id ID to be assigned to the new Private Objective Card
+     * @param node Node containing xml information of the Private Objective Card
+     * @return Private Objective Card created
+     */
+    private PrivateObjCard loadPrivateObjCard(int id, Node node){
+        String name;
+        String description;
+        ColourEnum colour;
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+            Element element = (Element) node;
+            name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
+            description = element.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
+            colour = ColourEnum.valueOf(element.getElementsByTagName("colour").item(0).getTextContent());
+
+            return new PrivateObjCard(id, name, description, colour);
+        }
+        return null;
+    }
+
+
 
     /**
      * Creates Public Objective Cards Deck
      */
     private void createPublicObjDeck(){
 
+        String cardTag = "publicObjCard";
         int id = ID_FIRST_PUBLIC_OBJ_CARD;
-        String name;
-        String description;
-        int bonus;
-        String strategy;
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\PublicObjCards.xml";
+        String stringId;
+
+        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\publicobjcards\\public";
 
         try {
-
-            NodeList nodeList = getNodeList(pathName, CARD_TAG);
-            if (nodeList == null) throw new RuntimeException(FILE_ERROR_MESSAGE);
-
             publicObjDeck = new CardDeck(CardTypeEnum.PUBLICOBJCARD);
 
-            for (int index = 0; index < nodeList.getLength(); index++) {
-                Node node = nodeList.item(index);
+            for (int i = 1; i <= NUMBER_OF_PUBLIC_OBJ_CARD; i++) {
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                stringId = getTwoCharacterId(i);
+                NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
 
-                    Element element = (Element) node;
-                    name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
-                    description = element.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
-                    strategy = element.getElementsByTagName("typeofcalculation").item(0).getTextContent();
-                    bonus = valueOf(element.getElementsByTagName("bonus").item(0).getTextContent());
+                if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
 
-                    PublicObjCard card = new PublicObjCard(id, name, description, bonus, strategy);
-                    publicObjDeck.insertCard(card);
-                }
+                Node node = cardNodeList.item(0);
+
+                PublicObjCard card = loadPublicObjCard(id, node);
+                if (card != null) publicObjDeck.insertCard(card);
+
                 id ++;
             }
-
         } catch (Exception e) {
             //TODO: Gestione Exceptions
         }
@@ -198,95 +203,200 @@ public class GameLoader {
     }
 
     /**
+     * Loads a single Public Objective Card
+     * @param id ID to be assigned to the new Public Objective Card
+     * @param node Node containing xml information of the Public Objective Card
+     * @return Public Objective Card created
+     */
+    private PublicObjCard loadPublicObjCard(int id, Node node){
+
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+            Element element = (Element) node;
+            String name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
+            String description = element.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
+            String strategy = element.getElementsByTagName("typeofcalculation").item(0).getTextContent();
+            int bonus = Integer.parseInt(element.getElementsByTagName("bonus").item(0).getTextContent());
+
+            return new PublicObjCard(id, name, description, bonus, strategy);
+        }
+        return null;
+    }
+
+    /**
      * Creates Schema Cards Deck
      */
-    private void createSchemaCard(){
-        int id = ID_FIRST_SCHEMA_CARD;
-        String name;
-        int difficulty;
-        List<Cell> cellList;
-        final String DIFFICULTYTAG = "difficulty";
+    private void createSchemaCardDeck() {
 
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\SchemaCards.xml";
+        String cardTag = "schemaCard";
+        int id = ID_FIRST_SCHEMA_CARD;
+        String stringId;
+
+        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\schemacards\\schema";
 
         try {
-
-            NodeList nodeList = getNodeList(pathName, CARD_TAG);
-            if (nodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
-
             schemaDeck = new CardDeck(CardTypeEnum.SCHEMACARD);
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
+            for (int i = 1; i <= NUMBER_OF_SCHEMA_CARD; i++) {
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
-                    difficulty = valueOf(element.getElementsByTagName(DIFFICULTYTAG).item(0).getTextContent());
+                stringId = getTwoCharacterId(i);
+                NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
 
-                    cellList = extractCells(0, element);
+                if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
 
-                    SchemaCard frontCard = new SchemaCard(id, name, "", difficulty, cellList);
+                Node node = cardNodeList.item(0);
 
-                    id ++;
+                SchemaCard card = loadSchemaCard(id, node);
+                if (card != null) schemaDeck.insertCard(card);
 
-                    name = element.getElementsByTagName(NAME_TAG).item(1).getTextContent();
-                    difficulty = valueOf(element.getElementsByTagName(DIFFICULTYTAG).item(1).getTextContent());
-
-                    cellList = extractCells(NUMBER_OF_SCHEMA_COL * NUMBER_OF_SCHEMA_ROW, element);
-
-                    SchemaCard backCard = new SchemaCard(id, name, "", difficulty, cellList);
-                    id ++;
-                    frontCard.setBackSchema(backCard);
-                    backCard.setBackSchema(frontCard);
-
-                    schemaDeck.insertCard(frontCard);
-
-                }
+                id += 2;
             }
-
         } catch (Exception e) {
             //TODO: Gestione Exceptions
         }
+
+    }
+
+    /**
+     * Loads a single SchemaCard
+     * @param id ID to be assigned to the new SchemaCard
+     * @param node Node containing xml information of the SchemaCard
+     * @return SchemaCard created
+     */
+    private SchemaCard loadSchemaCard(int id, Node node) {
+        String name;
+        int difficulty;
+        List<Cell> cellList;
+
+        final String difficultyTag = "difficulty";
+
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+            name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
+            difficulty = valueOf(element.getElementsByTagName(difficultyTag).item(0).getTextContent());
+
+            cellList = extractCells(0, element);
+
+            SchemaCard frontCard = new SchemaCard(id, name, "", difficulty, cellList);
+
+            id++;
+
+            name = element.getElementsByTagName(NAME_TAG).item(1).getTextContent();
+            difficulty = valueOf(element.getElementsByTagName(difficultyTag).item(1).getTextContent());
+
+            cellList = extractCells(NUMBER_OF_SCHEMA_COL * NUMBER_OF_SCHEMA_ROW, element);
+
+            SchemaCard backCard = new SchemaCard(id, name, "", difficulty, cellList);
+            frontCard.setBackSchema(backCard);
+            backCard.setBackSchema(frontCard);
+
+            return frontCard;
+        }
+        return null;
     }
 
     /**
      * Creates Tool Cards Deck
      */
     private void createToolDeck(){
-
+        String cardTag = "toolCard";
         int id = ID_FIRST_TOOL_CARD;
-        String name;
-        String description;
-        ColourEnum colour;
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\ToolCards.xml";
+        String stringId;
+
+        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\toolcards\\tool";
 
         try {
-
-            NodeList nodeList = getNodeList(pathName, CARD_TAG);
-            if (nodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
-
             toolDeck = new CardDeck(CardTypeEnum.TOOLCARD);
 
-            for (int index = 0; index < nodeList.getLength(); index++) {
-                Node node = nodeList.item(index);
+            for(int i = 1; i <= NUMBER_OF_TOOL_CARD; i++) {
 
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    Element element = (Element) node;
-                    name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
-                    description = element.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
-                    colour = ColourEnum.valueOf(element.getElementsByTagName("colour").item(0).getTextContent());
+                stringId = getTwoCharacterId(i);
+                NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
 
-                    ToolCard card = new ToolCard(id, name, description, colour);
-                    toolDeck.insertCard(card);
-                }
-                id ++;
+                if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
+
+                Node node = cardNodeList.item(0);
+
+                ToolCard card = loadToolCard(id, node);
+                if(card != null) toolDeck.insertCard(card);
+
+                id++;
             }
-
         } catch (Exception e) {
             //TODO: Gestione Exceptions
         }
 
+    }
+
+    /**
+     * Loads a single ToolCard
+     * @param id ID to be assigned to the new ToolCard
+     * @param node Node containing xml information of the ToolCard
+     * @return ToolCard created
+     */
+    private ToolCard loadToolCard(int id, Node node){
+        String turnTag = "turn";
+        String minQuantityTag = "minQuantity";
+        String maxQuantityTag = "maxQuantity";
+        String restrictionTag = "restriction";
+        String stateTag = "state";
+        String operationTag = "operation";
+        String actionTag = "action";
+        String diceContainerTag = "diceContainer";
+
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+
+            String name = element.getElementsByTagName(NAME_TAG).item(0).getTextContent();
+            String description = element.getElementsByTagName(DESCRIPTION_TAG).item(0).getTextContent();
+            ColourEnum colour = ColourEnum.valueOf(element.getElementsByTagName("colour").item(0).getTextContent());
+
+            int indexOfTurn = Integer.parseInt(element.getElementsByTagName(turnTag).item(0).getTextContent());
+            int minNumberOfDice = Integer.parseInt(element.getElementsByTagName(minQuantityTag).item(0).getTextContent());
+            int maxNumberOfDice = Integer.parseInt(element.getElementsByTagName(maxQuantityTag).item(0).getTextContent());
+            String avoidedRestriction = element.getElementsByTagName(restrictionTag).item(0).getTextContent();
+
+            List<List<OperationString>> operationStrings = new ArrayList<>();
+
+            NodeList stateNodeList = element.getElementsByTagName(stateTag);
+            for(int stateIndex = 0; stateIndex < stateNodeList.getLength(); stateIndex++) {
+
+                operationStrings.add(new ArrayList<>());
+                Node stateNode = stateNodeList.item(stateIndex);
+
+                if (stateNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element stateElement = (Element) stateNode;
+
+                    NodeList operationNodeList = stateElement.getElementsByTagName(operationTag);
+
+                    for (int operationIndex = 0; operationIndex < operationNodeList.getLength(); operationIndex++) {
+
+                        Node actionNode = operationNodeList.item(operationIndex);
+
+                        if (actionNode.getNodeType() == Node.ELEMENT_NODE) {
+                            Element actionElement = (Element) actionNode;
+
+                            operationStrings.get(stateIndex).add(new OperationString(actionElement.getElementsByTagName(actionTag)
+                                    .item(0).getTextContent(), actionElement.getElementsByTagName(diceContainerTag)
+                                    .item(0).getTextContent()));
+                        }
+                    }
+                }
+            }
+
+            return new ToolCard(id, name, description, colour, indexOfTurn, minNumberOfDice, maxNumberOfDice, avoidedRestriction, operationStrings);
+        }
+        return null;
+    }
+
+    /**
+     * Transforms a number in two character String
+     * @param i number to be transformed
+     * @return Two character containing given number
+     */
+    private String getTwoCharacterId(int i) {
+        if( i/10 == 0) return "0" + i;
+        else return "" + i;
     }
 
     /**
@@ -372,4 +482,6 @@ public class GameLoader {
         }
         return cellList;
     }
+
+
 }

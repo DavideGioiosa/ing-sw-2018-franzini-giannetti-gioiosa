@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Pinza Sgrossatrice</name>
+    <description>Dopo aver scelto un dado, aumenta o diminuisci il valore del dado scelto di 1. Non puoi cambiare un 6 in 1 o un 1 in 6.</description>
+    <colour>PURPLE</colour>
+    <turn>0</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>1</maxQuantity>
+    <restriction></restriction>
+    <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+        <operation>
+            <action>incdecvalue</action>
+            <diceContainer></diceContainer>
+        </operation>
+        <operation>
+            <action>leave</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+    </state>
+</toolCard>

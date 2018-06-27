@@ -22,7 +22,7 @@ public class Turn {
     /**
      * list of Actions of the player componing the turn
      */
-    private List<Action> turnsActionsList;
+    private List<PickController> turnsActionsList;
     /**
      * informs if the action PICK has already done or not
      * it can be done once a Turn for each player
@@ -62,7 +62,7 @@ public class Turn {
      * List of the actions componing the Turn
      * @return list of actions
      */
-    public List<Action> getTurnsActionsList() {
+    public List<PickController> getTurnsActionsList() {
         return turnsActionsList;
     }
 
@@ -83,10 +83,10 @@ public class Turn {
             return false;
         }
 
-        Action action = new Action (gameBoard);
+        PickController pickController = new PickController(gameBoard);
 
-        if(action.selectAction(playerMove)){
-            turnsActionsList.add(action);
+        if(pickController.doAction(gameBoard, playerMove,null, null) == 0){
+            turnsActionsList.add(pickController);
             if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK)){
                 this.numberOfPicks++;
             }
@@ -103,6 +103,7 @@ public class Turn {
      * @return boolean to communicate the end of the Turn for the current player
      */
     public boolean endTurn (){
+        if (turnsActionsList.isEmpty()) return false;
         return turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS);
     }
 

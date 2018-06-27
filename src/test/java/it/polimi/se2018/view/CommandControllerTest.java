@@ -1,5 +1,6 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.OperationString;
 import it.polimi.se2018.controller.client.CommandController;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
@@ -44,6 +45,15 @@ public class CommandControllerTest {
         final String NICKNAME = "Nickname";
         final String NAME = "Name";
         final String DESCRIPTION = "Description";
+        int indexOfTurn = 1;
+        int maxNumberOfDice = 1;
+        int minNumberOfDice = 1;
+        String avoidedRestriction = "";
+        List<List<OperationString>> operationStrings = new ArrayList<>();
+        operationStrings.add(new ArrayList<>());
+        operationStrings.get(0).add(new OperationString("pick", "diceboard"));
+        operationStrings.get(0).add(new OperationString("leave", "diceboard"));
+
         final boolean CONNECTION = true;
 
         String strategy = "DiffColoursRow";
@@ -54,7 +64,9 @@ public class CommandControllerTest {
         playerList.add(player);
 
         final ColourEnum COLOUR = ColourEnum.BLUE;
-        ToolCard toolCard = new ToolCard(1,NAME, DESCRIPTION, COLOUR);
+
+        ToolCard toolCard = new ToolCard(1, NAME, DESCRIPTION, COLOUR, indexOfTurn, minNumberOfDice, maxNumberOfDice, avoidedRestriction, operationStrings);
+
         List<ToolCard> toolCardList = new ArrayList<>();
         toolCardList.add(toolCard);
 

@@ -131,7 +131,7 @@ public class DieTest {
         final int value = 1;
         Die die = new Die(colour);
         die.setValue(value);
-        die.oppositeValue();
+        die.setOppositeValue();
         assertEquals(6, die.getValue());
     }
 
@@ -143,7 +143,7 @@ public class DieTest {
         Die die = new Die(colour);
 
         try{
-            die.oppositeValue();
+            die.setOppositeValue();
             fail();
         }catch(RuntimeException e){ }
     }
@@ -209,7 +209,7 @@ public class DieTest {
         Die die = new Die(colour);
         die.firstRoll();
         Die clonedDie = die.getClone();
-        clonedDie.oppositeValue();
+        clonedDie.setOppositeValue();
         assertNotEquals(die.getValue(), clonedDie.getValue());
         assertEquals(die.getColour(), clonedDie.getColour());
     }

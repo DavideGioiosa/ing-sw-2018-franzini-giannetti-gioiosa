@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Riga in Sughero</name>
+    <description>Dopo aver scelto un dado, piazzalo in una casella che non sia adiacente a un altro dado. Devi rispettare tutte le restrizioni di piazzamento.</description>
+    <colour>YELLOW</colour>
+    <turn>0</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>1</maxQuantity>
+    <restriction>cellcolour</restriction>
+    <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+        <operation>
+            <action>adjacent</action>
+            <diceContainer></diceContainer>
+        </operation>
+        <operation>
+            <action>leave</action>
+            <diceContainer>schemacard</diceContainer>
+        </operation>
+    </state>
+</toolCard>
