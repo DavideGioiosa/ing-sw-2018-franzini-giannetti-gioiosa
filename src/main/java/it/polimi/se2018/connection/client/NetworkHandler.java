@@ -28,7 +28,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
              bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
          } catch (IOException e) {
              PlayerMessage playerMessage = new PlayerMessage();
-             playerMessage.setError(200);
+             playerMessage.setError(400);
              receive(playerMessage);
          }
 

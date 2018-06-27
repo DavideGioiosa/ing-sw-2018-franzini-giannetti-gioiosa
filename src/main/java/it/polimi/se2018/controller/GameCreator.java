@@ -22,23 +22,30 @@ public class GameCreator {
         this.gameManager = null;
         this.gameStarter = new GameStarter(userList, remoteView);
 
+
     }
 
+    public void defaultMove(){
+        if(!gameStatus){
+            gameStarter.defaultMove();
+        }else if(gameManager == null){
+            gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
+            gameManager.defaultMove();
+        }
+    }
 
     public void receiveFromClient(PlayerMessage playerMessage) {
 
         if(!gameStatus){
-
             if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHOICE)){
                 gameStatus = gameStarter.newChoice(playerMessage.getPlayerChoice());
             }
-        }else if(gameManager==null){
+        }else if(gameManager == null){
             gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
         }
         if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHECK_MOVE)){
             gameManager.tryMove(playerMessage.getPlayerMove());
         }
-
 
     }
 }

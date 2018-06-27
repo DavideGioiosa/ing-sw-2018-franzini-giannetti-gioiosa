@@ -84,6 +84,13 @@ public class GameManager {
         }
     }
 
+    void defaultMove(){
+        if(roundList.get(roundList.size() - 1).isEnded()){
+            endRound();
+        }else roundList.get(roundList.size() - 1).defaultMove();
+    }
+
+
     /**
      * Method finds out the game winner
      */
@@ -114,11 +121,10 @@ public class GameManager {
         }
     }
 
-    public void tryMove(PlayerMove playerMove){
+    void tryMove(PlayerMove playerMove){
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
-        }
-        roundList.get(roundList.size() - 1).update(playerMove);
+        }else roundList.get(roundList.size() - 1).update(playerMove);
     }
 
 }

@@ -1,6 +1,7 @@
 package it.polimi.se2018.connection.client;
 
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.View;
@@ -29,14 +30,15 @@ public class Client implements Observer<PlayerMessage> {
         return nickname;
     }
 
-    public void setThisUser(User thisUser) {
+    private void setThisUser(User thisUser) {
         this.thisUser = thisUser;
     }
 
 
-     void connect(){
+    void connect(){
         clientStrategy.connect();
     }
+
     @Override
     public void update(PlayerMessage playerMessage){
 
@@ -49,6 +51,10 @@ public class Client implements Observer<PlayerMessage> {
     }
 
     public void send(PlayerMessage playerMessage){
+
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER) && thisUser == null){
+            setThisUser(playerMessage.getUser());
+        }
         clientStrategy.sendToServer(playerMessage);
     }
 

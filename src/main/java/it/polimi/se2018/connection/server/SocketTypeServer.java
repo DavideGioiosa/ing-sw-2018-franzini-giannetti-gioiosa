@@ -16,9 +16,9 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     private HashMap<String, ClientListener> clientListenerList;
     private Observable<PlayerMessage> obs;
     private List<String> disconnectedCodes;
-    private static int port = 1111; // verrà preso da file config
+    //private static int port = 1111; verrà preso da file config
 
-    public SocketTypeServer(){
+    public SocketTypeServer(int port){
         disconnectedCodes = new ArrayList<>();
         codeList = new ArrayList<>();
         clientListenerList = new HashMap<>();

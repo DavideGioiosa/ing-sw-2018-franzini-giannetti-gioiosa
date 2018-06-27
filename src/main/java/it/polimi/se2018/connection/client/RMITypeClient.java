@@ -2,7 +2,6 @@ package it.polimi.se2018.connection.client;
 
 import it.polimi.se2018.connection.server.ServerRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
@@ -12,13 +11,10 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import java.util.Date;
 import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
@@ -26,28 +22,13 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
     private Observable<PlayerMessage> obs;
     private Timer timer;
     private ClientImplementation clientImplementation;
-    private ClientRemoteInterface remoteRef;
 
     public RMITypeClient(){
         obs = new Observable<>();
         clientImplementation = new ClientImplementation();
         clientImplementation.getObs().addObserver(this);
 
-        try {
-            LocateRegistry.getRegistry();
 
-        } catch (RemoteException e) {
-            Logger.getGlobal().log(Level.SEVERE,e.toString());
-        }
-
-    }
-
-    public ServerRemoteInterface getStub() {
-        return stub;
-    }
-
-    public ClientRemoteInterface getRemoteRef() {
-        return remoteRef;
     }
 
     @Override
@@ -57,7 +38,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
             this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
 
-            remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
+            ClientRemoteInterface remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
 
             stub.addClient(remoteRef);
 
@@ -88,7 +69,6 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
     @Override
     public void sendToServer(PlayerMessage playerMessage){
-
 
         if(stub != null)
         {

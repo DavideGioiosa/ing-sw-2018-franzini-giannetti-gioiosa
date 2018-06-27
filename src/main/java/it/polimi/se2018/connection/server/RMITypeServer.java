@@ -15,12 +15,12 @@ import java.util.logging.Logger;
 
 
 public class RMITypeServer implements Observer<PlayerMessage> {
-    private static int port=1099; // verrà presa da file
+    //private static int port=1099 verrà presa da file
     private ServerImplementation serverImplementation;
     private Observable<PlayerMessage> obs;
 
 
-    RMITypeServer(){
+    RMITypeServer(int port){
 
         obs = new Observable<>();
         try {
@@ -34,7 +34,7 @@ public class RMITypeServer implements Observer<PlayerMessage> {
 
             this.serverImplementation = new ServerImplementation();
             serverImplementation.addObserver(this);
-            Naming.bind("RMIServer", serverImplementation); //nome del server verrà passato
+            Naming.bind("RMIServer", serverImplementation);
 
         } catch (RemoteException | AlreadyBoundException | MalformedURLException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());

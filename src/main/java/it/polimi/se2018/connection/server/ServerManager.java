@@ -23,7 +23,6 @@ public class ServerManager implements Observer<PlayerMessage> {
     private List<User> disconnectedUserList;
     private Timer userSetupTimer;
     private Timer senderTimer;
-    private TimerDelayer timerDelayer;
     private UsersDelayer usersDelayer;
     private boolean setUp;
 
@@ -35,17 +34,21 @@ public class ServerManager implements Observer<PlayerMessage> {
         disconnectedUserList = new ArrayList<>();
         userList = new ArrayList<>();
 
-
         serverSocket.addObserver(this);
         serverRMI.addObserver(this);
 
         gameCreator = null;
     }
 
+
+    void defaultMove(){
+        gameCreator.defaultMove();
+    }
+
     public void sendMessage(PlayerMessage playerMessage) {
 
-        if(timerDelayer!= null){
-            if (timerDelayer.isStarted() && playerMessage.getId().equals(PlayerMessageTypeEnum.ERROR)) {
+        if(senderTimer!= null){
+            if (playerMessage.getId().equals(PlayerMessageTypeEnum.ERROR)) {
                 serverSocket.send(playerMessage);
                 serverRMI.send(playerMessage);
             } else{
@@ -53,7 +56,7 @@ public class ServerManager implements Observer<PlayerMessage> {
                 serverSocket.send(playerMessage);
                 serverRMI.send(playerMessage);
 
-                timerDelayer = new TimerDelayer(playerMessage, this);
+                TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
                 senderTimer = new Timer();
 
                 senderTimer.schedule(timerDelayer, (long)90*1000);
@@ -64,7 +67,7 @@ public class ServerManager implements Observer<PlayerMessage> {
             serverRMI.send(playerMessage);
 
             senderTimer = new Timer();
-            timerDelayer = new TimerDelayer(playerMessage, this);
+            TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
             senderTimer.schedule(timerDelayer, (long)90*1000);
         }
     }

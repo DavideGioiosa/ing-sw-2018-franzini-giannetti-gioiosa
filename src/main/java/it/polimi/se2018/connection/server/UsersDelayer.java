@@ -14,10 +14,6 @@ public class UsersDelayer extends TimerTask {
         this.serverManager = serverManager;
     }
 
-    boolean isStarted() {
-        return isStarted;
-    }
-
     @Override
     public void run() {
 

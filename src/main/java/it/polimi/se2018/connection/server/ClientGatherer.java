@@ -32,7 +32,7 @@ public class ClientGatherer extends Thread{
 
         User user;
         String code;
-        Socket clientSocket = null;
+        Socket clientSocket;
         ClientListener clientListener = null;
         while(!serverSocket.isClosed()){
             try {

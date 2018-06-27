@@ -112,7 +112,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
     /**
      * Method used to detect client RMI disconnection
-     * @throws RemoteException
+     * @throws RemoteException due to disconnection
      */
     @Override
     public void lifeLine() throws RemoteException {

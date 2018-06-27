@@ -94,6 +94,11 @@ public class Round implements Observer<PlayerMove>{
         }
     }
 
+
+    public void defaultMove(){
+        //da completare sulle basi di action
+    }
+
     /**
      * Get of the current player from the ordered list of turns in the Round
      * @return current player

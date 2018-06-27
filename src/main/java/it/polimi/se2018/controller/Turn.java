@@ -72,7 +72,7 @@ public class Turn {
      * @param playerMove Move that the player wants to make
      * @return boolean to communicate the result of the action
      */
-    public boolean runTurn (PlayerMove playerMove){
+    boolean runTurn (PlayerMove playerMove){
         if(playerMove == null){
             throw new RuntimeException("Insertion of a PlayerMove null");
         }

@@ -11,6 +11,7 @@ import it.polimi.se2018.view.RemoteView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Controller's Class GameStarter
@@ -43,7 +44,6 @@ public class GameStarter {
         colourEnumList = gameLoader.getWindowFrame();
         indexNextUser = 0;
 
-        //TODO: Da approvare
         Collections.shuffle(userList);
         for(User user: userList){
             playerChoiceSaved.add(new PlayerChoice(user));
@@ -51,14 +51,38 @@ public class GameStarter {
 
         sendColours(colourEnumList,playerChoiceSaved.get(indexNextUser));
         config = new Config();
+    }
 
+
+    void defaultMove(){
+        if(playerChoiceSaved.size() == userList.size()){
+            for(PlayerChoice playerChoice : playerChoiceSaved){
+                if(playerChoice.getChosenColour() == null){
+                    ColourEnum colour = playerChoice.getColourEnumList().get(new Random().nextInt(playerChoice.getColourEnumList().size()));
+                    playerChoice.setChosenColour(colour);
+                    List<ColourEnum> colours = new ArrayList<>();
+                    colours.add(colour);
+                    playerChoice.setColourEnumList(colours);
+                }
+                if(playerChoice.getIdChosenSchema() == 0){
+                    SchemaCard card = playerChoice.getSchemaCardList().get(new Random().nextInt(playerChoice.getSchemaCardList().size()));
+                    playerChoice.setIdChosenSchema(card.getId());
+                    List<SchemaCard> schemas = new ArrayList<>();
+                    schemas.add(card);
+                    playerChoice.setSchemaCardList(schemas);
+                }
+            }
+
+            playerChoiceList = playerChoiceSaved;
+            startGame(playerChoiceList);
+        }
     }
 
     /**
      * Method prepares the board by extracting cards
      * @param playerChoiceList list player choices made to set up the game
      */
-    public void startGame(List<PlayerChoice> playerChoiceList){
+    private void startGame(List<PlayerChoice> playerChoiceList){
 
         BoardCard boardCard;
         List<PrivatePlayer> privatePlayerList = new ArrayList<>();
@@ -67,10 +91,6 @@ public class GameStarter {
         BoardDice boardDice = new BoardDice();
         BagDice bagDice = new BagDice();
         TrackBoard trackBoard = new TrackBoard();
-
-        if(playerChoiceList.size()!= userList.size()){
-            throw new RuntimeException("ERROR: not enough players");
-        }
 
         for(int i = 0; i < config.getNumberOfPublicObjCardOnBoard(); i++){
             try{
@@ -131,7 +151,7 @@ public class GameStarter {
      * Method used to add players to the playerList
      * @param player new object Player to add
      */
-    public void addPlayer(Player player){
+    private void addPlayer(Player player){
         this.playerList.add(player);
     }
 
@@ -139,7 +159,7 @@ public class GameStarter {
      * Method used to send the SchemaCards to the user in the set up phase
      * @param playerChoice Object used to send the SchemaCards extracted
      */
-    public void sendCardChoices(PlayerChoice playerChoice){
+    private void sendCardChoices(PlayerChoice playerChoice){
 
         List<SchemaCard> schemaCards = new ArrayList<>();
         try{
@@ -156,16 +176,14 @@ public class GameStarter {
 
         }catch (RuntimeException e){remoteView.reportError(1000, playerChoice.getUser().getNickname());}
 
-        //TODO studiare interazioni con view
-
     }
 
     /**
      * Method used to send the Colours choices for the frame
      * @param colourEnumList list of remaining colours
-     * @param playerChoice
+     * @param playerChoice choice message sent to the client
      */
-    public void sendColours(List<ColourEnum> colourEnumList, PlayerChoice playerChoice){
+    private void sendColours(List<ColourEnum> colourEnumList, PlayerChoice playerChoice){
 
         playerChoice.setColourEnumList(colourEnumList);
         remoteView.sendChoice(playerChoice);
@@ -176,7 +194,7 @@ public class GameStarter {
      * @param playerChoice Contains choices for setup made by the player
      * @return status of game: true if the game setup is completed
      */
-    public boolean newChoice(PlayerChoice playerChoice){
+     boolean newChoice(PlayerChoice playerChoice){
 
         for(PlayerChoice choiceSaved: playerChoiceSaved){
             if(choiceSaved.getUser().getNickname().equals(playerChoice.getUser().getNickname())){
@@ -191,7 +209,7 @@ public class GameStarter {
                             //Sets the player's colour choice in his possible choices, so it cannot be changed
                             List<SchemaCard> schemaSelected = new ArrayList<>();
                             schemaSelected.add(schemaCard);
-                            choiceSaved.setIdChosenSchema(playerChoice.getIdChosenSchema());
+                            choiceSaved.setSchemaCardList(schemaSelected);
 
                             playerChoiceList.add(choiceSaved);
                         }
