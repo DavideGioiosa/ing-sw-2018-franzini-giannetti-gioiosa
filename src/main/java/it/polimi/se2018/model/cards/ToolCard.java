@@ -27,7 +27,7 @@ public class ToolCard extends Card implements Serializable {
 
     private int maxQuantity;
 
-    private String restriction;
+    private String avoidedRestriction;
 
     private List<List<OperationString>> commandLists;
 
@@ -39,18 +39,19 @@ public class ToolCard extends Card implements Serializable {
      * @param colour colour of the ToolCard, used in SinglePlayer Mode
      */
     public ToolCard(int id, String name, String description, ColourEnum colour, int indexOfTurn, int minQuantity,
-                    int maxQuantity, String restriction, List<List<OperationString>> commandLists) {
+                    int maxQuantity, String avoidedRestriction, List<List<OperationString>> commandLists) {
         super(id, name, description);
         if(colour == null){
             throw new IllegalArgumentException("ERROR: Insert colour null");
         }
         this.colour = colour;
         this.token = 0;
+
         //TODO: controlli vailidità parametri
         this.indexOfTurn = indexOfTurn;
         this.minQuantity = minQuantity;
         this.maxQuantity = maxQuantity;
-        this.restriction = restriction;
+        this.avoidedRestriction = avoidedRestriction;
         this.commandLists = commandLists;
     }
 
@@ -121,8 +122,8 @@ public class ToolCard extends Card implements Serializable {
         return indexOfTurn;
     }
 
-    public String getRestriction() {
-        return restriction;
+    public String getAvoidedRestriction() {
+        return avoidedRestriction;
     }
 
     public List<List<OperationString>> getCommandLists() {

@@ -19,7 +19,7 @@
     </state>
     <state>
         <operation>
-            <action>setvalue</action>
+            <action>setdievalue</action>
             <diceContainer></diceContainer>
         </operation>
         <operation>
@@ -30,7 +30,7 @@
     <state>
         <operation>
             <action>leave</action>
-            <diceContainer>diceboard</diceContainer>
+            <diceContainer>schemacard</diceContainer>
         </operation>
     </state>
 </toolCard>

@@ -26,10 +26,12 @@ public class OperationCanBePlaced implements ToolOperation {
         for(Die die: dieList){
             for (int i = 0; i < NUMBER_OF_SCHEMA_ROW * NUMBER_OF_SCHEMA_COL; i++){
                 restrictionErrors = new ArrayList<>();
-                for (Restriction restriction: RestrictionManager.getStandardRestriction()) {
-                    restrictionErrors.add(restriction.checkRestriction(playerMove.getPlayer().getSchemaCard(), die, new Position(i)));
+                if(playerMove.getPlayer().getSchemaCard().getCellList().get(i).isEmpty()) {
+                    for (Restriction restriction : RestrictionManager.getStandardRestriction()) {
+                        restrictionErrors.add(restriction.checkRestriction(playerMove.getPlayer().getSchemaCard(), die, new Position(i)));
+                    }
+                    if (restrictionErrors.stream().allMatch(n -> n == 0)) return true;
                 }
-                if(restrictionErrors.stream().allMatch(n -> n == 0)) return true;
             }
 
         }
