@@ -14,7 +14,7 @@ public class RMIServerThread implements Runnable {
     @Override
     public void run() {
 
-        serverImplementation.transimit(playerMessage);
+        serverImplementation.transmit(playerMessage);
 
     }
 }

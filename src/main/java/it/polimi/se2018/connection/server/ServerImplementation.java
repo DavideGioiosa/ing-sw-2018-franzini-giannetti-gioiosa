@@ -53,7 +53,6 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
         User user;
         String code;
-
         do{
             user = new User(TypeOfConnection.RMI);
             code = user.createUniqueCode();
@@ -65,8 +64,9 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         playerMessage.setUser(user);
         RMIServerPing rmiServerPing = new RMIServerPing(this, code, client);
         Timer lifeLineTimer = new Timer();
-        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), 90*1000);
+        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), (long)90*1000);
         pingMap.put(code, lifeLineTimer);
+        System.out.println("trovato nuovo client");
         try {
             client.receiveFromServer(playerMessage);
         } catch (RemoteException e) {
@@ -97,7 +97,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
     }
 
-    void transimit(PlayerMessage playerMessage){
+    void transmit(PlayerMessage playerMessage){
         obs.notify(playerMessage);
     }
 
@@ -107,6 +107,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         if(playerMessage.getIdError() == 100 ){
             disconnectionHandler(playerMessage.getUser().getUniqueCode());
         }
+
         new Thread(new RMIServerThread(playerMessage, this)).start();
     }
 

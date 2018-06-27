@@ -36,6 +36,7 @@ public class RMITypeServer implements Observer<PlayerMessage> {
             serverImplementation.addObserver(this);
             Naming.bind("RMIServer", serverImplementation);
 
+            System.out.println("ServerRMI acceso");
         } catch (RemoteException | AlreadyBoundException | MalformedURLException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }

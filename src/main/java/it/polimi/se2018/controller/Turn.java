@@ -51,6 +51,14 @@ public class Turn {
 
     }
 
+    void defaultMove(){
+        if(turnsActionsList.get(turnsActionsList.size()-1).isComplete()){
+            PickController pickController = new PickController(gameBoard);
+            pickController.doDefaultMove();
+            turnsActionsList.add(pickController);
+        }else turnsActionsList.get(turnsActionsList.size()-1).doDefaultMove();
+    }
+
     /**
      * Creates the list of Action belonging the player for each Turn
      */
@@ -102,7 +110,7 @@ public class Turn {
      * Communicate if the action received is the last of the player and ends the turn
      * @return boolean to communicate the end of the Turn for the current player
      */
-    public boolean endTurn (){
+    boolean endTurn (){
         if (turnsActionsList.isEmpty()) return false;
         return turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS);
     }

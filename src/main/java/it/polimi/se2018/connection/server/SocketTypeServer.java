@@ -25,6 +25,7 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         obs = new Observable<>();
         ClientGatherer clientGatherer = new ClientGatherer(this, port);
         clientGatherer.start();
+        System.out.println("ServerSocket acceso");
     }
 
     public void addObserver(Observer<PlayerMessage> observer){

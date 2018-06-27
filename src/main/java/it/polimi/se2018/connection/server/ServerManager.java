@@ -28,18 +28,20 @@ public class ServerManager implements Observer<PlayerMessage> {
 
 
     public ServerManager (SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
-        setUp = true;
+
         this.serverSocket = socketTypeServer;
         this.serverRMI = rmiTypeServer;
+    }
+
+    void operate(){
+        setUp = true;
         disconnectedUserList = new ArrayList<>();
         userList = new ArrayList<>();
+        gameCreator = null;
 
         serverSocket.addObserver(this);
         serverRMI.addObserver(this);
-
-        gameCreator = null;
     }
-
 
     void defaultMove(){
         gameCreator.defaultMove();
@@ -86,6 +88,7 @@ public class ServerManager implements Observer<PlayerMessage> {
 
     private void addUser(User user){
 
+        System.out.println("aggiunto user: "+ user.getNickname());
         userList.add(user);
         if(gameCreator == null){
             if(userList.size()== 2){
@@ -101,6 +104,7 @@ public class ServerManager implements Observer<PlayerMessage> {
 
      private void removeUser(User user){
 
+         System.out.println("disconnesso user: "+ user.getNickname());
          userList.remove(user);
          if(gameCreator == null){
              if(setUp && userList.size() < 2 && userSetupTimer!=null){

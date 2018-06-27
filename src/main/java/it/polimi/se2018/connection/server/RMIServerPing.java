@@ -11,7 +11,7 @@ public class RMIServerPing extends TimerTask {
     private ClientRemoteInterface clientRemoteInterface;
     private String code;
     private ServerImplementation serverImplementation;
-    RMIServerPing(ServerImplementation serverImplementation, String code, ClientRemoteInterface clientRemoteInterface){
+    public RMIServerPing(ServerImplementation serverImplementation, String code, ClientRemoteInterface clientRemoteInterface){
         this.clientRemoteInterface = clientRemoteInterface;
         this.code = code;
         this.serverImplementation = serverImplementation;

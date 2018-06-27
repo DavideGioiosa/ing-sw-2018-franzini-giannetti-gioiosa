@@ -20,9 +20,30 @@ public class PickController implements Action{
      * Builder method of PickController class
      * @param gameBoard the game board of the match with all the elements on the board
      */
-    public PickController(GameBoard gameBoard){
+    PickController(GameBoard gameBoard){
         this.gameBoard = gameBoard;
         restrictionList = RestrictionManager.getStandardRestriction();
+    }
+
+    private int pickExecution(PlayerMove playerMove){
+        Die dieExtracted = null;
+        try{
+            for(Player player: gameBoard.getPlayerList()) {
+                if (player.getNickname().equals(playerMove.getPlayer().getNickname())){
+                    dieExtracted = gameBoard.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
+                    int error = placeDice(player, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
+                    if(error != 0){
+                        gameBoard.getBoardDice().insertDie(dieExtracted);
+                        return error;
+                    }
+                }
+            }
+        }catch(IllegalArgumentException e){
+            if (dieExtracted != null) gameBoard.getBoardDice().insertDie(dieExtracted);
+
+            //TODO: lanciare errore
+        }
+        return 0;
     }
 
     /**
@@ -39,37 +60,19 @@ public class PickController implements Action{
      * @return true if action completed, false otherwise
      */
     public int doAction(GameBoard gameBoard0, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
-        //this.gameBoard = gameBoard;
-        Die dieExtracted = null;
+        //this.gameBoard = gameBoard0;
+        int result = -1;
         this.playerMove = playerMove;
         switch (playerMove.getTypeOfChoice()){
-            case PICK:
-                try{
-                    for(Player player: gameBoard.getPlayerList()) {
-                        if (player.getNickname().equals(playerMove.getPlayer().getNickname())){
-                            dieExtracted = gameBoard.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
-                            int error = placeDice(player, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
-                            if(error != 0){
-                                gameBoard.getBoardDice().insertDie(dieExtracted);
-                                return error;
-                            }
-                            //TODO: else Notifica VIEW
-                        }
-                    }
-                }catch(IllegalArgumentException e){
-                    if (dieExtracted != null) gameBoard.getBoardDice().insertDie(dieExtracted);
-
-                    return 1000;
-                }
-                break;
+            case PICK: result = pickExecution(playerMove); break;
             case TOOL:
                 try{
-                    useTool(playerMove);
+                    result = useTool(playerMove);
                 }catch(IllegalArgumentException e){
                     return 1000;
                 }
                 break;
-            case PASS:
+            case PASS: result = 0;
                 break;
             case ROLL:
                 for(Die die : gameBoard.getBoardDice().getDieList()){
@@ -78,11 +81,11 @@ public class PickController implements Action{
                     }catch(RuntimeException e){
                         return 1000;
                     }
+                    result = 0;
                 }
                 break;
             case EXTRACT:
                 for(int i = 0; i < gameBoard.getPlayerList().size()*2 +1; i++){
-                    //try{}catch da implementare nella classe BoardDice
                     Die die;
                     try{
                         die = gameBoard.getBagDice().extractDice();
@@ -90,11 +93,12 @@ public class PickController implements Action{
                         return 1000;
                     }
                     gameBoard.getBoardDice().insertDie(die);
+                    result = 0;
                 } break;
             default:
                 break;
         }
-        return 0;
+        return result;
     }
 
     /**
@@ -120,8 +124,8 @@ public class PickController implements Action{
      * @param playerMove the player choice
      * @return true if action completed, false otherwise
      */
-    private boolean useTool(PlayerMove playerMove){
-        return false;
+    private int useTool(PlayerMove playerMove){
+        return 0;
     }
 
     @Override

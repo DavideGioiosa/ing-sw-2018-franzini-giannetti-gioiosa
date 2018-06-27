@@ -53,6 +53,17 @@ public class GameManager {
         roundList.add(round);
     }
 
+    private int blankCells(Player player){
+
+        int score = 0;
+        for(Cell c : player.getSchemaCard().getCellList()){
+            if(c.isEmpty()){
+                score++;
+            }
+        }
+        return score;
+    }
+
     /**
      * Method calculates the game score for each player at the end of the match
      */
@@ -68,11 +79,7 @@ public class GameManager {
                 }
 
             }
-            for(Cell c : player.getSchemaCard().getCellList()){
-                if(c.isEmpty()){
-                    score--;
-                }
-            }
+            score = score - blankCells(player);
             for(PrivatePlayer privatePlayer: gameBoard.getPrivatePlayerList()){
                 if(player.equals(privatePlayer.getPlayer())){
                     score += privatePlayer.getPrivateObj().getScore(player.getSchemaCard());

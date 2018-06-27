@@ -44,7 +44,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
             RMIClientPing rmiClientPing = new RMIClientPing(this, stub);
             timer = new Timer();
-            timer.scheduleAtFixedRate(rmiClientPing, new Date(), 90*1000);
+            timer.scheduleAtFixedRate(rmiClientPing, new Date(), (long)90*1000);
 
 
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
@@ -52,6 +52,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
             playerMessage.setError(200);
             update(playerMessage);
         }
+        System.out.println("connesso a serverRMI");
     }
 
 

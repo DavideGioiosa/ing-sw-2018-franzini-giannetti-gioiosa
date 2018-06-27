@@ -53,6 +53,7 @@ public class ClientGatherer extends Thread{
                 PlayerMessage playerMessage = new PlayerMessage();
                 playerMessage.setUser(user);
                 clientListener.send(playerMessage);
+                System.out.println("trovato nuovo client");
 
             } catch (IOException e) {
                 if(clientListener != null){

@@ -95,8 +95,12 @@ public class Round implements Observer<PlayerMove>{
     }
 
 
-    public void defaultMove(){
+    void defaultMove(){
         //da completare sulle basi di action
+        if(!isEnded()){
+            turn.defaultMove();
+        }
+
     }
 
     /**
@@ -107,7 +111,7 @@ public class Round implements Observer<PlayerMove>{
         return roundPlayerOrder.get(0);
     }
 
-    public boolean isEnded(){
+    boolean isEnded(){
         return roundPlayerOrder.isEmpty();
     }
 
@@ -161,9 +165,7 @@ public class Round implements Observer<PlayerMove>{
      * @param playerMove action of the current player
      */
     public void update (PlayerMove playerMove){
-        if(playerMove == null){
-            throw new RuntimeException("Empty playerMove action to execute");
-        }
+
         if(playerMove.getPlayer() == null){
             throw new RuntimeException("Empty Player in PlayerMove received");
         }

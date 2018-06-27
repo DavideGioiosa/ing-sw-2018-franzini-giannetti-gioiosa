@@ -31,7 +31,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
              playerMessage.setError(400);
              receive(playerMessage);
          }
-
+         System.out.println("connesso a ServerSocket");
     }
 
     Observable<PlayerMessage> getObs() {

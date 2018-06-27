@@ -6,15 +6,17 @@ public class ServerLauncher {
 
 
 
-    public ServerLauncher (){}
+    public ServerLauncher (){
+        //da rivedere
+    }
 
 
-    public static void main(String args[]){
+    public static void main(String[] args){
 
-        SocketTypeServer socketTypeServer = new SocketTypeServer();
-        RMITypeServer rmiTypeServer = new RMITypeServer();
+        SocketTypeServer socketTypeServer = new SocketTypeServer(1111);
+        RMITypeServer rmiTypeServer = new RMITypeServer(1099);
         ServerManager serverManager = new ServerManager(socketTypeServer,rmiTypeServer);
-        ServerLauncher serverLauncher = new ServerLauncher();
+        serverManager.operate();
 
     }
 

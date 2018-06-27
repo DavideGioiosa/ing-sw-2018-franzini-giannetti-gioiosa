@@ -189,6 +189,51 @@ public class GameStarter {
         remoteView.sendChoice(playerChoice);
     }
 
+    private void receivedSchema(PlayerChoice playerChoice, PlayerChoice choiceSaved){
+
+        for(SchemaCard schemaCard: choiceSaved.getSchemaCardList()) {
+            if (schemaCard.getId() == playerChoice.getIdChosenSchema()) {
+
+                choiceSaved.setIdChosenSchema(playerChoice.getIdChosenSchema());
+
+                //Sets the player's colour choice in his possible choices, so it cannot be changed
+                List<SchemaCard> schemaSelected = new ArrayList<>();
+                schemaSelected.add(schemaCard);
+                choiceSaved.setSchemaCardList(schemaSelected);
+
+                playerChoiceList.add(choiceSaved);
+            }
+        }
+        if(choiceSaved.getIdChosenSchema() == 0){
+
+            remoteView.reportError(1000, choiceSaved.getUser().getNickname());
+        }
+    }
+
+
+    private void receivedColour(PlayerChoice playerChoice, PlayerChoice choiceSaved){
+
+        if(choiceSaved.getColourEnumList().contains(playerChoice.getChosenColour())) {
+
+            colourEnumList.remove(playerChoice.getChosenColour());
+            choiceSaved.setChosenColour(playerChoice.getChosenColour());
+
+            //Sets the player's colour choice in his possible choices, so it cannot be changed
+            List<ColourEnum> colourSelected = new ArrayList<>();
+            colourSelected.add(choiceSaved.getChosenColour());
+            choiceSaved.setColourEnumList(colourSelected);
+
+            indexNextUser++;
+            sendCardChoices(choiceSaved);
+            if (indexNextUser < userList.size()) {
+                sendColours(colourEnumList, playerChoiceSaved.get(indexNextUser));
+            }
+        }else{
+            remoteView.reportError(1000, null);
+        }
+
+    }
+
     /**
      * Update method for Observer implementation
      * @param playerChoice Contains choices for setup made by the player
@@ -200,51 +245,13 @@ public class GameStarter {
             if(choiceSaved.getUser().getNickname().equals(playerChoice.getUser().getNickname())){
 
                 if(!choiceSaved.getSchemaCardList().isEmpty()) {
-
-                    for(SchemaCard schemaCard: choiceSaved.getSchemaCardList()) {
-                        if (schemaCard.getId() == playerChoice.getIdChosenSchema()) {
-
-                            choiceSaved.setIdChosenSchema(playerChoice.getIdChosenSchema());
-
-                            //Sets the player's colour choice in his possible choices, so it cannot be changed
-                            List<SchemaCard> schemaSelected = new ArrayList<>();
-                            schemaSelected.add(schemaCard);
-                            choiceSaved.setSchemaCardList(schemaSelected);
-
-                            playerChoiceList.add(choiceSaved);
-                        }
-                    }
-                    if(choiceSaved.getIdChosenSchema() == 0){
-
-                        remoteView.reportError(1000, choiceSaved.getUser().getNickname());
-                    }
+                    receivedSchema(playerChoice, choiceSaved);
                 }
-
                 if(choiceSaved.getChosenColour() == null){
-                    if(choiceSaved.getColourEnumList().contains(playerChoice.getChosenColour())) {
-
-                        colourEnumList.remove(playerChoice.getChosenColour());
-                        choiceSaved.setChosenColour(playerChoice.getChosenColour());
-
-                        //Sets the player's colour choice in his possible choices, so it cannot be changed
-                        List<ColourEnum> colourSelected = new ArrayList<>();
-                        colourSelected.add(choiceSaved.getChosenColour());
-                        choiceSaved.setColourEnumList(colourSelected);
-
-                        indexNextUser++;
-                        sendCardChoices(choiceSaved);
-                        if (indexNextUser < userList.size()) {
-                            sendColours(colourEnumList, playerChoiceSaved.get(indexNextUser));
-                        }
-                    }else{
-                        remoteView.reportError(1000, null);
-                    }
-
+                    receivedColour(playerChoice, choiceSaved);
                 }
-
             }
         }
-
         if(playerChoiceList.size() == userList.size()){
             startGame(playerChoiceList);
             remoteView.sendTable( new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
