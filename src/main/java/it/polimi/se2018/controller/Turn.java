@@ -103,6 +103,7 @@ public class Turn {
      * @return boolean to communicate the end of the Turn for the current player
      */
     public boolean endTurn (){
+        if (turnsActionsList.isEmpty()) return false;
         return turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS);
     }
 

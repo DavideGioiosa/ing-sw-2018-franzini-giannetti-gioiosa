@@ -38,21 +38,27 @@ public class PickController implements Action{
      * @param playerMove choices of the player
      * @return true if action completed, false otherwise
      */
-    public int doAction(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
-        this.gameBoard = gameBoard;
+    public int doAction(GameBoard gameBoard0, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
+        //this.gameBoard = gameBoard;
+        Die dieExtracted = null;
         this.playerMove = playerMove;
         switch (playerMove.getTypeOfChoice()){
             case PICK:
                 try{
                     for(Player player: gameBoard.getPlayerList()) {
                         if (player.getNickname().equals(playerMove.getPlayer().getNickname())){
-                            Die dieExtracted = gameBoard.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
+                            dieExtracted = gameBoard.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
                             int error = placeDice(player, dieExtracted, playerMove.getDiceSchemaWhereToLeave().get(0));
-                            if(error == 0) gameBoard.getBoardDice().insertDie(dieExtracted);
+                            if(error != 0){
+                                gameBoard.getBoardDice().insertDie(dieExtracted);
+                                return error;
+                            }
                             //TODO: else Notifica VIEW
                         }
                     }
                 }catch(IllegalArgumentException e){
+                    if (dieExtracted != null) gameBoard.getBoardDice().insertDie(dieExtracted);
+
                     return 1000;
                 }
                 break;
@@ -101,9 +107,7 @@ public class PickController implements Action{
     private int placeDice(Player actualPlayer, Die die, Position position){
 
         for(Restriction restriction: restrictionList){
-            int error = restriction.checkRestriction(playerMove.getPlayer().getSchemaCard(),
-                    gameBoard.getBoardDice().getDieList().get(playerMove.getDiceBoardIndex()),
-                    playerMove.getDiceSchemaWhereToLeave().get(0));
+            int error = restriction.checkRestriction(actualPlayer.getSchemaCard(), die, playerMove.getDiceSchemaWhereToLeave().get(0));
             if(error != 0) return error;
         }
 

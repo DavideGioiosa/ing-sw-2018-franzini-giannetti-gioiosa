@@ -47,7 +47,7 @@ public class PlayerMove implements Serializable {
     /**
      * Position of dice in Track Board from where the player wants to pick a die.
      */
-    private int[] trackBoardIndexArray;
+    private int[] trackBoardIndexArray = new int[] {-1, -1};
     /**
      * Generic value used by different Tool Cards
      */
@@ -94,7 +94,7 @@ public class PlayerMove implements Serializable {
         this.diceSchemaWhereToLeave = new ArrayList<>();
         for(Position position: playerMove.diceSchemaWhereToLeave) this.diceSchemaWhereToLeave.add(position.getClone());
 
-        if (playerMove.trackBoardIndexArray != null) System.arraycopy(playerMove.trackBoardIndexArray, 0, this.trackBoardIndexArray, 0,playerMove.trackBoardIndexArray.length);
+        if (playerMove.trackBoardIndexArray != null) System.arraycopy(playerMove.trackBoardIndexArray,0, this.trackBoardIndexArray, 0,playerMove.trackBoardIndexArray.length);
         this.value = playerMove.value;
     }
 
