@@ -6,15 +6,11 @@
     <turn>0</turn>
     <minQuantity>1</minQuantity>
     <maxQuantity>1</maxQuantity>
-    <restriction>cellcolour</restriction>
+    <restriction>adjacent</restriction>
     <state>
         <operation>
             <action>pick</action>
             <diceContainer>diceboard</diceContainer>
-        </operation>
-        <operation>
-            <action>adjacent</action>
-            <diceContainer></diceContainer>
         </operation>
         <operation>
             <action>leave</action>

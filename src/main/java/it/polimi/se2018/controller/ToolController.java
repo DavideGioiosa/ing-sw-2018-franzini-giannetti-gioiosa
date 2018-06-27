@@ -5,6 +5,7 @@ import it.polimi.se2018.model.DiceContainer;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.player.Player;
 
 import java.util.ArrayList;
@@ -25,13 +26,13 @@ public class ToolController implements Action{
     private List<Die> dieList;
 
 
-    public ToolController(List<List<OperationString>> operationStrings, String avoidedRestriction, int minNumberOfDice, int maxNumberOfDice, int indexOfRound){
+    public ToolController(ToolCard toolCard){
         dieList = new ArrayList<>();
         isComplete = false;
 
-        this.operationStrings = new ArrayList<>();
-        this.operationStrings.addAll(operationStrings);
-        createOperationLists(operationStrings, avoidedRestriction, indexOfRound, minNumberOfDice, maxNumberOfDice);
+        this.operationStrings = toolCard.getCommandLists();
+        createOperationLists(operationStrings, toolCard.getAvoidedRestriction(), toolCard.getIndexOfTurn(),
+                toolCard.getMinQuantity(), toolCard.getMaxQuantity());
 
         state = 0;
     }

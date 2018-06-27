@@ -13,7 +13,7 @@
             <diceContainer>schemacard</diceContainer>
         </operation>
         <operation>
-            <action>checksamecolours</action>
+            <action>checksamecolour</action>
             <diceContainer>trackboard</diceContainer>
         </operation>
         <operation>
