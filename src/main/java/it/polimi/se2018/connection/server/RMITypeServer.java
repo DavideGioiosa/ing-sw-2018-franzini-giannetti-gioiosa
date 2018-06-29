@@ -1,5 +1,5 @@
 package it.polimi.se2018.connection.server;
-
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.utils.Observable;
@@ -36,7 +36,7 @@ public class RMITypeServer implements Observer<PlayerMessage> {
             serverImplementation.addObserver(this);
             Naming.bind("RMIServer", serverImplementation);
 
-            System.out.println("ServerRMI acceso");
+            println("ServerRMI acceso");
         } catch (RemoteException | AlreadyBoundException | MalformedURLException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }

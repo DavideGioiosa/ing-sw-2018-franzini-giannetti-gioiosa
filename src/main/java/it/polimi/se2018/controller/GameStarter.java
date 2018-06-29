@@ -72,7 +72,7 @@ public class GameStarter {
                     playerChoice.setSchemaCardList(schemas);
                 }
             }
-
+            remoteView.sendDefaultChoices(playerChoiceSaved);
             playerChoiceList = playerChoiceSaved;
             startGame(playerChoiceList);
         }

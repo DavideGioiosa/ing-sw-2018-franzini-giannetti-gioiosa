@@ -7,6 +7,8 @@ import it.polimi.se2018.utils.Observable;
 import java.io.*;
 import java.net.Socket;
 
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
+
 
 
 public class NetworkHandler extends Thread implements ClientSocketInterface{
@@ -31,7 +33,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
              playerMessage.setError(400);
              receive(playerMessage);
          }
-         System.out.println("connesso a ServerSocket");
+         println("connesso a ServerSocket");
     }
 
     Observable<PlayerMessage> getObs() {

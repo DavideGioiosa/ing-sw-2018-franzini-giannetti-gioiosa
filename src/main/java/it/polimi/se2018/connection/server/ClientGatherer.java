@@ -1,5 +1,5 @@
 package it.polimi.se2018.connection.server;
-
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
@@ -53,7 +53,7 @@ public class ClientGatherer extends Thread{
                 PlayerMessage playerMessage = new PlayerMessage();
                 playerMessage.setUser(user);
                 clientListener.send(playerMessage);
-                System.out.println("trovato nuovo client");
+                println("trovato nuovo client");
 
             } catch (IOException e) {
                 if(clientListener != null){

@@ -84,6 +84,9 @@ public class Client implements Observer<PlayerMessage> {
     @Override
     public void update(PlayerMessage playerMessage){
 
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DEFAULTCHOICE)){
+            setThisUser(playerMessage.getUser());
+        }
          view.receive(playerMessage);
 
     }
@@ -101,9 +104,6 @@ public class Client implements Observer<PlayerMessage> {
      */
     public void send(PlayerMessage playerMessage){
 
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER) && thisUser == null){
-            setThisUser(playerMessage.getUser());
-        }
         clientStrategy.sendToServer(playerMessage);
     }
 

@@ -1,4 +1,5 @@
 package it.polimi.se2018.connection.server;
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 import com.google.gson.Gson;
 import it.polimi.se2018.connection.client.ClientSocketInterface;

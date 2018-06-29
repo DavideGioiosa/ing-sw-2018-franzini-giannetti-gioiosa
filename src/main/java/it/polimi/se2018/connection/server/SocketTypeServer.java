@@ -1,5 +1,5 @@
 package it.polimi.se2018.connection.server;
-
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
@@ -25,7 +25,7 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         obs = new Observable<>();
         ClientGatherer clientGatherer = new ClientGatherer(this, port);
         clientGatherer.start();
-        System.out.println("ServerSocket acceso");
+        println("ServerSocket acceso");
     }
 
     public void addObserver(Observer<PlayerMessage> observer){

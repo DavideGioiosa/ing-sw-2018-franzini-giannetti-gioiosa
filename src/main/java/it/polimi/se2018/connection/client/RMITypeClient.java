@@ -6,7 +6,7 @@ import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
-
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -52,7 +52,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
             playerMessage.setError(200);
             update(playerMessage);
         }
-        System.out.println("connesso a serverRMI");
+        println("connesso a serverRMI");
     }
 
 
