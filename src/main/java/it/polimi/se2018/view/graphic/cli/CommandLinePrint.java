@@ -86,7 +86,7 @@ public class CommandLinePrint {
      * Print entire line
      * @param string String to print
      */
-    static void println(String string){
+    public static void println(String string){
         System.out.println(string);
     }
 

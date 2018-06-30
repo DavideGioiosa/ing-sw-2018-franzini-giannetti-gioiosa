@@ -1,0 +1,6 @@
+<publicObjCard>
+    <name>Diagonali Colorate</name>
+    <description>Numero di dadi dello stesso colore diagonalmente adiacenti</description>
+    <typeofcalculation>ColouredDiagonal</typeofcalculation>
+    <bonus>1</bonus>
+</publicObjCard>

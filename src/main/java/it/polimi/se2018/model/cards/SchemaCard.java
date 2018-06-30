@@ -13,6 +13,7 @@ import java.util.List;
  */
 
 public class SchemaCard extends Card implements Serializable, DiceContainer {
+
     /**
      * List of the cells that make up the scheme
      */
@@ -27,7 +28,7 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
     private transient SchemaCard backSchema;
 
     /**
-     * Builder: create a Scheme card
+     * Builder: creates a Schema Card
      * @param name name of the card
      * @param description information about the card
      * @param id identifier of the scheme
@@ -277,10 +278,8 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
                 if (errorId != 0) return;
                 //TODO: ERROR O NEW EXCEPTION;
             }
-        }
-
-        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
             setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
+
         }
     }
 

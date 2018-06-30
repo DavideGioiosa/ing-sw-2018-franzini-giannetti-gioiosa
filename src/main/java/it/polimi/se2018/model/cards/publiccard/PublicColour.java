@@ -3,21 +3,22 @@ package it.polimi.se2018.model.cards.publiccard;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class used by DiffColourColumn, DiffColourRow, DiffColours to calculate the score
  * @author Silvia Franzini
  */
 public class PublicColour {
-    private HashMap<ColourEnum,Integer> hashMapColours;
+    private EnumMap<ColourEnum,Integer> hashMapColours;
     /**
      * Builder method of PublicColour class
      */
     public PublicColour(){
 
-        hashMapColours = new HashMap();
+        hashMapColours = new EnumMap<>(ColourEnum.class);
         hashMapColours.put(ColourEnum.BLUE, 0);
         hashMapColours.put(ColourEnum.GREEN, 0);
         hashMapColours.put(ColourEnum.PURPLE, 0);
@@ -31,7 +32,7 @@ public class PublicColour {
      * @param cellList cells in the window pattern card
      * @return an array having the number of die of the same colour in every cell
      */
-    public HashMap<ColourEnum,Integer> differentColours(List<Cell> cellList){
+    Map<ColourEnum,Integer> differentColours(List<Cell> cellList){
         if(cellList == null){
             throw new NullPointerException("ERROR: List does not exists");
         }

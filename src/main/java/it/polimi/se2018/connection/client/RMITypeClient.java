@@ -6,18 +6,15 @@ import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
-
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import java.util.Date;
 import java.util.Timer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
@@ -25,28 +22,13 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
     private Observable<PlayerMessage> obs;
     private Timer timer;
     private ClientImplementation clientImplementation;
-    private ClientRemoteInterface remoteRef;
 
     public RMITypeClient(){
         obs = new Observable<>();
         clientImplementation = new ClientImplementation();
         clientImplementation.getObs().addObserver(this);
 
-        try {
-            LocateRegistry.getRegistry();
 
-        } catch (RemoteException e) {
-            Logger.getGlobal().log(Level.SEVERE,e.toString());
-        }
-
-    }
-
-    public ServerRemoteInterface getStub() {
-        return stub;
-    }
-
-    public ClientRemoteInterface getRemoteRef() {
-        return remoteRef;
     }
 
     @Override
@@ -56,13 +38,13 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
             this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
 
-            remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
+            ClientRemoteInterface remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
 
             stub.addClient(remoteRef);
 
             RMIClientPing rmiClientPing = new RMIClientPing(this, stub);
             timer = new Timer();
-            timer.scheduleAtFixedRate(rmiClientPing, new Date(), 90*1000);
+            timer.scheduleAtFixedRate(rmiClientPing, new Date(), (long)90*1000);
 
 
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
@@ -70,6 +52,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
             playerMessage.setError(200);
             update(playerMessage);
         }
+        println("connesso a serverRMI");
     }
 
 

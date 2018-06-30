@@ -1,11 +1,10 @@
 package it.polimi.se2018.connection.server;
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 import com.google.gson.Gson;
 import it.polimi.se2018.connection.client.ClientSocketInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
-import it.polimi.se2018.model.PlayerMove;
-import it.polimi.se2018.model.TypeOfChoiceEnum;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
@@ -15,8 +14,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ClientListener extends Thread implements ClientSocketInterface {
 

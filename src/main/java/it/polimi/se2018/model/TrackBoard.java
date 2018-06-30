@@ -97,11 +97,6 @@ public class TrackBoard implements Serializable, DiceContainer {
         return new TrackBoard(this);
     }
 
-    /**
-     *
-     * @param playerMove
-     * @return
-     */
     @Override
     public void pickDice(PlayerMove playerMove, List<Die> dieList){
         dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));

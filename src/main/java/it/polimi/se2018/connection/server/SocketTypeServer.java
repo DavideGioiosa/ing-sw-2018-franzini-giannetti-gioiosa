@@ -1,5 +1,5 @@
 package it.polimi.se2018.connection.server;
-
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
@@ -16,15 +16,16 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     private HashMap<String, ClientListener> clientListenerList;
     private Observable<PlayerMessage> obs;
     private List<String> disconnectedCodes;
-    private static int port = 1111; // verrà preso da file config
+    //private static int port = 1111; verrà preso da file config
 
-    public SocketTypeServer(){
+    public SocketTypeServer(int port){
         disconnectedCodes = new ArrayList<>();
         codeList = new ArrayList<>();
         clientListenerList = new HashMap<>();
         obs = new Observable<>();
         ClientGatherer clientGatherer = new ClientGatherer(this, port);
         clientGatherer.start();
+        println("ServerSocket acceso");
     }
 
     public void addObserver(Observer<PlayerMessage> observer){

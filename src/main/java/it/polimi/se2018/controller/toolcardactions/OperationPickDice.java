@@ -21,14 +21,14 @@ public class OperationPickDice implements ToolOperation{
     @Override
     public boolean start(DiceContainer diceContainer, PlayerMove playerMove, List<Die> dieList, List<Player> roundPlayerOrder, Turn turn) {
 
-        for(int i = 0; i < maxNumberOfDice && (i < minNumberOfDice || i < getNumberOfDice(playerMove)); i++){
+        if(maxNumberOfDice == -1 && minNumberOfDice == -1 || maxNumberOfDice >= getNumberOfDice(playerMove) && minNumberOfDice <= getNumberOfDice(playerMove)) {
             diceContainer.pickDice(playerMove, dieList);
-        }
-        return true;
+            return true;
+        }else return false;
     }
 
     private int getNumberOfDice(PlayerMove playerMove){
-        if (!playerMove.getDiceSchemaWhereToLeave().isEmpty()) return playerMove.getDiceSchemaWhereToLeave().size();
+        if (!playerMove.getDiceSchemaWhereToTake().isEmpty()) return playerMove.getDiceSchemaWhereToTake().size();
         return 1;
     }
 }

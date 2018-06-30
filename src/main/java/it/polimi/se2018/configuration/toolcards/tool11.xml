@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Diluente per Pasta Salda</name>
+    <description>Dopo aver scelto un dado, riponilo nel Sacchetto, poi pescane uno dal Sacchetto. Scegli il valore del nuovo dado e piazzalo, rispettando tutte le restrizioni di piazzamento.</description>
+    <colour>PURPLE</colour>
+    <turn>0</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>1</maxQuantity>
+    <restriction></restriction>
+    <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+        <operation>
+            <action>exchange</action>
+            <diceContainer>dicebag</diceContainer>
+        </operation>
+    </state>
+    <state>
+        <operation>
+            <action>setdievalue</action>
+            <diceContainer></diceContainer>
+        </operation>
+        <operation>
+            <action>canbeplaced</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+    </state>
+    <state>
+        <operation>
+            <action>leave</action>
+            <diceContainer>schemacard</diceContainer>
+        </operation>
+    </state>
+</toolCard>

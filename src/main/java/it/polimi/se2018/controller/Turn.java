@@ -22,7 +22,7 @@ public class Turn {
     /**
      * list of Actions of the player componing the turn
      */
-    private List<Action> turnsActionsList;
+    private List<PickController> turnsActionsList;
     /**
      * informs if the action PICK has already done or not
      * it can be done once a Turn for each player
@@ -51,6 +51,14 @@ public class Turn {
 
     }
 
+    void defaultMove(){
+        if(turnsActionsList.get(turnsActionsList.size()-1).isComplete()){
+            PickController pickController = new PickController(gameBoard);
+            pickController.doDefaultMove();
+            turnsActionsList.add(pickController);
+        }else turnsActionsList.get(turnsActionsList.size()-1).doDefaultMove();
+    }
+
     /**
      * Creates the list of Action belonging the player for each Turn
      */
@@ -62,7 +70,7 @@ public class Turn {
      * List of the actions componing the Turn
      * @return list of actions
      */
-    public List<Action> getTurnsActionsList() {
+    public List<PickController> getTurnsActionsList() {
         return turnsActionsList;
     }
 
@@ -72,7 +80,7 @@ public class Turn {
      * @param playerMove Move that the player wants to make
      * @return boolean to communicate the result of the action
      */
-    public boolean runTurn (PlayerMove playerMove){
+    boolean runTurn (PlayerMove playerMove){
         if(playerMove == null){
             throw new RuntimeException("Insertion of a PlayerMove null");
         }
@@ -83,10 +91,10 @@ public class Turn {
             return false;
         }
 
-        Action action = new Action (gameBoard);
+        PickController pickController = new PickController(gameBoard);
 
-        if(action.selectAction(playerMove)){
-            turnsActionsList.add(action);
+        if(pickController.doAction(gameBoard, playerMove,null, null) == 0){
+            turnsActionsList.add(pickController);
             if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK)){
                 this.numberOfPicks++;
             }
@@ -102,7 +110,8 @@ public class Turn {
      * Communicate if the action received is the last of the player and ends the turn
      * @return boolean to communicate the end of the Turn for the current player
      */
-    public boolean endTurn (){
+    boolean endTurn (){
+        if (turnsActionsList.isEmpty()) return false;
         return turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS);
     }
 

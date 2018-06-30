@@ -7,6 +7,8 @@ import it.polimi.se2018.utils.Observable;
 import java.io.*;
 import java.net.Socket;
 
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
+
 
 
 public class NetworkHandler extends Thread implements ClientSocketInterface{
@@ -28,10 +30,10 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
              bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
          } catch (IOException e) {
              PlayerMessage playerMessage = new PlayerMessage();
-             playerMessage.setError(200);
+             playerMessage.setError(400);
              receive(playerMessage);
          }
-
+         println("connesso a ServerSocket");
     }
 
     Observable<PlayerMessage> getObs() {

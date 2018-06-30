@@ -29,7 +29,7 @@ public class SyntaxController {
 
     private CommandLineInput commandLineInput;
 
-    private final String okMessage = "OK MESSAGE";
+    private final  String okMessage = "OK MESSAGE";
     private final String errorMessage = "ERROR MESSAGE";
 
     /**

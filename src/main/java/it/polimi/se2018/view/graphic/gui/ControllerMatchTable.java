@@ -110,12 +110,12 @@ public class ControllerMatchTable implements Initializable{
         die4.firstRoll();
         Die die5 = new Die(ColourEnum.RED);
         die5.firstRoll();
-        boardDice.insertDice(die1);
+        /*boardDice.insertDice(die1);
         boardDice.insertDice(die2);
         boardDice.insertDice(die3);
         boardDice.insertDice(die4);
         boardDice.insertDice(die5);
-
+*/
         return boardDice;
     }
 

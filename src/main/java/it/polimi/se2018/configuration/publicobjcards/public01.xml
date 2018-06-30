@@ -1,0 +1,6 @@
+<publicObjCard>
+    <name>Colori Diversi - Riga</name>
+    <description>Righe senza colori ripetuti</description>
+    <typeofcalculation>DiffColoursRow</typeofcalculation>
+    <bonus>6</bonus>
+</publicObjCard>

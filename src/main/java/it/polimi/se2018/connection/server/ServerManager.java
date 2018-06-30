@@ -2,12 +2,11 @@ package it.polimi.se2018.connection.server;
 
 
 import it.polimi.se2018.controller.GameCreator;
-import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.PlayerMessageTypeEnum;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.RemoteView;
-
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -23,29 +22,35 @@ public class ServerManager implements Observer<PlayerMessage> {
     private List<User> disconnectedUserList;
     private Timer userSetupTimer;
     private Timer senderTimer;
-    private TimerDelayer timerDelayer;
     private UsersDelayer usersDelayer;
     private boolean setUp;
 
 
+
     public ServerManager (SocketTypeServer socketTypeServer, RMITypeServer rmiTypeServer){
-        setUp = true;
+
         this.serverSocket = socketTypeServer;
         this.serverRMI = rmiTypeServer;
+    }
+
+    void operate(){
+        setUp = true;
         disconnectedUserList = new ArrayList<>();
         userList = new ArrayList<>();
-
+        gameCreator = null;
 
         serverSocket.addObserver(this);
         serverRMI.addObserver(this);
+    }
 
-        gameCreator = null;
+    void defaultMove(){
+        gameCreator.defaultMove();
     }
 
     public void sendMessage(PlayerMessage playerMessage) {
 
-        if(timerDelayer!= null){
-            if (timerDelayer.isStarted() && playerMessage.getId().equals(PlayerMessageTypeEnum.ERROR)) {
+        if(senderTimer!= null){
+            if (playerMessage.getId().equals(PlayerMessageTypeEnum.ERROR)) {
                 serverSocket.send(playerMessage);
                 serverRMI.send(playerMessage);
             } else{
@@ -53,7 +58,7 @@ public class ServerManager implements Observer<PlayerMessage> {
                 serverSocket.send(playerMessage);
                 serverRMI.send(playerMessage);
 
-                timerDelayer = new TimerDelayer(playerMessage, this);
+                TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
                 senderTimer = new Timer();
 
                 senderTimer.schedule(timerDelayer, (long)90*1000);
@@ -64,7 +69,7 @@ public class ServerManager implements Observer<PlayerMessage> {
             serverRMI.send(playerMessage);
 
             senderTimer = new Timer();
-            timerDelayer = new TimerDelayer(playerMessage, this);
+            TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
             senderTimer.schedule(timerDelayer, (long)90*1000);
         }
     }
@@ -83,13 +88,14 @@ public class ServerManager implements Observer<PlayerMessage> {
 
     private void addUser(User user){
 
+        println("aggiunto user: "+ user.getNickname());
         userList.add(user);
         if(gameCreator == null){
             if(userList.size()== 2){
                 userSetupTimer = new Timer();
                 usersDelayer = new UsersDelayer(this);
                 userSetupTimer.schedule(usersDelayer, (long)90*1000);
-            }else if(userList.size() == 4 && userSetupTimer != null){
+            }else if(userList.size() == 4 && userSetupTimer != null ){
                 createGame();
             }
         }
@@ -98,6 +104,7 @@ public class ServerManager implements Observer<PlayerMessage> {
 
      private void removeUser(User user){
 
+        println("disconnesso user: "+ user.getNickname());
          userList.remove(user);
          if(gameCreator == null){
              if(setUp && userList.size() < 2 && userSetupTimer!=null){
@@ -146,6 +153,32 @@ public class ServerManager implements Observer<PlayerMessage> {
 
     public List<User> getUserList(){
         return userList;
+    }
+
+    public void sendDefaultChoices(List<PlayerChoice> playerChoiceList){
+        for(User user : userList){
+            for(PlayerChoice player : playerChoiceList){
+                if(user.getNickname().equals(player.getUser().getNickname())){
+                    PlayerMessage playerMessage = new PlayerMessage();
+                    playerMessage.setChoice(player);
+                    playerMessage.setId(PlayerMessageTypeEnum.DEFAULTCHOICE);
+                    serverRMI.send(playerMessage);
+                    serverSocket.send(playerMessage);
+                }
+            }
+        }
+    }
+
+    public void sendWinner(GameBoard gameBoard){
+
+        MoveMessage finale = new MoveMessage(gameBoard.getPlayerList(),gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice());
+        PlayerMessage playerMessage = new PlayerMessage();
+        playerMessage.setMessage(finale);
+        playerMessage.setId(PlayerMessageTypeEnum.WINNER);
+        playerMessage.setUser(null);
+        serverRMI.send(playerMessage);
+        serverSocket.send(playerMessage);
+
     }
 
 }

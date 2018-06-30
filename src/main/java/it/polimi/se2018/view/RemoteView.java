@@ -44,6 +44,18 @@ public class RemoteView extends Observable<PlayerMessage> {
         serverManager.sendMessage(playerMessage);
     }
 
+    public void send(PlayerMessage playerMessage){
+        serverManager.sendMessage(playerMessage);
+    }
+
+    public void sendWinner(GameBoard gameBoard){
+        serverManager.sendWinner(gameBoard);
+    }
+
+    public void sendDefaultChoices(List<PlayerChoice> playerChoiceList){
+        serverManager.sendDefaultChoices(playerChoiceList);
+    }
+
     /**
     * Method used to send a move message to the client specified in the message
     * @param playerMove message

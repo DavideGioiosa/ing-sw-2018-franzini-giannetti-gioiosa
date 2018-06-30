@@ -5,6 +5,7 @@ import it.polimi.se2018.model.DiceContainer;
 import it.polimi.se2018.model.Die;
 import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.player.Player;
 
 import java.util.ArrayList;
@@ -16,37 +17,38 @@ import java.util.List;
  * by Server request. An operation is the minimum ToolCard's action.
  * This ToolCard manager sets operation and manages the interaction between them.
  */
-public class ToolController {
+public class ToolController implements Action{
 
     private List<List<ToolOperation>> toolOperationLists;
     private List<List<OperationString>> operationStrings;
     private int state;
-    private boolean isFinished;
+    private boolean isComplete;
+    private List<Die> dieList;
 
-    public ToolController(List<List<OperationString>> operationStrings, String avoidedRestriction, int minNumberOfDice, int maxNumberOfDice, int indexOfRound){
 
-        isFinished = false;
+    public ToolController(ToolCard toolCard){
+        dieList = new ArrayList<>();
+        isComplete = false;
 
-        this.operationStrings = new ArrayList<>();
-        this.operationStrings.addAll(operationStrings);
-        createOperationLists(operationStrings, avoidedRestriction, indexOfRound, minNumberOfDice, maxNumberOfDice);
+        this.operationStrings = toolCard.getCommandLists();
+        createOperationLists(operationStrings, toolCard.getAvoidedRestriction(), toolCard.getIndexOfTurn(),
+                toolCard.getMinQuantity(), toolCard.getMaxQuantity());
 
         state = 0;
     }
 
-    public int useTool(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
-        if(!isFinished) {
-            List<Die> dieList = new ArrayList<>();
+    public int doAction(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
+        if(!isComplete) {
 
             HashMap<String,DiceContainer> diceContainerHashMap = setDiceContainerHashMap(gameBoard, playerMove.getPlayer());
 
-            for (int i = 0; i < toolOperationLists.size(); i++) {
-                toolOperationLists.get(state).get(i).start(diceContainerHashMap.get(operationStrings.get(state).get(i).getDiceContainer()),
-                        playerMove, dieList, roundPlayerOrder, turn);
+            for (int i = 0; i < toolOperationLists.get(state).size(); i++) {
+                if(!toolOperationLists.get(state).get(i).start(diceContainerHashMap.get(operationStrings.get(state).get(i).getDiceContainer()),
+                        playerMove, dieList, roundPlayerOrder, turn)) throw new RuntimeException("ERRORE DA GESTIRE");
             }
 
             state ++;
-            if (state == toolOperationLists.size()) isFinished = true;
+            if (state == toolOperationLists.size()) isComplete = true;
             return 0;
         }
         return 1000;
@@ -76,32 +78,35 @@ public class ToolController {
             for(OperationString operationString: operationList){
 
                 switch (operationString.getOperation()){
-                    case "PICK":
+                    case "pick":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationPickDice(minNumberOfDice, maxNumberOfDice));
                         break;
-                    case "DOUBLEPICK":
+                    case "doublepick":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationDoublePick());
                         break;
-                    case "CHECKSAMECOLOUR":
+                    case "checksamecolour":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationCheckSameColourOfOneInDiceContainer());
                         break;
-                    case "INCDECVALUE":
+                    case "incdecvalue":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationIncDecValue());
                         break;
-                    case "EXCHANGE":
+                    case "exchange":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationExchange());
                         break;
-                    case "REROLL":
+                    case "reroll":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationReRoll(indexOfRound));
                         break;
-                    case "LEAVE":
+                    case "leave":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationLeaveDice(avoidedRestriction));
                         break;
-                    case "OPPOSITE":
+                    case "opposite":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationOppositeValue());
                         break;
-                    case "SETDIEVALUE":
+                    case "setdievalue":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationSetDieValue());
+                        break;
+                    case "canbeplaced":
+                        toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationCanBePlaced());
                         break;
                     default: throw new IllegalArgumentException("ERROR: Wrong Operation Name");
 
@@ -110,5 +115,14 @@ public class ToolController {
             }
         }
 
+    }
+
+    @Override
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public int doDefaultMove(){
+        return 0;
     }
 }

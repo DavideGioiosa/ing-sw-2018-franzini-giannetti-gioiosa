@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Pennello per Pasta Salda</name>
+    <description>Dopo aver scelto un dado, tira nuovamente quel dado. Se non puoi piazzarlo, riponilo nella Riserva.</description>
+    <colour>PURPLE</colour>
+    <turn>0</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>1</maxQuantity>
+    <restriction></restriction>
+    <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+        <operation>
+            <action>reroll</action>
+            <diceContainer></diceContainer>
+        </operation>
+        <operation>
+            <action>canbeplaced</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+    </state>
+    <state>
+        <operation>
+            <action>leave</action>
+            <diceContainer>schemacard</diceContainer>
+        </operation>
+    </state>
+</toolCard>

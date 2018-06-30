@@ -42,15 +42,26 @@ public class GameManager {
      * @param gameBoard Starting GameBoard
      */
     public GameManager(RemoteView view, GameBoard gameBoard){
-        if(view == null){
-            throw new NullPointerException("ERROR: view not initialized");
-        }else this.view = view;
-        if(gameBoard == null){
-            this.view.reportError(1000, null);
-        }else this.gameBoard = gameBoard;
+        this.view = view;
+        this.gameBoard = gameBoard;
         roundList = new ArrayList<>();
         Round round = new Round(gameBoard, 0 , view);
         roundList.add(round);
+    }
+
+    public GameBoard getGameBoard() {
+        return gameBoard;
+    }
+
+    private int blankCells(Player player){
+
+        int score = 0;
+        for(Cell c : player.getSchemaCard().getCellList()){
+            if(c.isEmpty()){
+                score++;
+            }
+        }
+        return score;
     }
 
     /**
@@ -68,11 +79,7 @@ public class GameManager {
                 }
 
             }
-            for(Cell c : player.getSchemaCard().getCellList()){
-                if(c.isEmpty()){
-                    score--;
-                }
-            }
+            score = score - blankCells(player);
             for(PrivatePlayer privatePlayer: gameBoard.getPrivatePlayerList()){
                 if(player.equals(privatePlayer.getPlayer())){
                     score += privatePlayer.getPrivateObj().getScore(player.getSchemaCard());
@@ -84,19 +91,18 @@ public class GameManager {
         }
     }
 
+    void defaultMove(){
+        if(roundList.get(roundList.size() - 1).isEnded()){
+            endRound();
+        }else roundList.get(roundList.size() - 1).defaultMove();
+    }
+
+
     /**
      * Method finds out the game winner
      */
     private void setGameWinner(){
        winner = Collections.max(gameBoard.getPlayerList(), Comparator.comparingInt(Player :: getScore));
-    }
-
-    /**
-     * Gets game winner of the match
-     * @return the winner of the match
-     */
-    public Player getGameWinner(){
-        return winner;
     }
 
     /**
@@ -114,11 +120,13 @@ public class GameManager {
         }
     }
 
-    public void tryMove(PlayerMove playerMove){
+    int tryMove(PlayerMove playerMove){
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
+            return 1;
+        }else {roundList.get(roundList.size() - 1).update(playerMove);
+        return 0;
         }
-        roundList.get(roundList.size() - 1).update(playerMove);
     }
 
 }

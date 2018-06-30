@@ -34,7 +34,7 @@ public class TestSyntaxController {
     /**
      * Tests constructor
      */
-    @Test
+   /* @Test
     public void ConstructorTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         assertEquals(player, syntaxController.getPlayerMove().getPlayer());
@@ -43,7 +43,7 @@ public class TestSyntaxController {
     /**
      * Tests PICK message
      */
-    @Test
+    /*@Test
     public void commandPickTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message;
@@ -62,7 +62,7 @@ public class TestSyntaxController {
     /**
      * Tests TOOL message with valid ID
      */
-    @Test
+    /*@Test
     public void commandToolCardOKTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("TOOL");
@@ -79,7 +79,7 @@ public class TestSyntaxController {
     /**
      * Tests TOOL message with wrong ID
      */
-    @Test
+    /*@Test
     public void commandToolCardTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("TOOL");
@@ -96,7 +96,7 @@ public class TestSyntaxController {
     /**
      * Tests CANCEL message
      */
-    @Test
+    /*@Test
     public void commandResetTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("PICK");
@@ -113,7 +113,7 @@ public class TestSyntaxController {
     /**
      * Tests PASS command
      */
-    @Test
+   /* @Test
     public void commandPassTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("PASS");
@@ -125,7 +125,7 @@ public class TestSyntaxController {
     /**
      * Tests empty message
      */
-    @Test
+    /*@Test
     public void commandNotSettedTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("");
@@ -137,7 +137,7 @@ public class TestSyntaxController {
     /**
      * Tests wrong message
      */
-    @Test
+    /*@Test
     public void commandWrongTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("NOTSUPPORTED");
@@ -149,7 +149,7 @@ public class TestSyntaxController {
     /**
      * Tests null message
      */
-    @Test
+    /*@Test
     public void commandNullTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand(null);
@@ -161,7 +161,7 @@ public class TestSyntaxController {
     /**
      * Tests ROLL message
      */
-    @Test
+   /* @Test
     public void commandRollTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("ROLL");
@@ -173,7 +173,7 @@ public class TestSyntaxController {
     /**
      * Tests EXTRACT message
      */
-    @Test
+   /* @Test
     public void commandExtractTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         String message = syntaxController.validCommand("EXTRACT");
@@ -185,7 +185,7 @@ public class TestSyntaxController {
     /**
      * Tests Complete Pick move
      */
-    @Test
+   /* @Test
     public void commandPickDiceTest(){
         syntaxController = new SyntaxController(gameBoard, player);
         gameBoard.getBoardDice().insertDice(gameBoard.getBagDice().extractDice());
@@ -202,6 +202,6 @@ public class TestSyntaxController {
         message = syntaxController.validCommand(("1 1"));
         assertEquals(CommandTypeEnum.COMPLETE, syntaxController.getNextCommandType());
         assertEquals(OKMESSAGE, message);
-    }
+    }*/
 
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<toolCard>
+    <name>Tampone Diamantato</name>
+    <description>Dopo aver scelto un dado, giralo sulla faccia opposta. 6 diventa 1, 5 diventa 2, 4 diventa 3 ecc.</description>
+    <colour>GREEN</colour>
+    <turn>0</turn>
+    <minQuantity>1</minQuantity>
+    <maxQuantity>1</maxQuantity>
+    <restriction></restriction>
+    <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+        <operation>
+            <action>opposite</action>
+            <diceContainer></diceContainer>
+        </operation>
+        <operation>
+            <action>leave</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
+    </state>
+</toolCard>

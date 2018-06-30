@@ -1,6 +1,5 @@
 package it.polimi.se2018.connection.server;
 
-import it.polimi.se2018.connection.client.ClientImplementation;
 import it.polimi.se2018.connection.client.ClientRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
@@ -44,8 +43,8 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
             if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
                 ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
                 clientRemoteInterface.receiveFromServer(playerMessage);
-
             }
+
         }
     }
 
@@ -54,7 +53,6 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
         User user;
         String code;
-
         do{
             user = new User(TypeOfConnection.RMI);
             code = user.createUniqueCode();
@@ -66,8 +64,9 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         playerMessage.setUser(user);
         RMIServerPing rmiServerPing = new RMIServerPing(this, code, client);
         Timer lifeLineTimer = new Timer();
-        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), 90*1000);
+        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), (long)90*1000);
         pingMap.put(code, lifeLineTimer);
+        System.out.println("trovato nuovo client");
         try {
             client.receiveFromServer(playerMessage);
         } catch (RemoteException e) {
@@ -98,18 +97,27 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
     }
 
+    void transmit(PlayerMessage playerMessage){
+        obs.notify(playerMessage);
+    }
+
     @Override
     public void receive(PlayerMessage playerMessage) {
 
         if(playerMessage.getIdError() == 100 ){
             disconnectionHandler(playerMessage.getUser().getUniqueCode());
         }
-        obs.notify(playerMessage);
+
+        new Thread(new RMIServerThread(playerMessage, this)).start();
     }
 
+    /**
+     * Method used to detect client RMI disconnection
+     * @throws RemoteException due to disconnection
+     */
     @Override
     public void lifeLine() throws RemoteException {
-
+        //detects disconnection by throwing RemoteException
     }
 
 }

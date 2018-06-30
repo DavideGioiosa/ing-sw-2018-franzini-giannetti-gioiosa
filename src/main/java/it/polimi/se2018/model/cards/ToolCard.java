@@ -1,8 +1,10 @@
 package it.polimi.se2018.model.cards;
 
+import it.polimi.se2018.controller.OperationString;
 import it.polimi.se2018.model.ColourEnum;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * ToolCard allows the player to get Die placement benefits using it
@@ -19,6 +21,16 @@ public class ToolCard extends Card implements Serializable {
      */
     private int token;
 
+    private int indexOfTurn;
+
+    private int minQuantity;
+
+    private int maxQuantity;
+
+    private String avoidedRestriction;
+
+    private List<List<OperationString>> commandLists;
+
     /**
      * Builder: create ToolCard
      * @param id identified of the card
@@ -26,13 +38,21 @@ public class ToolCard extends Card implements Serializable {
      * @param description information about the card
      * @param colour colour of the ToolCard, used in SinglePlayer Mode
      */
-    public ToolCard(int id, String name, String description, ColourEnum colour) {
+    public ToolCard(int id, String name, String description, ColourEnum colour, int indexOfTurn, int minQuantity,
+                    int maxQuantity, String avoidedRestriction, List<List<OperationString>> commandLists) {
         super(id, name, description);
         if(colour == null){
             throw new IllegalArgumentException("ERROR: Insert colour null");
         }
         this.colour = colour;
         this.token = 0;
+
+        //TODO: controlli vailidità parametri
+        this.indexOfTurn = indexOfTurn;
+        this.minQuantity = minQuantity;
+        this.maxQuantity = maxQuantity;
+        this.avoidedRestriction = avoidedRestriction;
+        this.commandLists = commandLists;
     }
 
     /**
@@ -88,5 +108,25 @@ public class ToolCard extends Card implements Serializable {
     @Override
     public ToolCard getClone(){
         return new ToolCard(this);
+    }
+
+    public int getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public int getMinQuantity() {
+        return minQuantity;
+    }
+
+    public int getIndexOfTurn() {
+        return indexOfTurn;
+    }
+
+    public String getAvoidedRestriction() {
+        return avoidedRestriction;
+    }
+
+    public List<List<OperationString>> getCommandLists() {
+        return commandLists;
     }
 }
