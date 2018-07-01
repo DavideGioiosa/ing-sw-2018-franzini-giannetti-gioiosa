@@ -1,4 +1,4 @@
-package it.polimi.se2018.connection.server;
+package it.polimi.se2018.connection.server.rmi;
 
 import it.polimi.se2018.model.PlayerMessage;
 

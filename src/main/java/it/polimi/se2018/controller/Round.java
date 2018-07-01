@@ -51,9 +51,6 @@ public class Round implements Observer<PlayerMove>{
      * @param indexRound index of the current Round created
      */
     public Round (GameBoard gameBoard, int indexRound, RemoteView view){
-        if (gameBoard == null){
-            throw new NullPointerException("Insertion of null parameter gameBoard");
-        }
         if (indexRound < 0 || indexRound > 9){
             throw new IllegalArgumentException("Error creation of a Round " +
                     "with index out of the range permitted");
@@ -167,7 +164,7 @@ public class Round implements Observer<PlayerMove>{
     public void update (PlayerMove playerMove){
 
         if(playerMove.getPlayer() == null){
-            throw new RuntimeException("Empty Player in PlayerMove received");
+            //GESTIONE ERRORE
         }
 
         if (playerMove.getPlayer().getNickname().equals(getCurrPlayer().getNickname())) {

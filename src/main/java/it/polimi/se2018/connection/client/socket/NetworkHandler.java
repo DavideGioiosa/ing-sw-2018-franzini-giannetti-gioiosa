@@ -1,4 +1,4 @@
-package it.polimi.se2018.connection.client;
+package it.polimi.se2018.connection.client.socket;
 
 import com.google.gson.Gson;
 import it.polimi.se2018.model.PlayerMessage;
@@ -11,7 +11,7 @@ import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 
 
-public class NetworkHandler extends Thread implements ClientSocketInterface{
+public class NetworkHandler extends Thread implements ClientSocketInterface {
 
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -57,17 +57,21 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
 
                 String message = bufferedReader.readLine();
                 PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
-                receive(playerMessage);
+                if(playerMessage != null){
+                    receive(playerMessage);
+                }
 
             }catch (IOException e){
+                setQuit();
                 disconnectionHandler();
             }
         }
-
         try{
             this.closeConnection();
         }catch (IOException e){
-            disconnectionHandler();
+            PlayerMessage playerMessage = new PlayerMessage();
+            playerMessage.setError(401);
+            receive(playerMessage);
         }
 
     }
@@ -91,25 +95,16 @@ public class NetworkHandler extends Thread implements ClientSocketInterface{
     }
 
      private synchronized void closeConnection() throws IOException{
-        PlayerMessage playerMessage = new PlayerMessage();
-        playerMessage.setClosure();
 
         try {
-            send(playerMessage);
+            out.close();
         }
         finally {
             try {
-                out.close();
+                bufferedReader.close();
             }
-
             finally {
-                try {
-                    bufferedReader.close();
-                }
-
-                finally {
-                    socket.close();
-                }
+                socket.close();
             }
         }
     }

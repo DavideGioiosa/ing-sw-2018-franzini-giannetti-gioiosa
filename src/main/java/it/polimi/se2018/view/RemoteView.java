@@ -49,7 +49,14 @@ public class RemoteView extends Observable<PlayerMessage> {
     }
 
     public void sendWinner(GameBoard gameBoard){
-        serverManager.sendWinner(gameBoard);
+
+        MoveMessage finale = new MoveMessage(gameBoard.getPlayerList(),gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice());
+        PlayerMessage playerMessage = new PlayerMessage();
+        playerMessage.setMessage(finale);
+        playerMessage.setId(PlayerMessageTypeEnum.WINNER);
+        playerMessage.setUser(null);
+        serverManager.sendMessage(playerMessage);
+        serverManager.shutdown();
     }
 
     public void sendDefaultChoices(List<PlayerChoice> playerChoiceList){

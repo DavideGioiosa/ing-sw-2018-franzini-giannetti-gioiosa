@@ -47,10 +47,15 @@ public class GameManager {
         roundList = new ArrayList<>();
         Round round = new Round(gameBoard, 0 , view);
         roundList.add(round);
+        winner = null;
     }
 
     public GameBoard getGameBoard() {
         return gameBoard;
+    }
+
+    public Player getWinner() {
+        return winner;
     }
 
     private int blankCells(Player player){
@@ -92,6 +97,7 @@ public class GameManager {
     }
 
     void defaultMove(){
+
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
         }else roundList.get(roundList.size() - 1).defaultMove();
@@ -109,8 +115,8 @@ public class GameManager {
      * Update method for Observer pattern implementation
      */
     private void endRound(){
-        //TODO: da adattare a nuovo UML
-        if(roundList.size() == 4){
+
+        if(roundList.size() == 10){
             calculateGameScore();
             setGameWinner();
 
@@ -120,13 +126,13 @@ public class GameManager {
         }
     }
 
-    int tryMove(PlayerMove playerMove){
+    void tryMove(PlayerMove playerMove){
+
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
-            return 1;
-        }else {roundList.get(roundList.size() - 1).update(playerMove);
-        return 0;
         }
+        roundList.get(roundList.size() - 1).update(playerMove);
+
     }
 
 }

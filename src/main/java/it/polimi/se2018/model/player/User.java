@@ -2,6 +2,7 @@ package it.polimi.se2018.model.player;
 
 import java.io.Serializable;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -15,7 +16,7 @@ public class User implements Serializable {
     private boolean connection;
     private TypeOfConnection typeOfConnection;
     private String uniqueCode;
-    private EnumMap<TypeOfConnection, String> charConnection;
+    private HashMap<TypeOfConnection, String> charConnection;
 
     /**
      * Builder: create a user with the id and the connection
@@ -24,7 +25,7 @@ public class User implements Serializable {
     public User (TypeOfConnection typeOfConnection){
         this.connection = true;
         this.typeOfConnection = typeOfConnection;
-        charConnection = new EnumMap<>(TypeOfConnection.class);
+        charConnection = new HashMap<>();
         charConnection.put(TypeOfConnection.SOCKET, "s");
         charConnection.put(TypeOfConnection.RMI, "r");
 

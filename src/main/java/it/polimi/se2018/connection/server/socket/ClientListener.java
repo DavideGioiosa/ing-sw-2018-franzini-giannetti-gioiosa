@@ -1,8 +1,7 @@
-package it.polimi.se2018.connection.server;
-import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
+package it.polimi.se2018.connection.server.socket;
 
 import com.google.gson.Gson;
-import it.polimi.se2018.connection.client.ClientSocketInterface;
+import it.polimi.se2018.connection.client.socket.ClientSocketInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.TypeOfConnection;
@@ -37,9 +36,8 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         return obs;
     }
 
-
-    void setQuit() {
-        this.quit = true;
+    void setQuit(boolean value) {
+        this.quit = value;
     }
 
     @Override
@@ -51,13 +49,13 @@ public class ClientListener extends Thread implements ClientSocketInterface {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String message = bufferedReader.readLine();
                 PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
-                receive(playerMessage);
+                if(playerMessage != null){
+                    receive(playerMessage);
+                }
 
             } catch (IOException e) {
-                // disconnessione
                 handleDisconnection();
                 disconnection = true;
-
             }
         }
 

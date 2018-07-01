@@ -1,5 +1,7 @@
-package it.polimi.se2018.connection.client;
+package it.polimi.se2018.connection.client.socket;
 
+import it.polimi.se2018.connection.client.Client;
+import it.polimi.se2018.connection.client.ClientStrategy;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;

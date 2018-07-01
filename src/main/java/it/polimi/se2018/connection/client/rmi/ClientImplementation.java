@@ -1,4 +1,4 @@
-package it.polimi.se2018.connection.client;
+package it.polimi.se2018.connection.client.rmi;
 
 
 import it.polimi.se2018.model.PlayerMessage;
@@ -42,7 +42,10 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
     @Override
     public void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
 
-        new Thread(new RMIReceiveThread(playerMessage, this)).start();
+        if(playerMessage != null){
+            new Thread(new RMIReceiveThread(playerMessage, this)).start();
+        }
+
     }
 
     /**

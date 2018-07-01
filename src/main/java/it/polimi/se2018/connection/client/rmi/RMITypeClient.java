@@ -1,6 +1,11 @@
-package it.polimi.se2018.connection.client;
+package it.polimi.se2018.connection.client.rmi;
 
-import it.polimi.se2018.connection.server.ServerRemoteInterface;
+import it.polimi.se2018.connection.client.Client;
+import it.polimi.se2018.connection.client.ClientStrategy;
+import it.polimi.se2018.connection.client.rmi.ClientImplementation;
+import it.polimi.se2018.connection.client.rmi.ClientRemoteInterface;
+import it.polimi.se2018.connection.client.rmi.RMIClientPing;
+import it.polimi.se2018.connection.server.rmi.ServerRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
@@ -27,7 +32,6 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
         obs = new Observable<>();
         clientImplementation = new ClientImplementation();
         clientImplementation.getObs().addObserver(this);
-
 
     }
 
@@ -59,8 +63,10 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
     @Override
     public void reconnect(User user){
 
-        timer.cancel();
-        timer.purge();
+        if(timer != null){
+            timer.cancel();
+            timer.purge();
+        }
         connect();
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setUser(user);
@@ -83,23 +89,15 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
      void disconnectionHandler(){
         PlayerMessage disconnect = new PlayerMessage();
-        disconnect.setError(201); //valore da individuare
+        disconnect.setError(401); //valore da individuare
         obs.notify(disconnect);
     }
 
 
     @Override
     public void close(){
-        PlayerMessage playerMessage = new PlayerMessage();
         timer.cancel();
         timer.purge();
-        playerMessage.setClosure();
-        try {
-            stub.receive(playerMessage);
-        } catch (RemoteException e) {
-            disconnectionHandler();
-
-        }
     }
 
     @Override

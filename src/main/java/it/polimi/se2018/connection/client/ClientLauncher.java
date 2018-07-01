@@ -1,5 +1,7 @@
 package it.polimi.se2018.connection.client;
 
+import it.polimi.se2018.connection.client.rmi.RMITypeClient;
+import it.polimi.se2018.connection.client.socket.SocketTypeClient;
 import it.polimi.se2018.controller.client.ClientController;
 import it.polimi.se2018.view.View;
 
@@ -18,13 +20,13 @@ public class ClientLauncher {
         clientSocket.connect();
 
 
-        View viewRMI = new View();
+        /*View viewRMI = new View();
         ClientStrategy clientStrategy = new RMITypeClient();
         Client clientRMI = new Client(clientStrategy, viewRMI);
 
         ClientController clientControllerRMI = new ClientController(clientRMI, viewRMI);
         viewRMI.addObserver(clientControllerRMI);
-        clientRMI.connect();
+        clientRMI.connect();*/
 
 
     }

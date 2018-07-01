@@ -1,6 +1,6 @@
-package it.polimi.se2018.connection.client;
+package it.polimi.se2018.connection.client.rmi;
 
-import it.polimi.se2018.connection.server.ServerRemoteInterface;
+import it.polimi.se2018.connection.server.rmi.ServerRemoteInterface;
 
 import java.rmi.RemoteException;
 import java.util.TimerTask;
