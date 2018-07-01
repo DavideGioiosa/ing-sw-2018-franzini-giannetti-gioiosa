@@ -66,8 +66,10 @@ public class CommandController{
                 }
 
             case PICK:
-            case TOOL:
                 return checkRestrictionValidity(playerMove, clientBoard);
+
+            case TOOL:
+                //return checkRestrictionValidity(playerMove, clientBoard);
 
             default: return 0;
 

@@ -58,9 +58,6 @@ public class PlayerMessage implements Serializable {
         this.user = recipient;
     }
     public void setUser(User user){
-        if(user == null){
-            throw new NullPointerException("Insertion of null user parameter");
-        }
         this.user = user;
         id = PlayerMessageTypeEnum.USER;
     }

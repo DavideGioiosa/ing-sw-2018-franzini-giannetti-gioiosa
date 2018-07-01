@@ -9,14 +9,14 @@ import it.polimi.se2018.view.View;
 
 public class ClientLauncher {
 
-
     public static void main(String[] args){
 
         View viewSocket = new View();
         Client clientSocket = new Client(new SocketTypeClient("localhost", 1111), viewSocket);
 
         ClientController clientControllerSocket = new ClientController(clientSocket, viewSocket);
-        viewSocket.addObserver(clientControllerSocket);
+
+        viewSocket.getInputStrategy().getSyntaxController().addObserver(clientControllerSocket);
         clientSocket.connect();
 
 
