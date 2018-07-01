@@ -1,9 +1,13 @@
 package it.polimi.se2018.view.graphic.cli;
 
+import static it.polimi.se2018.controller.GameLoader.getNodeList;
 import static org.fusesource.jansi.Ansi.*;
 
 import it.polimi.se2018.model.ColourEnum;
 import org.fusesource.jansi.AnsiConsole;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -17,7 +21,18 @@ public class CommandLinePrint {
 
     private List<HashMap<Integer, String>> dieRowStringList;
 
+    private static HashMap<Integer, String> messageMap;
+    private static HashMap<Integer, String> errorMap;
+    static {
+        loadMessageMap();
+        loadErrorMap();
+    }
+
     public CommandLinePrint(EnumMap<ColourEnum, Color> hashMapColours){
+
+        loadErrorMap();
+        loadMessageMap();
+
         HashMap<Integer, String> dieRowString1;
         HashMap<Integer, String> dieRowString2;
         HashMap<Integer, String> dieRowString3;
@@ -66,6 +81,67 @@ public class CommandLinePrint {
          dieRowStringList.add(dieRowString3);
     }
 
+    private static void loadErrorMap() {
+        errorMap = new HashMap<>();
+        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\ErrorCodes.xml";
+
+        NodeList errorNodeList = getNodeList(pathName, "errors");
+        if (errorNodeList == null) throw new NullPointerException("File non valido");
+
+        for(int i = 0; i< errorNodeList.getLength(); i++) {
+            Node errorNode = errorNodeList.item(i);
+
+            if (errorNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) errorNode;
+
+                NodeList errorList = element.getElementsByTagName("error");
+
+                for (int index = 0; index < errorList.getLength(); index++) {
+                    Node singleErrorNode = errorList.item(index);
+                    if (singleErrorNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element singleError = (Element) singleErrorNode;
+
+                        int id = Integer.parseInt(singleError.getElementsByTagName("id").item(0).getTextContent());
+                        String errorString = singleError.getElementsByTagName("description").item(0).getTextContent();
+                        errorMap.put(id, errorString);
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    private static void loadMessageMap() {
+        messageMap = new HashMap<>();
+        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\MessageCodes.xml";
+
+        NodeList errorNodeList = getNodeList(pathName, "messages");
+        if (errorNodeList == null) throw new NullPointerException("File non valido");
+
+        for(int i = 0; i< errorNodeList.getLength(); i++) {
+            Node errorNode = errorNodeList.item(i);
+
+            if (errorNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) errorNode;
+
+                NodeList errorList = element.getElementsByTagName("message");
+
+                for (int j = 0; j < errorList.getLength(); j++) {
+                    Node singleErrorNode = errorList.item(j);
+                    if (singleErrorNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element singleMessage = (Element) singleErrorNode;
+
+                        int id = Integer.parseInt(singleMessage.getElementsByTagName("id").item(0).getTextContent());
+                        String messageString = singleMessage.getElementsByTagName("description").item(0).getTextContent();
+                        messageMap.put(id, messageString);
+                    }
+                }
+            }
+        }
+
+    }
+
     /**
      * Print String
      * @param string String to print
@@ -74,8 +150,12 @@ public class CommandLinePrint {
         System.out.print(string);
     }
 
-    static void print(int id){
-        System.out.print(id);
+    static void printMessage(int id){
+        System.out.println(messageMap.get(id));
+    }
+
+    static void printError(int id){
+        System.out.println(errorMap.get(id));
     }
 
     /**
@@ -96,13 +176,11 @@ public class CommandLinePrint {
 
     /**
      * Print line with an Integer
-     * @param num Integer to print
+//     * @param num Integer to print
      */
     static void println(int num){
         System.out.println(num);
     }
-
-
 
     public void colouredDiePrint(int row, ColourEnum colour, int value){
         if (colour != null && value == 0) value = -1;

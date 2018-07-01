@@ -16,6 +16,7 @@ public class ClientLauncher {
 
         ClientController clientControllerSocket = new ClientController(clientSocket, viewSocket);
 
+        viewSocket.getInputStrategy().getPlayerSetupper().addObserver(clientControllerSocket);
         viewSocket.getInputStrategy().getSyntaxController().addObserver(clientControllerSocket);
         clientSocket.connect();
 

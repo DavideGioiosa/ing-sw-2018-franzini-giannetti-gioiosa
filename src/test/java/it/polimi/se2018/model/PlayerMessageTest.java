@@ -132,10 +132,8 @@ public class PlayerMessageTest {
      */
     @Test
     public void setUser_shouldCallException() {
-        try {
-            playerMessage.setUser(null);
-            fail();
-        } catch (NullPointerException e){}
+        playerMessage.setUser(null);
+        assertNull(playerMessage.getUser());
     }
 
 

@@ -11,6 +11,7 @@ import java.util.List;
 
 import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import static org.fusesource.jansi.Ansi.*;
+
 import org.fusesource.jansi.AnsiConsole;
 
 
@@ -26,7 +27,7 @@ public class CommandLineGraphic{
     /**
      * Character used for Card frames
      */
-    private final char frameCardCharacter = '#';
+    private static final char FRAME_CARD_CHARACTER = '#';
     /**
      * Length of card's margin
      */
@@ -34,35 +35,32 @@ public class CommandLineGraphic{
     /**
      * Number of rows used for displaying card's title
      */
-    private final int cardTitleHeight = 4;
+    private static final int CARD_TITLE_HEIGHT = 4;
     /**
      * Number of rows used for displaying card's description
      */
-    private final int cardDescriptionHeight = 9;
+    private static final int CARD_DESCRIPTION_HEIGHT = 9;
     /**
      * Number of rows used for displaying card's details
      */
-    private final int cardDetailsHeight = 4;
+    private static final int CARD_DETAILS_HEIGHT = 4;
     /**
      * HashMap for converting ColourEnum in Colour for coloured output
      */
-    private EnumMap<ColourEnum, Color> hashMapColours;
+    private static EnumMap<ColourEnum, Color> hashMapColours;
 
     /**
      * Standard String for display colours of cards
      */
-    private final String colourString = "######";
+    private static final String COLOUR_STRING = "######";
     /**
      * Public Objective Card Description for Value
      */
-    private final String publicObjCardValueString = "Valore della carta: ";
+    private static final String PUBLIC_OBJ_CARD_VALUE_STRING = "Valore della carta: ";
 
-    CommandLinePrint commandLinePrint;
+    private static CommandLinePrint commandLinePrint;
 
-    /**
-     * Constructor
-     */
-    public CommandLineGraphic(){
+    static{
         hashMapColours = new EnumMap<>(ColourEnum.class);
         hashMapColours.put(ColourEnum.BLUE, Color.BLUE);
         hashMapColours.put(ColourEnum.GREEN, Color.GREEN);
@@ -73,19 +71,26 @@ public class CommandLineGraphic{
     }
 
     /**
+     * Constructor
+     */
+    public CommandLineGraphic(){
+        //This class has only static attributes
+    }
+
+    /**
      * Print message in command line
      * @param message String to display
      */
-    public void showMessage(String message){
-        println(message);
+    public void showMessage(int message){
+        printMessage(message);
     }
 
     /**
      * Print message in command line using his ID
-     * @param idMessage ID of the message to display
+     * @param error ID of the message to display
      */
-    public void show(Integer idMessage){
-        println(idMessage);
+    public void showError(Integer error){
+        printError(error);
     }
 
     /**
@@ -115,9 +120,9 @@ public class CommandLineGraphic{
      * Show name and description of the chosen card
      * @param card Card to display
      */
-    public void showBasicCard(Card card){
-        printCardDetails(card.getName().toUpperCase(), cardTitleHeight);
-        printCardDetails(card.getDescription(), cardDescriptionHeight);
+    private void showBasicCard(Card card){
+        printCardDetails(card.getName().toUpperCase(), CARD_TITLE_HEIGHT);
+        printCardDetails(card.getDescription(), CARD_DESCRIPTION_HEIGHT);
 
     }
 
@@ -125,10 +130,10 @@ public class CommandLineGraphic{
      * Show Public Objective Card
      * @param publicObjCard Public Objective Card to display
      */
-    public void showPublicObjCard(PublicObjCard publicObjCard){
+    void showPublicObjCard(PublicObjCard publicObjCard){
         printCardUpperFrame();
         showBasicCard(publicObjCard);
-        printCardDetails(publicObjCardValueString + publicObjCard.getBonus(), cardDetailsHeight);
+        printCardDetails(PUBLIC_OBJ_CARD_VALUE_STRING + publicObjCard.getBonus(), CARD_DETAILS_HEIGHT);
         printCardUpperFrame();
     }
 
@@ -136,10 +141,10 @@ public class CommandLineGraphic{
      * Show Private Objective Card
      * @param card Private Objective Card to display
      */
-    public void showPrivateObjCard(PrivateObjCard card){
+    static void showPrivateObjCard(PrivateObjCard card){
         printCardUpperFrame();
-        printCardDetails(card.getName().toUpperCase(), cardTitleHeight);
-        printCardDetails(card.getDescription(), cardDescriptionHeight);
+        printCardDetails(card.getName().toUpperCase(), CARD_TITLE_HEIGHT);
+        printCardDetails(card.getDescription(), CARD_DESCRIPTION_HEIGHT);
         printCardColour(card.getColour());
         printCardUpperFrame();
     }
@@ -159,7 +164,7 @@ public class CommandLineGraphic{
      * Show Schema Card
      * @param schemaCard Schema Card to display
      */
-    public void showSchemaCard(SchemaCard schemaCard){
+    static void showSchemaCard(SchemaCard schemaCard){
         String frameCardCharacter = " # ";
 
         Cell cell;
@@ -168,10 +173,6 @@ public class CommandLineGraphic{
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i< 4 + 9*5; i++) stringBuilder.append('#');
         String upperCardFrame = " " + stringBuilder.toString();
-
-        println(schemaCard.getName());
-
-        println("");
 
         println(upperCardFrame);
         print(frameCardCharacter);
@@ -214,15 +215,15 @@ public class CommandLineGraphic{
      * Print Private Objective Card colour
      * @param cardColour Colour to display
      */
-    public void printCardColour(ColourEnum cardColour){
+    public static void printCardColour(ColourEnum cardColour){
         System.setProperty("jansi.passthrough", "true");
         AnsiConsole.systemInstall();
         Color color = selectColour(cardColour);
 
-        for(int i = 0; i < cardDetailsHeight - 1; i++) {
-            print(preCardDescription(colourString));
-            System.out.print(ansi().eraseScreen().fg(color).a(colourString).reset());
-            print(postCardDescription(colourString));
+        for(int i = 0; i < CARD_DETAILS_HEIGHT - 1; i++) {
+            print(preCardDescription(COLOUR_STRING));
+            System.out.print(ansi().eraseScreen().fg(color).a(COLOUR_STRING).reset());
+            print(postCardDescription(COLOUR_STRING));
             println("");
         }
         printCardEmptyLine();
@@ -240,6 +241,7 @@ public class CommandLineGraphic{
         showTrackBoard(clientBoard.getTrackBoardDice());
         println("");
         for(Player player: clientBoard.getPlayerList()) {
+            printMessage(2020);
             println(player.getNickname());
             showSchemaCard(player.getSchemaCard());
             println("");
@@ -290,7 +292,7 @@ public class CommandLineGraphic{
      * @param string String to separate
      * @return List of strings with a maximum size possible
      */
-    private List<String> separateString(String string){
+    private static List<String> separateString(String string){
         int rowMaxLength = CARD_LENGTH - 4;
 
         String[] stringSplitted = string.split(" ");
@@ -312,18 +314,18 @@ public class CommandLineGraphic{
     /**
      * Print the upper (or lower) frame of the card
      */
-    private void printCardUpperFrame(){
-        for (int i = 0; i < CARD_LENGTH; i ++) print(frameCardCharacter);
+    private static void printCardUpperFrame(){
+        for (int i = 0; i < CARD_LENGTH; i ++) print(FRAME_CARD_CHARACTER);
         print("\n");
     }
 
     /**
      * Print a Card line with only margins
      */
-    private void printCardEmptyLine(){
-        print(frameCardCharacter);
+    private static void printCardEmptyLine(){
+        print(FRAME_CARD_CHARACTER);
         for (int j = 0; j < CARD_LENGTH - 2; j++) print(" ");
-        print(frameCardCharacter);
+        print(FRAME_CARD_CHARACTER);
         print('\n');
     }
 
@@ -332,7 +334,7 @@ public class CommandLineGraphic{
      * @param details String to display
      * @param numberOfRows Number of command line rows dedicated to the string
      */
-    private void printCardDetails(String details, int numberOfRows){
+    private static void printCardDetails(String details, int numberOfRows){
         String string = "";
 
         printCardEmptyLine();
@@ -343,13 +345,13 @@ public class CommandLineGraphic{
         int i;
         for (i = 0; i < stringList.size() && i < numberOfRows; i++){
 
-            string = string.concat(frameCardCharacter + " ");
+            string = string.concat(FRAME_CARD_CHARACTER + " ");
 
             while(string.length() < (CARD_LENGTH - stringList.get(i).length()) / 2) string = string.concat(" ");
             string = string.concat(stringList.get(i));
             while(string.length() < CARD_LENGTH - 2) string = string.concat(" ");
 
-            string = string.concat(" " + frameCardCharacter );
+            string = string.concat(" " + FRAME_CARD_CHARACTER);
             print(string + '\n');
             string = "";
         }
@@ -368,7 +370,7 @@ public class CommandLineGraphic{
      * @param cardColour ColourEnum of the card
      * @return Color for Jansi
      */
-    private Color selectColour(ColourEnum cardColour) {
+    private static Color selectColour(ColourEnum cardColour) {
         return hashMapColours.get(cardColour);
     }
 
@@ -377,9 +379,9 @@ public class CommandLineGraphic{
      * @param string String that must be central formatted
      * @return Initial string
      */
-    private String preCardDescription(String string) {
+    private static String preCardDescription(String string) {
         String startingString;
-        startingString = frameCardCharacter + " ";
+        startingString = FRAME_CARD_CHARACTER + " ";
 
         while(startingString.length() < (CARD_LENGTH - string.length()) / 2){
             startingString = startingString.concat(" ");
@@ -392,14 +394,45 @@ public class CommandLineGraphic{
      * @param string String that must be central formatted
      * @return Final string
      */
-    private String postCardDescription(String string) {
+    private static String postCardDescription(String string) {
         String startingString;
-        startingString =  " " + frameCardCharacter;
+        startingString =  " " + FRAME_CARD_CHARACTER;
 
         while(startingString.length() < (CARD_LENGTH - string.length() + 1) / 2){
             startingString = " ".concat(startingString);
         }
         return startingString;
+    }
+
+    static void showChoice(PlayerChoice playerChoice, CommandTypeEnum commandType){
+
+        switch(commandType){
+            case IDSCHEMA:
+                println("");
+                printMessage(2005);
+                showPrivateObjCard(playerChoice.getPrivateObjCard());
+                for(SchemaCard schemaCard: playerChoice.getSchemaCardList()) {
+                    println("");
+                    printMessage(2000);
+                    println(schemaCard.getId());
+                    printMessage(2002);
+                    println(schemaCard.getName());
+                    printMessage(2001);
+                    println(schemaCard.getDifficulty());
+                    showSchemaCard(schemaCard);
+                }
+                return;
+
+            case FRAMECOLOUR:
+                println("");
+                printMessage(2010);
+                for(ColourEnum colour: playerChoice.getColourEnumList()) {
+                    println(colour.toString());
+                }
+                return;
+
+            default:
+        }
     }
 
 }

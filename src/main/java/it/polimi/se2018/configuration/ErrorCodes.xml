@@ -52,5 +52,20 @@
         <id>2102</id>
         <description>Devi prima estrarre i dadi dal sacchetto</description>
     </error>
-
+    <error>
+        <id>2500</id>
+        <description>Hai scelto un colore non valido</description>
+    </error>
+    <error>
+        <id>2501</id>
+        <description>Impossibile selezionare lo schema scelto</description>
+    </error>
+    <error>
+        <id>2502</id>
+        <description>Nickname non valido</description>
+    </error>
+    <error>
+        <id>2503</id>
+        <description>La lunghezza del nickname non puo' superare i 25 caratteri</description>
+    </error>
 </errors>

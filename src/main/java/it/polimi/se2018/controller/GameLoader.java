@@ -444,7 +444,7 @@ public class GameLoader {
      * @param tag Tag of a single element in the file
      * @return List of elements divided by the tag selected
      */
-    private NodeList getNodeList(String pathName, String tag){
+    public static NodeList getNodeList(String pathName, String tag){
         try{
             File file = new File(pathName);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

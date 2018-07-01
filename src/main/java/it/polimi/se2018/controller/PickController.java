@@ -11,6 +11,7 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class PickController implements Action{
+
     private PlayerMove playerMove;
 
     private List<Restriction> restrictionList;
@@ -23,10 +24,10 @@ public class PickController implements Action{
     }
 
     /**
-     *
-     * @param playerMove
-     * @param gameBoard the game board of the match with all the elements on the board
-     * @return
+     * Makes the move chose by the player
+     * @param playerMove Contains information about the Player's move
+     * @param gameBoard Game board of the match with all the elements on the board
+     * @return Error code, 0 if there isn't any error
      */
     private int pickExecution(PlayerMove playerMove, GameBoard gameBoard){
         Die dieExtracted = null;
@@ -54,7 +55,7 @@ public class PickController implements Action{
      * @return playerMove related to the action
      */
     public boolean isPass() {
-        return playerMove.getTypeOfChoice() == TypeOfChoiceEnum.PASS;
+        return playerMove != null && playerMove.getTypeOfChoice() == TypeOfChoiceEnum.PASS;
     }
 
     /**
@@ -63,7 +64,6 @@ public class PickController implements Action{
      * @return true if action completed, false otherwise
      */
     public int doAction(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
-        //this.gameBoard = gameBoard0;
 
         this.playerMove = playerMove;
         switch (playerMove.getTypeOfChoice()){
@@ -98,15 +98,6 @@ public class PickController implements Action{
         return 2008;
     }
 
-    /**
-     * Method invokes the Tool card chosen by the player
-     * @param playerMove the player choice
-     * @return true if action completed, false otherwise
-     */
-    private int useTool(PlayerMove playerMove){
-        return 0;
-    }
-
     @Override
     public int doDefaultMove(){
         return 0;
@@ -114,6 +105,6 @@ public class PickController implements Action{
 
     @Override
     public boolean isComplete() {
-        return true;
+        return playerMove != null;
     }
 }

@@ -3,7 +3,6 @@ package it.polimi.se2018.model.cards.publiccard;
 import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.cards.SchemaCard;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

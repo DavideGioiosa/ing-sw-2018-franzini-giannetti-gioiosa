@@ -17,8 +17,6 @@ public class View extends Observable implements Observer<ClientBoard> {
     private MoveMessage moveMessage;
     private CommandLineInput commandLineInput;
 
-    private PlayerSetupper playerSetupper;
-
     private ClientBoard clientBoard;
 
     private CommandLineGraphic commandLineGraphic;
@@ -27,8 +25,7 @@ public class View extends Observable implements Observer<ClientBoard> {
      * Constructor of the class
      */
     public View() {
-        commandLineInput = new CommandLineInput(new SyntaxController());
-        playerSetupper = new PlayerSetupper(commandLineInput);
+        commandLineInput = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
         commandLineGraphic = new CommandLineGraphic();
         this.inputStrategy = commandLineInput;
     }
@@ -47,22 +44,15 @@ public class View extends Observable implements Observer<ClientBoard> {
         switch (playerMessage.getId()){
             case YOUR_TURN:
                 inputStrategy.yourTurn(clientBoard, playerMessage.getPlayerMove());
-
                 break;
 
             case USER:
-                User user = playerMessage.getUser();
-                user = playerSetupper.choseNickname(user);
-                playerMessage = new PlayerMessage();
-                playerMessage.setUser(user);
-                notify(playerMessage);
+                inputStrategy.choseNickname(playerMessage.getUser());
+
                 break;
 
             case CHOICE:
-                PlayerChoice playerChoice = playerSetupper.validCommand(playerMessage.getPlayerChoice());
-                playerMessage = new PlayerMessage();
-                playerMessage.setChoice(playerChoice);
-                notify(playerMessage);
+                inputStrategy.makeChoice(playerMessage.getPlayerChoice());
                 break;
 
             case ERROR:
@@ -98,22 +88,6 @@ public class View extends Observable implements Observer<ClientBoard> {
     }
 
     /**
-     * Method used to update the table status in the local Model
-     * @param moveMessage class containing the several elements of the table
-     */
-    public void updateTable(MoveMessage moveMessage){
-        this.moveMessage = moveMessage;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public PlayerSetupper getPlayerSetupper() {
-        return playerSetupper;
-    }
-
-    /**
      * Method used to understand the error notify received
      */
     public void reportError(int idError){
@@ -128,6 +102,10 @@ public class View extends Observable implements Observer<ClientBoard> {
         inputStrategy.showMessage(message);
     }
 
+    /**
+     * Method used to update the table status in the local Model
+     * @param clientBoard class containing the several elements of the table
+     */
     @Override
     public void update(ClientBoard clientBoard){
         this.clientBoard = clientBoard;
