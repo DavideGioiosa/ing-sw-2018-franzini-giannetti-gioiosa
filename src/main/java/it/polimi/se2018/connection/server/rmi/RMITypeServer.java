@@ -1,4 +1,4 @@
-package it.polimi.se2018.connection.server;
+package it.polimi.se2018.connection.server.rmi;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 import it.polimi.se2018.model.PlayerMessage;
@@ -20,7 +20,7 @@ public class RMITypeServer implements Observer<PlayerMessage> {
     private Observable<PlayerMessage> obs;
 
 
-    RMITypeServer(int port){
+    public RMITypeServer(int port){
 
         obs = new Observable<>();
         try {
@@ -62,5 +62,9 @@ public class RMITypeServer implements Observer<PlayerMessage> {
     @Override
     public void update(PlayerMessage message) {
         obs.notify(message);
+    }
+
+    public void shutdown(){
+        serverImplementation.close();
     }
 }

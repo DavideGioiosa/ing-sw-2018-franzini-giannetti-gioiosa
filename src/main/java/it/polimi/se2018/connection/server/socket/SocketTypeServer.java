@@ -1,5 +1,8 @@
-package it.polimi.se2018.connection.server;
+package it.polimi.se2018.connection.server.socket;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
+
+import it.polimi.se2018.connection.server.socket.ClientGatherer;
+import it.polimi.se2018.connection.server.socket.ClientListener;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
@@ -13,6 +16,7 @@ import java.util.List;
 public class SocketTypeServer implements Observer<PlayerMessage> {
 
     private List<String> codeList;
+    private  ClientGatherer clientGatherer;
     private HashMap<String, ClientListener> clientListenerList;
     private Observable<PlayerMessage> obs;
     private List<String> disconnectedCodes;
@@ -23,7 +27,7 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         codeList = new ArrayList<>();
         clientListenerList = new HashMap<>();
         obs = new Observable<>();
-        ClientGatherer clientGatherer = new ClientGatherer(this, port);
+        clientGatherer = new ClientGatherer(this, port);
         clientGatherer.start();
         println("ServerSocket acceso");
     }
@@ -48,12 +52,18 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         this.clientListenerList.put(code,clientListener);
     }
 
-    public void removeClient(String code){
+    private void removeClient(String code){
         ClientListener clientListener = clientListenerList.get(code);
-        clientListener.setQuit();
+        clientListener.setQuit(true);
         this.clientListenerList.remove(code);
     }
 
+    public void shutdown(){
+       for(String code : clientListenerList.keySet()){
+           removeClient(code);
+       }
+       clientGatherer.close();
+    }
 
     public void send (PlayerMessage playerMessage){
 
@@ -71,11 +81,11 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     }
 
     @Override
-    public void update(PlayerMessage playerMessage) {
+    public synchronized void update(PlayerMessage playerMessage) {
 
         if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
             disconnectedCodes.add(playerMessage.getUser().getUniqueCode());
-            clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit();
+            clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit(true);
         }
         obs.notify(playerMessage);
     }

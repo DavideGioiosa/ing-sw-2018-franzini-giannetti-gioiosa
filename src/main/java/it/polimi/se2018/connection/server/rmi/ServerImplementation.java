@@ -1,6 +1,7 @@
-package it.polimi.se2018.connection.server;
+package it.polimi.se2018.connection.server.rmi;
+import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
-import it.polimi.se2018.connection.client.ClientRemoteInterface;
+import it.polimi.se2018.connection.client.rmi.ClientRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.TypeOfConnection;
@@ -35,7 +36,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
     void sendToClient(PlayerMessage playerMessage) throws RemoteException {
 
-        if(playerMessage.getUser()== null){//da rivedere
+        if(playerMessage.getUser()== null){
             for(ClientRemoteInterface clientRemoteInterface : clientList.values()){
                 clientRemoteInterface.receiveFromServer(playerMessage);
             }
@@ -49,7 +50,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
     }
 
     @Override
-    public void addClient(ClientRemoteInterface client){
+    public void addClient(ClientRemoteInterface client) throws RemoteException{
 
         User user;
         String code;
@@ -66,12 +67,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         Timer lifeLineTimer = new Timer();
         lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), (long)90*1000);
         pingMap.put(code, lifeLineTimer);
-        System.out.println("trovato nuovo client");
+        println("trovato nuovo client");
         try {
             client.receiveFromServer(playerMessage);
         } catch (RemoteException e) {
-
-            //disconnessione
 
             String string = clientList.entrySet().stream().filter(entry -> entry.getValue().equals(client)).map(Map.Entry::getKey).findFirst().orElse(null);
             disconnectionHandler(string);
@@ -102,7 +101,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
     }
 
     @Override
-    public void receive(PlayerMessage playerMessage) {
+    public void receive(PlayerMessage playerMessage) throws RemoteException {
 
         if(playerMessage.getIdError() == 100 ){
             disconnectionHandler(playerMessage.getUser().getUniqueCode());
@@ -120,4 +119,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         //detects disconnection by throwing RemoteException
     }
 
+
+    public void close(){
+        for(Timer timer : pingMap.values()){
+            timer.cancel();
+            timer.purge();
+        }
+    }
 }

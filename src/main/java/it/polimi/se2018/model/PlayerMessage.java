@@ -71,6 +71,7 @@ public class PlayerMessage implements Serializable {
 
     public void setClosure() {
         this.closure = true;
+        id = PlayerMessageTypeEnum.CLOSURE;
     }
 
     public boolean isClosed() {

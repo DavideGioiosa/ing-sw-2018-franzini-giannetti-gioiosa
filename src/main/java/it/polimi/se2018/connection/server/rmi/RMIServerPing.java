@@ -1,6 +1,6 @@
-package it.polimi.se2018.connection.server;
+package it.polimi.se2018.connection.server.rmi;
 
-import it.polimi.se2018.connection.client.ClientRemoteInterface;
+import it.polimi.se2018.connection.client.rmi.ClientRemoteInterface;
 
 
 import java.rmi.RemoteException;

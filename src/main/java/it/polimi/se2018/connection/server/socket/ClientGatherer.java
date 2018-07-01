@@ -1,5 +1,6 @@
-package it.polimi.se2018.connection.server;
+package it.polimi.se2018.connection.server.socket;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
+
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
@@ -18,10 +19,17 @@ public class ClientGatherer extends Thread{
 
     public ClientGatherer(SocketTypeServer server, int port){
 
-
         this.server = server;
         try {
             this.serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            Logger.getGlobal().log(Level.SEVERE,e.toString());
+        }
+    }
+
+    public void close(){
+        try {
+            serverSocket.close();
         } catch (IOException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }

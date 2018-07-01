@@ -47,10 +47,15 @@ public class GameManager {
         roundList = new ArrayList<>();
         Round round = new Round(gameBoard, 0 , view);
         roundList.add(round);
+        winner = null;
     }
 
     public GameBoard getGameBoard() {
         return gameBoard;
+    }
+
+    public Player getWinner() {
+        return winner;
     }
 
     private int blankCells(Player player){
@@ -109,8 +114,8 @@ public class GameManager {
      * Update method for Observer pattern implementation
      */
     private void endRound(){
-        //TODO: da adattare a nuovo UML
-        if(roundList.size() == 4){
+
+        if(roundList.size() == 10){
             calculateGameScore();
             setGameWinner();
             view.sendWinner(gameBoard);

@@ -15,7 +15,7 @@ public class User implements Serializable {
     private boolean connection;
     private TypeOfConnection typeOfConnection;
     private String uniqueCode;
-    private HashMap<TypeOfConnection, Character> charConnection;
+    private HashMap<TypeOfConnection, String> charConnection;
 
     /**
      * Builder: create a user with the id and the connection
@@ -25,8 +25,8 @@ public class User implements Serializable {
         this.connection = true;
         this.typeOfConnection = typeOfConnection;
         charConnection = new HashMap<>();
-        charConnection.put(TypeOfConnection.SOCKET, 's');
-        charConnection.put(TypeOfConnection.RMI, 'r');
+        charConnection.put(TypeOfConnection.SOCKET, "s");
+        charConnection.put(TypeOfConnection.RMI, "r");
 
     }
 

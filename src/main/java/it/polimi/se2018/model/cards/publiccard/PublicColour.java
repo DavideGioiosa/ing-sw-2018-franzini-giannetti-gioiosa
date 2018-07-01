@@ -4,6 +4,7 @@ import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,13 +13,13 @@ import java.util.Map;
  * @author Silvia Franzini
  */
 public class PublicColour {
-    private EnumMap<ColourEnum,Integer> hashMapColours;
+    private HashMap<ColourEnum,Integer> hashMapColours;
     /**
      * Builder method of PublicColour class
      */
     public PublicColour(){
 
-        hashMapColours = new EnumMap<>(ColourEnum.class);
+        hashMapColours = new HashMap<ColourEnum, Integer>();
         hashMapColours.put(ColourEnum.BLUE, 0);
         hashMapColours.put(ColourEnum.GREEN, 0);
         hashMapColours.put(ColourEnum.PURPLE, 0);
