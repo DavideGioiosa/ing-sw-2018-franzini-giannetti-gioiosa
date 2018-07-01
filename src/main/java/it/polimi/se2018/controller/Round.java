@@ -74,7 +74,7 @@ public class Round implements Observer<PlayerMove>{
         turnsList = new ArrayList<> ();
         setRoundPlayerOrder(indexRound);
         nextRoundFirstPlayer = roundPlayerOrder.get(1);
-        turn = new Turn(gameBoard);
+        turn = new Turn(gameBoard, getCurrPlayer());
         turnsList.add(turn);
     }
 
@@ -96,8 +96,12 @@ public class Round implements Observer<PlayerMove>{
 
 
     void defaultMove(){
-        //da completare sulle basi di action
-        if(!isEnded()){
+        if(!isDraftPoolSet) {
+            PlayerMove playerMove = new PlayerMove();
+            playerMove.setPlayer(roundPlayerOrder.get(0));
+            playerMove.setTypeOfChoice(TypeOfChoiceEnum.EXTRACT);
+            update(playerMove);
+        }else{
             turn.defaultMove();
         }
 
@@ -153,6 +157,7 @@ public class Round implements Observer<PlayerMove>{
                 Die die = gameBoard.getBagDice().extractDice();
                 die.firstRoll();
                 gameBoard.getBoardDice().insertDie(die);
+                this.isDraftPoolSet = true;
             }
             return true;
         }
@@ -165,7 +170,7 @@ public class Round implements Observer<PlayerMove>{
      * @param playerMove action of the current player
      */
     public void update (PlayerMove playerMove){
-
+        int idError;
         if(playerMove.getPlayer() == null){
             throw new RuntimeException("Empty Player in PlayerMove received");
         }
@@ -173,29 +178,25 @@ public class Round implements Observer<PlayerMove>{
         if (playerMove.getPlayer().getNickname().equals(getCurrPlayer().getNickname())) {
             if (!isDraftPoolSet) {
                 if (setDraftPoolDice(playerMove)) {
-                    this.isDraftPoolSet = true;
                     view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+                } else {
+                    view.reportError(2102, getCurrPlayer().getNickname());
                 }
-                else {
-                    view.reportError(1000, getCurrPlayer().getNickname());
-                }
-                view.isYourTurn(getCurrPlayer());
 
-            }
-
-            else {
-                if (turn.runTurn(playerMove)) {
+            }else {
+                idError = turn.runTurn(playerMove);
+                if (idError == 0) {
                     view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
                 }else{
-                    view.reportError(1000, getCurrPlayer().getNickname());
+                    view.reportError(idError, getCurrPlayer().getNickname());
                 }
 
-                if (turn.endTurn()) {
+                if (turn.isFinished()) {
                     removeCurrPlayer();
 
                     //works but it be may exists a better check
                     if (turnsList.size() < roundPlayerOrder.size() + turnsList.size()) {
-                        turn = new Turn(gameBoard);
+                        turn = new Turn(gameBoard, getCurrPlayer());
                         turnsList.add(turn);
                     }
 
@@ -205,12 +206,14 @@ public class Round implements Observer<PlayerMove>{
                     }
                 }
 
-                if(roundPlayerOrder.isEmpty()){
-                    view.isYourTurn(nextRoundFirstPlayer);
-                }else view.isYourTurn(getCurrPlayer());
-
             }
+
+            if(roundPlayerOrder.isEmpty()){
+                view.isYourTurn(nextRoundFirstPlayer);
+            }else view.isYourTurn(getCurrPlayer());
         }
+
+
     }
 
 }

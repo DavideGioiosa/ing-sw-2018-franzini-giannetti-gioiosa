@@ -88,7 +88,7 @@ public class UserTest {
     public void getUniqueCode() {
         String code = user.createUniqueCode();
 
-        assertEquals(8, code.length());
+        assertEquals(9, code.length());
     }
 
 }

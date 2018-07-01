@@ -3,7 +3,6 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
-import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.RemoteView;
 
@@ -45,10 +44,7 @@ public class GameCreator {
             gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
         }
         if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHECK_MOVE)){
-            int result = gameManager.tryMove(playerMessage.getPlayerMove());
-            if(result==1){
-              remoteView.sendWinner(gameManager.getGameBoard());
-            }
+            gameManager.tryMove(playerMessage.getPlayerMove());
         }
 
     }

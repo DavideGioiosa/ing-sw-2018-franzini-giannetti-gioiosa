@@ -2,6 +2,7 @@ package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
+import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.view.graphic.cli.CommandLineGraphic;
@@ -13,51 +14,23 @@ import it.polimi.se2018.view.graphic.cli.CommandLineInput;
  */
 public class View extends Observable implements Observer<ClientBoard> {
     protected InputStrategy inputStrategy;
-    protected ConnectionStrategy connectionStrategy;
     private MoveMessage moveMessage;
     private CommandLineInput commandLineInput;
-    //private MessageLoader messageLoader;
 
-    private SyntaxController syntaxController;
     private PlayerSetupper playerSetupper;
 
     private ClientBoard clientBoard;
 
-    private PlayerMessage lastPlayerMessage;
     private CommandLineGraphic commandLineGraphic;
 
     /**
      * Constructor of the class
      */
     public View() {
-        commandLineInput = new CommandLineInput();
-        playerSetupper = new PlayerSetupper();
-        syntaxController = new SyntaxController(commandLineInput);
+        commandLineInput = new CommandLineInput(new SyntaxController());
+        playerSetupper = new PlayerSetupper(commandLineInput);
         commandLineGraphic = new CommandLineGraphic();
-        /*moveMessage = null;
-        try{
-            messageLoader = new MessageLoader();
-
-        }catch(Exception e){
-            //TODO Gestire eccezione
-        }*/
-    }
-
-    /**
-     * Setter method for the chosen graphic (CLI/GUI)
-     * @param inputStrategy the type chosen
-     */
-    public void setInputStrategy(InputStrategy inputStrategy) {
-        this.inputStrategy = inputStrategy;
-        //inputStrategy.getInput();
-    }
-
-    /**
-     * Setter method for the chosen connection (RMI/Socket)
-     * @param connectionStrategy the type chosen
-     */
-    public void setConnectionStrategy(ConnectionStrategy connectionStrategy) {
-        this.connectionStrategy = connectionStrategy;
+        this.inputStrategy = commandLineInput;
     }
 
     /**
@@ -67,16 +40,14 @@ public class View extends Observable implements Observer<ClientBoard> {
     public void receive(PlayerMessage playerMessage){
 
         if (playerMessage == null){
-            reportError(28031993);
+            reportError(1001);
             return;
         }
 
         switch (playerMessage.getId()){
             case YOUR_TURN:
-                PlayerMove playerMove = syntaxController.validCommand("Fai la tua mossa: ", playerMessage.getPlayerMove(), clientBoard);
-                playerMessage = new PlayerMessage();
-                playerMessage.setCheckMove(playerMove);
-                notify(playerMessage);
+                inputStrategy.yourTurn(clientBoard, playerMessage.getPlayerMove());
+
                 break;
 
             case USER:
@@ -106,9 +77,12 @@ public class View extends Observable implements Observer<ClientBoard> {
                 notify(playerMessage);
                 break;
 
+            case WINNER:
+                for(Player player: playerMessage.getMoveMessage().getPlayerList()) System.out.println( player.getNickname() + " " + player.getScore());
+                break;
+
             default:
-                reportError(28031993);
-                throw new IllegalArgumentException("ERROR: Invalid PlayerMessage");
+                reportError(1001);
         }
 
     }
@@ -143,7 +117,7 @@ public class View extends Observable implements Observer<ClientBoard> {
      * Method used to understand the error notify received
      */
     public void reportError(int idError){
-        System.out.println("ERROR: " + idError);
+        inputStrategy.showError(idError);
     }
 
     /**
@@ -151,20 +125,16 @@ public class View extends Observable implements Observer<ClientBoard> {
      * @param message
      */
     public void showMessage(int message){
-        System.out.println("MESSAGE: " + message);
-    }
-
-    public SyntaxController getSyntaxController() {
-        return syntaxController;
-    }
-
-    public void setSyntaxController(SyntaxController syntaxController) {
-        this.syntaxController = syntaxController;
+        inputStrategy.showMessage(message);
     }
 
     @Override
     public void update(ClientBoard clientBoard){
         this.clientBoard = clientBoard;
         commandLineGraphic.showGameBoard(clientBoard);
+    }
+
+    public InputStrategy getInputStrategy() {
+        return inputStrategy;
     }
 }

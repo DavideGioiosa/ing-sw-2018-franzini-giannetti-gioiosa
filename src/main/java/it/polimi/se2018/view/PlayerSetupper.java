@@ -21,8 +21,8 @@ public class PlayerSetupper extends Observable<PlayerChoice>{
     /**
      * Constructor sets input class
      */
-    public PlayerSetupper(){
-        commandLineInput = new CommandLineInput();
+    public PlayerSetupper(CommandLineInput commandLineInput){
+        this.commandLineInput = commandLineInput;
     }
 
     /**

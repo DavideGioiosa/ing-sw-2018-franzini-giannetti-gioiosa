@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<messages>
+    <message>
+        <id>3000</id>
+        <description>Fai la tua mossa</description>
+    </message>
+    <message>
+        <id>3001</id>
+        <description>Inserisci indice di riga e di colonna della cella in cui vuoi posizionare il dado</description>
+    </message>
+    <message>
+        <id>3101</id>
+        <description>Mossa Inviata</description>
+    </message>
+</messages>

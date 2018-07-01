@@ -113,20 +113,18 @@ public class GameManager {
         if(roundList.size() == 4){
             calculateGameScore();
             setGameWinner();
-
+            view.sendWinner(gameBoard);
         }else {
             Round newRound = new Round(gameBoard, roundList.size(), view);
             roundList.add(newRound);
         }
     }
 
-    int tryMove(PlayerMove playerMove){
+    void tryMove(PlayerMove playerMove){
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
-            return 1;
-        }else {roundList.get(roundList.size() - 1).update(playerMove);
-        return 0;
         }
+        roundList.get(roundList.size() - 1).update(playerMove);
     }
 
 }

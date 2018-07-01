@@ -15,14 +15,13 @@ public class CommandLinePrint {
 
     private static EnumMap<ColourEnum, Color> hashMapColours;
 
-    HashMap<Integer, String> dieRowString1;
-    HashMap<Integer, String> dieRowString2;
-    HashMap<Integer, String> dieRowString3;
-
-    List<HashMap<Integer, String>> dieRowStringList;
-
+    private List<HashMap<Integer, String>> dieRowStringList;
 
     public CommandLinePrint(EnumMap<ColourEnum, Color> hashMapColours){
+        HashMap<Integer, String> dieRowString1;
+        HashMap<Integer, String> dieRowString2;
+        HashMap<Integer, String> dieRowString3;
+
         this.hashMapColours = hashMapColours;
 
         dieRowString1 = new HashMap<>();
@@ -66,12 +65,17 @@ public class CommandLinePrint {
          dieRowStringList.add(dieRowString2);
          dieRowStringList.add(dieRowString3);
     }
+
     /**
      * Print String
      * @param string String to print
      */
     static void print(String string){
         System.out.print(string);
+    }
+
+    static void print(int id){
+        System.out.print(id);
     }
 
     /**
