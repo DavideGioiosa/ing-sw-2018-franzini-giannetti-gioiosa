@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="primaryScene" prefHeight="650.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.graphic.gui.ControllerMatchTable">
+   <children>
+      <GridPane fx:id="gridPane" gridLinesVisible="true" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="312.0" minWidth="10.0" percentWidth="28.33" prefWidth="312.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="513.0" minWidth="10.0" percentWidth="30.0" prefWidth="351.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="628.0" minWidth="0.0" prefWidth="259.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="379.0" minWidth="0.0" percentWidth="15.0" prefWidth="269.5" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="398.0" minHeight="10.0" percentHeight="42.0" prefHeight="269.2" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="457.0" minHeight="0.0" prefHeight="72.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="292.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <HBox fx:id="hbox" fillHeight="false" maxHeight="80.0" minHeight="50.0" minWidth="500.0" prefHeight="70.0" prefWidth="574.0" spacing="5.0" style="-fx-background-color: #B0C4DE;" GridPane.columnSpan="3" GridPane.rowIndex="1">
+               <cursor>
+                  <Cursor fx:constant="CLOSED_HAND" />
+               </cursor>
+               <padding>
+                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+               </padding>
+            </HBox>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <children>
+                  <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#extractClick" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
+                        <Button mnemonicParsing="false" onAction="#showScheme" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#enableToolCardPane" prefHeight="39.0" prefWidth="131.0" text="ToolCard" />
+                        <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="110.0" text="Passa" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets left="5.0" right="5.0" />
+                     </padding>
+                  </HBox>
+                  <HBox prefHeight="215.0" prefWidth="338.0" style="-fx-background-color: grey;" />
+               </children>
+            </VBox>
+            <HBox fx:id="publicCardPane" fillHeight="false" maxHeight="280.0" maxWidth="243.0" minHeight="160.0" minWidth="60.0" prefHeight="280.0" prefWidth="243.0" spacing="2.0" style="-fx-background-color: #87cefa;" GridPane.rowIndex="2">
+               <children>
+                  <ImageView fx:id="cardImg" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="nextCardButton" mnemonicParsing="false" onAction="#nextCard" prefHeight="35.0" prefWidth="40.0" text="&gt;" />
+               </children>
+               <cursor>
+                  <Cursor fx:constant="CLOSED_HAND" />
+               </cursor>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
+               </padding>
+            </HBox>
+            <Button mnemonicParsing="false" onAction="#enableLoginPane" text="Black" />
+            <VBox fx:id="schemeVBOX" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <VBox fx:id="schemeVBOX1" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" />
+            <VBox fx:id="schemeVBOX2" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" GridPane.columnIndex="1" />
+            <VBox fx:id="schemeVBOX3" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" GridPane.columnIndex="2" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </GridPane>
+      <AnchorPane fx:id="backgroundPane" layoutX="50.0" layoutY="50.0" opacity="0.0" prefHeight="720.0" prefWidth="1350.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane fx:id="toolCardPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0">
+               <children>
+                  <GridPane fx:id="choiceToolCardGrid" gridLinesVisible="true" hgap="20.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <padding>
+                        <Insets left="10.0" right="10.0" top="5.0" />
+                     </padding>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="loginPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0">
+               <children>
+                  <SplitPane dividerPositions="0.3302034428794992" layoutX="151.0" layoutY="165.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <TextArea fx:id="ipAreaText" layoutX="235.0" layoutY="304.0" prefHeight="41.0" prefWidth="481.0">
+                                 <padding>
+                                    <Insets left="2.0" top="2.0" />
+                                 </padding>
+                              </TextArea>
+                              <Text layoutX="292.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="40.0" />
+                                 </font>
+                              </Text>
+                              <Text layoutX="104.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP Connection" />
+                              <Button layoutX="235.0" layoutY="366.0" mnemonicParsing="false" onAction="#disableLoginPane" prefHeight="39.0" prefWidth="481.0" text="Start Game" />
+                           </children>
+                        </AnchorPane>
+                     </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="schemeSelectionPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: black;">
+               <children>
+                  <GridPane alignment="CENTER" gridLinesVisible="true" hgap="5.0" layoutX="84.0" layoutY="-7.0" prefHeight="650.0" prefWidth="1280.0" vgap="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <VBox fx:id="choiceSchemeBox1" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" GridPane.columnIndex="1">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#disableSchemeSelectionPane" prefHeight="39.0" prefWidth="339.0" text="Schema 1" />
+                           </children>
+                        </VBox>
+                        <VBox fx:id="choiceSchemeBox2" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" GridPane.columnIndex="2">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#disableSchemeSelectionPane" prefHeight="39.0" prefWidth="339.0" text="Schema 2" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0">
+                           <children>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="LA TUA CARTA OBIETTIVO PRIVATO:" wrappingWidth="180.2919921875" />
+                           </children>
+                        </VBox>
+                        <VBox fx:id="choiceSchemeBox3" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" GridPane.columnIndex="3">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#disableSchemeSelectionPane" prefHeight="39.0" prefWidth="339.0" text="Schema 3" />
+                           </children>
+                        </VBox>
+                        <VBox fx:id="choiceSchemeBox4" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" GridPane.columnIndex="4">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#disableSchemeSelectionPane" prefHeight="39.0" prefWidth="339.0" text="Schema 4" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="50.0" left="5.0" right="5.0" top="50.0" />
+                     </padding>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

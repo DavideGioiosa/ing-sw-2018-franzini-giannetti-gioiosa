@@ -83,8 +83,8 @@ public class View extends Observable implements Observer<ClientBoard> {
      */
     public void updateSchema(PlayerMove playerMove){
         SchemaCard schemaCard = playerMove.getPlayer().getSchemaCard();
-        Die die = moveMessage.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
-        schemaCard.setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
+      //  Die die = moveMessage.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
+     //   schemaCard.setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
     }
 
     /**
