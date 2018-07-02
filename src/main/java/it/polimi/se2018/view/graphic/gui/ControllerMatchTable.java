@@ -5,33 +5,44 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.PrivateObjCard;
 import it.polimi.se2018.model.cards.SchemaCard;
+import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
+import it.polimi.se2018.model.player.Player;
+import it.polimi.se2018.model.player.PrivatePlayer;
+import it.polimi.se2018.model.player.TypeOfConnection;
+import it.polimi.se2018.model.player.User;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
-import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
+/**
+ * View's Graphic Class: ControllerMatchTable
+ *
+ * @author Davide Gioiosa
+ */
 
-public class ControllerMatchTable implements Initializable{
+public class ControllerMatchTable implements Initializable {
 
     private List<ImageView> dice;
-    private List<PublicObjCard> publicObjCards;
 
     @FXML
     private HBox hbox;
@@ -40,126 +51,244 @@ public class ControllerMatchTable implements Initializable{
     @FXML
     private AnchorPane schemePane;
     @FXML
-    private ImageView publicCardImg;
+    private ImageView cardImg;
     @FXML
     private HBox publicCardPane;
     @FXML
     private ImageView privateCardImg;
     @FXML
     private HBox privateCardPane;
+    @FXML
+    private GridPane gridPane;
 
-    //scorrimento lettura carte
-    private int indexPublicCard;
+    //-------------------------------------------- SCHEME SELECTION -----------------------------
+
+    @FXML
+    private VBox schemeVBOX;
+    @FXML
+    private VBox schemeVBOX1;
+    @FXML
+    private VBox schemeVBOX2;
+    @FXML
+    private VBox schemeVBOX3;
+
+    @FXML
+    private VBox choiceSchemeBox1;
+
+    @FXML
+    private VBox choiceSchemeBox2;
+
+    @FXML
+    private VBox choiceSchemeBox3;
+
+    @FXML
+    private VBox choiceSchemeBox4;
+
+    @FXML
+    private AnchorPane schemeSelectionPane;
+
+
+
+    //-----------------------------
+   // @FXML VBox useToolBox1;
+
+   // @FXML VBox useToolBox2;
+
+   // @FXML VBox useToolBox3;
+
+
+    @FXML GridPane choiceToolCardGrid;
+
+    //-------------------
+
+    //scorrimento lettura carte pubbliche e tool
+    private int indexChangeCard;
 
     private GameLoader gameLoader;
+    private final String NICKNAME = "Nickname";
+    private final ColourEnum FRAMECOLOUR = ColourEnum.BLUE;
+    private final boolean CONNECTION = true;
+    private SchemaCard schemaCard;
+    private Player player;
+    private List<Player> playerList;
+    private ToolCard toolCard;
+    private List<ToolCard> toolCardList;
+    private PublicObjCard publicObjCard;
+    private List<PublicObjCard> publicCardList;
+    private BoardDice boardDice;
+    private TrackBoard trackBoardDice;
+    private BagDice bagDice;
+    private BoardCard boardCard;
+    private PrivateObjCard privateObjCard;
+    private List<PrivatePlayer> privatePlayerList;
+    private ClientBoard clientBoard;
+
+    List<SchemaCard> schemaCardList;
+
+    @FXML
+    private AnchorPane backPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        int width = (int) Screen.getPrimary().getBounds().getWidth() ;
+
+        int width = (int) Screen.getPrimary().getBounds().getWidth();
         int height = (int) Screen.getPrimary().getBounds().getHeight();
         primaryScene.setPrefWidth(width);
         primaryScene.setPrefHeight(height);
 
-        gameLoader = new GameLoader();
 
-        SchemaCard schemaCard = null;
-        while (schemaCard == null || schemaCard.getId() != 400){
-            schemaCard = (SchemaCard) gameLoader.getSchemaDeck().extractCard();
+        //------------------------------------------------------------------------------------------------
+        GameLoader gameLoader = new GameLoader();
+
+        playerList = new ArrayList<>();
+        playerList.add(new Player("Player1", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 3));
+        playerList.add(new Player("Player2", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 2));
+        playerList.add(new Player("Player3", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 1));
+        playerList.add(new Player("Player4", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 5));
+
+        publicCardList = new ArrayList<>();
+        publicCardList.add((PublicObjCard) gameLoader.getPublicObjDeck().extractCard());
+        publicCardList.add((PublicObjCard) gameLoader.getPublicObjDeck().extractCard());
+        publicCardList.add((PublicObjCard) gameLoader.getPublicObjDeck().extractCard());
+
+        toolCardList = new ArrayList<>();
+        toolCardList.add((ToolCard) gameLoader.getToolDeck().extractCard());
+        toolCardList.add((ToolCard) gameLoader.getToolDeck().extractCard());
+        toolCardList.add((ToolCard) gameLoader.getToolDeck().extractCard());
+
+        boardDice = new BoardDice();
+        trackBoardDice = new TrackBoard();
+
+        for (int i = 0; i < 9; i++) {
+            Die die = new Die(ColourEnum.RED);
+            die.firstRoll();
+            boardDice.insertDie(die);
+        }
+        trackBoardDice = new TrackBoard();
+
+        for (int i = 0; i < 10; i++) {
+            List<Die> dieList = new ArrayList<>();
+            Die die = new Die(ColourEnum.BLUE);
+            die.firstRoll();
+            dieList.add(die);
+            Die die1 = new Die(ColourEnum.YELLOW);
+            die1.firstRoll();
+            dieList.add(die1);
+            trackBoardDice.insertDice(dieList);
         }
 
-        publicObjCards = new ArrayList<>();
-        for (int i = 0; i < 3; i ++) {
-            publicObjCards.add((PublicObjCard) gameLoader.getPublicObjDeck().extractCard());
+        boardCard = new BoardCard(publicCardList, toolCardList);
+        clientBoard = new ClientBoard(playerList, boardDice, trackBoardDice, boardCard);
+
+        PlayerChoice playerChoice = new PlayerChoice(new User(TypeOfConnection.SOCKET));
+        schemaCardList = new ArrayList<>();
+        for (int j = 0; j < 5; j++) {
+            schemaCardList.add((SchemaCard) gameLoader.getSchemaDeck().extractCard());
         }
-        //componeScheme(schemaCard);
-        showPrivateCards();
-        showPublicCards();
+
+        playerChoice.setSchemaCardList(schemaCardList);
+        //-------------------------------------------------------------------------------------------------------
+
+
+        cardSize();
+        // showPrivateCards();
+        showPublicCards(0);
+
+        //gridPane.add(createScheme(), 1,2);
+
+        toolCardPane.setDisable(true);
+        schemeSelectionPane.setDisable(true);
+        loginPane.setDisable(true);
+
+        enableLoginPane();
+
+
         dice = new ArrayList();
+
+        //AnchorPane anchorPane = showSchemeSelection();
+        //primaryScene.getChildren().add(anchorPane);
     }
 
+    @FXML
+    HBox hboxScheme;
+
+    public AnchorPane loadSchema() {
+        try {
+            URL url = new File("src\\main\\java\\it\\polimi\\se2018\\view\\graphic\\gui\\SchemeCard.fxml").toURI().toURL();
+            AnchorPane schemeCardMatrix = FXMLLoader.load(url);
+
+            //gridPane.setAlignment(Pos.CENTER);
+            return schemeCardMatrix;
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    //TODO: TOGLIERE
     private void showPrivateCards() {
         privateCardImg.setImage(showCard((PrivateObjCard) gameLoader.getPrivateObjDeck().extractCard(),
                 "privateObjCard"));
-        privateCardImg.setPreserveRatio(true);
-        privateCardImg.setFitWidth(200);
+        //privateCardImg.setPreserveRatio(true);
+        //privateCardImg.setFitWidth(200);
         privateCardImg.fitWidthProperty().bind(privateCardPane.widthProperty());
         privateCardImg.fitHeightProperty().bind(privateCardPane.heightProperty().subtract(20));
     }
 
+    private void showPublicCards(int index) {
+        cardImg.setImage(showCard(clientBoard.getCardOnBoard().getPublicObjCardList().get(index), "publicObjCard"));
+    }
 
-    private void showPublicCards() {
-        publicCardImg.setImage(showCard(publicObjCards.get(0), "publicObjCard"));
-        publicCardImg.setPreserveRatio(true);
-        publicCardImg.setFitWidth(200);
-        publicCardImg.fitWidthProperty().bind(publicCardPane.widthProperty());
-        publicCardImg.fitHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
+    private void showToolCards(int index) {
+        cardImg.setImage(showCard(clientBoard.getCardOnBoard().getToolCardList().get(index), "toolCard"));
+    }
+
+    private void cardSize (){
+        cardImg.setPreserveRatio(true);
+        cardImg.setFitWidth(200);
+        cardImg.fitWidthProperty().bind(publicCardPane.widthProperty());
+        cardImg.fitHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
     }
 
 
-    //dadi sul draftpoll
-    public BoardDice draftPoolStart (){
 
-        BoardDice boardDice = new BoardDice();
-        Die die1 = new Die(ColourEnum.BLUE);
-        die1.firstRoll();
-        Die die2 = new Die(ColourEnum.YELLOW);
-        die2.firstRoll();
-        Die die3 = new Die(ColourEnum.GREEN);
-        die3.firstRoll();
-        Die die4 = new Die(ColourEnum.PURPLE);
-        die4.firstRoll();
-        Die die5 = new Die(ColourEnum.RED);
-        die5.firstRoll();
-        /*boardDice.insertDice(die1);
-        boardDice.insertDice(die2);
-        boardDice.insertDice(die3);
-        boardDice.insertDice(die4);
-        boardDice.insertDice(die5);
-*/
-        return boardDice;
+    //TODO: USARE PER LA SCELTA DELLA CARTA SCHEMA
+    public void prova() {
+     //   schemeSelectionController.showScheme(schemaCardList);
     }
 
-
-    /**
-     * Set del numero di dadi che dovrò estrarre ogni volta nella riserva
-     */
-    //public void setNumDice(GameBoard gameBoard) {
-        //this.numDraftDice = new ImageView[gameBoard.getPlayerList().size() * 2 + 1];
-    //}
-
-
-    private Image showCard (Card card, String stringa){
+    private Image showCard(Card card, String stringa) {
         String string = "src\\main\\java\\it\\polimi\\se2018\\img\\";
 
         try {
             return new Image(String.valueOf(new File(string + stringa + "\\" +
                     card.getName().replaceAll(" ", "") + ".jpg").toURI().toURL()));
-        }catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             // return new MalformedURLException("Public card image not found");
         }
         return null;
     }
 
-
-    private Image showDie (Die die){
+    //TODO CHECK STATIC
+    static public Image showDie(Die die) {
         String string = "src\\main\\java\\it\\polimi\\se2018\\img\\dice\\";
 
         try {
             return new Image(String.valueOf(new File(string + die.getColour().toString().toLowerCase()
                     + "\\" + die.getValue() + ".jpg").toURI().toURL()));
-        }catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             // return new MalformedURLException("Die image not found");
         }
         return null;
     }
 
 
-    public void nextCard (ActionEvent actionEvent) throws IOException {
-        if(indexPublicCard == 2){
-            indexPublicCard = -1;
+    //INTRODURRE SHOWPRIVATECARD
+    public void nextCard(ActionEvent actionEvent) throws IOException {
+        if (indexChangeCard == 2) {
+            indexChangeCard = -1;
         }
-        indexPublicCard++;
-        publicCardImg.setImage(showCard(publicObjCards.get(indexPublicCard), "publicObjCard"));
+        indexChangeCard++;
+        showPublicCards(indexChangeCard);
     }
 
     /**
@@ -167,10 +296,8 @@ public class ControllerMatchTable implements Initializable{
      * Boolean isClicked
      */
     public void extractClick(ActionEvent actionEvent) throws IOException {
-        BoardDice boardDice = draftPoolStart();
 
-        // i < numDraftDice
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < clientBoard.getPlayerList().size() * 2 + 1; i++) {
             ImageView die = new ImageView();
             die.setPreserveRatio(true);
             die.setFitWidth(45);
@@ -183,7 +310,7 @@ public class ControllerMatchTable implements Initializable{
                 }
             });
             dice.add(die);
-            dice.get(i).setImage(showDie(boardDice.getDieList().get(i)));
+            dice.get(i).setImage(showDie(clientBoard.getBoardDice().getDieList().get(i)));
 
             hbox.getChildren().add(dice.get(i));
             die.fitWidthProperty().bind(hbox.widthProperty());
@@ -191,6 +318,251 @@ public class ControllerMatchTable implements Initializable{
         }
     }
 
+    //TODO: TOGLIERE???
+    @FXML
+    public void showScheme(ActionEvent event) {
+        //primaryScene.getChildren().add(showSchemeSelection());
+    }
+
+
+    @FXML AnchorPane backgroundPane;
+    @FXML AnchorPane loginPane;
+
+    @FXML private void disableBackgroundPane (){
+        backgroundPane.setOpacity(0);
+        backgroundPane.setVisible(false);
+        backgroundPane.setDisable(true);
+    }
+
+    @FXML private void enableBackgroundPane (){
+        backgroundPane.setOpacity(1);
+        backgroundPane.setVisible(true);
+        backgroundPane.setDisable(false);
+    }
+
+    @FXML private void disableLoginPane (){
+        disableBackgroundPane();
+        loginPane.setOpacity(0);
+        loginPane.setVisible(false);
+        loginPane.setDisable(true);
+
+        //dà l'indirizzo IP inserito
+
+        enableSchemeSelectionPane();
+    }
+
+    @FXML private void enableLoginPane (){
+        enableBackgroundPane();
+        loginPane.setOpacity(1);
+        loginPane.setVisible(true);
+        loginPane.setDisable(false);
+    }
+
+   // @FXML private AnchorPane schemeSelectionPane;
+
+    @FXML private void disableSchemeSelectionPane (){
+        disableBackgroundPane();
+        schemeSelectionPane.setOpacity(0);
+        schemeSelectionPane.setVisible(false);
+        schemeSelectionPane.setDisable(true);
+    }
+
+    @FXML private void enableSchemeSelectionPane (){
+        inizSchemeCardSelection();
+        enableBackgroundPane();
+        schemeSelectionPane.setOpacity(1);
+        schemeSelectionPane.setVisible(true);
+        schemeSelectionPane.setDisable(false);
+    }
+
+    @FXML private AnchorPane toolCardPane;
+
+    @FXML private void disableToolCardPane (){
+        //confirmSchemeChoice();
+        disableBackgroundPane();
+        toolCardPane.setOpacity(0);
+        toolCardPane.setVisible(false);
+        toolCardPane.setDisable(true);
+
+        //dà i dati della toolcard scelta
+    }
+
+    @FXML private void enableToolCardPane (){
+        inizToolCard();
+        enableBackgroundPane();
+        toolCardPane.setOpacity(1);
+        toolCardPane.setVisible(true);
+        toolCardPane.setDisable(false);
+    }
+
+
+    //------------------------------------------------------------------------------------
+
+    public GridPane createScheme (SchemaCard schemaCard) {
+        int col = 0;
+        int row = 0;
+
+        GridPane schemeGridPane = new GridPane();
+        gridPane.maxHeight(350);
+        gridPane.maxWidth(280);
+        gridPane.setGridLinesVisible(true);
+
+
+        for (Cell c : schemaCard.getCellList()) {
+            ImageView cellImg = configCellImg();
+            AnchorPane anchorPane = configAnchorPane();
+
+            if (c.getValue() == 0 && c.getColour() == null) {
+                anchorPane.setStyle("-fx-background-color: white");
+            }
+            else if (c.getColour() != null) {
+                Map<ColourEnum, String> map = colorMap();
+                anchorPane.setStyle("-fx-background-color: #" + map.get(c.getColour()));
+
+            }
+            else {
+                setCellValueRestriction(c, cellImg);
+            }
+
+            if(!c.isEmpty()){
+                cellImg.setImage(ControllerMatchTable.showDie(c.getDie()));
+
+                cellImg.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if(c.getValue() != 0){
+                            setCellValueRestriction(c, cellImg);
+                        }else {
+                            cellImg.setImage(null);
+                        }
+                        event.consume();
+                    }
+                });
+
+                cellImg.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        cellImg.setImage(ControllerMatchTable.showDie(c.getDie()));
+                        event.consume();
+                    }
+                });
+            }
+
+            if (col == 5) {
+                col = 0;
+                row++;
+            }
+
+            anchorPane.getChildren().addAll(cellImg);
+            AnchorPane.setTopAnchor(cellImg, 0.6);
+            AnchorPane.setLeftAnchor(cellImg, 0.3);
+            cellImg.fitHeightProperty().bind(anchorPane.heightProperty().subtract(7));
+            cellImg.fitWidthProperty().bind(anchorPane.widthProperty().subtract(7));
+            schemeGridPane.add(anchorPane, col, row);
+            col++;
+        }
+        return schemeGridPane;
+    }
+
+    /**
+     * Association of the stardard color to web color
+     * @return
+     */
+    private Map colorMap (){
+        Map<ColourEnum, String> map = new EnumMap<>(ColourEnum.class);
+        map.put(ColourEnum.BLUE, "6599CB");
+        map.put(ColourEnum.RED, "FF6666");
+        map.put(ColourEnum.GREEN, "66CC66");
+        map.put(ColourEnum.YELLOW, "FEFF99");
+        map.put(ColourEnum.PURPLE, "CC66CC");
+
+        return map;
+    }
+
+    private AnchorPane configAnchorPane (){
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.setMinHeight(40);
+        anchorPane.setMinWidth(40);
+        anchorPane.setPrefHeight(50);
+        anchorPane.setPrefWidth(50);
+        anchorPane.maxHeight(50);
+        anchorPane.maxWidth(50);
+        // anchorPane.setPadding(new Insets(4,4,4,4));
+        anchorPane.setBorder(new Border(new BorderStroke(Color.web("2C3E50"),
+                BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
+
+        return anchorPane;
+    }
+
+    private ImageView configCellImg (){
+        ImageView cellImg = new ImageView();
+        cellImg.setPreserveRatio(true); //used for the correct resize of the starting image
+        cellImg.maxHeight(45);
+        cellImg.setFitWidth(45);
+        cellImg.setPreserveRatio(false); //to let the image resize bind to the anchorpane
+
+        return cellImg;
+    }
+
+    private void setCellValueRestriction (Cell c, ImageView cellImg){
+        try {
+            Image img = new Image(String.valueOf(new File("src\\main\\java\\it\\polimi\\se2018\\img\\dice\\restriction\\" +
+                    c.getValue() + ".jpg").toURI().toURL()));
+            cellImg.setOpacity(0.90);
+            cellImg.setImage(img);
+        }catch (Exception e){}
+    }
+
+    public void inizSchemeCardSelection(){
+        choiceSchemeBox1.getChildren().add(createScheme(schemaCardList.get(0)));
+        choiceSchemeBox2.getChildren().add(createScheme(schemaCardList.get(1)));
+        choiceSchemeBox3.getChildren().add(createScheme(schemaCardList.get(2)));
+        choiceSchemeBox4.getChildren().add(createScheme(schemaCardList.get(3)));
+    }
+
+    public void inizToolCard (){
+        for(int i = 0; i < 3; i++) {
+            VBox vBox = new VBox();
+            ImageView toolImg = new ImageView(showCard(clientBoard.getCardOnBoard().getToolCardList().get(i), "toolCard"));
+            toolImg.setPreserveRatio(true);
+            toolImg.setFitWidth(300);
+            //toolImg.fitWidthProperty().bind(vBox.widthProperty());
+            Button button = new Button("ToolCard " + i);
+
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    disableToolCardPane();
+                }
+            });
+
+            vBox.setAlignment(Pos.CENTER);
+            vBox.setSpacing(50);
+            vBox.getChildren().addAll(button, toolImg);
+
+            if(i==1){
+                Button cancelButton = new Button("Torna al menù");
+
+                cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override public void handle(ActionEvent e) {
+                        disableToolCardPane();
+                    }
+                });
+                vBox.getChildren().add(cancelButton);
+            }
+            choiceToolCardGrid.add(vBox, i,0);
+        }
+    }
+
+    private void inizSchemeOnTheTable (){
+        //schemeVBOX.getChildren().add(createScheme(schemaCardList.get(0)));
+        //schemeVBOX1.getChildren().add(createScheme(schemaCardList.get(1)));
+        //schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
+        //schemeVBOX3.getChildren().add(createScheme(schemaCardList.get(3)));
+    }
+
+    @FXML
+    void confirmSchemeChoice(ActionEvent event) {
+        //return schemaCardList.get(index).getId();
+    }
 
 }
-
