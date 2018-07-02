@@ -1,167 +1,309 @@
 package it.polimi.se2018.view;
 
+import it.polimi.se2018.controller.OperationString;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.ToolCard;
-import it.polimi.se2018.view.graphic.cli.CommandLineInput;
+import it.polimi.se2018.utils.Observable;
+import it.polimi.se2018.view.graphic.InputFormatEnum;
+import it.polimi.se2018.view.graphic.TypeOfInputAsked;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static it.polimi.se2018.model.Config.*;
 import static it.polimi.se2018.model.CommandTypeEnum.*;
+import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 /**
  * Controls the Syntax of message received and sets PlayerMove's attributes
- *
  * @author Cristian Giannetti
  */
-public class SyntaxController {
+public class SyntaxController extends Observable<PlayerMessage> {
 
     /**
      * Game Board used for the checks
      */
     private ClientBoard clientBoard;
     /**
-     * Player who wants to makes the action
-     */
-    //private Player player;
-    /**
      * Player Move representing the action that the player wants to make
      */
     private PlayerMove playerMove;
 
-    private CommandLineInput commandLineInput;
+    private ToolCard toolCard;
 
-    private final  String okMessage = "OK MESSAGE";
-    private final String errorMessage = "ERROR MESSAGE";
+    private CommandTypeEnum commandTypeEnum;
+
+    private InputFormatEnum inputFormatEnum;
+
+    private PlayerMove receivedPlayerMove;
+
+    private List<List<CommandTypeEnum>> commandTypeEnumLists;
 
     /**
      * Constructor sets the first nextCommandType
      */
-    public SyntaxController(CommandLineInput commandLineInput){
-//        this.player = player;
-        this.commandLineInput = new CommandLineInput();
-        this.commandLineInput = commandLineInput;
+    public SyntaxController(){
+        inputFormatEnum = null;
+        commandTypeEnum = TYPEOFCHOICE;
+    }
+
+    public TypeOfInputAsked newMoveReceived(PlayerMove receivedPlayerMove, ClientBoard clientBoard){
+        this.clientBoard = clientBoard;
+        this.receivedPlayerMove = receivedPlayerMove.getClone();
+        this.playerMove = receivedPlayerMove;
+        setNextCommandType(receivedPlayerMove);
+        return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
     }
 
     /**
      * Checks if the value inserted is valid
-     * @param messageString String with Player's input
-     * @return Error or OK message
+     * @return Error ID, 0 if there isn't any error
      */
-    public PlayerMove validCommand(String messageString, PlayerMove receivedPlayerMove, ClientBoard clientBoard){
+    public TypeOfInputAsked validCommand (String inputReceived){
+        inputReceived = inputReceived.toUpperCase();
 
-        String message;
-        CommandTypeEnum nextCommandType = resetCommand(receivedPlayerMove);
+        if (inputReceived.equals("CANCEL")){
+            resetCommand();
+            return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum, 0, nextMessage(commandTypeEnum));
+        }
 
-        while (nextCommandType != COMPLETE){
+        switch (commandTypeEnum) {
+            case TYPEOFCHOICE:
+                try {
+                    setTypeOfChoice(inputReceived);
+                    return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
+                } catch (IllegalArgumentException e) {
+                    return new TypeOfInputAsked(TYPEOFCHOICE, inputFormatEnum, 2001, nextMessage(commandTypeEnum));
+                }
 
-            message = commandLineInput.getInput(messageString);
+            case DICESCHEMAWHERETOTAKE:
+                try {
+                    setDiceSchemaWhereToTake(inputReceived);
+                    return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum, 0, nextMessage(commandTypeEnum));
+                }catch (IllegalArgumentException e){
+                    return new TypeOfInputAsked(DICESCHEMAWHERETOTAKE, InputFormatEnum.DIE_SCHEMA, 2002, nextMessage(commandTypeEnum));
+                }
 
-            if (message == null) message = commandLineInput.getInput(errorMessage);
-            message = message.toUpperCase();
+            case DICESCHEMAWHERETOLEAVE:
+                try {
+                    setDiceSchemaWhereToLeave(inputReceived);
+                    return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
+                }catch (IllegalArgumentException e){
+                    return new TypeOfInputAsked(DICESCHEMAWHERETOLEAVE, InputFormatEnum.CELL_SCHEMA, 2002, nextMessage(commandTypeEnum));
+                }
 
-            if (message.equals(RESET_COMMAND)){
-                nextCommandType = resetCommand(receivedPlayerMove);
+            case DICEBOARDINDEX:
+                try{
+                    setDiceBoardIndex(inputReceived);
+                    return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
+                }catch(IllegalArgumentException e){
+                    return new TypeOfInputAsked(DICEBOARDINDEX, InputFormatEnum.DIE_DICEBOARD, 2003, nextMessage(commandTypeEnum));
+                }
 
-                message = commandLineInput.getInput(okMessage);
+            case TRACKBOARDINDEX:
+                try{
+                    setTrackBoardIndex(inputReceived);
+                    return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
+                }catch(IllegalArgumentException e){
+                    return new TypeOfInputAsked(TRACKBOARDINDEX, InputFormatEnum.CELL_TRACKBOARD, 2004, nextMessage(commandTypeEnum));
+                }
 
-            }
+            case TOOLCARDID:
+                try{
+                    setToolCardId(inputReceived, clientBoard);
+                    return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
+                }catch(IllegalArgumentException e){
+                    return new TypeOfInputAsked(TOOLCARDID, InputFormatEnum.ID_TOOL, 2005, nextMessage(commandTypeEnum));
+                }
 
-            switch (nextCommandType) {
-                case TYPEOFCHOICE:
-                    try {
-                        playerMove.setTypeOfChoice(TypeOfChoiceEnum.valueOf(message));
-                        nextCommandType = setNextCommandType(playerMove);
-                        break;
-                    } catch (IllegalArgumentException e) {
-                        break;
+            case VALUE:
+                try{
+                    setValue(inputReceived);
+                    return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
+                }catch(IllegalArgumentException e){
+                    return new TypeOfInputAsked(VALUE, null, 2006, nextMessage(commandTypeEnum));
+                }
+
+            default:
+                return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,2000, nextMessage(commandTypeEnum));
+        }
+    }
+
+    private void setPassMove() {
+        playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+    }
+
+    private void setToolCardId(String inputReceived, ClientBoard clientBoard) {
+        for (ToolCard toolCard : clientBoard.getCardOnBoard().getToolCardList()) {
+            if (Integer.valueOf(inputReceived) == toolCard.getId()) {
+                this.toolCard = toolCard;
+                playerMove.setIdToolCard(Integer.valueOf(inputReceived));
+                commandTypeEnumLists = new ArrayList<>();
+
+                for(List<OperationString> operationStrings: toolCard.getCommandLists()){
+                    List<CommandTypeEnum> commandTypeEnumList = new ArrayList<>();
+                    for(OperationString operationString: operationStrings){
+                        CommandTypeEnum commandTypeEnum = getCommandFromString(operationString);
+                        if(commandTypeEnum != null) commandTypeEnumList.add(commandTypeEnum);
                     }
+                    if(!commandTypeEnumList.isEmpty()) commandTypeEnumLists.add(commandTypeEnumList);
+                }
+                setNextCommandType(playerMove);
 
-                case TOOLCARDID:
-                    for (ToolCard toolCard : clientBoard.getCardOnBoard().getToolCardList()) {
-                        if (Integer.valueOf(message) == toolCard.getId()) {
-                            playerMove.setIdToolCard(Integer.valueOf(message));
-                            nextCommandType = setNextCommandType(playerMove);
-                            break;
-                        }
-                    }
-                    break;
-
-                case DICEBOARDINDEX:
-                    if (Integer.valueOf(message) >= 0 && Integer.valueOf(message) < clientBoard.getBoardDice().getDieList().size()) {
-                        playerMove.setDiceBoardIndex(Integer.valueOf(message));
-                        nextCommandType = setNextCommandType(playerMove);
-                    }
-                    break;
-
-                case VALUE:
-                    playerMove.setValue(Integer.valueOf(message));
-                    nextCommandType = setNextCommandType(playerMove);
-                    break;
-                default:
-                    int value1 = Integer.parseInt(message.split(" ")[0]);
-                    int value2 = Integer.parseInt(message.split(" ")[1]);
-                    switch (nextCommandType) {
-
-                        case TRACKBOARDINDEX:
-                            if (value1 >= 0 && value1 < clientBoard.getTrackBoardDice().getDiceList().size() && value2 >= 0 &&
-                                    value2 < clientBoard.getTrackBoardDice().getDiceList().get(value1).size()) {
-
-                                playerMove.setTrackBoardIndex(value1, value2);
-                                nextCommandType = setNextCommandType(playerMove);
-                            }
-                            break;
-
-                        case DICESCHEMAWHERETOTAKE:
-                            if (value1 >= 0 && value1 < NUMBER_OF_SCHEMA_ROW && value2 >= 0 && value2 < NUMBER_OF_SCHEMA_COL) {
-
-                                playerMove.insertDiceSchemaWhereToTake(new Position(value1, value2));
-                                nextCommandType = setNextCommandType(playerMove);
-                            }
-                            break;
-
-                        case DICESCHEMAWHERETOLEAVE:
-                            if (value1 >= 0 && value1 < NUMBER_OF_SCHEMA_ROW && value2 >= 0 && value2 < NUMBER_OF_SCHEMA_COL) {
-
-                                playerMove.insertDiceSchemaWhereToLeave(new Position(value1, value2));
-                                nextCommandType = setNextCommandType(playerMove);
-                                break;
-                            }
-                            break;
-
-                        default:
-                    }
             }
         }
-        return playerMove;
     }
+
+    private CommandTypeEnum getCommandFromString(OperationString operationString) {
+        switch(operationString.getOperation().toLowerCase()){
+            case "pick":
+                if(operationString.getDiceContainer().equalsIgnoreCase("schemacard")) return DICESCHEMAWHERETOTAKE;
+                if(operationString.getDiceContainer().equalsIgnoreCase("trackboard")) return TRACKBOARDINDEX;
+                if(operationString.getDiceContainer().equalsIgnoreCase("diceboard")) return DICEBOARDINDEX;
+                break;
+
+            case "incdecvalue":
+                return VALUE;
+
+            case "leave":
+                if(operationString.getDiceContainer().equalsIgnoreCase("schemacard")) return DICESCHEMAWHERETOLEAVE;
+                return null;
+
+            case "exchange":
+                if(operationString.getDiceContainer().equalsIgnoreCase("trackboard")) return TRACKBOARDINDEX;
+                if(operationString.getDiceContainer().equalsIgnoreCase("diceboard")) return DICEBOARDINDEX;
+                return null;
+
+            case "setDieValue":
+                return VALUE;
+
+            default:
+                return null;
+        }
+        return null;
+    }
+
+    private void setValue(String inputReceived) {
+        playerMove.setValue(Integer.valueOf(inputReceived));
+        setNextCommandType(playerMove);
+    }
+
+    private void setTrackBoardIndex(String inputReceived) {
+
+        int coordinates[] = separateCellValues(inputReceived);
+
+        if (coordinates[0] >= 0 && coordinates[0] < clientBoard.getTrackBoardDice().getDiceList().size() && coordinates[1] >= 0 &&
+                coordinates[1] < clientBoard.getTrackBoardDice().getDiceList().get(coordinates[0]).size()) {
+
+            playerMove.setTrackBoardIndex(coordinates[0], coordinates[1]);
+            setNextCommandType(playerMove);
+        }
+    }
+
+    private void setDiceSchemaWhereToTake(String inputReceived) {
+
+        int coordinates[] = separateCellValues(inputReceived);
+
+        if (coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
+            playerMove.insertDiceSchemaWhereToTake(new Position(coordinates[0] , coordinates[1]));
+            setNextCommandType(playerMove);
+
+        }else throw new IllegalArgumentException("ERROR: Wrong input inserted");
+
+    }
+
+    private void setDiceBoardIndex(String inputReceived) {
+        if (Integer.valueOf(inputReceived) >= 0 && Integer.valueOf(inputReceived) < clientBoard.getBoardDice().getDieList().size()) {
+            playerMove.setDiceBoardIndex(Integer.valueOf(inputReceived));
+            setNextCommandType(playerMove);
+        }
+    }
+
+    private int[] separateCellValues(String message){
+
+        int coordinates[] = {Integer.parseInt(message.split(" ")[0]),Integer.parseInt(message.split(" ")[1])};
+        return coordinates;
+    }
+
+    private void setDiceSchemaWhereToLeave(String inputReceived) {
+
+        int coordinates[] = separateCellValues(inputReceived);
+
+        if (coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
+            playerMove.insertDiceSchemaWhereToLeave(new Position(coordinates[0] , coordinates[1]));
+            setNextCommandType(playerMove);
+
+        }else throw new IllegalArgumentException("ERROR: Wrong input inserted");
+    }
+
+    private int nextMessage(CommandTypeEnum commandTypeEnum) {
+        if (commandTypeEnum == COMPLETE) return 3101;
+        println(inputFormatEnum + " " + commandTypeEnum);
+        return 3000;
+    }
+
+    private void setTypeOfChoice(String inputReceived) {
+        if (inputReceived.equalsIgnoreCase("cancel")) resetCommand();
+        else playerMove.setTypeOfChoice(TypeOfChoiceEnum.valueOf(inputReceived.toUpperCase()));
+        if(playerMove.getTypeOfChoice() == TypeOfChoiceEnum.TOOL && inputReceived.equalsIgnoreCase("tool")){
+            commandTypeEnum = TOOLCARDID;
+            return;
+        }
+        if(playerMove.getTypeOfChoice() == TypeOfChoiceEnum.PICK && inputReceived.equalsIgnoreCase("pick")){
+            List<CommandTypeEnum> commandTypeEnumList = new ArrayList<>();
+            commandTypeEnumList.add(DICEBOARDINDEX);
+            commandTypeEnumList.add(DICESCHEMAWHERETOLEAVE);
+            commandTypeEnumLists = new ArrayList<>();
+            commandTypeEnumLists.add(commandTypeEnumList);
+        }
+
+        setNextCommandType(playerMove);
+    }
+
+
+
+
 
     /**
      * Sets the next command type to be received
      * @param playerMove Actual status of PlayerMove
      */
-    private CommandTypeEnum setNextCommandType(PlayerMove playerMove){
+    private void setNextCommandType(PlayerMove playerMove){
+        if (playerMove == null || playerMove.getTypeOfChoice() == null){
+            commandTypeEnum = TYPEOFCHOICE;
+            return;
+        }
 
         switch(playerMove.getTypeOfChoice()) {
-
-            case PICK:
-                if (playerMove.getDiceBoardIndex() == -1) {
-                    return CommandTypeEnum.DICEBOARDINDEX;
-                }
-                if (playerMove.getDiceSchemaWhereToLeave() == null || playerMove.getDiceSchemaWhereToLeave().isEmpty()) {
-                    return CommandTypeEnum.DICESCHEMAWHERETOLEAVE;
-                }
-                return COMPLETE;
 
             case EXTRACT:
             case ROLL:
             case PASS:
-                return COMPLETE;
+                setCompleteMove();
+                return;
 
+            case PICK:
             case TOOL:
-                return CommandTypeEnum.TOOLCARDID;
+                setNextCommandType();
+                return;
 
             default:
-                return TYPEOFCHOICE;
+                commandTypeEnum = CommandTypeEnum.TYPEOFCHOICE;
         }
+    }
+
+
+
+    private void setNextCommandType() {
+
+        if(commandTypeEnumLists.isEmpty()){
+            setCompleteMove();
+            return;
+        }
+
+        commandTypeEnum = commandTypeEnumLists.get(0).remove(0);
+        if(commandTypeEnumLists.get(0).isEmpty()) commandTypeEnumLists.remove(0);
+
     }
 
     /**
@@ -175,15 +317,22 @@ public class SyntaxController {
     /**
      * Resets Command
      */
-    private CommandTypeEnum resetCommand(PlayerMove receivedPlayerMove){
+    private void resetCommand(){
         try{
             playerMove = receivedPlayerMove.getClone();
         }catch (NullPointerException e){
             playerMove = new PlayerMove();
         }
 
-//        this.playerMove.setPlayer(this.player);
-        return CommandTypeEnum.TYPEOFCHOICE;
+        setNextCommandType(playerMove);
+    }
+
+    private void setCompleteMove(){
+        commandTypeEnum = COMPLETE;
+        PlayerMessage playerMessage = new PlayerMessage();
+
+        playerMessage.setCheckMove(playerMove);
+        notify(playerMessage);
     }
 
 }

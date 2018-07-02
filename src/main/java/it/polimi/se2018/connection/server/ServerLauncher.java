@@ -1,6 +1,8 @@
 package it.polimi.se2018.connection.server;
 
 
+import it.polimi.se2018.connection.server.rmi.RMITypeServer;
+import it.polimi.se2018.connection.server.socket.SocketTypeServer;
 
 public class ServerLauncher {
 

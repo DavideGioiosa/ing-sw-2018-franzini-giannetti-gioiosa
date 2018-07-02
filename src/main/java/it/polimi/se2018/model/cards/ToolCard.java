@@ -4,6 +4,7 @@ import it.polimi.se2018.controller.OperationString;
 import it.polimi.se2018.model.ColourEnum;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,6 +64,11 @@ public class ToolCard extends Card implements Serializable {
         super(toolCard);
         this.colour = toolCard.colour;
         this.token = toolCard.token;
+        this.commandLists = new ArrayList<>() ;
+        for(List<OperationString> operationStringList: toolCard.commandLists){
+            List<OperationString> operationStringCloned = new ArrayList<>(operationStringList);
+            commandLists.add(operationStringCloned);
+        }
     }
     
     /**

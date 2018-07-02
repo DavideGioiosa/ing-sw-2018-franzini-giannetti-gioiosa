@@ -1,6 +1,8 @@
 package it.polimi.se2018.connection.server;
 
 
+import it.polimi.se2018.connection.server.rmi.RMITypeServer;
+import it.polimi.se2018.connection.server.socket.SocketTypeServer;
 import it.polimi.se2018.controller.GameCreator;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.player.User;
@@ -8,6 +10,7 @@ import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.RemoteView;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 
@@ -88,52 +91,73 @@ public class ServerManager implements Observer<PlayerMessage> {
 
     private void addUser(User user){
 
-        println("aggiunto user: "+ user.getNickname());
-        userList.add(user);
-        if(gameCreator == null){
-            if(userList.size()== 2){
-                userSetupTimer = new Timer();
-                usersDelayer = new UsersDelayer(this);
-                userSetupTimer.schedule(usersDelayer, (long)90*1000);
-            }else if(userList.size() == 4 && userSetupTimer != null ){
-                createGame();
+        boolean alreadyUsed = false;
+        for(User addedUser: userList){
+            if(addedUser.getNickname().equals(user.getNickname())){
+                alreadyUsed = true;
             }
         }
-
+        if(alreadyUsed){
+            PlayerMessage playerMessage = new PlayerMessage();
+            playerMessage.setUser(user);
+            playerMessage.setError(450); //nickname già presente
+            sendMessage(playerMessage);
+        }else {
+            userList.add(user);
+            println("aggiunto user: "+ user.getNickname());
+            if(gameCreator == null){
+                if(userList.size()== 2){
+                    userSetupTimer = new Timer();
+                    usersDelayer = new UsersDelayer(this);
+                    userSetupTimer.schedule(usersDelayer, (long)90*1000);
+                }else if(userList.size() == 4 && userSetupTimer != null ){
+                    createGame();
+                }
+            }
+        }
     }
 
      private void removeUser(User user){
 
-        println("disconnesso user: "+ user.getNickname());
-         userList.remove(user);
-         if(gameCreator == null){
-             if(setUp && userList.size() < 2 && userSetupTimer!=null){
-                 userSetupTimer.cancel();
-                 userSetupTimer.purge();
-                 userSetupTimer = null;
+         Iterator<User> userIterator = userList.iterator();
+         while(userIterator.hasNext()){
+             User us = userIterator.next();
+             if(us.getUniqueCode().equals(user.getUniqueCode())){
+                 userIterator.remove();
+                 if(gameCreator == null){
+                     if(setUp && userList.size() < 2 && userSetupTimer!=null){
+                         userSetupTimer.cancel();
+                         userSetupTimer.purge();
+                         userSetupTimer = null;
+                     }
+                 }else disconnectedUserList.add(user);
+                 println("disconnesso user: "+ us.getNickname());
              }
-         }else disconnectedUserList.add(user);
-
+         }
     }
 
     private void reconnection(PlayerMessage playerMessage){
 
-        for(User user : disconnectedUserList){
-            if(user.getNickname().equals(playerMessage.getUser().getNickname()) && user.getUniqueCode().equals(playerMessage.getUser().getUniqueCode())){
+        boolean found = false;
+        for(Iterator<User> userIterator = disconnectedUserList.iterator(); userIterator.hasNext();){
+            User user = userIterator.next();
+            if(user.getUniqueCode().equals(playerMessage.getUser().getUniqueCode())){
                 disconnectedUserList.remove(user);
                 addUser(playerMessage.getUser());
-
-            }else {
-                PlayerMessage playerMessage1 = new PlayerMessage();
-                playerMessage1.setError(102);
-                sendMessage(playerMessage1);
+                found = true;
             }
         }
+        if(!found){
+            PlayerMessage playerMessage1 = new PlayerMessage();
+            playerMessage1.setError(102);
+            sendMessage(playerMessage1);
+        }
+
     }
 
 
     @Override
-    public void update(PlayerMessage playerMessage) {
+    public synchronized void update(PlayerMessage playerMessage) {
 
         if(gameCreator == null){
             if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
@@ -151,7 +175,7 @@ public class ServerManager implements Observer<PlayerMessage> {
 
     }
 
-    public List<User> getUserList(){
+    public synchronized List<User> getUserList(){
         return userList;
     }
 
@@ -169,16 +193,9 @@ public class ServerManager implements Observer<PlayerMessage> {
         }
     }
 
-    public void sendWinner(GameBoard gameBoard){
 
-        MoveMessage finale = new MoveMessage(gameBoard.getPlayerList(),gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice());
-        PlayerMessage playerMessage = new PlayerMessage();
-        playerMessage.setMessage(finale);
-        playerMessage.setId(PlayerMessageTypeEnum.WINNER);
-        playerMessage.setUser(null);
-        serverRMI.send(playerMessage);
-        serverSocket.send(playerMessage);
-
+    public void shutdown(){
+        serverRMI.shutdown();
+        serverSocket.shutdown();
     }
-
 }

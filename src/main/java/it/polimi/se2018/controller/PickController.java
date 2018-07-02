@@ -11,21 +11,25 @@ import java.util.List;
  * @author Silvia Franzini
  */
 public class PickController implements Action{
-    private GameBoard gameBoard;
+
     private PlayerMove playerMove;
 
     private List<Restriction> restrictionList;
 
     /**
-     * Builder method of PickController class
-     * @param gameBoard the game board of the match with all the elements on the board
+     * Constructor method of PickController class
      */
-    PickController(GameBoard gameBoard){
-        this.gameBoard = gameBoard;
+    PickController(){
         restrictionList = RestrictionManager.getStandardRestriction();
     }
 
-    private int pickExecution(PlayerMove playerMove){
+    /**
+     * Makes the move chose by the player
+     * @param playerMove Contains information about the Player's move
+     * @param gameBoard Game board of the match with all the elements on the board
+     * @return Error code, 0 if there isn't any error
+     */
+    private int pickExecution(PlayerMove playerMove, GameBoard gameBoard){
         Die dieExtracted = null;
         try{
             for(Player player: gameBoard.getPlayerList()) {
@@ -50,8 +54,8 @@ public class PickController implements Action{
      * Choice of the player
      * @return playerMove related to the action
      */
-    public PlayerMove getPlayerMove() {
-        return playerMove;
+    public boolean isPass() {
+        return playerMove != null && playerMove.getTypeOfChoice() == TypeOfChoiceEnum.PASS;
     }
 
     /**
@@ -59,46 +63,19 @@ public class PickController implements Action{
      * @param playerMove choices of the player
      * @return true if action completed, false otherwise
      */
-    public int doAction(GameBoard gameBoard0, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
-        //this.gameBoard = gameBoard0;
-        int result = -1;
+    public int doAction(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
+
         this.playerMove = playerMove;
         switch (playerMove.getTypeOfChoice()){
-            case PICK: result = pickExecution(playerMove); break;
-            case TOOL:
-                try{
-                    result = useTool(playerMove);
-                }catch(IllegalArgumentException e){
-                    return 1000;
-                }
-                break;
-            case PASS: result = 0;
-                break;
-            case ROLL:
-                for(Die die : gameBoard.getBoardDice().getDieList()){
-                    try{
-                        die.firstRoll();
-                    }catch(RuntimeException e){
-                        return 1000;
-                    }
-                    result = 0;
-                }
-                break;
-            case EXTRACT:
-                for(int i = 0; i < gameBoard.getPlayerList().size()*2 +1; i++){
-                    Die die;
-                    try{
-                        die = gameBoard.getBagDice().extractDice();
-                    }catch(RuntimeException e){
-                        return 1000;
-                    }
-                    gameBoard.getBoardDice().insertDie(die);
-                    result = 0;
-                } break;
+            case PICK:
+                return pickExecution(playerMove, gameBoard);
+
+            case PASS:
+                return 0;
+
             default:
-                break;
+                return 1000;
         }
-        return result;
     }
 
     /**
@@ -109,23 +86,16 @@ public class PickController implements Action{
      * @return true if action completed, false otherwise
      */
     private int placeDice(Player actualPlayer, Die die, Position position){
+        if(actualPlayer.getSchemaCard().getCellList().get(position.getIndexArrayPosition()).isEmpty()) {
+            for (Restriction restriction : restrictionList) {
+                int error = restriction.checkRestriction(actualPlayer.getSchemaCard(), die, playerMove.getDiceSchemaWhereToLeave().get(0));
+                if (error != 0) return error;
+            }
 
-        for(Restriction restriction: restrictionList){
-            int error = restriction.checkRestriction(actualPlayer.getSchemaCard(), die, playerMove.getDiceSchemaWhereToLeave().get(0));
-            if(error != 0) return error;
+            actualPlayer.getSchemaCard().setDiceIntoCell(position, die);
+            return 0;
         }
-
-        actualPlayer.getSchemaCard().setDiceIntoCell(position,die);
-        return 0;
-    }
-
-    /**
-     * Method invokes the Tool card chosen by the player
-     * @param playerMove the player choice
-     * @return true if action completed, false otherwise
-     */
-    private int useTool(PlayerMove playerMove){
-        return 0;
+        return 2008;
     }
 
     @Override
@@ -135,6 +105,6 @@ public class PickController implements Action{
 
     @Override
     public boolean isComplete() {
-        return true;
+        return playerMove != null;
     }
 }

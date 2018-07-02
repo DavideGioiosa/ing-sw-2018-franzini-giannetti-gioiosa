@@ -21,21 +21,14 @@ import static org.junit.Assert.fail;
  * @author Cristian Giannetti
  */
 public class GameBoardTest {
-    private final String NICKNAME = "Nickname";
+
     private final ColourEnum FRAMECOLOUR = ColourEnum.BLUE;
-    private final boolean CONNECTION = true;
-    private SchemaCard schemaCard;
-    private Player player;
+
     private List<Player> playerList;
-    private ToolCard toolCard;
-    private List<ToolCard> toolCardList;
-    private PublicObjCard publicObjCard;
-    private List<PublicObjCard> publicCardList;
     private BoardDice boardDice;
     private TrackBoard trackBoardDice;
     private BagDice bagDice;
     private BoardCard boardCard;
-    private PrivateObjCard privateObjCard;
     private List<PrivatePlayer> privatePlayerList;
 
     /**
@@ -43,6 +36,16 @@ public class GameBoardTest {
      */
     @Before
     public void setUp(){
+        final String NICKNAME = "Nickname";
+        final boolean CONNECTION = true;
+        SchemaCard schemaCard;
+        Player player;
+        PrivateObjCard privateObjCard;
+
+        ToolCard toolCard;
+        List<ToolCard> toolCardList;
+        PublicObjCard publicObjCard;
+        List<PublicObjCard> publicCardList;
         GameLoader gameLoader = new GameLoader();
         do {
             schemaCard = (SchemaCard) gameLoader.getSchemaDeck().extractCard();

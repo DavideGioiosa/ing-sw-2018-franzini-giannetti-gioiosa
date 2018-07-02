@@ -1,35 +1,71 @@
 <?xml version="1.0"?>
-<error>
-    <id></id>
-    <description></description>
-</error>
-<error>
-    <id></id>
-    <description></description>
-</error>
-<error>
-    <id></id>
-    <description></description>
-</error>
-<error>
-    <id></id>
-    <description></description>
-</error>
-<error>
-    <id></id>
-    <description></description>
-</error>
-<error>
-    <id></id>
-    <description></description>
-</error><error>
-    <id></id>
-    <description></description>
-</error><error>
-    <id></id>
-    <description></description>
-</error>
-<error>
-    <id></id>
-    <description></description>
-</error>
+<errors>
+    <error>
+        <id>1001</id>
+        <description>C'e' stato un errore nella ricezione ricezione di un aggiornamento. Attendi un nuovo messaggio dal server.</description>
+    </error>
+    <error>
+        <id>2000</id>
+        <description>ERRORE GENERICO</description>
+    </error>
+    <error>
+        <id>2001</id>
+        <description>Hai scelto una mossa non valida</description>
+    </error>
+    <error>
+        <id>2002</id>
+        <description>Hai scelto una cella non valida</description>
+    </error>
+    <error>
+        <id>2003</id>
+        <description>Hai inserito un indice di dado non valido</description>
+    </error>
+    <error>
+        <id>2004</id>
+        <description>Hai inserito un indice di Tracciato dei Round non valido</description>
+    </error>
+    <error>
+        <id>2005</id>
+        <description>Hai inserito un indice di Tool Card non valido</description>
+    </error>
+    <error>
+        <id>2006</id>
+        <description>Hai inserito un Valore errato</description>
+    </error>
+    <error>
+        <id>2007</id>
+        <description>L'ID della Carta Utensile selezionato non e' valido</description>
+    </error>
+    <error>
+        <id>2008</id>
+        <description>Impossibile inserire il dado. La cella selezionata e' gia' occupata</description>
+    </error>
+    <error>
+        <id>2100</id>
+        <description>In questo turno hai gia' inserito un dado</description>
+    </error>
+    <error>
+        <id>2101</id>
+        <description>In questo turno hai gia' utilizzato una Carta Utensile</description>
+    </error>
+    <error>
+        <id>2102</id>
+        <description>Devi prima estrarre i dadi dal sacchetto</description>
+    </error>
+    <error>
+        <id>2500</id>
+        <description>Hai scelto un colore non valido</description>
+    </error>
+    <error>
+        <id>2501</id>
+        <description>Impossibile selezionare lo schema scelto</description>
+    </error>
+    <error>
+        <id>2502</id>
+        <description>Nickname non valido</description>
+    </error>
+    <error>
+        <id>2503</id>
+        <description>La lunghezza del nickname non puo' superare i 25 caratteri</description>
+    </error>
+</errors>

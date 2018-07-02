@@ -98,7 +98,7 @@ public class ClientController implements Observer<PlayerMessage> {
      * @param playerMessage Move approved by the Server
      */
     private void applyMove(PlayerMessage playerMessage){
-        System.out.println("Ho ricevuto una mossa da effettuare");
+
     }
 
     /**
@@ -108,7 +108,6 @@ public class ClientController implements Observer<PlayerMessage> {
     private void updateBoard(MoveMessage moveMessage){
         ClientBoard clientBoard = new ClientBoard(moveMessage.getPlayerList(),  moveMessage.getBoardDice(), moveMessage.getTrackBoard(), moveMessage.getBoardCard());
         clientModel.setClientBoard(clientBoard);
-        System.out.println("Board Aggiornato");
     }
 
 }

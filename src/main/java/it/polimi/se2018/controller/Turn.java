@@ -3,6 +3,8 @@ package it.polimi.se2018.controller;
 import it.polimi.se2018.model.GameBoard;
 import it.polimi.se2018.model.PlayerMove;
 import it.polimi.se2018.model.TypeOfChoiceEnum;
+import it.polimi.se2018.model.cards.ToolCard;
+import it.polimi.se2018.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class Turn {
     /**
      * list of Actions of the player componing the turn
      */
-    private List<PickController> turnsActionsList;
+    private List<Action> turnsActionsList;
     /**
      * informs if the action PICK has already done or not
      * it can be done once a Turn for each player
@@ -36,11 +38,13 @@ public class Turn {
 
     private int numberOfPossiblePicks = 1;
 
+    private Player actualPlayer;
+
     /**
      * Builder of Turn which composes the Round
      * @param gameBoard full table of the game
      */
-    public Turn (GameBoard gameBoard){
+    public Turn (GameBoard gameBoard, Player actualPlayer){
         if (gameBoard == null){
             throw new NullPointerException("Insertion of null parameter gameBoard");
         }
@@ -48,14 +52,18 @@ public class Turn {
         this.numberOfPicks = 0;
         this.isToolCardUsed = false;
         startTurn();
-
+        this.actualPlayer = actualPlayer;
     }
 
     void defaultMove(){
-        if(turnsActionsList.get(turnsActionsList.size()-1).isComplete()){
-            PickController pickController = new PickController(gameBoard);
-            pickController.doDefaultMove();
-            turnsActionsList.add(pickController);
+        if(turnsActionsList.isEmpty() || turnsActionsList.get(turnsActionsList.size()-1).isComplete()){
+            PlayerMove playerMove = new PlayerMove();
+            playerMove.setPlayer(actualPlayer);
+            playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+
+            PickController action = new PickController();
+            action.doAction(gameBoard, playerMove, null,null);
+            turnsActionsList.add(action);
         }else turnsActionsList.get(turnsActionsList.size()-1).doDefaultMove();
     }
 
@@ -70,7 +78,7 @@ public class Turn {
      * List of the actions componing the Turn
      * @return list of actions
      */
-    public List<PickController> getTurnsActionsList() {
+    public List<Action> getTurnsActionsList() {
         return turnsActionsList;
     }
 
@@ -80,39 +88,64 @@ public class Turn {
      * @param playerMove Move that the player wants to make
      * @return boolean to communicate the result of the action
      */
-    boolean runTurn (PlayerMove playerMove){
+    int runTurn (PlayerMove playerMove){
+        int errorId = 0;
         if(playerMove == null){
             throw new RuntimeException("Insertion of a PlayerMove null");
         }
-        if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK) && !canPick()){
-            return false;
-        }
-        if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL) && isToolCardUsed){
-            return false;
-        }
-
-        PickController pickController = new PickController(gameBoard);
-
-        if(pickController.doAction(gameBoard, playerMove,null, null) == 0){
-            turnsActionsList.add(pickController);
-            if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK)){
-                this.numberOfPicks++;
+        if(turnsActionsList.isEmpty() || turnsActionsList.get(turnsActionsList.size() - 1).isComplete()) {
+            if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PASS)){
+                PickController pickController = new PickController();
+                errorId = pickController.doAction(gameBoard, playerMove, null, null);
+                turnsActionsList.add(pickController);
+                return errorId;
             }
-            else if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL)){
-                this.isToolCardUsed = true;
+
+            if (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PICK)){
+                if (canPick()) {
+                    PickController pickController = new PickController();
+                    errorId = pickController.doAction(gameBoard, playerMove, null, null);
+                    if (errorId == 0) {
+                        turnsActionsList.add(pickController);
+                        this.numberOfPicks++;
+                    }
+                    return errorId;
+                }
+                errorId = 2100;
+                return errorId;
             }
-            return true;
+
+            if (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL)) {
+                if (!isToolCardUsed) {
+                    for (ToolCard toolCard : gameBoard.getCardOnBoard().getToolCardList()) {
+                        if (toolCard.getId() == playerMove.getIdToolCard()) {
+                            ToolController toolController = new ToolController(toolCard);
+                            errorId = toolController.doAction(gameBoard, playerMove, null, this);
+                            if (errorId == 0) {
+                                turnsActionsList.add(toolController);
+                                this.isToolCardUsed = true;
+                            }
+                            return errorId;
+
+                        }
+                    }
+                    errorId = 2007;
+                } else errorId = 2101;
+            }
+            return errorId;
+        }else{
+            errorId = turnsActionsList.get(turnsActionsList.size() -1).doAction(gameBoard, playerMove, null, this);
         }
-        return false;
+        return errorId;
     }
 
     /**
      * Communicate if the action received is the last of the player and ends the turn
      * @return boolean to communicate the end of the Turn for the current player
      */
-    boolean endTurn (){
+    boolean isFinished (){
         if (turnsActionsList.isEmpty()) return false;
-        return turnsActionsList.get(turnsActionsList.size()-1).getPlayerMove().getTypeOfChoice().equals(TypeOfChoiceEnum.PASS);
+        return turnsActionsList.get(turnsActionsList.size()-1).isPass();
     }
 
     public void incrementPossiblePicks(){
@@ -122,4 +155,5 @@ public class Turn {
     private boolean canPick(){
         return numberOfPossiblePicks != numberOfPicks;
     }
+
 }

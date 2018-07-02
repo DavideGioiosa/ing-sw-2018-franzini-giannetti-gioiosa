@@ -1,10 +1,7 @@
 package it.polimi.se2018.controller;
 
 import it.polimi.se2018.controller.toolcardactions.*;
-import it.polimi.se2018.model.DiceContainer;
-import it.polimi.se2018.model.Die;
-import it.polimi.se2018.model.GameBoard;
-import it.polimi.se2018.model.PlayerMove;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.model.player.Player;
 
@@ -125,4 +122,9 @@ public class ToolController implements Action{
     public int doDefaultMove(){
         return 0;
     }
+
+    public boolean isPass() {
+        return false;
+    }
+
 }

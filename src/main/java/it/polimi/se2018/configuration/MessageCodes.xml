@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<messages>
+    <message>
+        <id>1000</id>
+        <description>Attendi un messaggio dal server.</description>
+    </message>
+    <message>
+        <id>2000</id>
+        <description>Codice Schema:</description>
+    </message>
+    <message>
+        <id>2001</id>
+        <description>Difficolta':</description>
+    </message>
+    <message>
+        <id>2002</id>
+        <description>Nome Schema:</description>
+    </message>
+    <message>
+        <id>2005</id>
+        <description>Questa e' la tua carta Obiettivo Privato:</description>
+    </message>
+    <message>
+        <id>2010</id>
+        <description>Colori disponibili:</description>
+    </message>
+    <message>
+        <id>2020</id>
+        <description>Utente:</description>
+    </message>
+    <message>
+        <id>3000</id>
+        <description>Fai la tua mossa</description>
+    </message>
+    <message>
+        <id>3001</id>
+        <description>Inserisci indice di riga e di colonna della cella in cui vuoi posizionare il dado</description>
+    </message>
+    <message>
+        <id>3101</id>
+        <description>Mossa Inviata</description>
+    </message>
+    <message>
+        <id>3500</id>
+        <description>Seleziona un colore tra quelli disponibili</description>
+    </message>
+    <message>
+        <id>3501</id>
+        <description>Seleziona il codice di uno schema tra quelli disponibili</description>
+    </message>
+    <message>
+        <id>3503</id>
+        <description>Scegli un nickname</description>
+    </message>
+    <message>
+        <id>3510</id>
+        <description>Scelta Inviata</description>
+    </message>
+</messages>
