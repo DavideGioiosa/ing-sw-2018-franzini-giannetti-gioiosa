@@ -54,7 +54,6 @@ public class RemoteView extends Observable<PlayerMessage> {
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setMessage(finale);
         playerMessage.setId(PlayerMessageTypeEnum.WINNER);
-        playerMessage.setUser(null);
         serverManager.sendMessage(playerMessage);
         serverManager.shutdown();
     }

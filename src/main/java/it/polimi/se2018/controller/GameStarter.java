@@ -255,7 +255,6 @@ public class GameStarter {
         if(playerChoiceList.size() == userList.size()){
             startGame(playerChoiceList);
             remoteView.sendTable( new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
-            remoteView.isYourTurn(playerList.get(0));
             return true;
         }else return false;
     }

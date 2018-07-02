@@ -115,7 +115,7 @@ public class GameManager {
      */
     private void endRound(){
 
-        if(roundList.size() == 10){
+        if(roundList.size() == 2){
             calculateGameScore();
             setGameWinner();
             view.sendWinner(gameBoard);
@@ -126,10 +126,10 @@ public class GameManager {
     }
 
     void tryMove(PlayerMove playerMove){
+        roundList.get(roundList.size() - 1).update(playerMove);
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
         }
-        roundList.get(roundList.size() - 1).update(playerMove);
     }
 
 }

@@ -60,6 +60,7 @@ public class Round implements Observer<PlayerMove>{
         this.isDraftPoolSet = false;
         initializeRound(indexRound);
         this.view = view;
+        view.isYourTurn(getCurrPlayer());
     }
 
     /**
@@ -179,6 +180,7 @@ public class Round implements Observer<PlayerMove>{
                 } else {
                     view.reportError(2102, getCurrPlayer().getNickname());
                 }
+                view.isYourTurn(getCurrPlayer());
 
             }else {
                 idError = turn.runTurn(playerMove);
@@ -189,27 +191,28 @@ public class Round implements Observer<PlayerMove>{
                 }
 
                 if (turn.isFinished()) {
+
                     removeCurrPlayer();
 
                     //works but it be may exists a better check
-                    if (turnsList.size() < roundPlayerOrder.size() + turnsList.size()) {
+/*                    if (turnsList.size() < roundPlayerOrder.size() + turnsList.size()) {
                         turn = new Turn(gameBoard, getCurrPlayer());
                         turnsList.add(turn);
                     }
-
+*/
                     if (roundPlayerOrder.isEmpty()) {
                         endRound();
                         view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+                        return;
+                    }else{
+                        turn = new Turn(gameBoard, getCurrPlayer());
+                        turnsList.add(turn);
                     }
                 }
-
+                view.isYourTurn(getCurrPlayer());
             }
 
-            if(roundPlayerOrder.isEmpty()){
-                view.isYourTurn(nextRoundFirstPlayer);
-            }else view.isYourTurn(getCurrPlayer());
         }
-
 
     }
 
