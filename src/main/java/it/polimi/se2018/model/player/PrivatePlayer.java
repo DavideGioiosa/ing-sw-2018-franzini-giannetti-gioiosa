@@ -31,6 +31,11 @@ public class PrivatePlayer implements Serializable {
         this.privateObj=card;
     }
 
+    private PrivatePlayer(PrivatePlayer privatePlayer){
+        this.player = privatePlayer.getPlayer().getClone();
+        this.privateObj = privatePlayer.getPrivateObj().getClone();
+    }
+
     /**
      * Method returns the Private Objective Card
      * @return Private Objective Card of the player
@@ -45,5 +50,9 @@ public class PrivatePlayer implements Serializable {
      */
     public Player getPlayer(){
         return player;
+    }
+
+    public PrivatePlayer getClone(){
+        return new PrivatePlayer(this);
     }
 }

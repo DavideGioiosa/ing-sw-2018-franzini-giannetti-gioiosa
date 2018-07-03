@@ -54,6 +54,11 @@ public class PlayerMove implements Serializable {
     private int value;
 
     /**
+     * Index of Toolcard's using state
+     */
+    private int state;
+
+    /**
      * Constructor sets the identifier to 0 and it resets all value of Player Move
      */
     public PlayerMove() {
@@ -74,6 +79,7 @@ public class PlayerMove implements Serializable {
         this.diceSchemaWhereToLeave = new ArrayList<>();
         this.trackBoardIndexArray = new int[] {-1, -1};
         this.value = 0;
+        this.state = 0;
     }
 
     /**
@@ -96,6 +102,7 @@ public class PlayerMove implements Serializable {
 
         if (playerMove.trackBoardIndexArray != null) System.arraycopy(playerMove.trackBoardIndexArray,0, this.trackBoardIndexArray, 0,playerMove.trackBoardIndexArray.length);
         this.value = playerMove.value;
+        this.state = playerMove.state;
     }
 
     /**
@@ -252,5 +259,14 @@ public class PlayerMove implements Serializable {
     public PlayerMove getClone(){
         return new PlayerMove(this);
     }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getState() {
+        return state;
+    }
+
 }
 

@@ -73,9 +73,8 @@ public class BoardDice implements Serializable, DiceContainer {
     }
 
     @Override
-    public void pickDice(PlayerMove playerMove, List<Die> dieList){
-
-        if (playerMove.getDiceBoardIndex() == -1){
+    public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
+        if (min == 0 && max == 0){
             int numberOfDice = this.dieList.size();
             for(int i = 0; i < numberOfDice; i++) dieList.add(takeDie(0));
         }else dieList.add(takeDie(playerMove.getDiceBoardIndex()));

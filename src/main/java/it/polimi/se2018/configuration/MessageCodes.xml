@@ -29,6 +29,10 @@
         <description>Utente:</description>
     </message>
     <message>
+        <id>2021</id>
+        <description>Token disponibili:</description>
+    </message>
+    <message>
         <id>3000</id>
         <description>Fai la tua mossa</description>
     </message>

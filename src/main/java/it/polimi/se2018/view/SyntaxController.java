@@ -1,6 +1,7 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.controller.OperationString;
+import it.polimi.se2018.controller.ToolController;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.ToolCard;
 import it.polimi.se2018.utils.Observable;
@@ -28,8 +29,6 @@ public class SyntaxController extends Observable<PlayerMessage> {
      * Player Move representing the action that the player wants to make
      */
     private PlayerMove playerMove;
-
-    private ToolCard toolCard;
 
     private CommandTypeEnum commandTypeEnum;
 
@@ -136,14 +135,13 @@ public class SyntaxController extends Observable<PlayerMessage> {
     private void setToolCardId(String inputReceived, ClientBoard clientBoard) {
         for (ToolCard toolCard : clientBoard.getCardOnBoard().getToolCardList()) {
             if (Integer.valueOf(inputReceived) == toolCard.getId()) {
-                this.toolCard = toolCard;
                 playerMove.setIdToolCard(Integer.valueOf(inputReceived));
                 commandTypeEnumLists = new ArrayList<>();
 
                 for(List<OperationString> operationStrings: toolCard.getCommandLists()){
                     List<CommandTypeEnum> commandTypeEnumList = new ArrayList<>();
                     for(OperationString operationString: operationStrings){
-                        CommandTypeEnum commandTypeEnum = getCommandFromString(operationString);
+                        CommandTypeEnum commandTypeEnum = getCommandFromString(operationString, toolCard);
                         if(commandTypeEnum != null) commandTypeEnumList.add(commandTypeEnum);
                     }
                     if(!commandTypeEnumList.isEmpty()) commandTypeEnumLists.add(commandTypeEnumList);
@@ -152,14 +150,18 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
             }
         }
+        //commandTypeEnumLists.add(new ArrayList<>());
     }
 
-    private CommandTypeEnum getCommandFromString(OperationString operationString) {
+    private CommandTypeEnum getCommandFromString(OperationString operationString, ToolCard toolCard) {
         switch(operationString.getOperation().toLowerCase()){
             case "pick":
                 if(operationString.getDiceContainer().equalsIgnoreCase("schemacard")) return DICESCHEMAWHERETOTAKE;
                 if(operationString.getDiceContainer().equalsIgnoreCase("trackboard")) return TRACKBOARDINDEX;
-                if(operationString.getDiceContainer().equalsIgnoreCase("diceboard")) return DICEBOARDINDEX;
+                if(operationString.getDiceContainer().equalsIgnoreCase("diceboard")){
+                    if(toolCard.getMinQuantity() == 0 && toolCard.getMaxQuantity() == 0) return null;
+                    return DICEBOARDINDEX;
+                }
                 break;
 
             case "incdecvalue":
@@ -167,18 +169,19 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
             case "leave":
                 if(operationString.getDiceContainer().equalsIgnoreCase("schemacard")) return DICESCHEMAWHERETOLEAVE;
-                return null;
+                return COMPLETE;
 
             case "exchange":
                 if(operationString.getDiceContainer().equalsIgnoreCase("trackboard")) return TRACKBOARDINDEX;
                 if(operationString.getDiceContainer().equalsIgnoreCase("diceboard")) return DICEBOARDINDEX;
+                if(operationString.getDiceContainer().equalsIgnoreCase("dicebag")) return null;
                 return null;
 
-            case "setDieValue":
+            case "setdievalue":
                 return VALUE;
 
             default:
-                return null;
+                return COMPLETE;
         }
         return null;
     }
@@ -213,7 +216,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
     }
 
     private void setDiceBoardIndex(String inputReceived) {
-        if (Integer.valueOf(inputReceived) >= 0 && Integer.valueOf(inputReceived) < clientBoard.getBoardDice().getDieList().size()) {
+        if (clientBoard.getBoardDice() != null && !clientBoard.getBoardDice().getDieList().isEmpty() && Integer.valueOf(inputReceived) >= 0 && Integer.valueOf(inputReceived) < clientBoard.getBoardDice().getDieList().size()) {
             playerMove.setDiceBoardIndex(Integer.valueOf(inputReceived));
             setNextCommandType(playerMove);
         }
@@ -237,7 +240,14 @@ public class SyntaxController extends Observable<PlayerMessage> {
     }
 
     private int nextMessage(CommandTypeEnum commandTypeEnum) {
-        if (commandTypeEnum == COMPLETE) return 3101;
+
+
+        //if (commandTypeEnum == COMPLETE) return 3101;
+
+        if (commandTypeEnum == COMPLETE) return 0;
+
+
+
         println(inputFormatEnum + " " + commandTypeEnum);
         return 3000;
     }
@@ -296,13 +306,12 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
     private void setNextCommandType() {
 
-        if(commandTypeEnumLists.isEmpty()){
+        if(commandTypeEnumLists.get(playerMove.getState()).isEmpty() || commandTypeEnumLists.get(playerMove.getState()).get(0) == COMPLETE){
             setCompleteMove();
             return;
         }
 
-        commandTypeEnum = commandTypeEnumLists.get(0).remove(0);
-        if(commandTypeEnumLists.get(0).isEmpty()) commandTypeEnumLists.remove(0);
+        commandTypeEnum = commandTypeEnumLists.get(playerMove.getState()).remove(0);
 
     }
 

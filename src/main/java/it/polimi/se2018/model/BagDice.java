@@ -63,13 +63,9 @@ public class BagDice implements DiceContainer {
         return dieList.size();
     }
 
-    /**
-     *
-     * @param playerMove
-     * @param dieList
-     */
+
     @Override
-    public void pickDice(PlayerMove playerMove, List<Die> dieList){
+    public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
         dieList.add(extractDice());
     }
 

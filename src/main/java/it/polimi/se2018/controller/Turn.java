@@ -48,6 +48,7 @@ public class Turn {
         if (gameBoard == null){
             throw new NullPointerException("Insertion of null parameter gameBoard");
         }
+        if (actualPlayer == null) throw new NullPointerException("Insertion of null player in turn");
         this.gameBoard = gameBoard;
         this.numberOfPicks = 0;
         this.isToolCardUsed = false;
@@ -88,10 +89,10 @@ public class Turn {
      * @param playerMove Move that the player wants to make
      * @return boolean to communicate the result of the action
      */
-    int runTurn (PlayerMove playerMove){
+    int runTurn (PlayerMove playerMove, List<Player> roundPlayerOrder){
         int errorId = 0;
         if(playerMove == null){
-            throw new RuntimeException("Insertion of a PlayerMove null");
+            throw new NullPointerException("Insertion of a PlayerMove null");
         }
         if(turnsActionsList.isEmpty() || turnsActionsList.get(turnsActionsList.size() - 1).isComplete()) {
             if(playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.PASS)){
@@ -108,6 +109,11 @@ public class Turn {
                     if (errorId == 0) {
                         turnsActionsList.add(pickController);
                         this.numberOfPicks++;
+                        if (isToolCardUsed && numberOfPicks == numberOfPossiblePicks){
+                            PickController passMove = new PickController();
+                            passMove.doDefaultMove();
+                            turnsActionsList.add(passMove);
+                        }
                     }
                     return errorId;
                 }
@@ -120,10 +126,15 @@ public class Turn {
                     for (ToolCard toolCard : gameBoard.getCardOnBoard().getToolCardList()) {
                         if (toolCard.getId() == playerMove.getIdToolCard()) {
                             ToolController toolController = new ToolController(toolCard);
-                            errorId = toolController.doAction(gameBoard, playerMove, null, this);
+                            errorId = toolController.doAction(gameBoard, playerMove, roundPlayerOrder, this);
                             if (errorId == 0) {
                                 turnsActionsList.add(toolController);
                                 this.isToolCardUsed = true;
+                                if (toolController.isComplete() && numberOfPicks == numberOfPossiblePicks){
+                                    PickController passMove = new PickController();
+                                    passMove.doDefaultMove();
+                                    turnsActionsList.add(passMove);
+                                }
                             }
                             return errorId;
 
@@ -156,4 +167,17 @@ public class Turn {
         return numberOfPossiblePicks != numberOfPicks;
     }
 
+    private Action lastAction(){
+        if(turnsActionsList.isEmpty()) return null;
+        return turnsActionsList.get(turnsActionsList.size() - 1);
+    }
+
+    public boolean lastActionFinished(){
+        return lastAction() == null || lastAction().isComplete();
+    }
+
+    public PlayerMove getStartedPlayerMove(){
+        if(lastActionFinished()) return new PlayerMove();
+        return lastAction().getPlayerMove();
+    }
 }

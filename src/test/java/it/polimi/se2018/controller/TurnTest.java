@@ -23,8 +23,7 @@ public class TurnTest {
 
     private final ColourEnum FRAMECOLOUR = ColourEnum.BLUE;
     private final ColourEnum COLOUR = ColourEnum.BLUE;
-    private SchemaCard schemaCard;
-    private List<PrivatePlayer> privatePlayerList = new ArrayList<>();
+
     private GameBoard gameBoard;
     private Player player;
     private Turn turn;
@@ -36,51 +35,44 @@ public class TurnTest {
      */
     @Before
     public void init(){
-        final String NICKNAME = "Nickname";
-        final String NICKNAME_2 = "Nickname2";
-        final String NAME = "Name";
-        final String DESCRIPTION = "Description";
-        final boolean CONNECTION = true;
-        final int ID = 1;
-        final int DIFFICULTY = 1;
-        String strategy = "DiffColoursRow";
-        List<Cell> cellList = new ArrayList<>();
-        int indexOfTurn = 1;
-        int maxNumberOfDice = 1;
-        int minNumberOfDice = 1;
-        String avoidedRestriction = "";
-        List<List<OperationString>> operationStrings = new ArrayList<>();
-        operationStrings.add(new ArrayList<>());
-        operationStrings.get(0).add(new OperationString("pick", "diceboard"));
-        operationStrings.get(0).add(new OperationString("leave", "diceboard"));
+        GameLoader gameLoader = new GameLoader();
+        GameBoardTest gameBoardTest = new GameBoardTest();
+        gameBoard = gameBoardTest.newGameBoard();
 
-        for(int j = 0; j < 20; j++){
-            cellList.add(new Cell(0, null));
+        for(int i = 0; i<12; i++){
+            gameBoard.getCardOnBoard().getToolCardList().add((ToolCard) gameLoader.getToolDeck().extractCard());
         }
-        SchemaCard schemaCard = new SchemaCard(ID,"name","desc", DIFFICULTY, cellList);
 
-        player = new Player(NICKNAME, CONNECTION, FRAMECOLOUR, schemaCard, 2);
-        Player player2 = new Player(NICKNAME_2, CONNECTION, ColourEnum.RED, schemaCard, 3);
-        List<Player> playerList = new ArrayList<Player>();
-        playerList.add(player);
-        playerList.add(player2);
+        gameBoard.getPlayerList().get(0).getSchemaCard();
+        Die die = new Die (ColourEnum.RED);
+        die.setValue(5);
+        gameBoard.getPlayerList().get(0).getSchemaCard().setDiceIntoCell(new Position(7),die);
+        die = new Die (ColourEnum.GREEN);
+        die.setValue(5);
+        gameBoard.getPlayerList().get(0).getSchemaCard().setDiceIntoCell(new Position(5),die);
+        die = new Die (ColourEnum.BLUE);
+        die.setValue(1);
+        gameBoard.getPlayerList().get(0).getSchemaCard().setDiceIntoCell(new Position(1),die);
+        die = new Die (ColourEnum.BLUE);
+        die.setValue(3);
+        gameBoard.getPlayerList().get(0).getSchemaCard().setDiceIntoCell(new Position(6),die);
+        die = new Die (ColourEnum.YELLOW);
+        die.setValue(4);
+        gameBoard.getPlayerList().get(0).getSchemaCard().setDiceIntoCell(new Position(0),die);
 
-        ToolCard toolCard = new ToolCard(1, NAME, DESCRIPTION, COLOUR, indexOfTurn, minNumberOfDice, maxNumberOfDice, avoidedRestriction, operationStrings);
-        List<ToolCard> toolCardList = new ArrayList<>();
-        toolCardList.add(toolCard);
+        die = new Die(ColourEnum.GREEN);
+        die.setValue(2);
+        this.gameBoard.getBoardDice().insertDie(die);
+        die = new Die(ColourEnum.GREEN);
+        die.setValue(3);
+        this.gameBoard.getBoardDice().insertDie(die);
+        die = new Die(ColourEnum.YELLOW);
+        die.setValue(3);
+        this.gameBoard.getBoardDice().insertDie(die);
 
-        PublicObjCard publicObjCard = new PublicObjCard(5,NAME,DESCRIPTION,2, strategy);
-        List<PublicObjCard> publicCardList = new ArrayList<>();
-        publicCardList.add(publicObjCard);
 
-        BoardDice boardDice = new BoardDice();
-        TrackBoard trackBoardDice = new TrackBoard();
-        BagDice bagDice = new BagDice();
-        BoardCard boardCard = new BoardCard(publicCardList,toolCardList);
-
-        gameBoard = new GameBoard(playerList, bagDice,boardDice, trackBoardDice, boardCard, privatePlayerList);
         playerMove = new PlayerMove();
-        playerMove.setPlayer(player);
+        playerMove.setPlayer(gameBoard.getPlayerList().get(0));
     }
 
     /**
@@ -89,6 +81,7 @@ public class TurnTest {
     @Test
     public void Turn_shouldReturnTrueIfCorrectCreation(){
         turn = new Turn(gameBoard, player);
+        assertTrue(turn.getTurnsActionsList().isEmpty());
     }
 
     /**
@@ -117,7 +110,7 @@ public class TurnTest {
             gameBoard.getBoardDice().insertDie(die);
         }
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.PICK);
-        playerMove.setDiceBoardIndex(3);
+        playerMove.setDiceBoardIndex(2);
         playerMove.insertDiceSchemaWhereToLeave(new Position(2));
 
         int result = turn.runTurn(playerMove);
@@ -144,6 +137,7 @@ public class TurnTest {
         turn.runTurn(playerMove);
 
         playerMove.newPlayerMove();
+        playerMove.setPlayer(gameBoard.getPlayerList().get(0));
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.PICK);
         playerMove.setDiceBoardIndex(4);
         playerMove.insertDiceSchemaWhereToLeave(new Position(5));
@@ -151,24 +145,6 @@ public class TurnTest {
         int result = turn.runTurn(playerMove);
         assertFalse(result == 0);
     }
-
-    /**
-     * Check the correct functioning of the run of a Turn with a TOOL action
-     * Expecting a positive result
-     */
-    /*@Test
-    public void runTurn_shouldReturnTrueIfCorrectTool(){
-        turn = new Turn(gameBoard, player);
-        for(int i = 0; i < 5; i++) {
-            gameBoard.getBoardDice().insertDie(gameBoard.getBagDice().extractDice());
-        }
-        playerMove.setTypeOfChoice(TypeOfChoiceEnum.TOOL);
-        playerMove.setDiceBoardIndex(3);
-        playerMove.insertDiceSchemaWhereToLeave(new Position(2));
-
-        int result = turn.runTurn(playerMove);
-        assertTrue(result == 0);
-    }*/
 
     /**
      * Check if a player tries to do the action 'TOOL' twice in a Round,
@@ -247,5 +223,38 @@ public class TurnTest {
 
         boolean result = turn.isFinished();
         assertFalse(result);
+    }
+
+    @Test
+    public void useTool300(){
+        Turn turn = new Turn(gameBoard, player);
+
+        playerMove.setTypeOfChoice(TypeOfChoiceEnum.TOOL);
+        playerMove.setIdToolCard(300);
+        playerMove.setDiceBoardIndex(0);
+        playerMove.setValue(-1);
+
+        int error = turn.runTurn(playerMove);
+
+        assertEquals(0, error);
+        assertEquals(1, gameBoard.getBoardDice().getDieList().get(2).getValue());
+        assertEquals(ColourEnum.GREEN, gameBoard.getBoardDice().getDieList().get(2).getColour());
+    }
+
+    @Test
+    public void useTool301(){
+        Turn turn = new Turn(gameBoard, player);
+
+        playerMove.setTypeOfChoice(TypeOfChoiceEnum.TOOL);
+        playerMove.setIdToolCard(301);
+        playerMove.insertDiceSchemaWhereToTake(new Position(0,0));
+        playerMove.insertDiceSchemaWhereToLeave(new Position(2,2));
+
+        int error= turn.runTurn(playerMove);
+
+        assertEquals(0, error);
+        assertTrue(gameBoard.getPlayerList().get(0).getSchemaCard().getCellList().get(0).isEmpty());
+        assertEquals(ColourEnum.YELLOW, gameBoard.getPlayerList().get(0).getSchemaCard().getCellList().get(12).getDie().getColour());
+        assertEquals(4, gameBoard.getPlayerList().get(0).getSchemaCard().getCellList().get(12).getDie().getValue());
     }
 }

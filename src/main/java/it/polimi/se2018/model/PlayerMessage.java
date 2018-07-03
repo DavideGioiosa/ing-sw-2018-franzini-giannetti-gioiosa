@@ -6,6 +6,7 @@ import it.polimi.se2018.model.player.User;
 import java.io.Serializable;
 
 public class PlayerMessage implements Serializable {
+
     private PlayerMessageTypeEnum id;
     private PlayerMove playerMove;
     private PlayerChoice playerChoice;

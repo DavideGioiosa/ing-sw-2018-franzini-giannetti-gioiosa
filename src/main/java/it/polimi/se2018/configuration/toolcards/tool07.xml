@@ -4,8 +4,8 @@
     <description>Tira nuovamente tutti i dadi della Riserva. Questa carta può essera usata solo durante il tuo secondo turno, prima di scegliere il secondo dado.</description>
     <colour>BLUE</colour>
     <turn>2</turn>
-    <minQuantity>-1</minQuantity>
-    <maxQuantity>-1</maxQuantity>
+    <minQuantity>0</minQuantity>
+    <maxQuantity>0</maxQuantity>
     <restriction></restriction>
     <state>
         <operation>

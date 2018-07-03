@@ -7,27 +7,39 @@ import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.view.graphic.cli.CommandLineGraphic;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
+import it.polimi.se2018.view.graphic.gui.GuiInput;
+import it.polimi.se2018.view.graphic.gui.GuiOutput;
+//import it.polimi.se2018.view.graphic.gui.GuiInput;
+//import it.polimi.se2018.view.graphic.gui.GuiOutput;
+
+import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.println;
 
 /**
  * Used for interaction with the player
  * @author Silvia Franzini
  */
-public class View extends Observable implements Observer<ClientBoard> {
+public class View extends Observable implements Observer<ClientModel> {
+
     protected InputStrategy inputStrategy;
-    private MoveMessage moveMessage;
-    private CommandLineInput commandLineInput;
+    protected OutputStrategy outputStrategy;
 
     private ClientBoard clientBoard;
-
-    private CommandLineGraphic commandLineGraphic;
 
     /**
      * Constructor of the class
      */
     public View() {
-        commandLineInput = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
-        commandLineGraphic = new CommandLineGraphic();
-        this.inputStrategy = commandLineInput;
+
+        //this.inputStrategy = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
+        //this.outputStrategy = new CommandLineGraphic();
+
+        this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
+        this.outputStrategy = new GuiOutput();
+
+
+
+        //commandLineGraphic = new CommandLineGraphic();
+
     }
 
     /**
@@ -68,23 +80,13 @@ public class View extends Observable implements Observer<ClientBoard> {
                 break;
 
             case WINNER:
-                for(Player player: playerMessage.getMoveMessage().getPlayerList()) System.out.println( player.getNickname() + " " + player.getScore());
+                for(Player player: playerMessage.getMoveMessage().getPlayerList()) println( player.getNickname() + " " + player.getScore());
                 break;
 
             default:
                 reportError(1001);
         }
 
-    }
-
-    /**
-     * Method used to update the status of the table when a player haa played and only used a PICK action
-     * @param playerMove class containing all the parameters of the move
-     */
-    public void updateSchema(PlayerMove playerMove){
-        SchemaCard schemaCard = playerMove.getPlayer().getSchemaCard();
-        Die die = moveMessage.getBoardDice().takeDie(playerMove.getDiceBoardIndex());
-        schemaCard.setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(0), die);
     }
 
     /**
@@ -95,24 +97,29 @@ public class View extends Observable implements Observer<ClientBoard> {
     }
 
     /**
-     *
-     * @param message
+     * Displays a message on vide
+     * @param message id of the message
      */
-    public void showMessage(int message){
+    private void showMessage(int message){
         inputStrategy.showMessage(message);
     }
 
     /**
      * Method used to update the table status in the local Model
-     * @param clientBoard class containing the several elements of the table
+     * @param clientModel class containing the several elements of the table
      */
     @Override
-    public void update(ClientBoard clientBoard){
-        this.clientBoard = clientBoard;
-        commandLineGraphic.showGameBoard(clientBoard);
+    public void update(ClientModel clientModel){
+        this.clientBoard = clientModel.getClientBoard();
+        outputStrategy.showGameBoard(clientBoard);
     }
 
     public InputStrategy getInputStrategy() {
         return inputStrategy;
     }
+
+    public OutputStrategy getOutputStrategy() {
+        return outputStrategy;
+    }
+
 }

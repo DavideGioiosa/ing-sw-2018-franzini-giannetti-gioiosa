@@ -19,9 +19,10 @@ public class User implements Serializable {
 
     /**
      * Builder: create a user with the id and the connection
+     *
      * @param typeOfConnection Type of connection chosen by user: RMI or Socket
      */
-    public User (TypeOfConnection typeOfConnection){
+    public User(TypeOfConnection typeOfConnection) {
         this.connection = true;
         this.typeOfConnection = typeOfConnection;
         charConnection = new HashMap<>();
@@ -73,7 +74,7 @@ public class User implements Serializable {
     }
 
 
-    public String createUniqueCode(){
+    public String createUniqueCode() {
 
         String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder stringBuilder = new StringBuilder();
@@ -82,11 +83,11 @@ public class User implements Serializable {
             stringBuilder.append(candidateChars.charAt(random.nextInt(candidateChars.length())));
         }
         uniqueCode = stringBuilder.toString();
-        if(typeOfConnection.equals(TypeOfConnection.SOCKET)){
+        if (typeOfConnection.equals(TypeOfConnection.SOCKET)) {
             uniqueCode = charConnection.get(TypeOfConnection.SOCKET) + uniqueCode;
-        }else uniqueCode = charConnection.get(TypeOfConnection.RMI) + uniqueCode;
+        } else uniqueCode = charConnection.get(TypeOfConnection.RMI) + uniqueCode;
 
-       return uniqueCode;
+        return uniqueCode;
     }
 
     public TypeOfConnection getTypeOfConnection() {

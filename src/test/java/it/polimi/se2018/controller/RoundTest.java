@@ -111,10 +111,10 @@ public class RoundTest {
     /**
      * Check of the correct creation of the Round
      */
-    @Test
+    /*@Test
     public void Round_shouldReturnTrueIfCorrectCreation() {
         round = new Round(gameBoard, 0, null);
-    }
+    }*/
 
     /**
      * Check Exception called because of wrong creation of a Round
@@ -228,7 +228,7 @@ public class RoundTest {
     /**
      * Check Exception called because of null parameter of playerMove
      */
-    @Test
+    /*@Test
     public void update_shouldCallExceptionForNullParameter() {
         round = new Round(gameBoard, 0, null);
         PlayerMove playerMoveNull = null;
@@ -238,5 +238,5 @@ public class RoundTest {
         }
         catch (RuntimeException e){
         }
-    }
+    }*/
 }

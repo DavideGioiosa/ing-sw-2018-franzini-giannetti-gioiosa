@@ -253,7 +253,7 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
      * @param dieList
      */
     @Override
-    public void pickDice(PlayerMove playerMove, List<Die> dieList){
+    public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
 
         for(int i = 0; i <playerMove.getDiceSchemaWhereToTake().size(); i++) {
             dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(i)));

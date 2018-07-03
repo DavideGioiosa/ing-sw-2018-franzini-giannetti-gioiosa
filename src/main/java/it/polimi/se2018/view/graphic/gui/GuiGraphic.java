@@ -15,6 +15,12 @@ import javafx.application.Application;
 import java.io.File;
 import java.net.URL;
 
+/**
+ * View's Graphic Class: GuiGraphic
+ *
+ * @author Davide Gioiosa
+ */
+
 public class GuiGraphic extends Application {
 
     /**
@@ -30,16 +36,19 @@ public class GuiGraphic extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        //URL url = new File("src\\main\\java\\it\\polimi\\se2018\\view\\graphic\\gui\\SchemeCard.fxml").toURI().toURL();
+        //Parent root = FXMLLoader.load(url);
 
-        URL url = new File("src\\main\\java\\it\\polimi\\se2018\\view\\graphic\\gui\\Table.fxml").toURI().toURL();
-        Parent root = FXMLLoader.load(url);
+
+        Parent root = FXMLLoader.load(getClass().getResource("GameTable.fxml"));
+
+
         primaryStage.setTitle("Sagrada");
         int width = (int) Screen.getPrimary().getBounds().getWidth() ;
         int height = (int) Screen.getPrimary().getBounds().getHeight() - 70;
 
         //per settare il full screen senza barra di uscita sopra
-        //primaryStage.setFullScreen(true);
-        //primaryStage.setScene(new Scene(root));
+       // primaryStage.setFullScreen(true);
 
         primaryStage.setScene(new Scene(root, width, height));
         primaryStage.show();

@@ -12,24 +12,24 @@ public class TrackBoardTest {
 
     private TrackBoard trackBoard;
     private List<Die> surplus;
-    private Die d;
-    private Die d1;
-    private Die d2;
+    private Die die;
+    private Die die1;
+    private Die die2;
 
     /**
      * Initialization for TrackBoardTest
      */
     @Before
     public void init(){
-            trackBoard = new TrackBoard();
-            surplus = new ArrayList<Die>();
-            d= new Die(ColourEnum.BLUE);
-            d.firstRoll();
-            d1= new Die(ColourEnum.GREEN);
-            d1.firstRoll();
-            d2= new Die(ColourEnum.RED);
-            d2.firstRoll();
-            surplus.add(d2);
+        trackBoard = new TrackBoard();
+        surplus = new ArrayList<>();
+        die = new Die(ColourEnum.BLUE);
+        die.firstRoll();
+        die1 = new Die(ColourEnum.GREEN);
+        die1.firstRoll();
+        die2 = new Die(ColourEnum.RED);
+        die2.firstRoll();
+        surplus.add(die2);
     }
 
     /**
@@ -37,13 +37,8 @@ public class TrackBoardTest {
      */
     @Test
     public void insertDice() {
-        try{
             trackBoard.insertDice(surplus);
-            assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1), surplus);
-        }catch(NullPointerException e){
-            fail();
-        }
-
+            assertEquals(surplus, trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1));
     }
 
     /**
@@ -52,20 +47,46 @@ public class TrackBoardTest {
      */
     @Test
     public void exchangeDice() {
-       try{
-           surplus.add(d);
-           trackBoard.getDiceList().remove(surplus);
-           trackBoard.insertDice(surplus);
-           if(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1).equals(surplus)){
-               Die die = trackBoard.exchangeDice(trackBoard.getDiceList().size()-1,0,d1);
-               if(die.equals(d2)){
-                   assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1).get(0), d);
-               }
+        trackBoard.insertDice(surplus);
 
-           }
-       }catch(NullPointerException e){
-           fail();
-       }
+        Die die = trackBoard.exchangeDice(trackBoard.getDiceList().size()-1,0,die1);
+
+        assertEquals(trackBoard.getDiceList().get(trackBoard.getDiceList().size()-1).get(0), die1);
+
+    }
+
+    @Test
+    public void trackBoardCopyConstructorTest(){
+        List<Die> dieList = new ArrayList<>();
+        Die die = new Die(ColourEnum.RED);
+        die.setValue(5);
+        dieList.add(die);
+        die = new Die(ColourEnum.RED);
+        die.setValue(1);
+        dieList.add(die);
+        List<Die> dieList1 = new ArrayList<>();
+        die = new Die(ColourEnum.GREEN);
+        die.setValue(5);
+        dieList1.add(die);
+        die = new Die(ColourEnum.BLUE);
+        die.setValue(4);
+        dieList1.add(die);
+
+        TrackBoard trackBoard = new TrackBoard();
+        trackBoard.insertDice(dieList);
+        trackBoard.insertDice(dieList1);
+
+        TrackBoard trackBoardClone = trackBoard.getClone();
+        trackBoard.getDiceList().get(1).get(1).setValue(1);
+
+        assertEquals(4,trackBoardClone.getDiceList().get(1).get(1).getValue());
+        assertEquals(ColourEnum.BLUE,trackBoardClone.getDiceList().get(1).get(1).getColour());
+        assertEquals(5,trackBoardClone.getDiceList().get(1).get(0).getValue());
+        assertEquals(ColourEnum.GREEN,trackBoardClone.getDiceList().get(1).get(0).getColour());
+        assertEquals(1,trackBoardClone.getDiceList().get(0).get(1).getValue());
+        assertEquals(ColourEnum.RED,trackBoardClone.getDiceList().get(0).get(1).getColour());
+        assertEquals(5,trackBoardClone.getDiceList().get(0).get(0).getValue());
+        assertEquals(ColourEnum.RED,trackBoardClone.getDiceList().get(0).get(0).getColour());
 
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import static org.fusesource.jansi.Ansi.*;
 
+import it.polimi.se2018.view.OutputStrategy;
 import org.fusesource.jansi.AnsiConsole;
 
 
@@ -22,7 +23,7 @@ import static it.polimi.se2018.model.Config.NUMBER_OF_SCHEMA_ROW;
  * Manages input and output in Command Line
  * @author Cristian Giannetti
  */
-public class CommandLineGraphic{
+public class CommandLineGraphic implements OutputStrategy {
 
     /**
      * Character used for Card frames
@@ -234,6 +235,7 @@ public class CommandLineGraphic{
      * Shows entire Game Board
      * @param clientBoard Game Board to display
      */
+    @Override
     public void showGameBoard(ClientBoard clientBoard){
         for(PublicObjCard publicObjCard: clientBoard.getCardOnBoard().getPublicObjCardList()) showPublicObjCard(publicObjCard);
         for(ToolCard toolCard: clientBoard.getCardOnBoard().getToolCardList()) showToolCard(toolCard);
@@ -243,6 +245,8 @@ public class CommandLineGraphic{
         for(Player player: clientBoard.getPlayerList()) {
             printMessage(2020);
             println(player.getNickname());
+            printMessage(2021);
+            println(player.getTokens());
             showSchemaCard(player.getSchemaCard());
             println("");
         }

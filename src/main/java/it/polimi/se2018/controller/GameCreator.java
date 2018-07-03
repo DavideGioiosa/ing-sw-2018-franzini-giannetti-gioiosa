@@ -39,10 +39,12 @@ public class GameCreator {
         if(!gameStatus){
             if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHOICE)){
                 gameStatus = gameStarter.newChoice(playerMessage.getPlayerChoice());
+                if(gameStatus) gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
             }
-        }else if(gameManager == null){
-            gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
         }
+        /*else if(gameManager == null){
+            gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
+        }*/
         if(playerMessage.getId().equals(PlayerMessageTypeEnum.CHECK_MOVE)){
             gameManager.tryMove(playerMessage.getPlayerMove());
         }

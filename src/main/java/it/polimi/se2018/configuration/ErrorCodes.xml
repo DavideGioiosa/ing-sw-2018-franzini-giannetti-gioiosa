@@ -50,6 +50,14 @@
     </error>
     <error>
         <id>2102</id>
+        <description>Non hai abbastanza token per utilizzare la Carta Utensile</description>
+    </error>
+    <error>
+        <id>2103</id>
+        <description>Errore nell'utilizzo della Carta Utensile</description>
+    </error>
+    <error>
+        <id>2104</id>
         <description>Devi prima estrarre i dadi dal sacchetto</description>
     </error>
     <error>
@@ -67,5 +75,9 @@
     <error>
         <id>2503</id>
         <description>La lunghezza del nickname non puo' superare i 25 caratteri</description>
+    </error>
+    <error>
+        <id>2504</id>
+        <description>Hai effettuato una scelta non valida</description>
     </error>
 </errors>

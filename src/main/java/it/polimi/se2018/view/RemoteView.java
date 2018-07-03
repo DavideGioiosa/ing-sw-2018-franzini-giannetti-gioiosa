@@ -54,7 +54,6 @@ public class RemoteView extends Observable<PlayerMessage> {
         PlayerMessage playerMessage = new PlayerMessage();
         playerMessage.setMessage(finale);
         playerMessage.setId(PlayerMessageTypeEnum.WINNER);
-        playerMessage.setUser(null);
         serverManager.sendMessage(playerMessage);
         serverManager.shutdown();
     }
@@ -92,9 +91,10 @@ public class RemoteView extends Observable<PlayerMessage> {
      //controllo su variabile
     }
 
-    public void isYourTurn(Player player){
+    public void isYourTurn(Player player, PlayerMove playerMove){
         PlayerMessage playerMessage = new PlayerMessage();
-        PlayerMove playerMove = new PlayerMove();
+        if(playerMove == null) playerMove = new PlayerMove();
+
         playerMove.setPlayer(player);
         playerMessage.setCheckMove(playerMove);
         playerMessage.setId(PlayerMessageTypeEnum.YOUR_TURN);
