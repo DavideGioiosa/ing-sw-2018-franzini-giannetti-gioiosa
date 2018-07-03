@@ -40,8 +40,8 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
         try {
 
-            this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
-
+            //this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
+                this.stub = (ServerRemoteInterface) Naming.lookup("//localhost/MyServer") ;
             ClientRemoteInterface remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
 
             stub.addClient(remoteRef);

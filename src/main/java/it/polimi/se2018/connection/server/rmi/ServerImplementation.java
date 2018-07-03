@@ -2,8 +2,7 @@ package it.polimi.se2018.connection.server.rmi;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 import it.polimi.se2018.connection.client.rmi.ClientRemoteInterface;
-import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.PlayerMessageTypeEnum;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
@@ -23,9 +22,10 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
     private transient Observable<PlayerMessage> obs = new Observable<>();
 
 
-    ServerImplementation() throws RemoteException{
-        super();
+    ServerImplementation(int port) throws RemoteException{
+        super(port);
     }
+
     public void addObserver(Observer<PlayerMessage> observer){
         obs.addObserver(observer);
     }
@@ -65,13 +65,13 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         playerMessage.setUser(user);
         RMIServerPing rmiServerPing = new RMIServerPing(this, code, client);
         Timer lifeLineTimer = new Timer();
-        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), (long)90*1000);
+        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), (long)1*1000);
         pingMap.put(code, lifeLineTimer);
         println("trovato nuovo client");
         try {
             client.receiveFromServer(playerMessage);
         } catch (RemoteException e) {
-
+            println("errore nella send");
             String string = clientList.entrySet().stream().filter(entry -> entry.getValue().equals(client)).map(Map.Entry::getKey).findFirst().orElse(null);
             disconnectionHandler(string);
         }
