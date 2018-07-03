@@ -27,7 +27,9 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -71,6 +73,7 @@ public class ControllerMatchTable implements Initializable {
     @FXML
     private GridPane gridPane;
 
+
     //-------------------------------------------- SCHEME SELECTION -----------------------------
 
     @FXML
@@ -95,9 +98,13 @@ public class ControllerMatchTable implements Initializable {
     private VBox choiceSchemeBox4;
 
     @FXML
+    private VBox privateCardBox0;
+
+    @FXML
     private AnchorPane schemeSelectionPane;
 
-
+    @FXML
+    private AnchorPane gameboardPane;
 
     //-----------------------------
    // @FXML VBox useToolBox1;
@@ -117,10 +124,10 @@ public class ControllerMatchTable implements Initializable {
 
     //---------------------
 
-    @FXML Button buttonSchemeChosen1;
-    @FXML Button buttonSchemeChosen2;
-    @FXML Button buttonSchemeChosen3;
-    @FXML Button buttonSchemeChosen4;
+    @FXML RadioButton buttonSchemeChosen1;
+    @FXML RadioButton buttonSchemeChosen2;
+    @FXML RadioButton buttonSchemeChosen3;
+    @FXML RadioButton buttonSchemeChosen4;
 
     //scorrimento lettura carte pubbliche e tool
     private int indexChangeCard;
@@ -146,6 +153,8 @@ public class ControllerMatchTable implements Initializable {
 
     List<SchemaCard> schemaCardList;
 
+    ToggleGroup selectionSchemeButtonGroup;
+
     @FXML
     private AnchorPane backPane;
 
@@ -170,7 +179,6 @@ public class ControllerMatchTable implements Initializable {
 
 
         //------------------------------------------------------------------------------------------------
-        GameLoader gameLoader = new GameLoader();
 
         playerList = new ArrayList<>();
         playerList.add(new Player("Player1", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 3));
@@ -232,8 +240,7 @@ public class ControllerMatchTable implements Initializable {
         schemeSelectionPane.setDisable(true);
         loginPane.setDisable(true);
         nicknamePane.setDisable(true);
-
-
+        gameboardPane.setDisable(true);
 
 
         viewSocket = new View();
@@ -248,7 +255,11 @@ public class ControllerMatchTable implements Initializable {
         viewSocket.getInputStrategy().getSyntaxController().addObserver(clientControllerSocket);
         clientSocket.connect();
 
-
+        selectionSchemeButtonGroup = new ToggleGroup();
+        buttonSchemeChosen1.setToggleGroup(selectionSchemeButtonGroup);
+        buttonSchemeChosen2.setToggleGroup(selectionSchemeButtonGroup);
+        buttonSchemeChosen3.setToggleGroup(selectionSchemeButtonGroup);
+        buttonSchemeChosen4.setToggleGroup(selectionSchemeButtonGroup);
 
 
         enableLoginPane();
@@ -301,11 +312,6 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-
-    //TODO: USARE PER LA SCELTA DELLA CARTA SCHEMA
-    public void prova() {
-     //   schemeSelectionController.showScheme(schemaCardList);
-    }
 
     private Image showCard(Card card, String stringa) {
         String string = "src\\main\\java\\it\\polimi\\se2018\\img\\";
@@ -460,10 +466,10 @@ public class ControllerMatchTable implements Initializable {
     }
 
     public void sendSelectedScheme (){
-        if(buttonSchemeChosen1.isPressed()){
-            playerSetupper.validCommand(((Integer)playerChoice.getSchemaCardList().get(0).getId()).toString());
-        }
-        else if(buttonSchemeChosen2.isPressed()){
+
+        playerSetupper.validCommand(((Integer)playerChoice.getSchemaCardList().get(0).getId()).toString());
+
+         if(buttonSchemeChosen2.isPressed()){
             playerSetupper.validCommand(((Integer)playerChoice.getSchemaCardList().get(1).getId()).toString());
         }
         else if(buttonSchemeChosen3.isPressed()){
@@ -486,6 +492,7 @@ public class ControllerMatchTable implements Initializable {
         CommandTypeEnum nextCommandType = typeOfInputAsked.getCommandTypeEnum();
 
 
+        enableGameboardPane(clientBoard, playerMove);
     }
 
 
@@ -509,6 +516,33 @@ public class ControllerMatchTable implements Initializable {
         toolCardPane.setDisable(false);
     }
 
+    @FXML private void disableGameboardPane (){
+
+        gameboardPane.setOpacity(0);
+        gameboardPane.setVisible(false);
+        gameboardPane.setDisable(true);
+
+        //dà i dati della toolcard scelta
+    }
+
+    @FXML private void enableGameboardPane (ClientBoard clientBoard, PlayerMove playerMove){
+        disableBackgroundPane();
+        inizGameboard(clientBoard, playerMove);
+        gameboardPane.setOpacity(1);
+        gameboardPane.setVisible(true);
+        gameboardPane.setDisable(false);
+    }
+
+    //TODO: FIX, NON SAI DI CHI E' LO SCHEMO
+    public void inizGameboard (ClientBoard clientBoard, PlayerMove playerMove){
+        Platform.runLater(() -> {
+                    schemeVBOX.getChildren().add(createScheme(clientBoard.getPlayerList().get(0).getSchemaCard()));
+                    schemeVBOX2.getChildren().add(createScheme(clientBoard.getPlayerList().get(1).getSchemaCard()));
+                });
+
+      //  schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
+      //  schemeVBOX3.getChildren().add(createScheme(schemaCardList.get(3)));
+    }
 
     //------------------------------------------------------------------------------------
 
@@ -636,7 +670,6 @@ public class ControllerMatchTable implements Initializable {
             choiceSchemeBox4.getChildren().add(createScheme(schemeToChooseList.get(3)));
         });
 
-
     }
 
     public void inizToolCard (){
@@ -670,13 +703,6 @@ public class ControllerMatchTable implements Initializable {
             }
             choiceToolCardGrid.add(vBox, i,0);
         }
-    }
-
-    private void inizSchemeOnTheTable (){
-        //schemeVBOX.getChildren().add(createScheme(schemaCardList.get(0)));
-        //schemeVBOX1.getChildren().add(createScheme(schemaCardList.get(1)));
-        //schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
-        //schemeVBOX3.getChildren().add(createScheme(schemaCardList.get(3)));
     }
 
     @FXML
