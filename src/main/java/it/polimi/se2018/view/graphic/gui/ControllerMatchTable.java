@@ -45,11 +45,19 @@ import java.util.List;
 
 public class ControllerMatchTable implements Initializable {
 
+    //Lista delle ImageView dei dadi nel DraftPool
     private List<ImageView> diceOnDraftList;
 
     //Lista delle celle dello schema scelto dall'utente
     private List<AnchorPane> cellSchemeList;
 
+    //Lista dei bottoni delle ToolCard da usare
+    private List<Button> toolChoiceButtonList;
+
+    @FXML GridPane schemeSelectionGrid;
+
+
+    @FXML private AnchorPane toolCardPane;
 
     @FXML
     private HBox hBoxDraftDice;
@@ -103,6 +111,21 @@ public class ControllerMatchTable implements Initializable {
      */
     private ImageView selectedDie;
 
+    /**
+     * Button selezionato per la scelta dell'uso della toolCard
+     */
+    private Button selectedButtonToolCardToUse;
+
+    /**
+     * AnchorPane della cella cliccata
+     */
+    private AnchorPane cellSelected;
+
+    /**
+     * Button pressed of the selection Scheme Pane
+     */
+    private Button selectedButtonScheme;
+
     //-----------------------------
 
     PlayerChoice playerChoice;
@@ -121,12 +144,8 @@ public class ControllerMatchTable implements Initializable {
 
     //----------------------
 
-    private List<GridPane> schemeGridPaneList;
-
-
-    //scorrimento lettura carte pubbliche e tool
+    //scorrimento lettura carte pubbliche e obj privato
     private int indexChangeCard;
-
 
     @FXML
     private AnchorPane backPane;
@@ -177,32 +196,14 @@ public class ControllerMatchTable implements Initializable {
 
         //------------------------------------
 
-        schemeGridPaneList = new ArrayList<>();
-
         cellSchemeList = new ArrayList<>();
-
 
         diceOnDraftList = new ArrayList();
 
-        //AnchorPane anchorPane = showSchemeSelection();
-        //primaryScene.getChildren().add(anchorPane);
+        toolChoiceButtonList = new ArrayList<>();
+
     }
 
-    @FXML
-    HBox hboxScheme;
-
-    //TODO: TOGLIERE??
-    public AnchorPane loadSchema() {
-        try {
-            URL url = new File("src\\main\\java\\it\\polimi\\se2018\\view\\graphic\\gui\\SchemeCard.fxml").toURI().toURL();
-            AnchorPane schemeCardMatrix = FXMLLoader.load(url);
-
-            //gridPane.setAlignment(Pos.CENTER);
-            return schemeCardMatrix;
-        } catch (Exception e) {
-        }
-        return null;
-    }
 
     //TODO: TOGLIERE GIA' SI VISUALIZZANO DAL MENU
     private void showPrivateCards() {
@@ -228,7 +229,6 @@ public class ControllerMatchTable implements Initializable {
         cardImg.fitWidthProperty().bind(publicCardPane.widthProperty());
         cardImg.fitHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
     }
-
 
 
     private Image showCard(Card card, String stringa) {
@@ -266,16 +266,17 @@ public class ControllerMatchTable implements Initializable {
         showPublicCards(clientBoard, indexChangeCard);
     }
 
-    /**
-     * TODO: POSSIBILE SOLO AL PRIMO PLAYER DEL ROUND
-     * Boolean isClicked
-     */
+
     @FXML private void extractClick() {
         syntaxController.validCommand("extract");
     }
 
     @FXML private void passClick () {
         syntaxController.validCommand("pass");
+    }
+
+    @FXML private void cancelClick () {
+        syntaxController.validCommand("cancel");
     }
 
     private void showDiceBoard (){
@@ -298,21 +299,9 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
-    private void checkDiceBoardIndex(){
-        syntaxController.validCommand("pick");
-
-        for (int i = 0; i < clientBoard.getBoardDice().getDieList().size(); i++) {
-            if(diceOnDraftList.get(i) == selectedDie){
-                //System.out.println("INDICE DADO " + i);
-                syntaxController.validCommand(((Integer) i).toString());
-            }
-        }
-
-        //TODO: SE HO ERRORE?
-    }
 
 
-
+    //ENABLE & DISABLE PANE //
 
     @FXML private void disableBackgroundPane (){
         backgroundPane.setOpacity(0);
@@ -333,17 +322,6 @@ public class ControllerMatchTable implements Initializable {
         disableBackgroundPane();
         sendNickname();
     }
-
-    public void sendNickname (){
-        playerSetupper.validNickname(nicknameAreaText.getText());
-    }
-
-    public void requestNickname (User user){
-        enableNicknamePane();
-
-        TypeOfInputAsked typeOfInputAsked = playerSetupper.newUserReceived(user); //la stringa che ti invio è per il nick dell'user
-    }
-
 
     @FXML private void enableNicknamePane (){
         enableBackgroundPane();
@@ -386,47 +364,6 @@ public class ControllerMatchTable implements Initializable {
         schemeSelectionPane.setDisable(false);
     }
 
-    public void sendSelectedScheme (){
-        System.out.println(selectedButtonScheme.getText());
-
-        if(selectedButtonScheme.getText().equals("Schema 1")){
-            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(0).getId()).toString());
-        }
-        else if(selectedButtonScheme.getText().equals("Schema 2")){
-            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(1).getId()).toString());
-        }
-        else if(selectedButtonScheme.getText().equals("Schema 3")){
-            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(2).getId()).toString());
-        }
-        else if(selectedButtonScheme.getText().equals("Schema 4")){
-            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(3).getId()).toString());
-        }
-    }
-
-    public void requestSchemeSelection (PlayerChoice playerChoice){
-        this.playerChoice=playerChoice;
-        TypeOfInputAsked typeOfInputAsked = playerSetupper.newChoiceReceived(playerChoice); //la stringa che ti invio è per scelta scheme
-
-        enableSchemeSelectionPane(playerChoice.getSchemaCardList());
-    }
-
-    public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
-
-        TypeOfInputAsked typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
-        this.nextCommandType = typeOfInputAsked.getCommandTypeEnum(); //la mossa richiesta
-
-        //extractButton.setEffect(Shadow);
-    }
-
-    //UPDATE
-    public void requestShowGameboard (ClientBoard clientBoard){
-        this.clientBoard = clientBoard;
-        enableGameboardPane();
-        inizGameboard(clientBoard);
-    }
-
-    @FXML private AnchorPane toolCardPane;
-
     @FXML private void disableToolCardPane (){
         //confirmToolCardChoice();
         disableBackgroundPane();
@@ -462,12 +399,131 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
+
+
+    // REQUEST: richieste invocate dal GuiInput //
+
+    public void requestSchemeSelection (PlayerChoice playerChoice){
+        this.playerChoice=playerChoice;
+        TypeOfInputAsked typeOfInputAsked = playerSetupper.newChoiceReceived(playerChoice); //la stringa che ti invio è per scelta scheme
+
+        enableSchemeSelectionPane(playerChoice.getSchemaCardList());
+    }
+
+    public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
+
+        TypeOfInputAsked typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
+        this.nextCommandType = typeOfInputAsked.getCommandTypeEnum(); //la mossa richiesta
+
+        //extractButton.setEffect(Shadow);
+    }
+
+    public void requestNickname (User user){
+        enableNicknamePane();
+
+        TypeOfInputAsked typeOfInputAsked = playerSetupper.newUserReceived(user); //la stringa che ti invio è per il nick dell'user
+    }
+
+    //UPDATE
+    public void requestShowGameboard (ClientBoard clientBoard){
+        this.clientBoard = clientBoard;
+        enableGameboardPane();
+        inizGameboard(clientBoard);
+    }
+
+
+    //SEND: invio della scelta fatta dall'utente
+
+    public void sendSelectedScheme (){
+        System.out.println(selectedButtonScheme.getText());
+
+        if(selectedButtonScheme.getText().equals("Schema 1")){
+            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(0).getId()).toString());
+        }
+        else if(selectedButtonScheme.getText().equals("Schema 2")){
+            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(1).getId()).toString());
+        }
+        else if(selectedButtonScheme.getText().equals("Schema 3")){
+            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(2).getId()).toString());
+        }
+        else if(selectedButtonScheme.getText().equals("Schema 4")){
+            playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(3).getId()).toString());
+        }
+    }
+
+
+    public void sendNickname (){
+        playerSetupper.validNickname(nicknameAreaText.getText());
+    }
+
+
+    //INIZ: chiamati per posizionare le carte nel corrispettivo pane //
+
+    //ADD DINAMICO DEI 4 SCHEMI CHE L'UTENTE DEVE SCEGLIERE
+    //TODO: ADD CARTA OBJ PRIVATO
+    public void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList){
+
+        Platform.runLater(() -> {
+            for(int i = 0; i <5; i++) {
+                VBox vBox = new VBox();
+                vBox.setAlignment(Pos.CENTER);
+                vBox.setSpacing(50);
+                if(i == 0){
+                    Text text = new Text("La tua carta obiettivo privato");
+                    text.setFill(Color.WHITE);
+                    vBox.getChildren().addAll(text);
+                }else {
+                    Button button = new Button("Schema " + (i));
+                    button.setOnAction(event -> {
+                        selectedButtonScheme = button;
+                        disableSchemeSelectionPane();
+                    });
+
+                    vBox.getChildren().addAll(button, createScheme(schemeToChooseList.get(i - 1)));
+                }
+
+                schemeSelectionGrid.add(vBox, i, 0);
+            }
+        });
+    }
+
+
+    public void inizToolCard (){
+        for(int i = 0; i < 3; i++) {
+            VBox vBox = new VBox();
+            ImageView toolImg = new ImageView(showCard(clientBoard.getCardOnBoard().getToolCardList().get(i), "toolCard"));
+            toolImg.setPreserveRatio(true);
+            toolImg.setFitWidth(300);
+            //toolImg.fitWidthProperty().bind(vBox.widthProperty());
+            Button button = new Button("ToolCard " + i);
+
+
+            button.setOnAction(e -> {
+                selectedButtonToolCardToUse = button;
+                checkToolIndex();
+                disableToolCardPane();
+            });
+            toolChoiceButtonList.add(button);
+
+            vBox.setAlignment(Pos.CENTER);
+            vBox.setSpacing(50);
+            vBox.getChildren().addAll(button, toolImg);
+
+            if(i==1){
+                Button cancelButton = new Button("Torna al menù");
+
+                cancelButton.setOnAction(e -> disableToolCardPane());
+                vBox.getChildren().add(cancelButton);
+            }
+            choiceToolCardGrid.add(vBox, i,0);
+        }
+    }
+
+
     //TODO: FIX, NON SAI DI CHI E' LO SCHEMA, NUM DI GIOCATORI
     public void inizGameboard (ClientBoard clientBoard){
         Platform.runLater(() -> {
-            //    for(int i = 0; i < 2; i++){
-            //        schemeGridPaneList.add(createScheme(clientBoard.getPlayerList().get(i).getSchemaCard()));
-            //    }
+
                 emptyPanes();
 
                 schemeVBOX.getChildren().add(createScheme(clientBoard.getPlayerList().get(0).getSchemaCard()));
@@ -477,24 +533,24 @@ public class ControllerMatchTable implements Initializable {
 
                 showPublicCards(clientBoard,0);
                 showDiceBoard();
-
         });
 
       //  schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
       //  schemeVBOX3.getChildren().add(createScheme(schemaCardList.get(3)));
     }
 
+    /**
+     * Empty panels to prepare them for the next update
+     */
     private void emptyPanes(){
         schemeVBOX.getChildren().clear();
         schemeVBOX2.getChildren().clear();
         hBoxDraftDice.getChildren().clear();
         cellSchemeList.clear();
         diceOnDraftList.clear();
+        toolChoiceButtonList.clear();
     }
 
-    private AnchorPane cellSelected;
-
-    //------------------------------------------------------------------------------------
 
     public GridPane createScheme (SchemaCard schemaCard) {
         int col = 0;
@@ -512,9 +568,7 @@ public class ControllerMatchTable implements Initializable {
 
             anchorPaneCell.setOnMouseClicked(event -> {
                 cellSelected = anchorPaneCell;
-
-                checkCellIndex(); //TODO E' QUESTO DA FARE? @CRIS
-
+                checkCellIndex();
                 event.consume();
             });
 
@@ -568,18 +622,50 @@ public class ControllerMatchTable implements Initializable {
         return schemeGridPane;
     }
 
+
+    // CHECK: invocano il syntaxController inviandogli il comando valido //
+
     private void checkCellIndex() {
 
         for (int i = 0; i < cellSchemeList.size(); i++) {
             if(cellSchemeList.get(i) == cellSelected){
-                //System.out.println("INDICE CELL " + i % 20);
                 int index = i % 20;
                 int row = index / 5;
                 int col = index % 5;
                 syntaxController.validCommand(row + " " + col);
+                return;
             }
         }
     }
+
+
+    private void checkToolIndex() {
+        syntaxController.validCommand("tool");
+
+        for (int i = 0; i < toolChoiceButtonList.size(); i++) {
+            if(toolChoiceButtonList.get(i) == selectedButtonToolCardToUse){
+
+                syntaxController.validCommand(((Integer) clientBoard.getCardOnBoard()
+                        .getToolCardList().get(i).getId()).toString());
+                return;
+            }
+        }
+    }
+
+
+    private void checkDiceBoardIndex(){
+        syntaxController.validCommand("pick");
+
+        for (int i = 0; i < clientBoard.getBoardDice().getDieList().size(); i++) {
+            if(diceOnDraftList.get(i) == selectedDie){
+                syntaxController.validCommand(((Integer) i).toString());
+                return;
+            }
+        }
+
+        //TODO: SE HO ERRORE?
+    }
+
 
     /**
      * Association of the standard color to web color
@@ -595,6 +681,8 @@ public class ControllerMatchTable implements Initializable {
 
         return map;
     }
+
+    // CONFIG: set delle dimensioni corrette dei pane & binding
 
     private AnchorPane configAnchorPane (){
         AnchorPane anchorPane = new AnchorPane();
@@ -628,69 +716,6 @@ public class ControllerMatchTable implements Initializable {
             cellImg.setOpacity(0.90);
             cellImg.setImage(img);
         }catch (Exception e){}
-    }
-
-    @FXML GridPane schemeSelectionGrid;
-    private Button selectedButtonScheme;
-
-
-    //ADD DINAMICO DEI 4 SCHEMI CHE L'UTENTE DEVE SCEGLIERE
-    //TODO: ADD CARTA OBJ PRIVATO
-    public void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList){
-
-        Platform.runLater(() -> {
-            for(int i = 0; i <5; i++) {
-                VBox vBox = new VBox();
-                vBox.setAlignment(Pos.CENTER);
-                vBox.setSpacing(50);
-                if(i == 0){
-                    Text text = new Text("La tua carta obiettivo privato");
-                    text.setFill(Color.WHITE);
-                    vBox.getChildren().addAll(text);
-                }else {
-                    Button button = new Button("Schema " + (i));
-                    button.setOnAction(event -> {
-                        selectedButtonScheme = button;
-                        disableSchemeSelectionPane();
-                    });
-
-                    vBox.getChildren().addAll(button, createScheme(schemeToChooseList.get(i - 1)));
-                }
-
-                schemeSelectionGrid.add(vBox, i, 0);
-            }
-        });
-
-    }
-
-    private Button selectedButtonToolCardToUse;
-
-    public void inizToolCard (){
-        for(int i = 0; i < 3; i++) {
-            VBox vBox = new VBox();
-            ImageView toolImg = new ImageView(showCard(clientBoard.getCardOnBoard().getToolCardList().get(i), "toolCard"));
-            toolImg.setPreserveRatio(true);
-            toolImg.setFitWidth(300);
-            //toolImg.fitWidthProperty().bind(vBox.widthProperty());
-            Button button = new Button("ToolCard " + i);
-
-            button.setOnAction(e -> {
-                selectedButtonToolCardToUse = button;
-                disableToolCardPane();
-            });
-
-            vBox.setAlignment(Pos.CENTER);
-            vBox.setSpacing(50);
-            vBox.getChildren().addAll(button, toolImg);
-
-            if(i==1){
-                Button cancelButton = new Button("Torna al menù");
-
-                cancelButton.setOnAction(e -> disableToolCardPane());
-                vBox.getChildren().add(cancelButton);
-            }
-            choiceToolCardGrid.add(vBox, i,0);
-        }
     }
 
 }

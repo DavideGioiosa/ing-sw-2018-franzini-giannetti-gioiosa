@@ -141,7 +141,7 @@
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
                               <Button fx:id="extractButton" mnemonicParsing="false" onAction="#extractClick" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
-                              <Button mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
+                              <Button mnemonicParsing="false" onAction="#cancelClick" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
                            </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
@@ -171,7 +171,6 @@
                         <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <Button mnemonicParsing="false" onAction="#enableLoginPane" text="Black" />
                   <VBox fx:id="schemeVBOX" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <VBox fx:id="schemeVBOX1" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" />
                   <VBox fx:id="schemeVBOX2" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" GridPane.columnIndex="1" />
