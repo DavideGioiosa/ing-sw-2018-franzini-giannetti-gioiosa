@@ -1,6 +1,9 @@
 package it.polimi.se2018.view.graphic.gui;
 
+import it.polimi.se2018.connection.client.Client;
+import it.polimi.se2018.connection.client.socket.SocketTypeClient;
 import it.polimi.se2018.controller.GameLoader;
+import it.polimi.se2018.controller.client.ClientController;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.PrivateObjCard;
@@ -11,6 +14,11 @@ import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
 import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
+import it.polimi.se2018.view.PlayerSetupper;
+import it.polimi.se2018.view.SyntaxController;
+import it.polimi.se2018.view.View;
+import it.polimi.se2018.view.graphic.TypeOfInputAsked;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,6 +27,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +42,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
+
 
 /**
  * View's Graphic Class: ControllerMatchTable
@@ -95,11 +105,22 @@ public class ControllerMatchTable implements Initializable {
    // @FXML VBox useToolBox2;
 
    // @FXML VBox useToolBox3;
-
+    PlayerChoice playerChoice;
 
     @FXML GridPane choiceToolCardGrid;
 
     //-------------------
+
+    @FXML AnchorPane nicknamePane;
+    @FXML
+    TextArea nicknameAreaText;
+
+    //---------------------
+
+    @FXML Button buttonSchemeChosen1;
+    @FXML Button buttonSchemeChosen2;
+    @FXML Button buttonSchemeChosen3;
+    @FXML Button buttonSchemeChosen4;
 
     //scorrimento lettura carte pubbliche e tool
     private int indexChangeCard;
@@ -127,6 +148,17 @@ public class ControllerMatchTable implements Initializable {
 
     @FXML
     private AnchorPane backPane;
+
+
+    View viewSocket;
+
+    Client clientSocket;
+
+    ClientController clientControllerSocket;
+
+    PlayerSetupper playerSetupper;
+
+    SyntaxController syntaxController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -199,6 +231,25 @@ public class ControllerMatchTable implements Initializable {
         toolCardPane.setDisable(true);
         schemeSelectionPane.setDisable(true);
         loginPane.setDisable(true);
+        nicknamePane.setDisable(true);
+
+
+
+
+        viewSocket = new View();
+        GuiInput guiInput = (GuiInput) viewSocket.getInputStrategy();
+        guiInput.setControllerMatchTable(this);
+        clientSocket = new Client(new SocketTypeClient("localhost", 1111), viewSocket);
+        playerSetupper = viewSocket.getInputStrategy().getPlayerSetupper();
+        syntaxController = viewSocket.getInputStrategy().getSyntaxController();
+        clientControllerSocket = new ClientController(clientSocket, viewSocket);
+
+        viewSocket.getInputStrategy().getPlayerSetupper().addObserver(clientControllerSocket);
+        viewSocket.getInputStrategy().getSyntaxController().addObserver(clientControllerSocket);
+        clientSocket.connect();
+
+
+
 
         enableLoginPane();
 
@@ -340,6 +391,36 @@ public class ControllerMatchTable implements Initializable {
         backgroundPane.setDisable(false);
     }
 
+    @FXML private void disableNicknamePane (){
+        sendNickname();
+
+        disableBackgroundPane();
+        nicknamePane.setOpacity(0);
+        nicknamePane.setVisible(false);
+        nicknamePane.setDisable(true);
+
+
+        enableBackgroundPane(); //---------------------------------------------------
+    }
+
+    public void sendNickname (){
+        playerSetupper.validNickname(nicknameAreaText.getText());
+    }
+
+    public void requestNickname (User user){
+        enableNicknamePane();
+
+        TypeOfInputAsked typeOfInputAsked = playerSetupper.newUserReceived(user); //la stringa che ti invio è per il nick dell'user
+    }
+
+
+    @FXML private void enableNicknamePane (){
+        enableBackgroundPane();
+        nicknamePane.setOpacity(1);
+        nicknamePane.setVisible(true);
+        nicknamePane.setDisable(false);
+    }
+
     @FXML private void disableLoginPane (){
         disableBackgroundPane();
         loginPane.setOpacity(0);
@@ -348,7 +429,8 @@ public class ControllerMatchTable implements Initializable {
 
         //dà l'indirizzo IP inserito
 
-        enableSchemeSelectionPane();
+        enableNicknamePane();
+
     }
 
     @FXML private void enableLoginPane (){
@@ -361,19 +443,51 @@ public class ControllerMatchTable implements Initializable {
    // @FXML private AnchorPane schemeSelectionPane;
 
     @FXML private void disableSchemeSelectionPane (){
+        sendSelectedScheme();
+
         disableBackgroundPane();
         schemeSelectionPane.setOpacity(0);
         schemeSelectionPane.setVisible(false);
         schemeSelectionPane.setDisable(true);
     }
 
-    @FXML private void enableSchemeSelectionPane (){
-        inizSchemeCardSelection();
+    @FXML private void enableSchemeSelectionPane (List<SchemaCard> schemeToChooseList){
+        inizSchemeCardSelection(schemeToChooseList);
         enableBackgroundPane();
         schemeSelectionPane.setOpacity(1);
         schemeSelectionPane.setVisible(true);
         schemeSelectionPane.setDisable(false);
     }
+
+    public void sendSelectedScheme (){
+        if(buttonSchemeChosen1.isPressed()){
+            playerSetupper.validCommand(((Integer)playerChoice.getSchemaCardList().get(0).getId()).toString());
+        }
+        else if(buttonSchemeChosen2.isPressed()){
+            playerSetupper.validCommand(((Integer)playerChoice.getSchemaCardList().get(1).getId()).toString());
+        }
+        else if(buttonSchemeChosen3.isPressed()){
+            playerSetupper.validCommand(((Integer)playerChoice.getSchemaCardList().get(2).getId()).toString());
+        }
+        else if(buttonSchemeChosen4.isPressed()){
+            playerSetupper.validCommand(((Integer)playerChoice.getSchemaCardList().get(3).getId()).toString());
+        }
+    }
+
+    public void requestSchemeSelection (PlayerChoice playerChoice){
+        this.playerChoice=playerChoice;
+        TypeOfInputAsked typeOfInputAsked = playerSetupper.newChoiceReceived(playerChoice); //la stringa che ti invio è per scelta scheme
+
+        enableSchemeSelectionPane(playerChoice.getSchemaCardList());
+    }
+
+    public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
+        TypeOfInputAsked typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
+        CommandTypeEnum nextCommandType = typeOfInputAsked.getCommandTypeEnum();
+
+
+    }
+
 
     @FXML private AnchorPane toolCardPane;
 
@@ -513,11 +627,16 @@ public class ControllerMatchTable implements Initializable {
         }catch (Exception e){}
     }
 
-    public void inizSchemeCardSelection(){
-        choiceSchemeBox1.getChildren().add(createScheme(schemaCardList.get(0)));
-        choiceSchemeBox2.getChildren().add(createScheme(schemaCardList.get(1)));
-        choiceSchemeBox3.getChildren().add(createScheme(schemaCardList.get(2)));
-        choiceSchemeBox4.getChildren().add(createScheme(schemaCardList.get(3)));
+    public void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList){
+        Button button = new Button("A");
+        Platform.runLater(() -> {
+            choiceSchemeBox1.getChildren().add(createScheme(schemeToChooseList.get(0)));
+            choiceSchemeBox2.getChildren().add(createScheme(schemeToChooseList.get(1)));
+            choiceSchemeBox3.getChildren().add(createScheme(schemeToChooseList.get(2)));
+            choiceSchemeBox4.getChildren().add(createScheme(schemeToChooseList.get(3)));
+        });
+
+
     }
 
     public void inizToolCard (){
