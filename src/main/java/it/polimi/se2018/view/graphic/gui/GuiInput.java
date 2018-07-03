@@ -27,7 +27,7 @@ public class GuiInput implements InputStrategy {
 
     @Override
     public void yourTurn(ClientBoard clientBoard, PlayerMove playerMove) {
-        controllerMatchTable.requestYourTurn(clientBoard, playerMove);
+      //  controllerMatchTable.requestYourTurn(clientBoard, playerMove);
     }
 
     @Override

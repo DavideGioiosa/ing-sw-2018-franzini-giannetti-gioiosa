@@ -140,8 +140,8 @@
                      <children>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#extractClick" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
-                              <Button mnemonicParsing="false" onAction="#showScheme" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
+                              <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
+                              <Button mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
                            </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">

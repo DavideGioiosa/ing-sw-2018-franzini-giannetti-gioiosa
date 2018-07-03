@@ -94,11 +94,7 @@ public class ControllerMatchTable implements Initializable {
     private AnchorPane gameboardPane;
 
     //-----------------------------
-   // @FXML VBox useToolBox1;
 
-   // @FXML VBox useToolBox2;
-
-   // @FXML VBox useToolBox3;
     PlayerChoice playerChoice;
 
     @FXML GridPane choiceToolCardGrid;
@@ -111,47 +107,28 @@ public class ControllerMatchTable implements Initializable {
 
     //---------------------
 
+    ClientBoard clientBoard;
+
+    //----------------------
+
 
 
     //scorrimento lettura carte pubbliche e tool
     private int indexChangeCard;
 
-    private GameLoader gameLoader;
-    private final String NICKNAME = "Nickname";
-    private final ColourEnum FRAMECOLOUR = ColourEnum.BLUE;
-    private final boolean CONNECTION = true;
-    private SchemaCard schemaCard;
-    private Player player;
-    private List<Player> playerList;
-    private ToolCard toolCard;
-    private List<ToolCard> toolCardList;
-    private PublicObjCard publicObjCard;
-    private List<PublicObjCard> publicCardList;
-    private BoardDice boardDice;
-    private TrackBoard trackBoardDice;
-    private BagDice bagDice;
-    private BoardCard boardCard;
-    private PrivateObjCard privateObjCard;
-    private List<PrivatePlayer> privatePlayerList;
-    private ClientBoard clientBoard;
-
-    List<SchemaCard> schemaCardList;
-
-    ToggleGroup selectionSchemeButtonGroup;
 
     @FXML
     private AnchorPane backPane;
 
+    private View viewSocket;
 
-    View viewSocket;
+    private Client clientSocket;
 
-    Client clientSocket;
+    private ClientController clientControllerSocket;
 
-    ClientController clientControllerSocket;
+    private PlayerSetupper playerSetupper;
 
-    PlayerSetupper playerSetupper;
-
-    SyntaxController syntaxController;
+    private SyntaxController syntaxController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -162,64 +139,10 @@ public class ControllerMatchTable implements Initializable {
         primaryScene.setPrefHeight(height);
 
 
-        //------------------------------------------------------------------------------------------------
-        GameLoader gameLoader = new GameLoader();
-
-        playerList = new ArrayList<>();
-        playerList.add(new Player("Player1", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 3));
-        playerList.add(new Player("Player2", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 2));
-        playerList.add(new Player("Player3", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 1));
-        playerList.add(new Player("Player4", CONNECTION, FRAMECOLOUR, (SchemaCard) gameLoader.getSchemaDeck().extractCard(), 5));
-
-        publicCardList = new ArrayList<>();
-        publicCardList.add((PublicObjCard) gameLoader.getPublicObjDeck().extractCard());
-        publicCardList.add((PublicObjCard) gameLoader.getPublicObjDeck().extractCard());
-        publicCardList.add((PublicObjCard) gameLoader.getPublicObjDeck().extractCard());
-
-        toolCardList = new ArrayList<>();
-        toolCardList.add((ToolCard) gameLoader.getToolDeck().extractCard());
-        toolCardList.add((ToolCard) gameLoader.getToolDeck().extractCard());
-        toolCardList.add((ToolCard) gameLoader.getToolDeck().extractCard());
-
-        boardDice = new BoardDice();
-        trackBoardDice = new TrackBoard();
-
-        for (int i = 0; i < 9; i++) {
-            Die die = new Die(ColourEnum.RED);
-            die.firstRoll();
-            boardDice.insertDie(die);
-        }
-        trackBoardDice = new TrackBoard();
-
-        for (int i = 0; i < 10; i++) {
-            List<Die> dieList = new ArrayList<>();
-            Die die = new Die(ColourEnum.BLUE);
-            die.firstRoll();
-            dieList.add(die);
-            Die die1 = new Die(ColourEnum.YELLOW);
-            die1.firstRoll();
-            dieList.add(die1);
-            trackBoardDice.insertDice(dieList);
-        }
-
-        boardCard = new BoardCard(publicCardList, toolCardList);
-        clientBoard = new ClientBoard(playerList, boardDice, trackBoardDice, boardCard);
-
-        PlayerChoice playerChoice = new PlayerChoice(new User(TypeOfConnection.SOCKET));
-        schemaCardList = new ArrayList<>();
-        for (int j = 0; j < 5; j++) {
-            schemaCardList.add((SchemaCard) gameLoader.getSchemaDeck().extractCard());
-        }
-
-        playerChoice.setSchemaCardList(schemaCardList);
-        //-------------------------------------------------------------------------------------------------------
-
-
         cardSize();
         // showPrivateCards();
-        showPublicCards(0);
+       // showPublicCards(0);
 
-        //gridPane.add(createScheme(), 1,2);
 
         toolCardPane.setDisable(true);
         schemeSelectionPane.setDisable(true);
@@ -231,6 +154,8 @@ public class ControllerMatchTable implements Initializable {
         viewSocket = new View();
         GuiInput guiInput = (GuiInput) viewSocket.getInputStrategy();
         guiInput.setControllerMatchTable(this);
+        GuiOutput guiOutput = (GuiOutput) viewSocket.getOutputStrategy();
+        guiOutput.setControllerMatchTable(this);
         clientSocket = new Client(new SocketTypeClient("localhost", 1111), viewSocket);
         playerSetupper = viewSocket.getInputStrategy().getPlayerSetupper();
         syntaxController = viewSocket.getInputStrategy().getSyntaxController();
@@ -240,10 +165,8 @@ public class ControllerMatchTable implements Initializable {
         viewSocket.getInputStrategy().getSyntaxController().addObserver(clientControllerSocket);
         clientSocket.connect();
 
+        //------------------------------------
 
-
-
-        enableLoginPane();
 
 
         dice = new ArrayList();
@@ -270,19 +193,19 @@ public class ControllerMatchTable implements Initializable {
 
     //TODO: TOGLIERE GIA' SI VISUALIZZANO DAL MENU
     private void showPrivateCards() {
-        privateCardImg.setImage(showCard((PrivateObjCard) gameLoader.getPrivateObjDeck().extractCard(),
-                "privateObjCard"));
+      //  privateCardImg.setImage(showCard((PrivateObjCard) gameLoader.getPrivateObjDeck().extractCard(),
+      //          "privateObjCard"));
         //privateCardImg.setPreserveRatio(true);
         //privateCardImg.setFitWidth(200);
         privateCardImg.fitWidthProperty().bind(privateCardPane.widthProperty());
         privateCardImg.fitHeightProperty().bind(privateCardPane.heightProperty().subtract(20));
     }
 
-    private void showPublicCards(int index) {
+    private void showPublicCards(ClientBoard clientBoard, int index) {
         cardImg.setImage(showCard(clientBoard.getCardOnBoard().getPublicObjCardList().get(index), "publicObjCard"));
     }
 
-    private void showToolCards(int index) {
+    private void showToolCards(ClientBoard clientBoard, int index) {
         cardImg.setImage(showCard(clientBoard.getCardOnBoard().getToolCardList().get(index), "toolCard"));
     }
 
@@ -321,21 +244,22 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    //INTRODURRE SHOWPRIVATECARD
+    //TODO: INTRODURRE SHOWPRIVATECARD
     public void nextCard(ActionEvent actionEvent) throws IOException {
         if (indexChangeCard == 2) {
             indexChangeCard = -1;
         }
         indexChangeCard++;
-        showPublicCards(indexChangeCard);
+        showPublicCards(clientBoard, indexChangeCard);
     }
 
     /**
      * TODO: POSSIBILE SOLO AL PRIMO PLAYER DEL ROUND
      * Boolean isClicked
      */
+    /*
     public void extractClick(ActionEvent actionEvent) throws IOException {
-
+        //TODO: SET N DICE
         for (int i = 0; i < clientBoard.getPlayerList().size() * 2 + 1; i++) {
             ImageView die = new ImageView();
             die.setPreserveRatio(true);
@@ -351,13 +275,7 @@ public class ControllerMatchTable implements Initializable {
             die.fitWidthProperty().bind(hbox.widthProperty());
             die.fitHeightProperty().bind(hbox.heightProperty().subtract(20));
         }
-    }
-
-    //TODO: TOGLIERE???
-    @FXML
-    public void showScheme(ActionEvent event) {
-        //primaryScene.getChildren().add(showSchemeSelection());
-    }
+    }*/
 
 
     @FXML AnchorPane backgroundPane;
@@ -376,13 +294,11 @@ public class ControllerMatchTable implements Initializable {
     }
 
     @FXML private void disableNicknamePane (){
-        sendNickname();
-
-        disableBackgroundPane();
         nicknamePane.setOpacity(0);
         nicknamePane.setVisible(false);
         nicknamePane.setDisable(true);
-
+        disableBackgroundPane();
+        sendNickname();
     }
 
     public void sendNickname (){
@@ -404,14 +320,12 @@ public class ControllerMatchTable implements Initializable {
     }
 
     @FXML private void disableLoginPane (){
-        disableBackgroundPane();
         loginPane.setOpacity(0);
         loginPane.setVisible(false);
         loginPane.setDisable(true);
+        disableBackgroundPane();
 
         //dà l'indirizzo IP inserito
-
-        enableNicknamePane();
 
     }
 
@@ -425,12 +339,12 @@ public class ControllerMatchTable implements Initializable {
    // @FXML private AnchorPane schemeSelectionPane;
 
     @FXML private void disableSchemeSelectionPane (){
-        sendSelectedScheme();
-
         disableBackgroundPane();
         schemeSelectionPane.setOpacity(0);
         schemeSelectionPane.setVisible(false);
         schemeSelectionPane.setDisable(true);
+        sendSelectedScheme();
+
     }
 
     @FXML private void enableSchemeSelectionPane (List<SchemaCard> schemeToChooseList){
@@ -442,7 +356,7 @@ public class ControllerMatchTable implements Initializable {
     }
 
     public void sendSelectedScheme (){
-        //System.out.println(selectedButtonScheme.getText());
+        System.out.println(selectedButtonScheme.getText());
 
         if(selectedButtonScheme.getText().equals("Schema 1")){
             playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(0).getId()).toString());
@@ -465,14 +379,20 @@ public class ControllerMatchTable implements Initializable {
         enableSchemeSelectionPane(playerChoice.getSchemaCardList());
     }
 
-    public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
+  /*  public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
         TypeOfInputAsked typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
         CommandTypeEnum nextCommandType = typeOfInputAsked.getCommandTypeEnum();
 
 
         enableGameboardPane(clientBoard, playerMove);
     }
+*/
 
+    public void requestShowGameboard (ClientBoard clientBoard){
+        this.clientBoard = clientBoard;
+        enableGameboardPane();
+        inizGameboard(clientBoard);
+    }
 
     @FXML private AnchorPane toolCardPane;
 
@@ -482,40 +402,41 @@ public class ControllerMatchTable implements Initializable {
         toolCardPane.setOpacity(0);
         toolCardPane.setVisible(false);
         toolCardPane.setDisable(true);
+        enableGameboardPane();
 
         //dà i dati della toolcard scelta
     }
 
     @FXML private void enableToolCardPane (){
-        inizToolCard();
+        disableGameboardPane();
         enableBackgroundPane();
+        inizToolCard();
         toolCardPane.setOpacity(1);
         toolCardPane.setVisible(true);
         toolCardPane.setDisable(false);
     }
 
     @FXML private void disableGameboardPane (){
-
         gameboardPane.setOpacity(0);
         gameboardPane.setVisible(false);
         gameboardPane.setDisable(true);
 
-        //dà i dati della toolcard scelta
     }
 
-    @FXML private void enableGameboardPane (ClientBoard clientBoard, PlayerMove playerMove){
+    @FXML private void enableGameboardPane (){
         disableBackgroundPane();
-        inizGameboard(clientBoard, playerMove);
         gameboardPane.setOpacity(1);
         gameboardPane.setVisible(true);
         gameboardPane.setDisable(false);
     }
 
-    //TODO: FIX, NON SAI DI CHI E' LO SCHEMO, NUM DI GIOCATORI
-    public void inizGameboard (ClientBoard clientBoard, PlayerMove playerMove){
+    //TODO: FIX, NON SAI DI CHI E' LO SCHEMA, NUM DI GIOCATORI
+    public void inizGameboard (ClientBoard clientBoard){
         Platform.runLater(() -> {
                     schemeVBOX.getChildren().add(createScheme(clientBoard.getPlayerList().get(0).getSchemaCard()));
                     schemeVBOX2.getChildren().add(createScheme(clientBoard.getPlayerList().get(1).getSchemaCard()));
+
+                    showPublicCards(clientBoard,0);
                 });
 
       //  schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
