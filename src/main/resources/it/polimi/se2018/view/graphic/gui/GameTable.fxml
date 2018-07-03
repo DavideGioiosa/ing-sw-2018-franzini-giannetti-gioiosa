@@ -128,7 +128,7 @@
                   <RowConstraints maxHeight="313.0" minHeight="10.0" prefHeight="306.99999999999994" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <HBox fx:id="hbox" fillHeight="false" maxHeight="80.0" minHeight="50.0" minWidth="500.0" prefHeight="70.0" prefWidth="574.0" spacing="5.0" style="-fx-background-color: #B0C4DE;" GridPane.columnSpan="3" GridPane.rowIndex="1">
+                  <HBox fx:id="hBoxDraftDice" fillHeight="false" maxHeight="80.0" minHeight="50.0" minWidth="500.0" prefHeight="70.0" prefWidth="574.0" spacing="5.0" style="-fx-background-color: #B0C4DE;" GridPane.columnSpan="3" GridPane.rowIndex="1">
                      <cursor>
                         <Cursor fx:constant="CLOSED_HAND" />
                      </cursor>
@@ -140,14 +140,14 @@
                      <children>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
+                              <Button fx:id="extractButton" mnemonicParsing="false" onAction="#extractClick" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
                               <Button mnemonicParsing="false" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
                            </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#enableToolCardPane" prefHeight="39.0" prefWidth="131.0" text="ToolCard" />
-                              <Button mnemonicParsing="false" prefHeight="39.0" prefWidth="110.0" text="Passa" />
+                              <Button mnemonicParsing="false" onAction="#passClick" prefHeight="39.0" prefWidth="110.0" text="Passa" />
                            </children>
                            <opaqueInsets>
                               <Insets />
