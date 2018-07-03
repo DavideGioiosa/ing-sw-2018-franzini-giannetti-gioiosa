@@ -46,7 +46,7 @@ public class ClientController implements Observer<PlayerMessage> {
         clientModel = new ClientModel();
         clientModel.addObserver(view);
         commandController = new CommandController(view);
-        choiceController = new ChoiceController(client, null, view);
+        choiceController = new ChoiceController();
     }
 
     /**
@@ -70,6 +70,7 @@ public class ClientController implements Observer<PlayerMessage> {
                     playerMessage.setCheckMove(commandController.getResetPlayerMove(playerMessage.getPlayerMove()));
                     playerMessage.setId(PlayerMessageTypeEnum.YOUR_TURN);
                     view.receive(playerMessage);
+                    return;
                 }
                 break;
 
@@ -86,10 +87,9 @@ public class ClientController implements Observer<PlayerMessage> {
                 break;
 
             default:
-                idError = 0;
                 break;
         }
-        if (idError == 0) client.send(playerMessage);
+        client.send(playerMessage);
         //TODO: Gestione errori nelle varie mosse
     }
 

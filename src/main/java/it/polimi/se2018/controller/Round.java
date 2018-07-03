@@ -60,7 +60,7 @@ public class Round implements Observer<PlayerMove>{
         this.isDraftPoolSet = false;
         initializeRound(indexRound);
         this.view = view;
-        view.isYourTurn(getCurrPlayer());
+        view.isYourTurn(getCurrPlayer(), new PlayerMove());
     }
 
     /**
@@ -102,7 +102,6 @@ public class Round implements Observer<PlayerMove>{
         }else{
             turn.defaultMove();
         }
-
     }
 
     /**
@@ -169,51 +168,46 @@ public class Round implements Observer<PlayerMove>{
      */
     public void update (PlayerMove playerMove){
         int idError;
-        if(playerMove.getPlayer() == null){
-            //GESTIONE ERRORE
-        }
+        if(playerMove.getPlayer() != null && playerMove.getPlayer().getNickname().equals(getCurrPlayer().getNickname())) {
 
-        if (playerMove.getPlayer().getNickname().equals(getCurrPlayer().getNickname())) {
             if (!isDraftPoolSet) {
-                if (setDraftPoolDice(playerMove)) {
-                    view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
-                } else {
-                    view.reportError(2102, getCurrPlayer().getNickname());
-                }
-                view.isYourTurn(getCurrPlayer());
+                boolean rightMove = setDraftPoolDice(playerMove);
+                view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+                if(!rightMove) view.reportError(2104, getCurrPlayer().getNickname());
 
-            }else {
-                idError = turn.runTurn(playerMove);
-                if (idError == 0) {
-                    view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
-                }else{
-                    view.reportError(idError, getCurrPlayer().getNickname());
-                }
+            } else {
+                idError = turn.runTurn(playerMove, roundPlayerOrder);
+                view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+                if (idError != 0) view.reportError(idError, getCurrPlayer().getNickname());
 
                 if (turn.isFinished()) {
 
                     removeCurrPlayer();
 
-                    //works but it be may exists a better check
-/*                    if (turnsList.size() < roundPlayerOrder.size() + turnsList.size()) {
-                        turn = new Turn(gameBoard, getCurrPlayer());
-                        turnsList.add(turn);
-                    }
-*/
                     if (roundPlayerOrder.isEmpty()) {
                         endRound();
                         view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
                         return;
-                    }else{
+                    } else {
                         turn = new Turn(gameBoard, getCurrPlayer());
                         turnsList.add(turn);
                     }
                 }
-                view.isYourTurn(getCurrPlayer());
             }
+            view.isYourTurn(getCurrPlayer(), getStartedPlayerMove());
 
         }
 
+    }
+
+
+    private Turn lastTurn(){
+        return turnsList.get(turnsList.size() - 1);
+    }
+
+    private PlayerMove getStartedPlayerMove(){
+        if(lastTurn().lastActionFinished()) return new PlayerMove();
+        return lastTurn().getStartedPlayerMove();
     }
 
 }

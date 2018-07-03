@@ -151,11 +151,11 @@ public class CommandLinePrint {
     }
 
     static void printMessage(int id){
-        System.out.println(messageMap.get(id));
+        if(id != 0) System.out.println(messageMap.get(id));
     }
 
     static void printError(int id){
-        System.out.println(errorMap.get(id));
+        if(id != 0) System.out.println(errorMap.get(id));
     }
 
     /**

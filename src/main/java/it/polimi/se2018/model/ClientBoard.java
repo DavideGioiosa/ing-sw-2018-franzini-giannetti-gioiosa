@@ -66,7 +66,7 @@ public class ClientBoard{
         this.playerList = new ArrayList<>();
         for(Player player: clientBoard.playerList) this.playerList.add(player.getClone());
 
-        //this.boardDice = clientBoard.boardDice.getClone();
+        this.boardDice = clientBoard.boardDice.getClone();
         this.trackBoardDice = clientBoard.getTrackBoardDice().getClone();
         this.cardOnBoard = clientBoard.getCardOnBoard().getClone();
     }

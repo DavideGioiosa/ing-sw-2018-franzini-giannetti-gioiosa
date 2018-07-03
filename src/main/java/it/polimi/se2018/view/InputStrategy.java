@@ -17,5 +17,4 @@ public interface InputStrategy {
     PlayerSetupper getPlayerSetupper();
     void makeChoice(PlayerChoice playerChoice);
     void choseNickname(User user);
-    //void showChoice(PlayerChoice playerChoice);
 }

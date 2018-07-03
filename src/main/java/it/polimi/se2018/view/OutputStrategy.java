@@ -4,5 +4,5 @@ import it.polimi.se2018.model.ClientBoard;
 
 public interface OutputStrategy {
 
-    void showGameboard (ClientBoard clientBoard);
+    void showGameBoard (ClientBoard clientBoard);
 }

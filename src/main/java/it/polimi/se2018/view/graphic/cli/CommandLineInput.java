@@ -18,13 +18,15 @@ import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
 public class CommandLineInput implements InputStrategy {
 
-    /**
-     * Standard string for invalid input
-     */
     private boolean timeOut;
     private SyntaxController syntaxController;
     private PlayerSetupper playerSetupper;
 
+    /**
+     * Constructor sets
+     * @param syntaxController
+     * @param playerSetupper
+     */
     public CommandLineInput(SyntaxController syntaxController, PlayerSetupper playerSetupper){
         this.syntaxController = syntaxController;
         this.playerSetupper = playerSetupper;
@@ -88,21 +90,6 @@ public class CommandLineInput implements InputStrategy {
 
         printMessage(1000);
     }
-/*    public void yourTurn(int idMessage) {
-
-        Scanner scanner = new Scanner(System.in);
-
-        boolean okMessage = false;
-        String message = null;
-
-        while (!okMessage) {
-            print(idMessage);
-
-            message = scanner.nextLine();
-            okMessage = true;
-
-        }
-    }*/
 
     public String getInput(String requestMessage) {
 

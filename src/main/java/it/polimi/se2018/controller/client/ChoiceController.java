@@ -1,37 +1,38 @@
 package it.polimi.se2018.controller.client;
 
-import it.polimi.se2018.connection.client.Client;
+import it.polimi.se2018.model.ColourEnum;
 import it.polimi.se2018.model.PlayerChoice;
-import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.player.User;
-import it.polimi.se2018.view.PlayerSetupper;
-import it.polimi.se2018.view.View;
 
 public class ChoiceController {
 
-    private Client client;
 
-    private PlayerSetupper playerSetupper;
-
-    private View view;
-
-    public ChoiceController (Client client, PlayerSetupper playerSetupper, View view){
-        this.client = client;
-        this.playerSetupper = playerSetupper;
+    public ChoiceController (){
     }
 
     public int checkChoice(PlayerChoice message) {
-        //TODO Check validità choice
-        PlayerMessage playerMessage = new PlayerMessage();
-        playerMessage.setChoice(message);
+        Boolean schema = false;
+        Boolean col = false;
 
-        return 0;
+        if(message.getColourEnumList().isEmpty()) col = true;
+        else
+            for(ColourEnum colour: message.getColourEnumList())
+                if(message.getChosenColour() == colour)
+                    col = true;
+
+        if(message.getSchemaCardList().isEmpty()) schema = true;
+        else
+            for(SchemaCard schemaCard: message.getSchemaCardList())
+                if(schemaCard.getId() == message.getIdChosenSchema())
+                    schema = true;
+
+        if(schema && col) return 0;
+        else return 2504;
     }
 
     public int checkNickname(User user){
-        if (user.getNickname() == null) return 1000;
-        if (user.getNickname() == "") return 1000;
-        if (user.getNickname().length() > 25) return 1000;
+        if (user.getNickname() == null || user.getNickname() == "" || user.getNickname().length() > 25) return 2502;
         return 0;
     }
 }

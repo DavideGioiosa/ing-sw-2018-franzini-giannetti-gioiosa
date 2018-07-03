@@ -12,4 +12,5 @@ public interface Action {
     boolean isComplete();
     int doDefaultMove();
     boolean isPass();
+    PlayerMove getPlayerMove();
 }

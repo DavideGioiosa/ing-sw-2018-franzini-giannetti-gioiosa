@@ -58,6 +58,11 @@ public class PickController implements Action{
         return playerMove != null && playerMove.getTypeOfChoice() == TypeOfChoiceEnum.PASS;
     }
 
+    @Override
+    public PlayerMove getPlayerMove() {
+        return new PlayerMove();
+    }
+
     /**
      * Method used to call the correct action chosen by the player
      * @param playerMove choices of the player
@@ -100,6 +105,8 @@ public class PickController implements Action{
 
     @Override
     public int doDefaultMove(){
+        playerMove = new PlayerMove();
+        playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
         return 0;
     }
 
@@ -107,4 +114,5 @@ public class PickController implements Action{
     public boolean isComplete() {
         return playerMove != null;
     }
+
 }

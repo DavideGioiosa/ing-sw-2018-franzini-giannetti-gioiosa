@@ -22,7 +22,7 @@ public class OperationPickDice implements ToolOperation{
     public boolean start(DiceContainer diceContainer, PlayerMove playerMove, List<Die> dieList, List<Player> roundPlayerOrder, Turn turn) {
 
         if(maxNumberOfDice == -1 && minNumberOfDice == -1 || maxNumberOfDice >= getNumberOfDice(playerMove) && minNumberOfDice <= getNumberOfDice(playerMove)) {
-            diceContainer.pickDice(playerMove, dieList);
+            diceContainer.pickDice(playerMove, dieList, minNumberOfDice, maxNumberOfDice);
             return true;
         }else return false;
     }

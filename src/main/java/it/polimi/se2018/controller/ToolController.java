@@ -21,7 +21,7 @@ public class ToolController implements Action{
     private int state;
     private boolean isComplete;
     private List<Die> dieList;
-
+    private PlayerMove playerMoveSaved;
 
     public ToolController(ToolCard toolCard){
         dieList = new ArrayList<>();
@@ -41,11 +41,15 @@ public class ToolController implements Action{
 
             for (int i = 0; i < toolOperationLists.get(state).size(); i++) {
                 if(!toolOperationLists.get(state).get(i).start(diceContainerHashMap.get(operationStrings.get(state).get(i).getDiceContainer()),
-                        playerMove, dieList, roundPlayerOrder, turn)) throw new RuntimeException("ERRORE DA GESTIRE");
+                        playerMove, dieList, roundPlayerOrder, turn)){
+                    return 2103;
+                }
             }
 
             state ++;
+            playerMove.setState(state);
             if (state == toolOperationLists.size()) isComplete = true;
+            playerMoveSaved = playerMove.getClone();
             return 0;
         }
         return 1000;
@@ -125,6 +129,11 @@ public class ToolController implements Action{
 
     public boolean isPass() {
         return false;
+    }
+
+    @Override
+    public PlayerMove getPlayerMove() {
+        return playerMoveSaved;
     }
 
 }

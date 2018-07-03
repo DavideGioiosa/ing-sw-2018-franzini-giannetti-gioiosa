@@ -12,7 +12,7 @@ public class GuiOutput implements OutputStrategy {
     }
 
     @Override
-    public void showGameboard(ClientBoard clientBoard) {
+    public void showGameBoard(ClientBoard clientBoard) {
         controllerMatchTable.requestShowGameboard(clientBoard);
     }
 }
