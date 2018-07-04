@@ -10,13 +10,14 @@ import it.polimi.se2018.utils.Observer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 
 public class SocketTypeServer implements Observer<PlayerMessage> {
 
     private List<String> codeList;
-    private  ClientGatherer clientGatherer;
+    private ClientGatherer clientGatherer;
     private HashMap<String, ClientListener> clientListenerList;
     private Observable<PlayerMessage> obs;
     private List<String> disconnectedCodes;
@@ -53,16 +54,26 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     }
 
     private void removeClient(String code){
+        clientGatherer.getTimerHashMap().get(code).cancel();
         ClientListener clientListener = clientListenerList.get(code);
         clientListener.setQuit(true);
         this.clientListenerList.remove(code);
     }
 
     public void shutdown(){
-       for(String code : clientListenerList.keySet()){
-           removeClient(code);
-       }
-       clientGatherer.close();
+
+        Iterator<String> iterator = clientListenerList.keySet().iterator();
+
+        for(int i = codeList.size() - 1; i >= 0; i--){
+            clientListenerList.get(codeList.get(i)).setQuit(true);
+        }
+
+/*        while(iterator.hasNext()){
+            String code = iterator.next();
+            removeClient(code);
+        }*/
+
+        clientGatherer.close();
     }
 
     public void send (PlayerMessage playerMessage){
@@ -83,9 +94,10 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     @Override
     public synchronized void update(PlayerMessage playerMessage) {
 
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.isEmpty() && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
             disconnectedCodes.add(playerMessage.getUser().getUniqueCode());
             clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit(true);
+            clientGatherer.getTimerHashMap().get(playerMessage.getUser().getUniqueCode()).cancel();
         }
         obs.notify(playerMessage);
     }

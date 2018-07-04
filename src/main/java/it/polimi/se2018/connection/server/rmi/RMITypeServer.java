@@ -31,11 +31,13 @@ public class RMITypeServer implements Observer<PlayerMessage> {
             Registry registry =  LocateRegistry.createRegistry(port);
             this.serverImplementation = new ServerImplementation(port);
             serverImplementation.addObserver(this);
-            //registry.rebind("RMIServer", serverImplementation);
-            Naming.rebind("//192.168.139.100:1099/MyServer", serverImplementation);
+            Naming.rebind("//localhost/RMIServer", serverImplementation);
+
+            //Naming.rebind("//192.168.139.100:1099/MyServer", serverImplementation);
 
             println("ServerRMI acceso");
         } catch (RemoteException | MalformedURLException e) {
+
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
     }

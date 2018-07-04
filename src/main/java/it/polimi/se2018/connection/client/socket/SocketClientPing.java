@@ -12,9 +12,10 @@ public class SocketClientPing  extends TimerTask {
 
     @Override
     public void run() {
+
+        System.out.println("invoco ping");
         networkHandler.ping();
-        Timer timer = new Timer();
-        ClientTimeout clientTimeout  = new ClientTimeout(networkHandler);
-        timer.schedule(clientTimeout, (long)7*1000);
+
     }
 }
+

@@ -2,17 +2,10 @@ package it.polimi.se2018.view.graphic.gui;
 
 import it.polimi.se2018.connection.client.Client;
 import it.polimi.se2018.connection.client.socket.SocketTypeClient;
-import it.polimi.se2018.controller.GameLoader;
 import it.polimi.se2018.controller.client.ClientController;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.Card;
-import it.polimi.se2018.model.cards.PrivateObjCard;
 import it.polimi.se2018.model.cards.SchemaCard;
-import it.polimi.se2018.model.cards.ToolCard;
-import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
-import it.polimi.se2018.model.player.Player;
-import it.polimi.se2018.model.player.PrivatePlayer;
-import it.polimi.se2018.model.player.TypeOfConnection;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.PlayerSetupper;
 import it.polimi.se2018.view.SyntaxController;
@@ -20,14 +13,13 @@ import it.polimi.se2018.view.View;
 import it.polimi.se2018.view.graphic.TypeOfInputAsked;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -53,10 +45,14 @@ import java.util.List;
 
 public class ControllerMatchTable implements Initializable {
 
-    private List<ImageView> dice;
+    private List<ImageView> diceOnDraftList;
+
+    //Lista delle celle dello schema scelto dall'utente
+    private List<AnchorPane> cellSchemeList;
+
 
     @FXML
-    private HBox hbox;
+    private HBox hBoxDraftDice;
     @FXML
     private AnchorPane primaryScene;
     @FXML
@@ -72,8 +68,15 @@ public class ControllerMatchTable implements Initializable {
     @FXML
     private GridPane gridPane;
 
-
+    @FXML
+    private Button extractButton;
     //-------------------------------------------- SCHEME SELECTION -----------------------------
+
+    @FXML AnchorPane backgroundPane;
+    @FXML AnchorPane loginPane;
+
+    //-----------
+    //VBOX CONTENENTE GLI SCHEMI DEI 4 GIOCATORI DURANTE LA PARTITA
 
     @FXML
     private VBox schemeVBOX;
@@ -84,6 +87,8 @@ public class ControllerMatchTable implements Initializable {
     @FXML
     private VBox schemeVBOX3;
 
+    //--------------------------------------------------------------------------------
+
     @FXML
     private VBox privateCardBox0;
 
@@ -92,6 +97,11 @@ public class ControllerMatchTable implements Initializable {
 
     @FXML
     private AnchorPane gameboardPane;
+
+    /**
+     * Img Dado selezionato dal Draft per la PICK
+     */
+    private ImageView selectedDie;
 
     //-----------------------------
 
@@ -111,6 +121,7 @@ public class ControllerMatchTable implements Initializable {
 
     //----------------------
 
+    private List<GridPane> schemeGridPaneList;
 
 
     //scorrimento lettura carte pubbliche e tool
@@ -130,6 +141,8 @@ public class ControllerMatchTable implements Initializable {
 
     private SyntaxController syntaxController;
 
+    private CommandTypeEnum nextCommandType;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -140,9 +153,6 @@ public class ControllerMatchTable implements Initializable {
 
 
         cardSize();
-        // showPrivateCards();
-       // showPublicCards(0);
-
 
         toolCardPane.setDisable(true);
         schemeSelectionPane.setDisable(true);
@@ -167,9 +177,12 @@ public class ControllerMatchTable implements Initializable {
 
         //------------------------------------
 
+        schemeGridPaneList = new ArrayList<>();
+
+        cellSchemeList = new ArrayList<>();
 
 
-        dice = new ArrayList();
+        diceOnDraftList = new ArrayList();
 
         //AnchorPane anchorPane = showSchemeSelection();
         //primaryScene.getChildren().add(anchorPane);
@@ -257,29 +270,49 @@ public class ControllerMatchTable implements Initializable {
      * TODO: POSSIBILE SOLO AL PRIMO PLAYER DEL ROUND
      * Boolean isClicked
      */
-    /*
-    public void extractClick(ActionEvent actionEvent) throws IOException {
-        //TODO: SET N DICE
-        for (int i = 0; i < clientBoard.getPlayerList().size() * 2 + 1; i++) {
+    @FXML private void extractClick() {
+        syntaxController.validCommand("extract");
+    }
+
+    @FXML private void passClick () {
+        syntaxController.validCommand("pass");
+    }
+
+    private void showDiceBoard (){
+        for (int i = 0; i < clientBoard.getBoardDice().getDieList().size(); i++) {
             ImageView die = new ImageView();
             die.setPreserveRatio(true);
             die.setFitWidth(45);
             die.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                //provaClickDado(); da implementare
+                selectedDie = die;
+                checkDiceBoardIndex();
+
                 event.consume();
             });
-            dice.add(die);
-            dice.get(i).setImage(showDie(clientBoard.getBoardDice().getDieList().get(i)));
+            diceOnDraftList.add(die);
+            diceOnDraftList.get(i).setImage(showDie(clientBoard.getBoardDice().getDieList().get(i)));
 
-            hbox.getChildren().add(dice.get(i));
-            die.fitWidthProperty().bind(hbox.widthProperty());
-            die.fitHeightProperty().bind(hbox.heightProperty().subtract(20));
+            hBoxDraftDice.getChildren().add(diceOnDraftList.get(i));
+            die.fitWidthProperty().bind(hBoxDraftDice.widthProperty());
+            die.fitHeightProperty().bind(hBoxDraftDice.heightProperty().subtract(20));
         }
-    }*/
+    }
+
+    private void checkDiceBoardIndex(){
+        syntaxController.validCommand("pick");
+
+        for (int i = 0; i < clientBoard.getBoardDice().getDieList().size(); i++) {
+            if(diceOnDraftList.get(i) == selectedDie){
+                //System.out.println("INDICE DADO " + i);
+                syntaxController.validCommand(((Integer) i).toString());
+            }
+        }
+
+        //TODO: SE HO ERRORE?
+    }
 
 
-    @FXML AnchorPane backgroundPane;
-    @FXML AnchorPane loginPane;
+
 
     @FXML private void disableBackgroundPane (){
         backgroundPane.setOpacity(0);
@@ -336,8 +369,6 @@ public class ControllerMatchTable implements Initializable {
         loginPane.setDisable(false);
     }
 
-   // @FXML private AnchorPane schemeSelectionPane;
-
     @FXML private void disableSchemeSelectionPane (){
         disableBackgroundPane();
         schemeSelectionPane.setOpacity(0);
@@ -379,15 +410,15 @@ public class ControllerMatchTable implements Initializable {
         enableSchemeSelectionPane(playerChoice.getSchemaCardList());
     }
 
-  /*  public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
+    public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
+
         TypeOfInputAsked typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
-        CommandTypeEnum nextCommandType = typeOfInputAsked.getCommandTypeEnum();
+        this.nextCommandType = typeOfInputAsked.getCommandTypeEnum(); //la mossa richiesta
 
-
-        enableGameboardPane(clientBoard, playerMove);
+        //extractButton.setEffect(Shadow);
     }
-*/
 
+    //UPDATE
     public void requestShowGameboard (ClientBoard clientBoard){
         this.clientBoard = clientBoard;
         enableGameboardPane();
@@ -430,18 +461,38 @@ public class ControllerMatchTable implements Initializable {
         gameboardPane.setDisable(false);
     }
 
+
     //TODO: FIX, NON SAI DI CHI E' LO SCHEMA, NUM DI GIOCATORI
     public void inizGameboard (ClientBoard clientBoard){
         Platform.runLater(() -> {
-                    schemeVBOX.getChildren().add(createScheme(clientBoard.getPlayerList().get(0).getSchemaCard()));
-                    schemeVBOX2.getChildren().add(createScheme(clientBoard.getPlayerList().get(1).getSchemaCard()));
+            //    for(int i = 0; i < 2; i++){
+            //        schemeGridPaneList.add(createScheme(clientBoard.getPlayerList().get(i).getSchemaCard()));
+            //    }
+                emptyPanes();
 
-                    showPublicCards(clientBoard,0);
-                });
+                schemeVBOX.getChildren().add(createScheme(clientBoard.getPlayerList().get(0).getSchemaCard()));
+                schemeVBOX2.getChildren().add(createScheme(clientBoard.getPlayerList().get(1).getSchemaCard()));
+
+                System.out.println("..update..");
+
+                showPublicCards(clientBoard,0);
+                showDiceBoard();
+
+        });
 
       //  schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
       //  schemeVBOX3.getChildren().add(createScheme(schemaCardList.get(3)));
     }
+
+    private void emptyPanes(){
+        schemeVBOX.getChildren().clear();
+        schemeVBOX2.getChildren().clear();
+        hBoxDraftDice.getChildren().clear();
+        cellSchemeList.clear();
+        diceOnDraftList.clear();
+    }
+
+    private AnchorPane cellSelected;
 
     //------------------------------------------------------------------------------------
 
@@ -457,14 +508,22 @@ public class ControllerMatchTable implements Initializable {
 
         for (Cell c : schemaCard.getCellList()) {
             ImageView cellImg = configCellImg();
-            AnchorPane anchorPane = configAnchorPane();
+            AnchorPane anchorPaneCell = configAnchorPane();
+
+            anchorPaneCell.setOnMouseClicked(event -> {
+                cellSelected = anchorPaneCell;
+
+                checkCellIndex(); //TODO E' QUESTO DA FARE? @CRIS
+
+                event.consume();
+            });
 
             if (c.getValue() == 0 && c.getColour() == null) {
-                anchorPane.setStyle("-fx-background-color: white");
+                anchorPaneCell.setStyle("-fx-background-color: white");
             }
             else if (c.getColour() != null) {
                 Map<ColourEnum, String> map = colorMap();
-                anchorPane.setStyle("-fx-background-color: #" + map.get(c.getColour()));
+                anchorPaneCell.setStyle("-fx-background-color: #" + map.get(c.getColour()));
 
             }
             else {
@@ -474,6 +533,7 @@ public class ControllerMatchTable implements Initializable {
             if(!c.isEmpty()){
                 cellImg.setImage(ControllerMatchTable.showDie(c.getDie()));
 
+                //Handle the click to see what's under a die placed in the scheme
                 cellImg.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
                     if(c.getValue() != 0){
                         setCellValueRestriction(c, cellImg);
@@ -494,20 +554,36 @@ public class ControllerMatchTable implements Initializable {
                 row++;
             }
 
-            anchorPane.getChildren().addAll(cellImg);
+            anchorPaneCell.getChildren().addAll(cellImg);   //add img (conterrà dadi messi) all'anchor pane della cella
             AnchorPane.setTopAnchor(cellImg, 0.6);
             AnchorPane.setLeftAnchor(cellImg, 0.3);
-            cellImg.fitHeightProperty().bind(anchorPane.heightProperty().subtract(7));
-            cellImg.fitWidthProperty().bind(anchorPane.widthProperty().subtract(7));
-            schemeGridPane.add(anchorPane, col, row);
+            cellImg.fitHeightProperty().bind(anchorPaneCell.heightProperty().subtract(7));
+            cellImg.fitWidthProperty().bind(anchorPaneCell.widthProperty().subtract(7));
+            cellSchemeList.add(anchorPaneCell);
+
+
+            schemeGridPane.add(anchorPaneCell, col, row);
             col++;
         }
         return schemeGridPane;
     }
 
+    private void checkCellIndex() {
+
+        for (int i = 0; i < cellSchemeList.size(); i++) {
+            if(cellSchemeList.get(i) == cellSelected){
+                //System.out.println("INDICE CELL " + i % 20);
+                int index = i % 20;
+                int row = index / 5;
+                int col = index % 5;
+                syntaxController.validCommand(row + " " + col);
+            }
+        }
+    }
+
     /**
-     * Association of the stardard color to web color
-     * @return
+     * Association of the standard color to web color
+     * @return hashMap of the association
      */
     private Map colorMap (){
         Map<ColourEnum, String> map = new EnumMap<>(ColourEnum.class);
@@ -568,7 +644,9 @@ public class ControllerMatchTable implements Initializable {
                 vBox.setAlignment(Pos.CENTER);
                 vBox.setSpacing(50);
                 if(i == 0){
-                    vBox.getChildren().addAll(new Text("La tua carta obiettivo privato"));
+                    Text text = new Text("La tua carta obiettivo privato");
+                    text.setFill(Color.WHITE);
+                    vBox.getChildren().addAll(text);
                 }else {
                     Button button = new Button("Schema " + (i));
                     button.setOnAction(event -> {
@@ -577,8 +655,9 @@ public class ControllerMatchTable implements Initializable {
                     });
 
                     vBox.getChildren().addAll(button, createScheme(schemeToChooseList.get(i - 1)));
-                    schemeSelectionGrid.add(vBox, i, 0);
                 }
+
+                schemeSelectionGrid.add(vBox, i, 0);
             }
         });
 

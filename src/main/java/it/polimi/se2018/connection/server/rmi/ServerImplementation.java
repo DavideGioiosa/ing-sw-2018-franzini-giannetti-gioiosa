@@ -65,7 +65,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         playerMessage.setUser(user);
         RMIServerPing rmiServerPing = new RMIServerPing(this, code, client);
         Timer lifeLineTimer = new Timer();
-        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, new Date(), (long)1*1000);
+        lifeLineTimer.scheduleAtFixedRate(rmiServerPing, (long) 10*1000, (long)10*1000);
         pingMap.put(code, lifeLineTimer);
         println("trovato nuovo client");
         try {
