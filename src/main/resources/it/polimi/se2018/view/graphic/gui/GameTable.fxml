@@ -88,7 +88,7 @@
             </AnchorPane>
             <AnchorPane fx:id="nicknamePane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0">
                <children>
-                  <SplitPane dividerPositions="0.3302034428794992" layoutX="151.0" layoutY="165.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.38028169014084506" layoutX="151.0" layoutY="165.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -130,7 +130,7 @@
                <children>
                   <HBox fx:id="hBoxDraftDice" fillHeight="false" maxHeight="80.0" minHeight="50.0" minWidth="500.0" prefHeight="70.0" prefWidth="574.0" spacing="5.0" style="-fx-background-color: #B0C4DE;" GridPane.columnSpan="3" GridPane.rowIndex="1">
                      <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
+                        <Cursor fx:constant="HAND" />
                      </cursor>
                      <padding>
                         <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
@@ -165,7 +165,7 @@
                         <Button fx:id="nextCardButton" mnemonicParsing="false" onAction="#nextCard" prefHeight="35.0" prefWidth="40.0" text="&gt;" />
                      </children>
                      <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
+                        <Cursor fx:constant="HAND" />
                      </cursor>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
@@ -175,6 +175,24 @@
                   <VBox fx:id="schemeVBOX1" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" />
                   <VBox fx:id="schemeVBOX2" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" GridPane.columnIndex="1" />
                   <VBox fx:id="schemeVBOX3" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #29a329;" GridPane.columnIndex="2" />
+                  <GridPane fx:id="trackBoardGrid" GridPane.columnIndex="3" GridPane.rowSpan="3">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" prefWidth="109.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="82.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

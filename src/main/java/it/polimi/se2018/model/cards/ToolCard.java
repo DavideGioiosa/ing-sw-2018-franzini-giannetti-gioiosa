@@ -69,6 +69,10 @@ public class ToolCard extends Card implements Serializable {
             List<OperationString> operationStringCloned = new ArrayList<>(operationStringList);
             commandLists.add(operationStringCloned);
         }
+        this.indexOfTurn = toolCard.indexOfTurn;
+        this.minQuantity = toolCard.minQuantity;
+        this.maxQuantity = toolCard.maxQuantity;
+        this.avoidedRestriction = toolCard.avoidedRestriction;
     }
     
     /**

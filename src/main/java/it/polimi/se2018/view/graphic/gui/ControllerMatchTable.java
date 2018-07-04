@@ -13,9 +13,7 @@ import it.polimi.se2018.view.View;
 import it.polimi.se2018.view.graphic.TypeOfInputAsked;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -53,6 +51,10 @@ public class ControllerMatchTable implements Initializable {
 
     //Lista dei bottoni delle ToolCard da usare
     private List<Button> toolChoiceButtonList;
+
+    //Lista di liste???? per dadi sul trackboard
+    List<ImageView> diceExtraTrackboardList;
+
 
     @FXML GridPane schemeSelectionGrid;
 
@@ -138,6 +140,8 @@ public class ControllerMatchTable implements Initializable {
     @FXML
     TextArea nicknameAreaText;
 
+    @FXML GridPane trackBoardGrid;
+
     //---------------------
 
     ClientBoard clientBoard;
@@ -201,6 +205,8 @@ public class ControllerMatchTable implements Initializable {
         diceOnDraftList = new ArrayList();
 
         toolChoiceButtonList = new ArrayList<>();
+
+        diceExtraTrackboardList = new ArrayList<>();
 
     }
 
@@ -551,6 +557,33 @@ public class ControllerMatchTable implements Initializable {
         toolChoiceButtonList.clear();
     }
 
+
+  /*  private void insertDiceTrackboard () {
+        for (int i = 0; i < clientBoard.getTrackBoardDice().getDiceList().get(0).size(); i++) {
+
+            HBox hBoxExtraDiceRound = new HBox();
+            ImageView dieExtra = new ImageView();
+
+            dieExtra.setPreserveRatio(true);
+            dieExtra.setFitWidth(45);
+            dieExtra.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                //selectedDieExtra = dieExtra;
+                checkDiceBoardIndex();
+
+                event.consume();
+            });
+            diceExtraTrackboardList.add(dieExtra);
+            diceExtraTrackboardList.get(i).setImage(showDie(clientBoard.getTrackBoardDice().getDiceList().get(0).get(0)));
+
+            hBoxDraftDice.getChildren().add(diceExtraTrackboardList.get(i));
+            dieExtra.fitWidthProperty().bind(hBoxExtraDiceRound.widthProperty());
+            dieExtra.fitHeightProperty().bind(hBoxExtraDiceRound.heightProperty().subtract(20));
+
+            //hBoxExtraDiceRound.
+              //      trackBoardGrid
+        }
+    }
+*/
 
     public GridPane createScheme (SchemaCard schemaCard) {
         int col = 0;
