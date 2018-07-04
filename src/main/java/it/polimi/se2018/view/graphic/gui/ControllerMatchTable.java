@@ -12,7 +12,6 @@ import it.polimi.se2018.view.SyntaxController;
 import it.polimi.se2018.view.View;
 import it.polimi.se2018.view.graphic.TypeOfInputAsked;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -28,7 +27,6 @@ import javafx.stage.Screen;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -52,9 +50,12 @@ public class ControllerMatchTable implements Initializable {
     //Lista dei bottoni delle ToolCard da usare
     private List<Button> toolChoiceButtonList;
 
-    //Lista di liste???? per dadi sul trackboard
-    List<ImageView> diceExtraTrackboardList;
+    //Lista di liste per dadi sul trackboard
+    List<ImageView> diceExtraImgTrackboardList;
 
+    List<Button> buttonTrackBoarIndexList;
+
+    List<Integer> indexChangeDiceTrackBoard;
 
     @FXML GridPane schemeSelectionGrid;
 
@@ -127,6 +128,16 @@ public class ControllerMatchTable implements Initializable {
      * Button pressed of the selection Scheme Pane
      */
     private Button selectedButtonScheme;
+
+    /**
+     * Img Dado selezionato dalla Trackboard
+     */
+    private ImageView selectedTrackboardDie;
+
+    /**
+     * Button on the Trackboard pressed to see the other extra dice
+     */
+    private Button selectedButtonTrackBoardNext;
 
     //-----------------------------
 
@@ -206,8 +217,11 @@ public class ControllerMatchTable implements Initializable {
 
         toolChoiceButtonList = new ArrayList<>();
 
-        diceExtraTrackboardList = new ArrayList<>();
+        diceExtraImgTrackboardList = new ArrayList<>();
 
+        buttonTrackBoarIndexList = new ArrayList<>();
+
+        indexChangeDiceTrackBoard = new ArrayList<>();
     }
 
 
@@ -227,6 +241,11 @@ public class ControllerMatchTable implements Initializable {
 
     private void showToolCards(ClientBoard clientBoard, int index) {
         cardImg.setImage(showCard(clientBoard.getCardOnBoard().getToolCardList().get(index), "toolCard"));
+    }
+
+    private void showNextDieTrackBoard (ClientBoard clientBoard, int index, int indexRound){
+        diceExtraImgTrackboardList.get(indexRound).setImage(showDie
+                (clientBoard.getTrackBoardDice().getDiceList().get(indexRound).get(index)));
     }
 
     private void cardSize (){
@@ -264,13 +283,26 @@ public class ControllerMatchTable implements Initializable {
 
 
     //TODO: INTRODURRE SHOWPRIVATECARD
-    public void nextCard(ActionEvent actionEvent) throws IOException {
+    @FXML private void nextCard() {
         if (indexChangeCard == 2) {
             indexChangeCard = -1;
         }
         indexChangeCard++;
         showPublicCards(clientBoard, indexChangeCard);
     }
+
+    @FXML private void nextDieTrackboard(int selectedButtonIndex, int numExtraDiceRound) {
+        if (indexChangeDiceTrackBoard.get(selectedButtonIndex) == numExtraDiceRound - 1) {
+            indexChangeDiceTrackBoard.remove(selectedButtonIndex);
+            indexChangeDiceTrackBoard.add(selectedButtonIndex, -1);
+        }
+        int indexValue = indexChangeDiceTrackBoard.get(selectedButtonIndex).intValue();
+        indexChangeDiceTrackBoard.remove(selectedButtonIndex);
+        indexChangeDiceTrackBoard.add(selectedButtonIndex, (indexValue + 1));
+
+        showNextDieTrackBoard(clientBoard, indexValue + 1, selectedButtonIndex);
+    }
+
 
 
     @FXML private void extractClick() {
@@ -539,6 +571,7 @@ public class ControllerMatchTable implements Initializable {
 
                 showPublicCards(clientBoard,0);
                 showDiceBoard();
+                insertDiceTrackboard();
         });
 
       //  schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
@@ -555,35 +588,56 @@ public class ControllerMatchTable implements Initializable {
         cellSchemeList.clear();
         diceOnDraftList.clear();
         toolChoiceButtonList.clear();
+        trackBoardGrid.getChildren().clear();
     }
 
 
-  /*  private void insertDiceTrackboard () {
-        for (int i = 0; i < clientBoard.getTrackBoardDice().getDiceList().get(0).size(); i++) {
+    private void insertDiceTrackboard () {
+        if(!clientBoard.getTrackBoardDice().getDiceList().isEmpty()) {
 
-            HBox hBoxExtraDiceRound = new HBox();
-            ImageView dieExtra = new ImageView();
+            for (int i = 0; i < clientBoard.getTrackBoardDice().getDiceList().size(); i++) {
+                ImageView dieExtra = new ImageView();
+                dieExtra.setPreserveRatio(true);
+                dieExtra.setFitWidth(45);
+                dieExtra.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    selectedTrackboardDie = dieExtra;
+                    //TODO: TOOL CHE UTILIZZANO
+                    System.out.println(checkDieTrackBoardIndex());
 
-            dieExtra.setPreserveRatio(true);
-            dieExtra.setFitWidth(45);
-            dieExtra.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                //selectedDieExtra = dieExtra;
-                checkDiceBoardIndex();
+                    event.consume();
+                });
 
-                event.consume();
-            });
-            diceExtraTrackboardList.add(dieExtra);
-            diceExtraTrackboardList.get(i).setImage(showDie(clientBoard.getTrackBoardDice().getDiceList().get(0).get(0)));
+                diceExtraImgTrackboardList.add(dieExtra);
 
-            hBoxDraftDice.getChildren().add(diceExtraTrackboardList.get(i));
-            dieExtra.fitWidthProperty().bind(hBoxExtraDiceRound.widthProperty());
-            dieExtra.fitHeightProperty().bind(hBoxExtraDiceRound.heightProperty().subtract(20));
+                diceExtraImgTrackboardList.get(i).setImage(showDie
+                        (clientBoard.getTrackBoardDice().getDiceList().get(i).get(0))); //TODO: INDEX
 
-            //hBoxExtraDiceRound.
-              //      trackBoardGrid
+                trackBoardGrid.add(diceExtraImgTrackboardList.get(i), 0, 9 - i);
+                Button button = new Button(">");
+                button.setOnAction(event -> {
+                    selectedButtonTrackBoardNext = button;
+
+                    //TODO: EVITARE DI CHIAMARE LA FUNZ DIVERSE VOLTE
+                    if(checkButtonTrackBoardIndex() != -1) {
+                        nextDieTrackboard(checkButtonTrackBoardIndex(),
+                                clientBoard.getTrackBoardDice().getDiceList().get(checkButtonTrackBoardIndex()).size());
+                    }
+                    //è premuto, chiama metodo switcha carta
+                });
+                indexChangeDiceTrackBoard.add(0);
+                buttonTrackBoarIndexList.add(button);
+                trackBoardGrid.add(buttonTrackBoarIndexList.get(i), 1, 9 - i);
+
+
+                if(clientBoard.getTrackBoardDice().getDiceList().get(i).size() == 1) {
+                    buttonTrackBoarIndexList.get(i).setVisible(false);
+                    buttonTrackBoarIndexList.get(i).setDisable(true);
+                }
+
+            }
         }
     }
-*/
+
 
     public GridPane createScheme (SchemaCard schemaCard) {
         int col = 0;
@@ -697,6 +751,30 @@ public class ControllerMatchTable implements Initializable {
         }
 
         //TODO: SE HO ERRORE?
+    }
+
+    private int checkDieTrackBoardIndex (){
+        //syntax??
+
+        for(int i = 0; i < clientBoard.getTrackBoardDice().getDiceList().size(); i++) {
+            for(int j = 0; j < clientBoard.getTrackBoardDice().getDiceList().get(i).size(); j++) {
+                if (diceExtraImgTrackboardList.get(i) == selectedTrackboardDie) {
+                    //    posso beccare l'altro indice con l'array di integer
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int checkButtonTrackBoardIndex (){
+
+        for(int i = 0; i < buttonTrackBoarIndexList.size(); i++) {
+            if (buttonTrackBoarIndexList.get(i) == selectedButtonTrackBoardNext) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 
