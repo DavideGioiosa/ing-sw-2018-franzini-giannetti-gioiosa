@@ -98,19 +98,30 @@ public class TrackBoard implements Serializable, DiceContainer {
     }
 
     @Override
-    public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
-        dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
+    public boolean pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
+        try {
+            dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
+        }catch (IndexOutOfBoundsException | NullPointerException e){
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
-        dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
-        this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(dieList.get(0));
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        try {
+            dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
+            this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(dieList.get(0));
+        } catch(IndexOutOfBoundsException | NullPointerException e){
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
-        for (Die die: dieList) this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(die);
+    public boolean leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
+        if(dieList != null) for (Die die: dieList) this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(die);
+        return true;
     }
 
     @Override

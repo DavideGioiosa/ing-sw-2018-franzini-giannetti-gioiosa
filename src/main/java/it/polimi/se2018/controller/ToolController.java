@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * ToolCards are divided into states and operations. A state is what ToolCard needs between two user interaction divided
  * by Server request. An operation is the minimum ToolCard's action.
- * This ToolCard manager sets operation and manages the interaction between them.
+ * This ToolCard manager sets operation of the Card used and manages the interaction between the operation.
  */
 public class ToolController implements Action{
 
@@ -22,7 +22,12 @@ public class ToolController implements Action{
     private boolean isComplete;
     private List<Die> dieList;
     private PlayerMove playerMoveSaved;
+    private GameBoard gameBoardCloned;
 
+    /**
+     * Manages the
+     * @param toolCard
+     */
     public ToolController(ToolCard toolCard){
         dieList = new ArrayList<>();
         isComplete = false;
@@ -35,16 +40,24 @@ public class ToolController implements Action{
     }
 
     public int doAction(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
+
+
         if(!isComplete) {
+            this.gameBoardCloned = gameBoard.getClone();
+            this.playerMoveSaved = playerMove.getClone();
+            List<Die> dieListCloned = new ArrayList<>();
+            for(Die die: dieList)dieListCloned.add(die.getClone());
+            Turn turnCloned;
+            if(turn != null) turnCloned = turn.getClone();
+            else turnCloned = null;
+            List<Player> roundPlayerOrderCloned = new ArrayList<>();
+            if(roundPlayerOrder != null) for(Player player: roundPlayerOrder) roundPlayerOrderCloned.add(player.getClone());
+            else roundPlayerOrderCloned = null;
 
-            HashMap<String,DiceContainer> diceContainerHashMap = setDiceContainerHashMap(gameBoard, playerMove.getPlayer());
+            int idError = tryMove(gameBoardCloned, toolOperationLists, state, operationStrings, dieListCloned, playerMoveSaved, roundPlayerOrderCloned, turnCloned);
+            if(idError != 0) return idError;
 
-            for (int i = 0; i < toolOperationLists.get(state).size(); i++) {
-                if(!toolOperationLists.get(state).get(i).start(diceContainerHashMap.get(operationStrings.get(state).get(i).getDiceContainer()),
-                        playerMove, dieList, roundPlayerOrder, turn)){
-                    return 2103;
-                }
-            }
+            tryMove(gameBoard, toolOperationLists, state, operationStrings, dieList, playerMove, roundPlayerOrder, turn);
 
             state ++;
             playerMove.setState(state);
@@ -53,6 +66,18 @@ public class ToolController implements Action{
             return 0;
         }
         return 1000;
+    }
+
+    private int tryMove(GameBoard gameBoard, List<List<ToolOperation>> toolOperationLists, int state, List<List<OperationString>> operationStrings, List<Die> dieList, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn) {
+        HashMap<String,DiceContainer> diceContainerHashMap = setDiceContainerHashMap(gameBoard, playerMove.getPlayer());
+
+        for (int i = 0; i < toolOperationLists.get(state).size(); i++) {
+            if(!toolOperationLists.get(state).get(i).start(diceContainerHashMap.get(operationStrings.get(state).get(i).getDiceContainer()),
+                    playerMove, dieList, roundPlayerOrder, turn)){
+                return 2103;
+            }
+        }
+        return 0;
     }
 
     private HashMap<String, DiceContainer> setDiceContainerHashMap(GameBoard gameBoard, Player player){
@@ -126,7 +151,11 @@ public class ToolController implements Action{
         return isComplete;
     }
 
-    public int doDefaultMove(){
+    public int doDefaultMove(GameBoard gameBoard){
+        if(dieList != null) for(Die die: dieList){
+            if(die.getValue() == 0) die.firstRoll();
+            gameBoard.getBoardDice().insertDie(die);
+        }
         return 0;
     }
 

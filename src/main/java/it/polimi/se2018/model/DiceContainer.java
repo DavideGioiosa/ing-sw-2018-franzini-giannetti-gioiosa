@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface DiceContainer {
 
-    void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max);
-    void exchangeDice(PlayerMove playerMove, List<Die> dieList);
-    void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList);
+    boolean pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max);
+    boolean exchangeDice(PlayerMove playerMove, List<Die> dieList);
+    boolean leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList);
     List<Die> getClonedDieList();
 
 }

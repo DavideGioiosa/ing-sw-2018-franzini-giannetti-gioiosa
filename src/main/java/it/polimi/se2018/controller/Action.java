@@ -10,7 +10,7 @@ public interface Action {
 
     int doAction(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn);
     boolean isComplete();
-    int doDefaultMove();
+    int doDefaultMove(GameBoard gameBoard);
     boolean isPass();
     PlayerMove getPlayerMove();
 }

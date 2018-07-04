@@ -402,8 +402,64 @@ public class ToolControllerTest {
 
 
     @Test
-    public void useTool2000() {
+    public void useTool303() {
+        GameBoardTest gameBoardTest = new GameBoardTest();
 
+        gameBoard = gameBoardTest.newGameBoard();
+        player = gameBoard.getPlayerList().get(0);
+
+        playerMove = new PlayerMove();
+        playerMove.setPlayer(player);
+
+        Die die1 = new Die(ColourEnum.YELLOW);
+        die1.setValue(5);
+        Die die2 = new Die(ColourEnum.BLUE);
+        die2.setValue(4);
+        Die die3 = new Die(ColourEnum.RED);
+        die3.setValue(3);
+        Die die4 = new Die(ColourEnum.PURPLE);
+        die4.setValue(1);
+        Die die5 = new Die(ColourEnum.BLUE);
+        die5.setValue(2);
+        Die die6 = new Die(ColourEnum.RED);
+        die6.setValue(1);
+        Die die7 = new Die(ColourEnum.YELLOW);
+        die7.setValue(6);
+        Die die8 = new Die(ColourEnum.GREEN);
+        die8.setValue(4);
+        Die die9 = new Die(ColourEnum.YELLOW);
+        die9.setValue(1);
+
+        gameBoard.getBoardDice().insertDie(die4);
+        gameBoard.getBoardDice().insertDie(die5);
+        gameBoard.getBoardDice().insertDie(die9);
+
+        List<Die> dieList = new ArrayList<>();
+        dieList.add(die6);
+        gameBoard.getTrackBoardDice().insertDice(dieList);
+
+        dieList = new ArrayList<>();
+        dieList.add(die7);
+        dieList.add(die8);
+        gameBoard.getTrackBoardDice().insertDice(dieList);
+
+        gameLoader = new GameLoader();
+
+        ToolCard toolCard;
+        do {
+            toolCard = (ToolCard) gameLoader.getToolDeck().extractCard();
+        }while (!toolCard.getName().equalsIgnoreCase("Pennello per Eglomise"));
+        ToolController toolController = new ToolController(toolCard);
+
+        player.getSchemaCard().setDiceIntoCell(new Position(0,0), die1);
+
+        PlayerMove playerMove = new PlayerMove();
+        playerMove.setPlayer(player);
+        playerMove.insertDiceSchemaWhereToTake(new Position(0,0));
+        playerMove.insertDiceSchemaWhereToLeave(new Position(0,4));
+
+        int error = toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
+        assertEquals(2103,error);
     }
 
 }

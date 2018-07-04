@@ -28,11 +28,11 @@ public class View extends Observable implements Observer<ClientModel> {
      */
     public View() {
 
-        this.inputStrategy = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
-        this.outputStrategy = new CommandLineGraphic();
+  //      this.inputStrategy = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
+//        this.outputStrategy = new CommandLineGraphic();
 
-        //this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
-        //this.outputStrategy = new GuiOutput();
+        this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
+        this.outputStrategy = new GuiOutput();
 
     }
 

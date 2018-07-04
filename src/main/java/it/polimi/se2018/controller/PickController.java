@@ -104,7 +104,7 @@ public class PickController implements Action{
     }
 
     @Override
-    public int doDefaultMove(){
+    public int doDefaultMove(GameBoard gameBoard){
         playerMove = new PlayerMove();
         playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
         return 0;

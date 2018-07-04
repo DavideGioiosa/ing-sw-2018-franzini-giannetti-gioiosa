@@ -22,7 +22,7 @@ public class OperationLeaveDice implements ToolOperation{
     @Override
     public boolean start(DiceContainer diceContainer, PlayerMove playerMove, List<Die> dieList, List<Player> roundPlayerOrder, Turn turn) {
         if(!dieList.isEmpty()){
-            diceContainer.leaveDice(playerMove, dieList, restrictionList);
+            return diceContainer.leaveDice(playerMove, dieList, restrictionList);
         }
         return true;
     }

@@ -60,7 +60,7 @@ public class ClientBoard{
      * Copy Constructor
      * @param clientBoard ClientBoard to be cloned
      */
-    private ClientBoard(ClientBoard clientBoard){
+    protected ClientBoard(ClientBoard clientBoard){
         if (clientBoard == null) throw new NullPointerException("ERROR: Tried to create a null ClientBoard");
 
         this.playerList = new ArrayList<>();

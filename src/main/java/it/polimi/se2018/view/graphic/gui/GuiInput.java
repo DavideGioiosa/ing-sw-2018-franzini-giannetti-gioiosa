@@ -67,4 +67,15 @@ public class GuiInput implements InputStrategy {
     }
 
 
+    @Override
+    public void tryReconnection() {
+
+    }
+
+    @Override
+    public void validPath() {
+
+    }
+
+
 }
