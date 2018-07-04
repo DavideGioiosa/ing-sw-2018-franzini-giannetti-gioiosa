@@ -17,4 +17,6 @@ public interface InputStrategy {
     PlayerSetupper getPlayerSetupper();
     void makeChoice(PlayerChoice playerChoice);
     void choseNickname(User user);
+    void tryReconnection();
+    void validPath();
 }

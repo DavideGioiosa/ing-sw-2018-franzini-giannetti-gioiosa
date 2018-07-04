@@ -36,8 +36,8 @@ public class ClientController implements Observer<PlayerMessage> {
 
     /**
      * Constructor sets this ClientController as view's Observer
-     * @param client
-     * @param view
+     * @param client Object that manages networking
+     * @param view Object that manages View
      */
     public ClientController(Client client, View view){
         this.client = client;
@@ -61,6 +61,13 @@ public class ClientController implements Observer<PlayerMessage> {
         switch (playerMessage.getId()){
             case CHOICE:
                 idError = choiceController.checkChoice(playerMessage.getPlayerChoice());
+                if(idError != 0) {
+                    view.reportError(idError);
+                    playerMessage.setChoice(choiceController.getResetPlayerChoice(playerMessage.getPlayerChoice()));
+                    if(playerMessage.getPlayerChoice() == null) view.showMessage(1000);
+                    view.receive(playerMessage);
+                    return;
+                }
                 break;
 
             case CHECK_MOVE:
@@ -74,10 +81,6 @@ public class ClientController implements Observer<PlayerMessage> {
                 }
                 break;
 
-            case APPLY_MOVE:
-                applyMove(playerMessage);
-                return;
-
             case UPDATE:
                 updateBoard(playerMessage.getMoveMessage());
                 return;
@@ -86,19 +89,19 @@ public class ClientController implements Observer<PlayerMessage> {
                 idError = choiceController.checkNickname(playerMessage.getUser());
                 break;
 
+            case DISCONNECTED:
+                reconnection();
+                break;
+
+            case EXIT:
+                client.close();
+                break;
+
             default:
                 break;
         }
         client.send(playerMessage);
         //TODO: Gestione errori nelle varie mosse
-    }
-
-    /**
-     * New move approved by the Server
-     * @param playerMessage Move approved by the Server
-     */
-    private void applyMove(PlayerMessage playerMessage){
-
     }
 
     /**
@@ -110,4 +113,8 @@ public class ClientController implements Observer<PlayerMessage> {
         clientModel.setClientBoard(clientBoard);
     }
 
+    private void reconnection(){
+        view.showMessage(4001);
+        client.reconnect();
+    }
 }

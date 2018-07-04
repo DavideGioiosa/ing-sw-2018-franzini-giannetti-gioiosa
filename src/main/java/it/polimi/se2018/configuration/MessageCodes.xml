@@ -38,7 +38,7 @@
     </message>
     <message>
         <id>3001</id>
-        <description>Inserisci indice di riga e di colonna della cella in cui vuoi posizionare il dado</description>
+        <description>Inserisci indice di riga e di colonna della cella in cui vuoi posizionare il dado [RIG [+ spazio +] COL</description>
     </message>
     <message>
         <id>3101</id>
@@ -54,10 +54,18 @@
     </message>
     <message>
         <id>3503</id>
-        <description>Scegli un nickname</description>
+        <description>Scegli un nickname [Max 25 caratteri]</description>
     </message>
     <message>
         <id>3510</id>
         <description>Scelta Inviata</description>
     </message>
+    <error>
+        <id>4000</id>
+        <description>C'e' stato un problema di connessione. Vuoi tentare la riconnessione? [n = no]</description>
+    </error>
+    <error>
+        <id>4001</id>
+        <description>Tentativo di riconnessione</description>
+    </error>
 </messages>

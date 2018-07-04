@@ -200,11 +200,18 @@ public class Round implements Observer<PlayerMove>{
 
     }
 
-
+    /**
+     * Gets last Turn created
+     * @return Last Turn created
+     */
     private Turn lastTurn(){
         return turnsList.get(turnsList.size() - 1);
     }
 
+    /**
+     * PlayerMove to be sent to the next User
+     * @return New PlayerMove or PlayerMove not finished
+     */
     private PlayerMove getStartedPlayerMove(){
         if(lastTurn().lastActionFinished()) return new PlayerMove();
         return lastTurn().getStartedPlayerMove();

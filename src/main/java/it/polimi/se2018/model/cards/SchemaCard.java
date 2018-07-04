@@ -255,8 +255,9 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
     @Override
     public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
 
-        for(int i = 0; i <playerMove.getDiceSchemaWhereToTake().size(); i++) {
-            dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(i)));
+        for(int i = 0; i <playerMove.getDiceSchemaWhereToTake().size() && i < max; i++) {
+            dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(0)));
+            playerMove.getDiceSchemaWhereToTake().remove(0);
         }
     }
 
@@ -274,13 +275,13 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
 
         for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
             for(Restriction restriction: restrictionList) {
-                int errorId = restriction.checkRestriction(this, dieList.get(i), playerMove.getDiceSchemaWhereToLeave().get(i));
+                int errorId = restriction.checkRestriction(this, dieList.get(0), playerMove.getDiceSchemaWhereToLeave().get(i));
                 if (errorId != 0) return;
                 //TODO: ERROR O NEW EXCEPTION;
             }
-            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
-
+            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().remove(0), dieList.get(i));
         }
+        dieList.remove(0);
     }
 
     @Override

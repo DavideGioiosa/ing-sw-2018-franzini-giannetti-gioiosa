@@ -154,36 +154,30 @@ public class ToolControllerTest {
 
     @Test
     public void useToolWithID4Test() {
-
-        playerMove.insertDiceSchemaWhereToTake(new Position(1,1));
-        playerMove.insertDiceSchemaWhereToLeave(new Position(0,2));
-
-        playerMove.insertDiceSchemaWhereToTake(new Position(0,0));
-        playerMove.insertDiceSchemaWhereToLeave(new Position(0,3));
-
-        List<List<OperationString>> operationList = new ArrayList<>();
-        operationList.add(new ArrayList<>());
-
-        operationList.get(0).add(new OperationString("pick", "schemacard"));
-        operationList.get(0).add(new OperationString("leave", "schemacard"));
-
         ToolCard toolCard;
         do {
             toolCard = (ToolCard) gameLoader.getToolDeck().extractCard();
-        }while (!toolCard.getName().equals("Lathekin"));
+        } while (!toolCard.getName().equals("Lathekin"));
         ToolController toolController = new ToolController(toolCard);
 
-        toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
 
-        assertTrue(player.getSchemaCard().getCellList().get(0).isEmpty());
+        playerMove.insertDiceSchemaWhereToTake(new Position(1, 1));
+        playerMove.insertDiceSchemaWhereToTake(new Position(0, 0));
+        playerMove.insertDiceSchemaWhereToLeave(new Position(0, 2));
+        playerMove.insertDiceSchemaWhereToLeave(new Position(0, 3));
+
+        int error = toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(), turn);
+
+        assertEquals(0, error);
+
         assertTrue(player.getSchemaCard().getCellList().get(6).isEmpty());
+        assertTrue(player.getSchemaCard().getCellList().get(0).isEmpty());
 
         assertEquals(ColourEnum.RED, player.getSchemaCard().getCellList().get(2).getDie().getColour());
         assertEquals(3, player.getSchemaCard().getCellList().get(2).getDie().getValue());
 
-        assertEquals(ColourEnum.YELLOW, player.getSchemaCard().getCellList().get(3).getDie().getColour());
         assertEquals(5, player.getSchemaCard().getCellList().get(3).getDie().getValue());
-
+        assertEquals(ColourEnum.YELLOW, player.getSchemaCard().getCellList().get(3).getDie().getColour());
     }
 
     @Test
@@ -319,16 +313,6 @@ public class ToolControllerTest {
 
         List<List<OperationString>> operationList = new ArrayList<>();
 
-        int value = gameBoard.getBoardDice().getDieList().get(0).getValue();
-
-        operationList.add(new ArrayList<>());
-        operationList.get(0).add(new OperationString("pick", "diceboard"));
-        operationList.get(0).add(new OperationString("exchange", "dicebag"));
-
-        operationList.add(new ArrayList<>());
-        operationList.get(1).add(new OperationString("setdievalue", ""));
-        operationList.get(1).add(new OperationString("leave", "schemacard"));
-
         ToolCard toolCard;
         do {
             toolCard = (ToolCard) gameLoader.getToolDeck().extractCard();
@@ -343,35 +327,12 @@ public class ToolControllerTest {
 
         toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
 
-        playerMove = new PlayerMove();
-        playerMove.setPlayer(player);
-        playerMove.insertDiceSchemaWhereToLeave(new Position(2,0));
-        toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
-
-        assertEquals(2, gameBoard.getBoardDice().getDieList().size());
-        assertEquals(3, player.getSchemaCard().getCellList().get(10).getDie().getValue());
+        assertEquals(3, gameBoard.getBoardDice().getDieList().size());
+        assertEquals(3, gameBoard.getBoardDice().getDieList().get(2).getValue());
     }
 
     @Test
     public void useToolWithID12Test() {
-        Die die = new Die(ColourEnum.YELLOW);
-        die.setValue(2);
-        player.getSchemaCard().setDiceIntoCell(new Position(0,2), die);
-
-        playerMove.insertDiceSchemaWhereToTake(new Position(0,0));
-        playerMove.insertDiceSchemaWhereToLeave(new Position(1,2));
-
-        playerMove.insertDiceSchemaWhereToTake(new Position(0,2));
-        playerMove.insertDiceSchemaWhereToLeave(new Position(0,3));
-
-        List<List<OperationString>> operationList = new ArrayList<>();
-        operationList.add(new ArrayList<>());
-
-        int value = gameBoard.getBoardDice().getDieList().get(0).getValue();
-
-        operationList.get(0).add(new OperationString("pick", "schemacard"));
-        operationList.get(0).add(new OperationString("checksamecolour", "trackboard"));
-        operationList.get(0).add(new OperationString("leave", "schemacard"));
 
         ToolCard toolCard;
         do {
@@ -379,17 +340,66 @@ public class ToolControllerTest {
         }while (!toolCard.getName().equals("Taglierina Manuale"));
         ToolController toolController = new ToolController(toolCard);
 
-        toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
+        Die die = new Die(ColourEnum.YELLOW);
+        die.setValue(2);
+        player.getSchemaCard().setDiceIntoCell(new Position(0,2), die);
 
+        playerMove.insertDiceSchemaWhereToTake(new Position(0,0));
+        playerMove.insertDiceSchemaWhereToLeave(new Position(2,1));
+        int error = toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
+        assertTrue(error == 0);
+
+        playerMove = new PlayerMove();
+        playerMove.insertDiceSchemaWhereToTake(new Position(0,2));
+        playerMove.insertDiceSchemaWhereToLeave(new Position(3,0));
+        playerMove.setPlayer(player);
+        error = toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
+
+        assertEquals(0, error);
         assertTrue(player.getSchemaCard().getCellList().get(0).isEmpty());
-        assertTrue(player.getSchemaCard().getCellList().get(10).isEmpty());
+        assertTrue(player.getSchemaCard().getCellList().get(2).isEmpty());
 
-        assertEquals(ColourEnum.YELLOW, player.getSchemaCard().getCellList().get(3).getDie().getColour());
-        assertEquals(2, player.getSchemaCard().getCellList().get(3).getDie().getValue());
+        assertEquals(ColourEnum.YELLOW, player.getSchemaCard().getCellList().get(11).getDie().getColour());
+        assertEquals(5, player.getSchemaCard().getCellList().get(11).getDie().getValue());
+
+        assertEquals(ColourEnum.YELLOW, player.getSchemaCard().getCellList().get(15).getDie().getColour());
+        assertEquals(2, player.getSchemaCard().getCellList().get(15).getDie().getValue());
+
+    }
+
+
+    @Test
+    public void useToolWithID12WithOneDieTest() {
+        ToolCard toolCard;
+        do {
+            toolCard = (ToolCard) gameLoader.getToolDeck().extractCard();
+        }while (!toolCard.getName().equals("Taglierina Manuale"));
+        ToolController toolController = new ToolController(toolCard);
+
+        Die die = new Die(ColourEnum.GREEN);
+        die.setValue(2);
+        player.getSchemaCard().setDiceIntoCell(new Position(0,2), die);
+
+        playerMove.insertDiceSchemaWhereToTake(new Position(0,0));
+        playerMove.insertDiceSchemaWhereToLeave(new Position(1,2));
+        int error = toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
+
+        assertEquals(0,error);
+        assertTrue(player.getSchemaCard().getCellList().get(0).isEmpty());
+
+        playerMove = new PlayerMove();
+        playerMove.setPlayer(player);
+        playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
+
+        error = toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
+
+        assertEquals(0,error);
+        assertTrue(player.getSchemaCard().getCellList().get(0).isEmpty());
 
         assertEquals(ColourEnum.YELLOW, player.getSchemaCard().getCellList().get(7).getDie().getColour());
         assertEquals(5, player.getSchemaCard().getCellList().get(7).getDie().getValue());
     }
+
 
     @Test
     public void useTool2000() {

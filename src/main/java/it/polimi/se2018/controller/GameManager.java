@@ -97,11 +97,11 @@ public class GameManager {
     }
 
     void defaultMove(){
+        roundList.get(roundList.size() - 1).defaultMove();
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
-        }else roundList.get(roundList.size() - 1).defaultMove();
+        }
     }
-
 
     /**
      * Method finds out the game winner

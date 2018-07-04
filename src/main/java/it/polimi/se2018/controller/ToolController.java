@@ -109,6 +109,9 @@ public class ToolController implements Action{
                     case "canbeplaced":
                         toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationCanBePlaced());
                         break;
+                    case "pickcanpass":
+                        toolOperationLists.get(toolOperationLists.size() - 1).add(new OperationPickCanPass(minNumberOfDice, maxNumberOfDice));
+                        break;
                     default: throw new IllegalArgumentException("ERROR: Wrong Operation Name");
 
                 }
