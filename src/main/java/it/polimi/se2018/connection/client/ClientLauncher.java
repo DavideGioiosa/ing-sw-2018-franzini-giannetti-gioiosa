@@ -22,13 +22,23 @@ public class ClientLauncher {
 
 
         /*View viewRMI = new View();
-        ClientStrategy clientStrategy = new RMITypeClient();
-        Client clientRMI = new Client(clientStrategy, viewRMI);
+        Client clientRMI = new Client(new RMITypeClient(), viewRMI);
 
         ClientController clientControllerRMI = new ClientController(clientRMI, viewRMI);
-        viewRMI.addObserver(clientControllerRMI);
+
+        viewRMI.getInputStrategy().getPlayerSetupper().addObserver(clientControllerRMI);
+        viewRMI.getInputStrategy().getSyntaxController().addObserver(clientControllerRMI);
         clientRMI.connect();*/
 
+
+        /*View viewSocket = new View();
+        Client clientSocket = new Client(new SocketTypeClient("localhost", 1111), viewSocket);
+
+        ClientController clientControllerSocket = new ClientController(clientSocket, viewSocket);
+
+        viewSocket.getInputStrategy().getPlayerSetupper().addObserver(clientControllerSocket);
+        viewSocket.getInputStrategy().getSyntaxController().addObserver(clientControllerSocket);
+        clientSocket.connect();*/
 
     }
 

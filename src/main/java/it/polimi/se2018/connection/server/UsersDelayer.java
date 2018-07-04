@@ -15,6 +15,7 @@ public class UsersDelayer extends TimerTask {
     @Override
     public void run() {
 
+        System.out.println("scaduto timer utenti");
         serverManager.createGame();
     }
 }

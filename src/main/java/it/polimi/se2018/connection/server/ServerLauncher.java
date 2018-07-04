@@ -12,7 +12,6 @@ public class ServerLauncher {
         //da rivedere
     }
 
-
     public static void main(String[] args){
 
         SocketTypeServer socketTypeServer = new SocketTypeServer(1111);
