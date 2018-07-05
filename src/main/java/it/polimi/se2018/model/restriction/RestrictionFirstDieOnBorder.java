@@ -19,7 +19,7 @@ public class RestrictionFirstDieOnBorder implements Restriction{
     public RestrictionFirstDieOnBorder(){
         errorMap = new HashMap<>();
         errorMap.put(true, 0);
-        errorMap.put(false, 1);
+        errorMap.put(false, 5001);
     }
 
     /**

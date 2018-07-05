@@ -156,6 +156,7 @@ public class ToolController implements Action{
             if(die.getValue() == 0) die.firstRoll();
             gameBoard.getBoardDice().insertDie(die);
         }
+        isComplete = true;
         return 0;
     }
 

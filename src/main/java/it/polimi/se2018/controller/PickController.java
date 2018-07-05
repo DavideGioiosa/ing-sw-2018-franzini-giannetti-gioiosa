@@ -79,7 +79,7 @@ public class PickController implements Action{
                 return 0;
 
             default:
-                return 1000;
+                return 3000;
         }
     }
 

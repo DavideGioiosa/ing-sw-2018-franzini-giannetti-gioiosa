@@ -39,8 +39,7 @@ public class ChoiceController {
     PlayerChoice getResetPlayerChoice(PlayerChoice playerChoice){
         if(playerChoice.getColourEnumList().isEmpty() && playerChoice.getSchemaCardList().isEmpty())
             return null;
-        playerChoice.setIdChosenSchema(0);
-        playerChoice.setChosenColour(null);
+        //playerChoice.setChosenColour(null);
         return playerChoice;
     }
 }

@@ -208,7 +208,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
         int coordinates[] = separateCellValues(inputReceived);
 
-        if (coordinates[0] >= 0 && coordinates[0] < clientBoard.getTrackBoardDice().getDiceList().size() && coordinates[1] >= 0 &&
+        if (coordinates != null && coordinates[0] >= 0 && coordinates[0] < clientBoard.getTrackBoardDice().getDiceList().size() && coordinates[1] >= 0 &&
                 coordinates[1] < clientBoard.getTrackBoardDice().getDiceList().get(coordinates[0]).size()) {
 
             playerMove.setTrackBoardIndex(coordinates[0], coordinates[1]);
@@ -220,7 +220,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
         int coordinates[] = separateCellValues(inputReceived);
 
-        if (coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
+        if (coordinates != null && coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
             playerMove.insertDiceSchemaWhereToTake(new Position(coordinates[0] , coordinates[1]));
             setNextCommandType(playerMove);
 
@@ -236,21 +236,28 @@ public class SyntaxController extends Observable<PlayerMessage> {
     }
 
     private int[] separateCellValues(String message){
-        if(message.charAt(1) == (' ')) {
-            int[] coordinates = {Integer.parseInt(message.split(" ")[0]), Integer.parseInt(message.split(" ")[1])};
+        if(message.length() == 3) {
+            try {
+                if (message.charAt(1) == (' ')) {
+                    int[] coordinates = {Integer.parseInt(message.split(" ")[0]), Integer.parseInt(message.split(" ")[1])};
+                    return coordinates;
+                }
+            }catch (IndexOutOfBoundsException e){
+                return null;
+            }
+            int[] coordinates = new int[2];
+            coordinates[0] = 0;
+            coordinates[1] = 0;
             return coordinates;
         }
-        int[] coordinates = new int[2];
-        coordinates[0] = 0;
-        coordinates[1] = 0;
-        return coordinates;
+        return null;
     }
 
     private void setDiceSchemaWhereToLeave(String inputReceived) {
 
         int coordinates[] = separateCellValues(inputReceived);
 
-        if (coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
+        if (coordinates != null && coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
             playerMove.insertDiceSchemaWhereToLeave(new Position(coordinates[0] , coordinates[1]));
             setNextCommandType(playerMove);
 

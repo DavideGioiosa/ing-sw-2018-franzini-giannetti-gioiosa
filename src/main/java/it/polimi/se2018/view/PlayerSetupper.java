@@ -37,6 +37,7 @@ public class PlayerSetupper extends Observable<PlayerMessage>{
         messageMap.put(IDSCHEMA, 3501);
         messageMap.put(NICKNAME, 3503);
         messageMap.put(COMPLETE, 3510);
+
     }
 
     /**

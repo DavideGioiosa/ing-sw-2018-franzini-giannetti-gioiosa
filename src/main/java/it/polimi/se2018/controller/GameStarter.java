@@ -11,7 +11,6 @@ import it.polimi.se2018.view.RemoteView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Controller's Class GameStarter
@@ -85,7 +84,6 @@ public class GameStarter {
      * @param playerChoiceList list player choices made to set up the game
      */
     private void startGame(List<PlayerChoice> playerChoiceList){
-
         BoardCard boardCard;
         List<PrivatePlayer> privatePlayerList = new ArrayList<>();
         List<PublicObjCard> publicObjCardList = new ArrayList<>();

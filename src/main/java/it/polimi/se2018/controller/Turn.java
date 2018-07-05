@@ -35,7 +35,9 @@ public class Turn {
      * it can be done once a Turn for each player
      */
     private boolean isToolCardUsed;
-
+    /**
+     * Number of possible picks for turn
+     */
     private int numberOfPossiblePicks = 1;
 
     private Player actualPlayer;
@@ -56,6 +58,10 @@ public class Turn {
         this.actualPlayer = actualPlayer;
     }
 
+    /**
+     * Copy Constructor
+     * @param turn Turn to be cloned
+     */
     private Turn(Turn turn){
         this.numberOfPicks = turn.numberOfPossiblePicks;
         this.isToolCardUsed = turn.isToolCardUsed;

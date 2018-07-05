@@ -66,7 +66,8 @@ public class PlayerChoice implements Serializable {
             this.schemaCardList.add(schemaCard.getClone());
         }
         this.idChosenSchema = playerChoice.idChosenSchema;
-        this.privateObjCard = playerChoice.privateObjCard.getClone();
+        if(playerChoice.privateObjCard != null) this.privateObjCard = playerChoice.privateObjCard.getClone();
+        else this.privateObjCard = null;
         this.chosenColour = playerChoice.chosenColour;
         this.colourEnumList = new ArrayList<>();
         colourEnumList.addAll(playerChoice.colourEnumList);

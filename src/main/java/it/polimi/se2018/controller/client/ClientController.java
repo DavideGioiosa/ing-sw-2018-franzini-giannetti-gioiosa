@@ -3,6 +3,7 @@ package it.polimi.se2018.controller.client;
 import it.polimi.se2018.connection.client.Client;
 import it.polimi.se2018.model.*;
 
+import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.model.ClientModel;
 import it.polimi.se2018.view.View;
@@ -59,16 +60,27 @@ public class ClientController implements Observer<PlayerMessage> {
         int idError;
 
         switch (playerMessage.getId()){
-            case CHOICE:
-                idError = choiceController.checkChoice(playerMessage.getPlayerChoice());
-                if(idError != 0) {
-                    view.reportError(idError);
-                    playerMessage.setChoice(choiceController.getResetPlayerChoice(playerMessage.getPlayerChoice()));
-                    if(playerMessage.getPlayerChoice() == null) view.showMessage(1000);
-                    view.receive(playerMessage);
-                    return;
+
+        case CHOICE:
+            if(!playerMessage.getPlayerChoice().getColourEnumList().isEmpty() && playerMessage.getPlayerChoice().getChosenColour() == null ||
+                    playerMessage.getPlayerChoice().getIdChosenSchema() == 0 && !playerMessage.getPlayerChoice().getSchemaCardList().isEmpty()) {
+                clientModel.setActualUser(playerMessage.getUser());
+                if (playerMessage.getPlayerChoice().getPrivateObjCard() != null) {
+                    clientModel.setPrivateObjCard(playerMessage.getPlayerChoice().getPrivateObjCard());
                 }
-                break;
+                return;
+            }
+
+
+            idError = choiceController.checkChoice(playerMessage.getPlayerChoice());
+            if(idError != 0) {
+                view.reportError(idError);
+                playerMessage.setChoice(choiceController.getResetPlayerChoice(playerMessage.getPlayerChoice()));
+                if(playerMessage.getPlayerChoice() == null) view.showMessage(1000);
+                view.receive(playerMessage);
+                return;
+            }
+            break;
 
             case CHECK_MOVE:
                 idError = commandController.checkMoveValidity(playerMessage.getPlayerMove(), clientModel.getClientBoard());
@@ -109,8 +121,13 @@ public class ClientController implements Observer<PlayerMessage> {
      * @param moveMessage Actual status of Board
      */
     private void updateBoard(MoveMessage moveMessage){
-        ClientBoard clientBoard = new ClientBoard(moveMessage.getPlayerList(),  moveMessage.getBoardDice(), moveMessage.getTrackBoard(), moveMessage.getBoardCard());
+        ClientBoard clientBoard = new ClientBoard(moveMessage.getPlayerList(), moveMessage.getBoardDice(), moveMessage.getTrackBoard(), moveMessage.getBoardCard());
         clientModel.setClientBoard(clientBoard);
+        for(int i = 0; i < clientBoard.getPlayerList().size(); i++){
+            if(clientModel.getActualUser()!= null && clientBoard.getPlayerList().get(i).getNickname().equals(clientModel.getActualUser().getNickname())) {
+                clientModel.setActualPlayer(clientBoard.getPlayerList().remove(i));
+            }
+        }
     }
 
     private void reconnection(){

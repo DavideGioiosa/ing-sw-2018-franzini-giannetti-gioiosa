@@ -115,7 +115,7 @@ public class GameManager {
      */
     private void endRound(){
 
-        if(roundList.size() == 2){
+        if(roundList.size() == 5){
             calculateGameScore();
             setGameWinner();
             view.sendWinner(gameBoard);

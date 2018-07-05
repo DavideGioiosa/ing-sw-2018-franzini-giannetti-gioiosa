@@ -14,7 +14,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class CommandLinePrint {
 
     private static EnumMap<ColourEnum, Color> hashMapColours;

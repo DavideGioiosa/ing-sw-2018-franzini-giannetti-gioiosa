@@ -60,7 +60,8 @@ public class Round implements Observer<PlayerMove>{
         this.isDraftPoolSet = false;
         initializeRound(indexRound);
         this.view = view;
-        view.isYourTurn(getCurrPlayer(), new PlayerMove());
+        if(getCurrPlayer().getConnectionStatus()) view.isYourTurn(getCurrPlayer(), new PlayerMove());
+        else defaultMove();
     }
 
     /**
@@ -69,7 +70,7 @@ public class Round implements Observer<PlayerMove>{
      * @param indexRound Index of actual round
      * */
     private void initializeRound(int indexRound) {
-        turnsList = new ArrayList<> ();
+        turnsList = new ArrayList<>();
         setRoundPlayerOrder(indexRound);
         nextRoundFirstPlayer = roundPlayerOrder.get(1);
         turn = new Turn(gameBoard, getCurrPlayer());
@@ -94,14 +95,20 @@ public class Round implements Observer<PlayerMove>{
 
 
     void defaultMove(){
+        System.out.println("Default move invocata per: " + roundPlayerOrder.get(0).getNickname());
         if(!isDraftPoolSet) {
             PlayerMove playerMove = new PlayerMove();
             playerMove.setPlayer(roundPlayerOrder.get(0));
             playerMove.setTypeOfChoice(TypeOfChoiceEnum.EXTRACT);
             update(playerMove);
         }else{
-            turn.defaultMove();
+            if(!turn.isFinished()) turn.defaultMove();
+            if(terminateTurn()) return;
         }
+        Player player = getCurrPlayer();
+        if(player != null && player.getConnectionStatus())
+            view.isYourTurn(getCurrPlayer(), getStartedPlayerMove());
+        else defaultMove();
     }
 
     /**
@@ -109,6 +116,7 @@ public class Round implements Observer<PlayerMove>{
      * @return current player
      */
     private Player getCurrPlayer() {
+        if(roundPlayerOrder.isEmpty()) return null;
         return roundPlayerOrder.get(0);
     }
 
@@ -181,21 +189,11 @@ public class Round implements Observer<PlayerMove>{
                 if (idError != 0) view.reportError(idError, getCurrPlayer().getNickname());
 
                 if (turn.isFinished()) {
-
-                    removeCurrPlayer();
-
-                    if (roundPlayerOrder.isEmpty()) {
-                        endRound();
-                        view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
-                        return;
-                    } else {
-                        turn = new Turn(gameBoard, getCurrPlayer());
-                        turnsList.add(turn);
-                    }
+                    if(terminateTurn()) return;
                 }
             }
-            view.isYourTurn(getCurrPlayer(), getStartedPlayerMove());
-
+            if(getCurrPlayer().getConnectionStatus()) view.isYourTurn(getCurrPlayer(), getStartedPlayerMove());
+            else defaultMove();
         }
 
     }
@@ -215,6 +213,23 @@ public class Round implements Observer<PlayerMove>{
     private PlayerMove getStartedPlayerMove(){
         if(lastTurn().lastActionFinished()) return new PlayerMove();
         return lastTurn().getStartedPlayerMove();
+    }
+
+    /**
+     * Close turn
+     * @return Boolean indicating if the round is terminated or not
+     */
+    private boolean terminateTurn(){
+        removeCurrPlayer();
+        if (roundPlayerOrder.isEmpty()) {
+            endRound();
+            view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+            return true;
+        } else {
+            turn = new Turn(gameBoard, getCurrPlayer());
+            turnsList.add(turn);
+            return false;
+        }
     }
 
 }
