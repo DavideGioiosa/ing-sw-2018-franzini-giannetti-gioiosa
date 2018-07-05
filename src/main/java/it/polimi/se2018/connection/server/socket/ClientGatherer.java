@@ -8,9 +8,7 @@ import it.polimi.se2018.model.player.User;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Timer;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +31,12 @@ public class ClientGatherer extends Thread{
     }
 
     public void close(){
+
+        Iterator<Map.Entry<String, Timer>> iterator = timerHashMap.entrySet().iterator();
+        while(iterator.hasNext()){
+            iterator.next();
+            iterator.remove();
+        }
         try {
             serverSocket.close();
         } catch (IOException e) {

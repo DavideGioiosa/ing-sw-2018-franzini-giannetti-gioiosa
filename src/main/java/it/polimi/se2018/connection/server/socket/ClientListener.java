@@ -46,7 +46,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         }
         timer = new Timer();
         CheckTimeout checkTimeout = new CheckTimeout(this);
-        timer.scheduleAtFixedRate(checkTimeout, (long)30*1000, (long)5*1000);
+        timer.scheduleAtFixedRate(checkTimeout, (long)30*1000, (long)15*1000);
 
     }
 
@@ -54,17 +54,27 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         return obs;
     }
 
-    void setQuit(boolean value) {
-        this.quit = value;
+    void setQuit() {
+        this.quit = false;
+        if(timer != null){
+            timer.cancel();
+        }
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            System.out.println("già chiusa");
+        }
     }
 
     void handleDisconnection(){
-        timer.cancel();
+        if(timer != null){
+            timer.cancel();
+        }
+
         User user = new User(TypeOfConnection.SOCKET);
         user.setUniqueCode(code);
         PlayerMessage disconnected = new PlayerMessage();
         disconnected.setUser(user);
-        disconnected.setError(100);
         disconnected.setId(PlayerMessageTypeEnum.DISCONNECTED);
         obs.notify(disconnected);
     }
@@ -86,6 +96,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
             output.flush();
 
         } catch (IOException e) {
+            System.out.println("eccezione send");
             handleDisconnection();
         }
     }
@@ -94,20 +105,6 @@ public class ClientListener extends Thread implements ClientSocketInterface {
     public synchronized void receive(PlayerMessage playerMessage) {
 
         obs.notify(playerMessage);
-    }
-
-    synchronized void ping(){
-        PlayerMessage playerMessage = new PlayerMessage();
-        playerMessage.setId(PlayerMessageTypeEnum.PING);
-        try {
-            OutputStreamWriter output = new OutputStreamWriter(clientSocket.getOutputStream());
-            String jsonInString = gson.toJson(playerMessage) + "\n";
-            output.write(jsonInString);
-            output.flush();
-
-        } catch (IOException e) {
-            handleDisconnection();
-        }
     }
 
     void setPing(boolean ping) {
@@ -124,16 +121,18 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         while(!clientSocket.isClosed() && !quit && !disconnection){
             try {
 
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String message = bufferedReader.readLine();
                 PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
                 if(playerMessage != null ){
                     if(playerMessage.getId().equals(PlayerMessageTypeEnum.PING)){
+                        System.out.println("ricevo ping");
                         ping = true;
                     }else receive(playerMessage);
                 }
 
             } catch (IOException e) {
+                System.out.println("eccezione run");
                 handleDisconnection();
                 disconnection = true;
             }

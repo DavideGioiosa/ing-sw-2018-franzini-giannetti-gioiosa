@@ -22,7 +22,12 @@ public class GameCreator {
         this.gameManager = null;
         this.gameStarter = new GameStarter(userList, remoteView);
 
+    }
 
+    public void modifyStatus(){
+        if(gameManager != null){
+            gameManager.checkStatus();
+        }
     }
 
     public void defaultMove(){
