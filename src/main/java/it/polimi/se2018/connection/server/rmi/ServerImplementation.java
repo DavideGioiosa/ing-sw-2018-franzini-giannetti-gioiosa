@@ -34,19 +34,34 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         return obs;
     }
 
-    void sendToClient(PlayerMessage playerMessage) throws RemoteException {
+    void sendToClient(PlayerMessage playerMessage) {
 
-        if(playerMessage.getUser()== null){
-            for(ClientRemoteInterface clientRemoteInterface : clientList.values()){
-                clientRemoteInterface.receiveFromServer(playerMessage);
-            }
-        }else{
-            if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
-                ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
-                clientRemoteInterface.receiveFromServer(playerMessage);
-            }
+        if(!clientList.isEmpty()){
+            if(playerMessage.getUser()== null){
+                for(ClientRemoteInterface clientRemoteInterface : clientList.values()){
+                    try {
+                        clientRemoteInterface.receiveFromServer(playerMessage);
+                    } catch (RemoteException e) {
+                        for(String code : clientList.keySet()){
+                            if(clientList.get(code).equals(clientRemoteInterface)){ //override equals
+                                disconnectionHandler(code);
+                            }
+                        }
+                    }
+                }
+            }else{
+                if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
+                    ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
+                    try {
+                        clientRemoteInterface.receiveFromServer(playerMessage);
+                    } catch (RemoteException e) {
+                        disconnectionHandler(playerMessage.getUser().getUniqueCode());
+                    }
+                }
 
+            }
         }
+
     }
 
     @Override
@@ -90,10 +105,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
             obs.notify(disconnect);
         }
         Timer timer = pingMap.get(code);
-        timer.cancel();
-        timer.purge();
-        pingMap.remove(code);
-
+        if(timer != null){
+            timer.cancel();
+            timer.purge();
+            pingMap.remove(code);
+        }
     }
 
     void transmit(PlayerMessage playerMessage){

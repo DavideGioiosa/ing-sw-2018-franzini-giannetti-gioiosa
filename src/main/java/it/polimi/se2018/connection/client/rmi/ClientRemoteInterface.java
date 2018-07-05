@@ -1,7 +1,6 @@
 package it.polimi.se2018.connection.client.rmi;
 
 import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.player.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

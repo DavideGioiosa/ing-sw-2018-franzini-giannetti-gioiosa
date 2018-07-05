@@ -12,7 +12,7 @@ public class ClientLauncher {
     public static void main(String[] args){
 
         View viewSocket = new View();
-        Client clientSocket = new Client(new SocketTypeClient("localhost", 1111), viewSocket);
+        Client clientSocket = new Client(new SocketTypeClient("192.168.139.101", 1111), viewSocket);
 
         ClientController clientControllerSocket = new ClientController(clientSocket, viewSocket);
 

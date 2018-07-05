@@ -4,6 +4,7 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
+import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.*;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class GameManager {
         Round round = new Round(gameBoard, 0 , view);
         roundList.add(round);
         winner = null;
+        checkStatus();
     }
 
     public GameBoard getGameBoard() {
@@ -56,6 +58,24 @@ public class GameManager {
 
     public Player getWinner() {
         return winner;
+    }
+
+    public void checkStatus(){
+        System.out.println("entro in gameManager per modifyStatus");
+        int connected=0;
+        Player gameWinner = null;
+        for(Player player : gameBoard.getPlayerList()){
+            if(player.getConnectionStatus()){
+                connected++;
+                gameWinner = player;
+            }
+        }
+        if(connected <= 1){
+            winner = gameWinner;
+            System.out.println("rimasto un giocatore solo: "+ winner.getNickname());
+            winner.setScore(99);
+            view.sendWinner(gameBoard);
+        }
     }
 
     private int blankCells(Player player){
@@ -110,15 +130,19 @@ public class GameManager {
        winner = Collections.max(gameBoard.getPlayerList(), Comparator.comparingInt(Player :: getScore));
     }
 
+    private void closeGame(){
+        calculateGameScore();
+        setGameWinner();
+        view.sendWinner(gameBoard);
+    }
+
     /**
      * Update method for Observer pattern implementation
      */
     private void endRound(){
 
-        if(roundList.size() == 5){
-            calculateGameScore();
-            setGameWinner();
-            view.sendWinner(gameBoard);
+        if(roundList.size() == 2){
+            closeGame();
         }else {
             Round newRound = new Round(gameBoard, roundList.size(), view);
             roundList.add(newRound);

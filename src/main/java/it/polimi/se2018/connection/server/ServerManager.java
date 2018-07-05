@@ -131,8 +131,14 @@ public class ServerManager implements Observer<PlayerMessage> {
                          userSetupTimer.purge();
                          userSetupTimer = null;
                      }
-                 }else disconnectedUserList.add(user);
-                 println("disconnesso user: "+ us.getNickname());
+                 }else {
+                     println("disconnesso user: "+ us.getNickname());
+                     disconnectedUserList.add(us);
+                     us.getPlayer().setConnectionStatus(false);
+                     gameCreator.modifyStatus();
+                 }
+
+
              }
          }
     }
@@ -143,11 +149,14 @@ public class ServerManager implements Observer<PlayerMessage> {
         println("Riconnessione");
         println("ricevuto: " + playerMessage.getUser().getNickname());
 
-        for(Iterator<User> userIterator = disconnectedUserList.iterator(); userIterator.hasNext();){
+        Iterator<User> userIterator = disconnectedUserList.iterator();
+
+        while(userIterator.hasNext()){
             User user = userIterator.next();
             println(user.getNickname());
             if(user.getNickname().equals(playerMessage.getUser().getNickname())){
-                disconnectedUserList.remove(user);
+                userIterator.remove();
+                gameCreator.modifyStatus();
                 addUser(playerMessage.getUser());
                 found = true;
                 println("trovato");

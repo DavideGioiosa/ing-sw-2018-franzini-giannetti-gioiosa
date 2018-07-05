@@ -2,7 +2,6 @@ package it.polimi.se2018.connection.client.rmi;
 
 
 import it.polimi.se2018.model.PlayerMessage;
-import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
@@ -19,6 +18,7 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
      * Observable element used to send the received message to the upper classes
      */
     private Observable<PlayerMessage> obs;
+
 
     /**
      * Builder method of the class
@@ -41,7 +41,7 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
      * @throws RemoteException exception due to communication fall
      */
     @Override
-    public void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
+    public synchronized void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
         System.out.println("ricevo dal server");
         if(playerMessage != null){
             new Thread(new RMIReceiveThread(playerMessage, this)).start();
@@ -54,7 +54,7 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
      * @param playerMessage message received from the server
      */
     @Override
-    public void update(PlayerMessage playerMessage) {
+    public synchronized void update(PlayerMessage playerMessage) {
         obs.notify(playerMessage);
     }
 
