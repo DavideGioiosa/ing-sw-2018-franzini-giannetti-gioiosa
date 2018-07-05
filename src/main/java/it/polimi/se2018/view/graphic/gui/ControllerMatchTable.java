@@ -11,6 +11,7 @@ import it.polimi.se2018.view.PlayerSetupper;
 import it.polimi.se2018.view.SyntaxController;
 import it.polimi.se2018.view.View;
 import it.polimi.se2018.view.graphic.TypeOfInputAsked;
+import it.polimi.se2018.view.graphic.cli.CommandLinePrint;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,6 +56,7 @@ public class ControllerMatchTable implements Initializable {
 
     List<Button> buttonTrackBoarIndexList;
 
+    //Lista index dello switch dei dadi sulla track
     List<Integer> indexChangeDiceTrackBoard;
 
     @FXML GridPane schemeSelectionGrid;
@@ -110,6 +112,12 @@ public class ControllerMatchTable implements Initializable {
     private AnchorPane gameboardPane;
 
     /**
+     * Message Area in the table
+     */
+    private static TextArea msgArea;
+
+
+    /**
      * Img Dado selezionato dal Draft per la PICK
      */
     private ImageView selectedDie;
@@ -156,6 +164,8 @@ public class ControllerMatchTable implements Initializable {
     //---------------------
 
     ClientBoard clientBoard;
+
+    @FXML HBox hBoxMsgArea;
 
     //----------------------
 
@@ -212,16 +222,21 @@ public class ControllerMatchTable implements Initializable {
         //------------------------------------
 
         cellSchemeList = new ArrayList<>();
-
         diceOnDraftList = new ArrayList();
-
         toolChoiceButtonList = new ArrayList<>();
-
         diceExtraImgTrackboardList = new ArrayList<>();
-
         buttonTrackBoarIndexList = new ArrayList<>();
-
         indexChangeDiceTrackBoard = new ArrayList<>();
+
+        msgArea = new TextArea();
+        msgArea.setEditable(false);
+        msgArea.setMouseTransparent(true);
+        msgArea.setFocusTraversable(false);
+
+        msgArea.maxHeight(215);
+        msgArea.maxWidth(338);
+        hBoxMsgArea.getChildren().addAll(msgArea);
+
     }
 
 
@@ -535,7 +550,6 @@ public class ControllerMatchTable implements Initializable {
             //toolImg.fitWidthProperty().bind(vBox.widthProperty());
             Button button = new Button("ToolCard " + i);
 
-
             button.setOnAction(e -> {
                 selectedButtonToolCardToUse = button;
                 checkToolIndex();
@@ -578,6 +592,16 @@ public class ControllerMatchTable implements Initializable {
       //  schemeVBOX3.getChildren().add(createScheme(schemaCardList.get(3)));
     }
 
+    public static void inizMsgAreaError (int id){
+        String string = msgArea.getText();
+        msgArea.setText("ERROR: " + CommandLinePrint.errorMap.get(id) + "\n" + string);
+    }
+
+    public static void inizMsgAreaMessage (int id){
+        String string = msgArea.getText();
+        msgArea.setText("Message: " + CommandLinePrint.messageMap.get(id) + "\n" + string);
+    }
+
     /**
      * Empty panels to prepare them for the next update
      */
@@ -601,8 +625,7 @@ public class ControllerMatchTable implements Initializable {
                 dieExtra.setFitWidth(45);
                 dieExtra.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     selectedTrackboardDie = dieExtra;
-                    //TODO: TOOL CHE UTILIZZANO
-                    System.out.println(checkDieTrackBoardIndex());
+                    checkDieTrackBoardIndex();
 
                     event.consume();
                 });
@@ -753,18 +776,15 @@ public class ControllerMatchTable implements Initializable {
         //TODO: SE HO ERRORE?
     }
 
-    private int checkDieTrackBoardIndex (){
-        //syntax??
+    private void checkDieTrackBoardIndex (){
 
         for(int i = 0; i < clientBoard.getTrackBoardDice().getDiceList().size(); i++) {
             for(int j = 0; j < clientBoard.getTrackBoardDice().getDiceList().get(i).size(); j++) {
                 if (diceExtraImgTrackboardList.get(i) == selectedTrackboardDie) {
-                    //    posso beccare l'altro indice con l'array di integer
-                    return i;
+                    syntaxController.validCommand(i + " " + indexChangeDiceTrackBoard.get(i));
                 }
             }
         }
-        return -1;
     }
 
     private int checkButtonTrackBoardIndex (){

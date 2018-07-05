@@ -156,7 +156,7 @@
                               <Insets left="5.0" right="5.0" />
                            </padding>
                         </HBox>
-                        <HBox prefHeight="215.0" prefWidth="338.0" style="-fx-background-color: grey;" />
+                        <HBox fx:id="hBoxMsgArea" prefHeight="215.0" prefWidth="338.0" style="-fx-background-color: grey;" />
                      </children>
                   </VBox>
                   <HBox fx:id="publicCardPane" fillHeight="false" maxHeight="280.0" maxWidth="243.0" minHeight="160.0" minWidth="60.0" prefHeight="280.0" prefWidth="243.0" spacing="2.0" style="-fx-background-color: #87cefa;" GridPane.rowIndex="2">

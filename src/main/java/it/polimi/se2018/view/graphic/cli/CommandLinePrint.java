@@ -21,8 +21,8 @@ public class CommandLinePrint {
 
     private List<HashMap<Integer, String>> dieRowStringList;
 
-    private static HashMap<Integer, String> messageMap;
-    private static HashMap<Integer, String> errorMap;
+    public static HashMap<Integer, String> messageMap;
+    public static HashMap<Integer, String> errorMap;
     static {
         loadMessageMap();
         loadErrorMap();
