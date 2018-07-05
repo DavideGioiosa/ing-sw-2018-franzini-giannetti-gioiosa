@@ -187,6 +187,8 @@ public class ControllerMatchTable implements Initializable {
 
     private CommandTypeEnum nextCommandType;
 
+    private TypeOfInputAsked typeOfInputAsked;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -227,6 +229,7 @@ public class ControllerMatchTable implements Initializable {
         diceExtraImgTrackboardList = new ArrayList<>();
         buttonTrackBoarIndexList = new ArrayList<>();
         indexChangeDiceTrackBoard = new ArrayList<>();
+        typeOfInputAsked = null;
 
         msgArea = new TextArea();
         msgArea.setEditable(false);
@@ -593,13 +596,17 @@ public class ControllerMatchTable implements Initializable {
     }
 
     public static void inizMsgAreaError (int id){
-        String string = msgArea.getText();
-        msgArea.setText("ERROR: " + CommandLinePrint.errorMap.get(id) + "\n" + string);
+        if(id != 0) {
+            String string = msgArea.getText();
+            msgArea.setText("ERROR: " + CommandLinePrint.errorMap.get(id) + "\n" + string);
+        }
     }
 
     public static void inizMsgAreaMessage (int id){
-        String string = msgArea.getText();
-        msgArea.setText("Message: " + CommandLinePrint.messageMap.get(id) + "\n" + string);
+        if(id != 0) {
+            String string = msgArea.getText();
+            msgArea.setText("Message: " + CommandLinePrint.messageMap.get(id) + "\n" + string);
+        }
     }
 
     /**
@@ -742,7 +749,8 @@ public class ControllerMatchTable implements Initializable {
                 int index = i % 20;
                 int row = index / 5;
                 int col = index % 5;
-                syntaxController.validCommand(row + " " + col);
+                typeOfInputAsked = syntaxController.validCommand(row + " " + col);
+                nextCommandSequence(typeOfInputAsked);
                 return;
             }
         }
@@ -755,8 +763,9 @@ public class ControllerMatchTable implements Initializable {
         for (int i = 0; i < toolChoiceButtonList.size(); i++) {
             if(toolChoiceButtonList.get(i) == selectedButtonToolCardToUse){
 
-                syntaxController.validCommand(((Integer) clientBoard.getCardOnBoard()
+                typeOfInputAsked = syntaxController.validCommand(((Integer) clientBoard.getCardOnBoard()
                         .getToolCardList().get(i).getId()).toString());
+                nextCommandSequence(typeOfInputAsked);
                 return;
             }
         }
@@ -768,7 +777,8 @@ public class ControllerMatchTable implements Initializable {
 
         for (int i = 0; i < clientBoard.getBoardDice().getDieList().size(); i++) {
             if(diceOnDraftList.get(i) == selectedDie){
-                syntaxController.validCommand(((Integer) i).toString());
+                typeOfInputAsked = syntaxController.validCommand(((Integer) i).toString());
+                nextCommandSequence(typeOfInputAsked);
                 return;
             }
         }
@@ -781,7 +791,8 @@ public class ControllerMatchTable implements Initializable {
         for(int i = 0; i < clientBoard.getTrackBoardDice().getDiceList().size(); i++) {
             for(int j = 0; j < clientBoard.getTrackBoardDice().getDiceList().get(i).size(); j++) {
                 if (diceExtraImgTrackboardList.get(i) == selectedTrackboardDie) {
-                    syntaxController.validCommand(i + " " + indexChangeDiceTrackBoard.get(i));
+                    typeOfInputAsked = syntaxController.validCommand(i + " " + indexChangeDiceTrackBoard.get(i));
+                    nextCommandSequence(typeOfInputAsked);
                 }
             }
         }
@@ -797,6 +808,32 @@ public class ControllerMatchTable implements Initializable {
         return -1;
     }
 
+    private void nextCommandType (CommandTypeEnum commandTypeEnum) {
+        switch (commandTypeEnum){
+            case COMPLETE: //TODO: disabilita tutto
+                break;
+            case DICEBOARDINDEX: //abilita diceboard
+                break;
+            case DICESCHEMAWHERETOLEAVE:
+            case DICESCHEMAWHERETOTAKE:
+                //abilita schema
+                break;
+            case TRACKBOARDINDEX:
+                //abilita track
+                break;
+            case VALUE:
+                ValueRequest.display(syntaxController);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void nextCommandSequence (TypeOfInputAsked typeOfInputAsked){
+        inizMsgAreaError(typeOfInputAsked.getError());
+        inizMsgAreaMessage(typeOfInputAsked.getMessage());
+        nextCommandType(typeOfInputAsked.getCommandTypeEnum());
+    }
 
     /**
      * Association of the standard color to web color
