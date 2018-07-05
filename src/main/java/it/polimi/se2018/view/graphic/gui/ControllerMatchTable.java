@@ -5,6 +5,7 @@ import it.polimi.se2018.connection.client.socket.SocketTypeClient;
 import it.polimi.se2018.controller.client.ClientController;
 import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.Card;
+import it.polimi.se2018.model.cards.PrivateObjCard;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.PlayerSetupper;
@@ -16,6 +17,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -94,6 +96,8 @@ public class ControllerMatchTable implements Initializable {
 
     @FXML private AnchorPane gameboardPane;
 
+    @FXML private AnchorPane lobbyPane;
+
     /**
      * Message Area in the table
      */
@@ -146,6 +150,8 @@ public class ControllerMatchTable implements Initializable {
 
     ClientBoard clientBoard;
 
+    ClientModel clientModel;
+
     @FXML HBox hBoxMsgArea;
 
     //----------------------
@@ -176,14 +182,14 @@ public class ControllerMatchTable implements Initializable {
         primaryScene.setPrefHeight(height);
 
 
-        cardSize();
+        cardSize(cardImg);
 
         toolCardPane.setDisable(true);
         schemeSelectionPane.setDisable(true);
         loginPane.setDisable(true);
         nicknamePane.setDisable(true);
         gameboardPane.setDisable(true);
-
+        lobbyPane.setDisable(true);
 
         viewSocket = new View();
         GuiInput guiInput = (GuiInput) viewSocket.getInputStrategy();
@@ -217,12 +223,7 @@ public class ControllerMatchTable implements Initializable {
 
     //TODO: TOGLIERE GIA' SI VISUALIZZANO DAL MENU
     private void showPrivateCards() {
-      //  privateCardImg.setImage(showCard((PrivateObjCard) gameLoader.getPrivateObjDeck().extractCard(),
-      //          "privateObjCard"));
-        //privateCardImg.setPreserveRatio(true);
-        //privateCardImg.setFitWidth(200);
-      //  privateCardImg.fitWidthProperty().bind(privateCardPane.widthProperty());
-      //  privateCardImg.fitHeightProperty().bind(privateCardPane.heightProperty().subtract(20));
+        cardImg.setImage(showCard(clientModel.getPrivateObjCard(), "privateObjCard"));
     }
 
     private void showPublicCards(ClientBoard clientBoard, int index) {
@@ -238,11 +239,15 @@ public class ControllerMatchTable implements Initializable {
                 (clientBoard.getTrackBoardDice().getDiceList().get(indexRound).get(index)));
     }
 
-    private void cardSize (){
-        cardImg.setPreserveRatio(true);
-        cardImg.setFitWidth(200);
-        cardImg.fitWidthProperty().bind(publicCardPane.widthProperty());
-        cardImg.fitHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
+    /**
+     * Sets the correct size and binding of the ImageView
+     * @param cardImageView that has to be resized and binded
+     */
+    private void cardSize (ImageView cardImageView){
+        cardImageView.setPreserveRatio(true);
+        cardImageView.setFitWidth(200);
+        cardImageView.fitWidthProperty().bind(publicCardPane.widthProperty());
+        cardImageView.fitHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
     }
 
 
@@ -264,10 +269,13 @@ public class ControllerMatchTable implements Initializable {
 
     //TODO: INTRODURRE SHOWPRIVATECARD
     @FXML private void nextCard() {
-        if (indexChangeCard == 2) {
+        if (indexChangeCard == 3) {
             indexChangeCard = -1;
         }
         indexChangeCard++;
+        if(indexChangeCard == 3){
+            showPrivateCards();
+        }
         showPublicCards(clientBoard, indexChangeCard);
     }
 
@@ -338,6 +346,7 @@ public class ControllerMatchTable implements Initializable {
         nicknamePane.setVisible(false);
         nicknamePane.setDisable(true);
         disableBackgroundPane();
+        enableLobbyPane ();
         sendNickname();
     }
 
@@ -346,6 +355,19 @@ public class ControllerMatchTable implements Initializable {
         nicknamePane.setOpacity(1);
         nicknamePane.setVisible(true);
         nicknamePane.setDisable(false);
+    }
+
+    @FXML private void disableLobbyPane (){
+        lobbyPane.setOpacity(0);
+        lobbyPane.setVisible(false);
+        lobbyPane.setDisable(true);
+    }
+
+    @FXML private void enableLobbyPane (){
+        enableBackgroundPane();
+        lobbyPane.setOpacity(1);
+        lobbyPane.setVisible(true);
+        lobbyPane.setDisable(false);
     }
 
     @FXML private void disableLoginPane (){
@@ -367,6 +389,7 @@ public class ControllerMatchTable implements Initializable {
 
     @FXML private void disableSchemeSelectionPane (){
         disableBackgroundPane();
+        enableLobbyPane ();
         schemeSelectionPane.setOpacity(0);
         schemeSelectionPane.setVisible(false);
         schemeSelectionPane.setDisable(true);
@@ -374,8 +397,9 @@ public class ControllerMatchTable implements Initializable {
 
     }
 
-    @FXML private void enableSchemeSelectionPane (List<SchemaCard> schemeToChooseList){
-        inizSchemeCardSelection(schemeToChooseList);
+    @FXML private void enableSchemeSelectionPane (List<SchemaCard> schemeToChooseList, PrivateObjCard privateObjCard){
+        inizSchemeCardSelection(schemeToChooseList, privateObjCard);
+        disableLobbyPane();
         enableBackgroundPane();
         schemeSelectionPane.setOpacity(1);
         schemeSelectionPane.setVisible(true);
@@ -396,7 +420,6 @@ public class ControllerMatchTable implements Initializable {
     @FXML private void enableToolCardPane (){
         disableGameboardPane();
         enableBackgroundPane();
-       // inizToolCard();
         toolCardPane.setOpacity(1);
         toolCardPane.setVisible(true);
         toolCardPane.setDisable(false);
@@ -411,6 +434,7 @@ public class ControllerMatchTable implements Initializable {
 
     @FXML private void enableGameboardPane (){
         disableBackgroundPane();
+        disableLobbyPane();
         gameboardPane.setOpacity(1);
         gameboardPane.setVisible(true);
         gameboardPane.setDisable(false);
@@ -424,7 +448,7 @@ public class ControllerMatchTable implements Initializable {
         this.playerChoice=playerChoice;
         playerSetupper.newChoiceReceived(playerChoice); //la stringa che ti invio è per scelta scheme
 
-        enableSchemeSelectionPane(playerChoice.getSchemaCardList());
+        enableSchemeSelectionPane(playerChoice.getSchemaCardList(), playerChoice.getPrivateObjCard());
     }
 
     public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
@@ -445,8 +469,10 @@ public class ControllerMatchTable implements Initializable {
     }
 
     //UPDATE
-    public void requestShowGameboard (ClientBoard clientBoard){
-        this.clientBoard = clientBoard;
+    public void requestShowGameboard (ClientModel clientModel){
+        this.clientBoard = clientModel.getClientBoard();
+        this.clientModel = clientModel;
+        this.clientModel.setPrivateObjCard(playerChoice.getPrivateObjCard());
         enableGameboardPane();
         inizGameboard(clientBoard);
         disableNotYourTurn();
@@ -481,7 +507,7 @@ public class ControllerMatchTable implements Initializable {
 
     //ADD DINAMICO DEI 4 SCHEMI CHE L'UTENTE DEVE SCEGLIERE
     //TODO: ADD CARTA OBJ PRIVATO
-    private void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList){
+    private void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList, PrivateObjCard privateObjCard){
 
         Platform.runLater(() -> {
             for(int i = 0; i <5; i++) {
@@ -491,15 +517,19 @@ public class ControllerMatchTable implements Initializable {
                 if(i == 0){
                     Text text = new Text("La tua carta obiettivo privato");
                     text.setFill(Color.WHITE);
-                    vBox.getChildren().addAll(text);
+                    ImageView privateObjImg = new ImageView(showCard(privateObjCard, "privateObjCard"));
+                    cardSize(privateObjImg);
+                    vBox.getChildren().addAll(text, privateObjImg);
                 }else {
                     Button button = new Button("Schema " + (i));
                     button.setOnAction(event -> {
                         selectedButtonScheme = button;
                         disableSchemeSelectionPane();
                     });
-
-                    vBox.getChildren().addAll(button, createScheme(schemeToChooseList.get(i - 1)));
+                    GridPane schemeGrid = createScheme(schemeToChooseList.get(i - 1));
+                 //   schemeGrid.prefWidthProperty().bind(publicCardPane.widthProperty()); //TODO: BINDING?
+                  //  schemeGrid.prefHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
+                    vBox.getChildren().addAll(button, schemeGrid);
                 }
 
                 schemeSelectionGrid.add(vBox, i, 0);
@@ -530,7 +560,7 @@ public class ControllerMatchTable implements Initializable {
 
             if(i==1){
                 Button cancelButton = new Button("Torna al menù");
-
+                cancelButton.setCursor(Cursor.HAND);
                 cancelButton.setOnAction(e -> disableToolCardPane());
                 vBox.getChildren().add(cancelButton);
             }
@@ -808,30 +838,36 @@ public class ControllerMatchTable implements Initializable {
         extractButton.setDisable(true);
         resetMoveButton.setDisable(true);
         passButton.setDisable(true);
-        for(int i = 0; i < toolChoiceButtonList.size(); i++) {
-            toolChoiceButtonList.get(i).setDisable(true);
-        }
         for(int i = 0; i < diceExtraImgTrackboardList.size(); i++) {
             diceExtraImgTrackboardList.get(i).setDisable(true);
         }
         hBoxDraftDice.setDisable(true);
-        schemeVBOX.setDisable(true);
-        schemeVBOX1.setDisable(true);
-        schemeVBOX2.setDisable(true);
-        schemeVBOX3.setDisable(true);
+
+      //  schemeVBOX.setDisable(true);      //TODO: DISABILITARLI?
+      //  schemeVBOX1.setDisable(true);
+      //  schemeVBOX2.setDisable(true);
+      //  schemeVBOX3.setDisable(true);
     }
 
     private void enableCommandButton (){
-        extractButton.setDisable(false);
+        Platform.runLater(() -> {
+                    if (hBoxDraftDice.getChildren().isEmpty()) {
+                        extractButton.setDisable(false);
+                    }
+                });
+        //extractButton.setDisable(false);
         resetMoveButton.setDisable(false);
         toolCardButton.setDisable(false);
         passButton.setDisable(false);
     }
 
     private void enableToolChoiceButton (){
-        for(int i = 0; i < toolChoiceButtonList.size(); i++) {
-            toolChoiceButtonList.get(i).setDisable(false);
-        }
+        Platform.runLater(() -> {
+            for (int i = 0; i < toolChoiceButtonList.size(); i++) {
+                toolChoiceButtonList.get(i).setDisable(false);
+                toolChoiceButtonList.get(i).setCursor(Cursor.HAND);
+            }
+        });
     }
 
     private void enableDiceTrackBoard(){
@@ -895,6 +931,7 @@ public class ControllerMatchTable implements Initializable {
         msgArea.setFocusTraversable(false);
         msgArea.maxHeight(215);
         msgArea.maxWidth(338);
+        msgArea.setStyle("-fx-background-color: #808080;"); //TODO: CHECK NOT WORKING
         hBoxMsgArea.getChildren().addAll(msgArea);
     }
 }

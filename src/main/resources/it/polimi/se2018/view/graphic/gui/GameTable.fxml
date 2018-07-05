@@ -41,10 +41,17 @@
             </AnchorPane>
             <AnchorPane fx:id="loginPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0">
                <children>
-                  <SplitPane dividerPositions="0.3302034428794992" layoutX="151.0" layoutY="165.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.3794992175273865" layoutX="151.0" layoutY="165.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <ImageView fitHeight="648.0" fitWidth="491.0">
+                                 <image>
+                                    <Image url="@img/sagradaMenu.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children></AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #800000;">
                            <children>
                               <TextArea fx:id="ipAreaText" layoutX="235.0" layoutY="304.0" prefHeight="41.0" prefWidth="481.0">
                                  <padding>
@@ -88,27 +95,53 @@
             </AnchorPane>
             <AnchorPane fx:id="nicknamePane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0">
                <children>
-                  <SplitPane dividerPositions="0.38028169014084506" layoutX="151.0" layoutY="165.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                  <GridPane alignment="CENTER" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #2B2B2B;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <TextArea fx:id="nicknameAreaText" layoutX="235.0" layoutY="304.0" prefHeight="41.0" prefWidth="481.0">
-                                 <padding>
-                                    <Insets left="2.0" top="2.0" />
-                                 </padding>
-                              </TextArea>
-                              <Text layoutX="292.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="40.0" />
-                                 </font>
-                              </Text>
-                              <Text layoutX="104.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" />
-                              <Button layoutX="235.0" layoutY="366.0" mnemonicParsing="false" onAction="#disableNicknamePane" prefHeight="39.0" prefWidth="481.0" text="Join" />
+                              <ImageView fitHeight="648.0" fitWidth="504.0">
+                                 <image>
+                                    <Image url="@img/sagradaMenu.jpg" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </AnchorPane>
-                     </items>
-                  </SplitPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" GridPane.columnIndex="1">
+                           <children>
+                              <AnchorPane layoutX="110.0" layoutY="69.0" maxWidth="711.0" prefHeight="509.0" prefWidth="528.0" style="-fx-background-color: #800000;">
+                                 <children>
+                                    <Text fill="WHITE" layoutX="56.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" />
+                                    <TextArea fx:id="nicknameAreaText" layoutX="56.0" layoutY="237.0" prefHeight="35.0" prefWidth="445.0">
+                                       <padding>
+                                          <Insets left="2.0" top="2.0" />
+                                       </padding>
+                                    </TextArea>
+                                    <Text fill="WHITE" layoutX="6.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER" wrappingWidth="556.953125">
+                                       <font>
+                                          <Font name="Yu Gothic UI Semibold" size="38.0" />
+                                       </font>
+                                    </Text>
+                                    <Button layoutX="56.0" layoutY="335.0" mnemonicParsing="false" onAction="#disableNicknamePane" prefHeight="39.0" prefWidth="445.0" text="Join">
+                                       <font>
+                                          <Font name="Californian FB" size="20.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </AnchorPane>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="635.0" minWidth="10.0" prefWidth="503.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="777.0" minWidth="10.0" prefWidth="777.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
                </children>
             </AnchorPane>
          </children>
@@ -140,20 +173,23 @@
                      <children>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
-                              <Button fx:id="extractButton" mnemonicParsing="false" onAction="#extractClick" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
-                              <Button fx:id="resetMoveButton" mnemonicParsing="false" onAction="#cancelClick" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
+                              <Button fx:id="extractButton" mnemonicParsing="false" onAction="#extractClick" prefHeight="39.0" prefWidth="125.0" text="Estrai" />
+                              <Button fx:id="resetMoveButton" mnemonicParsing="false" onAction="#cancelClick" prefHeight="39.0" prefWidth="125.0" text="Reset Mossa" />
                            </children>
+                           <padding>
+                              <Insets bottom="3.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
                         </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
-                              <Button fx:id="toolCardButton" mnemonicParsing="false" onAction="#enableToolCardPane" prefHeight="39.0" prefWidth="131.0" text="ToolCard" />
-                              <Button fx:id="passButton" mnemonicParsing="false" onAction="#passClick" prefHeight="39.0" prefWidth="110.0" text="Passa" />
+                              <Button fx:id="toolCardButton" mnemonicParsing="false" onAction="#enableToolCardPane" prefHeight="39.0" prefWidth="125.0" text="ToolCard" />
+                              <Button fx:id="passButton" mnemonicParsing="false" onAction="#passClick" prefHeight="39.0" prefWidth="125.0" text="Passa" />
                            </children>
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                            <padding>
-                              <Insets left="5.0" right="5.0" />
+                              <Insets bottom="3.0" left="5.0" right="5.0" top="3.0" />
                            </padding>
                         </HBox>
                         <HBox fx:id="hBoxMsgArea" prefHeight="215.0" prefWidth="338.0" style="-fx-background-color: grey;" />
@@ -214,6 +250,27 @@
                </padding>
             </GridPane>
          </children>
+      </AnchorPane>
+      <AnchorPane fx:id="lobbyPane" opacity="0.0" prefHeight="650.0" prefWidth="1286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="650.0" fitWidth="1286.0" opacity="0.85">
+               <image>
+                  <Image url="@img/backSagrada3.jpg" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER_RIGHT" opacity="0.8" prefHeight="98.0" prefWidth="1286.0" style="-fx-background-color: #2f2f2f;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="In attesa di altri giocatori .." wrappingWidth="428.0">
+                     <font>
+                        <Font name="System Italic" size="35.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+         </children>
+         <cursor>
+            <Cursor fx:constant="WAIT" />
+         </cursor>
       </AnchorPane>
    </children>
 </AnchorPane>

@@ -1,6 +1,7 @@
 package it.polimi.se2018.view.graphic.gui;
 
 import it.polimi.se2018.model.ClientBoard;
+import it.polimi.se2018.model.ClientModel;
 import it.polimi.se2018.view.OutputStrategy;
 
 public class GuiOutput implements OutputStrategy {
@@ -12,7 +13,7 @@ public class GuiOutput implements OutputStrategy {
     }
 
     @Override
-    public void showGameBoard(ClientBoard clientBoard) {
-        controllerMatchTable.requestShowGameboard(clientBoard);
+    public void showGameBoard(ClientModel clientModel) {
+        controllerMatchTable.requestShowGameboard(clientModel);
     }
 }

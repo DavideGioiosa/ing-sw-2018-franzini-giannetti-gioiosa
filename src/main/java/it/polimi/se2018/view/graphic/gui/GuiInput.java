@@ -33,7 +33,6 @@ public class GuiInput implements InputStrategy {
     @Override
     public void showMessage(int idMessage) {
         ControllerMatchTable.inizMsgAreaMessage(idMessage);
-
     }
 
     @Override
