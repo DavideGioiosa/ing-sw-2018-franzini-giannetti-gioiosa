@@ -16,6 +16,7 @@ import it.polimi.se2018.view.graphic.cli.CommandLinePrint;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -25,6 +26,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
@@ -220,8 +222,6 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-
-    //TODO: TOGLIERE GIA' SI VISUALIZZANO DAL MENU
     private void showPrivateCards() {
         cardImg.setImage(showCard(clientModel.getPrivateObjCard(), "privateObjCard"));
     }
@@ -230,6 +230,7 @@ public class ControllerMatchTable implements Initializable {
         cardImg.setImage(showCard(clientBoard.getCardOnBoard().getPublicObjCardList().get(index), "publicObjCard"));
     }
 
+    //TODO: TOGLIERE GIA' SI VISUALIZZANO DAL MENU
     private void showToolCards(ClientBoard clientBoard, int index) {
         cardImg.setImage(showCard(clientBoard.getCardOnBoard().getToolCardList().get(index), "toolCard"));
     }
@@ -267,7 +268,6 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    //TODO: INTRODURRE SHOWPRIVATECARD
     @FXML private void nextCard() {
         if (indexChangeCard == 3) {
             indexChangeCard = -1;
@@ -575,6 +575,8 @@ public class ControllerMatchTable implements Initializable {
 
                 emptyPanes();
 
+                //clientModel.getActualPlayer().getSchemaCard() //TODO
+
                 schemeVBOX.getChildren().add(createScheme(clientBoard.getPlayerList().get(0).getSchemaCard()));
                 schemeVBOX2.getChildren().add(createScheme(clientBoard.getPlayerList().get(1).getSchemaCard()));
 
@@ -670,8 +672,8 @@ public class ControllerMatchTable implements Initializable {
         int row = 0;
 
         GridPane schemeGridPane = new GridPane();
-        gridPane.maxHeight(350);
-        gridPane.maxWidth(280);
+        gridPane.maxHeight(400);
+        gridPane.maxWidth(320);
         gridPane.setGridLinesVisible(true);
 
         for (Cell c : schemaCard.getCellList()) {
@@ -731,6 +733,27 @@ public class ControllerMatchTable implements Initializable {
             schemeGridPane.add(anchorPaneCell, col, row);
             col++;
         }
+
+            HBox infoScheme = configHBox();
+
+            Text text = new Text(schemaCard.getName());
+            text.setFill(Color.WHITE);
+            Text emptyText = new Text("       ");
+            infoScheme.getChildren().addAll(text, emptyText);
+
+            for(int i = 0; i < schemaCard.getDifficulty(); i++) {
+                Circle circle = new Circle(5, 5, 4);
+                circle.setStroke(Color.WHITE);
+                circle.setStrokeWidth(2);
+                circle.setFill(Color.web("#2C3E50"));
+
+                infoScheme.getChildren().add(circle);
+            }
+
+            schemeGridPane.add(infoScheme, 0, row + 1);
+            schemeGridPane.setColumnSpan(infoScheme, 5);
+
+
         return schemeGridPane;
     }
 
@@ -912,6 +935,21 @@ public class ControllerMatchTable implements Initializable {
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
 
         return anchorPane;
+    }
+
+    private HBox configHBox (){
+        HBox infoScheme = new HBox();
+        infoScheme.setMinHeight(20);
+        infoScheme.setMinWidth(40);
+        infoScheme.setPrefHeight(30);
+        infoScheme.setPrefWidth(50);
+        infoScheme.maxHeight(30);
+        infoScheme.maxWidth(50);
+        infoScheme.setStyle("-fx-background-color: #2C3E50");
+        infoScheme.setAlignment(Pos.CENTER);
+        infoScheme.setSpacing(4);
+
+        return infoScheme;
     }
 
     private ImageView configCellImg (){

@@ -64,6 +64,7 @@ public class View extends Observable implements Observer<ClientModel> {
                 break;
 
             case CHOICE:
+                notify(playerMessage);
                 inputStrategy.makeChoice(playerMessage.getPlayerChoice());
                 break;
 
@@ -100,7 +101,7 @@ public class View extends Observable implements Observer<ClientModel> {
      * Displays a message on vide
      * @param message id of the message
      */
-    private void showMessage(int message){
+    public void showMessage(int message){
         inputStrategy.showMessage(message);
     }
 
@@ -111,7 +112,7 @@ public class View extends Observable implements Observer<ClientModel> {
     @Override
     public void update(ClientModel clientModel){
         this.clientBoard = clientModel.getClientBoard();
-        outputStrategy.showGameBoard(clientBoard);
+        outputStrategy.showGameBoard(clientModel);
     }
 
     public InputStrategy getInputStrategy() {
