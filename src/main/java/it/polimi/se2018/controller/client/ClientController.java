@@ -128,6 +128,7 @@ public class ClientController implements Observer<PlayerMessage> {
                 clientModel.setActualPlayer(clientBoard.getPlayerList().remove(i));
             }
         }
+        clientModel.notify(clientModel.getClone());
     }
 
     private void reconnection(){

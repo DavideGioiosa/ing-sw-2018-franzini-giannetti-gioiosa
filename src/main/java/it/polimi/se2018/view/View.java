@@ -21,7 +21,7 @@ public class View extends Observable implements Observer<ClientModel> {
     protected InputStrategy inputStrategy;
     protected OutputStrategy outputStrategy;
 
-    private ClientBoard clientBoard;
+    private ClientModel clientModel;
 
     /**
      * Constructor of the class
@@ -31,8 +31,8 @@ public class View extends Observable implements Observer<ClientModel> {
         this.inputStrategy = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
         this.outputStrategy = new CommandLineGraphic();
 
-        //this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
-        //this.outputStrategy = new GuiOutput();
+//        this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
+  //      this.outputStrategy = new GuiOutput();
 
     }
 
@@ -49,7 +49,7 @@ public class View extends Observable implements Observer<ClientModel> {
 
         switch (playerMessage.getId()){
             case YOUR_TURN:
-                inputStrategy.yourTurn(clientBoard, playerMessage.getPlayerMove());
+                inputStrategy.yourTurn(clientModel.getClientBoard(), playerMessage.getPlayerMove());
                 break;
 
             case USER:
@@ -58,6 +58,7 @@ public class View extends Observable implements Observer<ClientModel> {
                 break;
 
             case CHOICE:
+                notify(playerMessage);
                 inputStrategy.makeChoice(playerMessage.getPlayerChoice());
                 break;
 
@@ -70,6 +71,7 @@ public class View extends Observable implements Observer<ClientModel> {
                 break;
 
             case UPDATE:
+
                 notify(playerMessage);
                 break;
 
@@ -79,6 +81,10 @@ public class View extends Observable implements Observer<ClientModel> {
 
             case DISCONNECTED:
                 reconnection();
+                break;
+
+            case APPLY_CHOICE:
+                notify(playerMessage);
                 break;
 
             default:
@@ -108,8 +114,8 @@ public class View extends Observable implements Observer<ClientModel> {
      */
     @Override
     public void update(ClientModel clientModel){
-        this.clientBoard = clientModel.getClientBoard();
-        outputStrategy.showGameBoard(clientBoard);
+        this.clientModel = clientModel;
+        outputStrategy.showGameBoard(clientModel);
     }
 
     /**
@@ -137,7 +143,6 @@ public class View extends Observable implements Observer<ClientModel> {
 
     public void setConnection(){
         inputStrategy.validPath();
-
     }
 
 }

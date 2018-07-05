@@ -31,12 +31,12 @@ public class GameCreator {
     }
 
     public void defaultMove(){
-        if(!gameStatus) {
+        /*if(!gameStatus) {
             gameStatus = gameStarter.defaultMove();
             if(gameStatus) gameManager = new GameManager(remoteView, gameStarter.getGameBoard());
             return;
-        }
-        gameManager.defaultMove();
+        }*/
+        if(gameStatus) gameManager.defaultMove();
     }
 
     public void receiveFromClient(PlayerMessage playerMessage) {

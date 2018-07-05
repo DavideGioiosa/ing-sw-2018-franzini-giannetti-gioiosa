@@ -16,9 +16,9 @@ import java.util.List;
 
 public class CommandLinePrint {
 
-    private static EnumMap<ColourEnum, Color> hashMapColours;
+    static EnumMap<ColourEnum, Color> hashMapColours;
 
-    private static List<HashMap<Integer, String>> dieRowStringList;
+    static List<HashMap<Integer, String>> dieRowStringList;
 
     private static HashMap<Integer, String> messageMap;
     private static HashMap<Integer, String> errorMap;
@@ -204,5 +204,9 @@ public class CommandLinePrint {
 
     static void colouredPrint(char character, ColourEnum colour){
         System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(character).reset());
+    }
+
+    static void colouredPrint(String string, ColourEnum colour){
+        System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(string).reset());
     }
 }

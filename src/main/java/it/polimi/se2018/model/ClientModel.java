@@ -30,11 +30,14 @@ public class ClientModel extends Observable<ClientModel>{
     }
 
     private ClientModel(ClientModel clientModel){
-        this.clientBoard = clientModel.getClientBoard().getClone();
-        if(this.actualPlayer != null) this.actualPlayer = clientModel.actualPlayer.getClone();
+        if(clientModel.clientBoard != null) this.clientBoard = clientModel.getClientBoard().getClone();
+        else this.clientBoard = null;
+        if(clientModel.actualPlayer != null) this.actualPlayer = clientModel.actualPlayer.getClone();
         else actualPlayer = null;
-        if(this.privateObjCard != null) this.privateObjCard = clientModel.privateObjCard.getClone();
+        if(clientModel.privateObjCard != null) this.privateObjCard = clientModel.privateObjCard.getClone();
         else privateObjCard = null;
+        if(clientModel.actualUser != null) this.actualUser = clientModel.actualUser.getClone();
+        else actualUser = null;
     }
 
     /**
@@ -46,7 +49,7 @@ public class ClientModel extends Observable<ClientModel>{
         try {
             notify(this.getClone());
         }catch (NullPointerException e){
-
+            System.out.println("ERRORE NELLA PRINT");
         }
     }
 
