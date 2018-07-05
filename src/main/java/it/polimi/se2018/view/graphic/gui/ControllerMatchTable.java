@@ -59,28 +59,22 @@ public class ControllerMatchTable implements Initializable {
 
     @FXML GridPane schemeSelectionGrid;
 
-
     @FXML private AnchorPane toolCardPane;
 
-    @FXML
-    private HBox hBoxDraftDice;
-    @FXML
-    private AnchorPane primaryScene;
-    @FXML
-    private AnchorPane schemePane;
-    @FXML
-    private ImageView cardImg;
-    @FXML
-    private HBox publicCardPane;
-    @FXML
-    private ImageView privateCardImg;
-    @FXML
-    private HBox privateCardPane;
-    @FXML
-    private GridPane gridPane;
+    @FXML private HBox hBoxDraftDice;
+    @FXML private AnchorPane primaryScene;
+    @FXML private ImageView cardImg;
+    @FXML private HBox publicCardPane;
+    @FXML private ImageView privateCardImg;
+    @FXML private GridPane gridPane;
 
-    @FXML
-    private Button extractButton;
+
+    //TASTI SUL TAVOLO
+
+    @FXML private Button extractButton;
+    @FXML private Button toolCardButton;
+    @FXML private Button resetMoveButton;
+    @FXML private Button passButton;
     //-------------------------------------------- SCHEME SELECTION -----------------------------
 
     @FXML AnchorPane backgroundPane;
@@ -89,25 +83,16 @@ public class ControllerMatchTable implements Initializable {
     //-----------
     //VBOX CONTENENTE GLI SCHEMI DEI 4 GIOCATORI DURANTE LA PARTITA
 
-    @FXML
-    private VBox schemeVBOX;
-    @FXML
-    private VBox schemeVBOX1;
-    @FXML
-    private VBox schemeVBOX2;
-    @FXML
-    private VBox schemeVBOX3;
+    @FXML private VBox schemeVBOX;
+    @FXML private VBox schemeVBOX1;
+    @FXML private VBox schemeVBOX2;
+    @FXML private VBox schemeVBOX3;
 
     //--------------------------------------------------------------------------------
 
-    @FXML
-    private VBox privateCardBox0;
+    @FXML private AnchorPane schemeSelectionPane;
 
-    @FXML
-    private AnchorPane schemeSelectionPane;
-
-    @FXML
-    private AnchorPane gameboardPane;
+    @FXML private AnchorPane gameboardPane;
 
     /**
      * Message Area in the table
@@ -147,16 +132,14 @@ public class ControllerMatchTable implements Initializable {
 
     //-----------------------------
 
-    PlayerChoice playerChoice;
+    private PlayerChoice playerChoice;
 
     @FXML GridPane choiceToolCardGrid;
 
     //-------------------
 
     @FXML AnchorPane nicknamePane;
-    @FXML
-    TextArea nicknameAreaText;
-
+    @FXML TextArea nicknameAreaText;
     @FXML GridPane trackBoardGrid;
 
     //---------------------
@@ -169,9 +152,6 @@ public class ControllerMatchTable implements Initializable {
 
     //scorrimento lettura carte pubbliche e obj privato
     private int indexChangeCard;
-
-    @FXML
-    private AnchorPane backPane;
 
     private View viewSocket;
 
@@ -229,16 +209,10 @@ public class ControllerMatchTable implements Initializable {
         indexChangeDiceTrackBoard = new ArrayList<>();
         typeOfInputAsked = null;
 
-        msgArea = new TextArea();
-        msgArea.setEditable(false);
-        msgArea.setMouseTransparent(true);
-        msgArea.setFocusTraversable(false);
-
-        msgArea.maxHeight(215);
-        msgArea.maxWidth(338);
-        hBoxMsgArea.getChildren().addAll(msgArea);
+        createMsgArea();
 
     }
+
 
 
     //TODO: TOGLIERE GIA' SI VISUALIZZANO DAL MENU
@@ -247,8 +221,8 @@ public class ControllerMatchTable implements Initializable {
       //          "privateObjCard"));
         //privateCardImg.setPreserveRatio(true);
         //privateCardImg.setFitWidth(200);
-        privateCardImg.fitWidthProperty().bind(privateCardPane.widthProperty());
-        privateCardImg.fitHeightProperty().bind(privateCardPane.heightProperty().subtract(20));
+      //  privateCardImg.fitWidthProperty().bind(privateCardPane.widthProperty());
+      //  privateCardImg.fitHeightProperty().bind(privateCardPane.heightProperty().subtract(20));
     }
 
     private void showPublicCards(ClientBoard clientBoard, int index) {
@@ -409,7 +383,7 @@ public class ControllerMatchTable implements Initializable {
     }
 
     @FXML private void disableToolCardPane (){
-        //confirmToolCardChoice();
+        //confirmToolCardChoice(); //TODO: NO??
         disableBackgroundPane();
         toolCardPane.setOpacity(0);
         toolCardPane.setVisible(false);
@@ -422,7 +396,7 @@ public class ControllerMatchTable implements Initializable {
     @FXML private void enableToolCardPane (){
         disableGameboardPane();
         enableBackgroundPane();
-        inizToolCard();
+       // inizToolCard();
         toolCardPane.setOpacity(1);
         toolCardPane.setVisible(true);
         toolCardPane.setDisable(false);
@@ -441,7 +415,7 @@ public class ControllerMatchTable implements Initializable {
         gameboardPane.setVisible(true);
         gameboardPane.setDisable(false);
     }
-    
+
 
 
     // REQUEST: richieste invocate dal GuiInput //
@@ -454,8 +428,11 @@ public class ControllerMatchTable implements Initializable {
     }
 
     public void requestYourTurn (ClientBoard clientBoard, PlayerMove playerMove){
+        enableCommandButton();
+        enableToolChoiceButton();
+        hBoxDraftDice.setDisable(false);
 
-        TypeOfInputAsked typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
+        typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
         this.nextCommandType = typeOfInputAsked.getCommandTypeEnum(); //la mossa richiesta
 
         //extractButton.setEffect(Shadow);
@@ -472,6 +449,7 @@ public class ControllerMatchTable implements Initializable {
         this.clientBoard = clientBoard;
         enableGameboardPane();
         inizGameboard(clientBoard);
+        disableNotYourTurn();
     }
 
 
@@ -537,8 +515,8 @@ public class ControllerMatchTable implements Initializable {
             toolImg.setPreserveRatio(true);
             toolImg.setFitWidth(300);
             //toolImg.fitWidthProperty().bind(vBox.widthProperty());
-            Button button = new Button("ToolCard " + i);
 
+            Button button = new Button("ToolCard " + (i + 1));
             button.setOnAction(e -> {
                 selectedButtonToolCardToUse = button;
                 checkToolIndex();
@@ -571,7 +549,10 @@ public class ControllerMatchTable implements Initializable {
                 schemeVBOX2.getChildren().add(createScheme(clientBoard.getPlayerList().get(1).getSchemaCard()));
 
                 System.out.println("..update..");
-
+                inizToolCard();
+                 for(int i = 0; i < toolChoiceButtonList.size(); i++) {
+                     toolChoiceButtonList.get(i).setDisable(true);
+                 }
                 showPublicCards(clientBoard,0);
                 showDiceBoard();
                 insertDiceTrackboard();
@@ -626,7 +607,7 @@ public class ControllerMatchTable implements Initializable {
                 diceExtraImgTrackboardList.add(dieExtra);
 
                 diceExtraImgTrackboardList.get(i).setImage(showDie
-                        (clientBoard.getTrackBoardDice().getDiceList().get(i).get(0))); //TODO: INDEX
+                        (clientBoard.getTrackBoardDice().getDiceList().get(i).get(0)));
 
                 trackBoardGrid.add(diceExtraImgTrackboardList.get(i), 0, 9 - i);
                 Button button = new Button(">");
@@ -649,7 +630,6 @@ public class ControllerMatchTable implements Initializable {
                     buttonTrackBoarIndexList.get(i).setVisible(false);
                     buttonTrackBoarIndexList.get(i).setDisable(true);
                 }
-
             }
         }
     }
@@ -801,21 +781,62 @@ public class ControllerMatchTable implements Initializable {
     private void nextCommandType (CommandTypeEnum commandTypeEnum) {
         switch (commandTypeEnum){
             case COMPLETE: //TODO: disabilita tutto
+        //        disableNotYourTurn();
                 break;
-            case DICEBOARDINDEX: //abilita diceboard
+            case DICEBOARDINDEX:
+                hBoxDraftDice.setDisable(false);    //abilita diceboard
                 break;
             case DICESCHEMAWHERETOLEAVE:
-            case DICESCHEMAWHERETOTAKE:
-                //abilita schema
+            case DICESCHEMAWHERETOTAKE:             //TODO: Abilitare solo il tuo
+                schemeVBOX.setDisable(false);
+                schemeVBOX1.setDisable(false);
+                schemeVBOX2.setDisable(false);
+                schemeVBOX3.setDisable(false);
                 break;
             case TRACKBOARDINDEX:
-                //abilita track
+                enableDiceTrackBoard();
                 break;
             case VALUE:
                 ValueRequest.display(syntaxController);
                 break;
             default:
                 break;
+        }
+    }
+
+    private void disableNotYourTurn (){
+        extractButton.setDisable(true);
+        resetMoveButton.setDisable(true);
+        passButton.setDisable(true);
+        for(int i = 0; i < toolChoiceButtonList.size(); i++) {
+            toolChoiceButtonList.get(i).setDisable(true);
+        }
+        for(int i = 0; i < diceExtraImgTrackboardList.size(); i++) {
+            diceExtraImgTrackboardList.get(i).setDisable(true);
+        }
+        hBoxDraftDice.setDisable(true);
+        schemeVBOX.setDisable(true);
+        schemeVBOX1.setDisable(true);
+        schemeVBOX2.setDisable(true);
+        schemeVBOX3.setDisable(true);
+    }
+
+    private void enableCommandButton (){
+        extractButton.setDisable(false);
+        resetMoveButton.setDisable(false);
+        toolCardButton.setDisable(false);
+        passButton.setDisable(false);
+    }
+
+    private void enableToolChoiceButton (){
+        for(int i = 0; i < toolChoiceButtonList.size(); i++) {
+            toolChoiceButtonList.get(i).setDisable(false);
+        }
+    }
+
+    private void enableDiceTrackBoard(){
+        for(int i = 0; i < diceExtraImgTrackboardList.size(); i++) {
+            diceExtraImgTrackboardList.get(i).setDisable(false);
         }
     }
 
@@ -867,5 +888,13 @@ public class ControllerMatchTable implements Initializable {
         return cellImg;
     }
 
-
+    private void createMsgArea (){
+        msgArea = new TextArea();
+        msgArea.setEditable(false);
+        msgArea.setMouseTransparent(true);
+        msgArea.setFocusTraversable(false);
+        msgArea.maxHeight(215);
+        msgArea.maxWidth(338);
+        hBoxMsgArea.getChildren().addAll(msgArea);
+    }
 }

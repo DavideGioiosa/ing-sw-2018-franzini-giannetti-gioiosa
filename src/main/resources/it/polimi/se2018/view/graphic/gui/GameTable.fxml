@@ -141,13 +141,13 @@
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
                               <Button fx:id="extractButton" mnemonicParsing="false" onAction="#extractClick" prefHeight="39.0" prefWidth="84.0" text="Estrai" />
-                              <Button mnemonicParsing="false" onAction="#cancelClick" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
+                              <Button fx:id="resetMoveButton" mnemonicParsing="false" onAction="#cancelClick" prefHeight="48.0" prefWidth="129.0" text="Reset Mossa" />
                            </children>
                         </HBox>
                         <HBox alignment="TOP_CENTER" prefHeight="45.0" prefWidth="317.0" spacing="10.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#enableToolCardPane" prefHeight="39.0" prefWidth="131.0" text="ToolCard" />
-                              <Button mnemonicParsing="false" onAction="#passClick" prefHeight="39.0" prefWidth="110.0" text="Passa" />
+                              <Button fx:id="toolCardButton" mnemonicParsing="false" onAction="#enableToolCardPane" prefHeight="39.0" prefWidth="131.0" text="ToolCard" />
+                              <Button fx:id="passButton" mnemonicParsing="false" onAction="#passClick" prefHeight="39.0" prefWidth="110.0" text="Passa" />
                            </children>
                            <opaqueInsets>
                               <Insets />
