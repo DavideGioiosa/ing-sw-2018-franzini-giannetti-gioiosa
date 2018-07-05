@@ -27,6 +27,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
@@ -105,6 +107,7 @@ public class ControllerMatchTable implements Initializable {
      */
     private static TextArea msgArea;
 
+    @FXML Text numTokens;
 
     /**
      * Img Dado selezionato dal Draft per la PICK
@@ -515,7 +518,8 @@ public class ControllerMatchTable implements Initializable {
                 vBox.setAlignment(Pos.CENTER);
                 vBox.setSpacing(50);
                 if(i == 0){
-                    Text text = new Text("La tua carta obiettivo privato");
+                    Text text = new Text("La tua carta obiettivo privato :");
+                    text.setFont(Font.font("Verdana", FontPosture.ITALIC, 15));
                     text.setFill(Color.WHITE);
                     ImageView privateObjImg = new ImageView(showCard(privateObjCard, "privateObjCard"));
                     cardSize(privateObjImg);
@@ -588,6 +592,7 @@ public class ControllerMatchTable implements Initializable {
                 showPublicCards(clientBoard,0);
                 showDiceBoard();
                 insertDiceTrackboard();
+//TODO                setNumTokens(String.valueOf(clientModel.getActualPlayer().getTokens()));
         });
 
       //  schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
@@ -643,6 +648,9 @@ public class ControllerMatchTable implements Initializable {
 
                 trackBoardGrid.add(diceExtraImgTrackboardList.get(i), 0, 9 - i);
                 Button button = new Button(">");
+                button.setStyle("fx-background-radius: 300;");
+                button.setCursor(Cursor.HAND);
+
                 button.setOnAction(event -> {
                     selectedButtonTrackBoardNext = button;
 
@@ -752,6 +760,9 @@ public class ControllerMatchTable implements Initializable {
 
             schemeGridPane.add(infoScheme, 0, row + 1);
             schemeGridPane.setColumnSpan(infoScheme, 5);
+
+            schemeGridPane.setBorder(new Border(new BorderStroke(Color.web("2C3E50"),
+                BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(1))));
 
 
         return schemeGridPane;
@@ -971,5 +982,9 @@ public class ControllerMatchTable implements Initializable {
         msgArea.maxWidth(338);
         msgArea.setStyle("-fx-background-color: #808080;"); //TODO: CHECK NOT WORKING
         hBoxMsgArea.getChildren().addAll(msgArea);
+    }
+
+    public void setNumTokens(String numPlayerTokens) {
+        numTokens.setText(numPlayerTokens);
     }
 }
