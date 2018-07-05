@@ -27,8 +27,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -275,28 +273,18 @@ public class ControllerMatchTable implements Initializable {
 
 
     private Image showCard(Card card, String stringa) {
-        String string = "src\\main\\java\\it\\polimi\\se2018\\img\\";
+        String string = "it/polimi/se2018/view/graphic/gui/img/" + stringa + "/" +
+                card.getName().replaceAll(" ", "") + ".jpg" ;
 
-        try {
-            return new Image(String.valueOf(new File(string + stringa + "\\" +
-                    card.getName().replaceAll(" ", "") + ".jpg").toURI().toURL()));
-        } catch (MalformedURLException e) {
-            // return new MalformedURLException("Public card image not found");
-        }
-        return null;
+        return new Image(string);
+
     }
 
-    //TODO CHECK STATIC
-    static public Image showDie(Die die) {
-        String string = "src\\main\\java\\it\\polimi\\se2018\\img\\dice\\";
+     private Image showDie(Die die) {
+        String string = "it/polimi/se2018/view/graphic/gui/img/dice/" +
+                die.getColour().toString().toLowerCase() + "/" + die.getValue() + ".jpg";
 
-        try {
-            return new Image(String.valueOf(new File(string + die.getColour().toString().toLowerCase()
-                    + "\\" + die.getValue() + ".jpg").toURI().toURL()));
-        } catch (MalformedURLException e) {
-            // return new MalformedURLException("Die image not found");
-        }
-        return null;
+        return new Image(string);
     }
 
 
@@ -453,15 +441,14 @@ public class ControllerMatchTable implements Initializable {
         gameboardPane.setVisible(true);
         gameboardPane.setDisable(false);
     }
-
-
+    
 
 
     // REQUEST: richieste invocate dal GuiInput //
 
     public void requestSchemeSelection (PlayerChoice playerChoice){
         this.playerChoice=playerChoice;
-        TypeOfInputAsked typeOfInputAsked = playerSetupper.newChoiceReceived(playerChoice); //la stringa che ti invio è per scelta scheme
+        playerSetupper.newChoiceReceived(playerChoice); //la stringa che ti invio è per scelta scheme
 
         enableSchemeSelectionPane(playerChoice.getSchemaCardList());
     }
@@ -477,7 +464,7 @@ public class ControllerMatchTable implements Initializable {
     public void requestNickname (User user){
         enableNicknamePane();
 
-        TypeOfInputAsked typeOfInputAsked = playerSetupper.newUserReceived(user); //la stringa che ti invio è per il nick dell'user
+        playerSetupper.newUserReceived(user); //la stringa che ti invio è per il nick dell'user
     }
 
     //UPDATE
@@ -490,8 +477,7 @@ public class ControllerMatchTable implements Initializable {
 
     //SEND: invio della scelta fatta dall'utente
 
-    public void sendSelectedScheme (){
-        System.out.println(selectedButtonScheme.getText());
+    private void sendSelectedScheme (){
 
         if(selectedButtonScheme.getText().equals("Schema 1")){
             playerSetupper.validCommand(((Integer) playerChoice.getSchemaCardList().get(0).getId()).toString());
@@ -508,7 +494,7 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    public void sendNickname (){
+    private void sendNickname (){
         playerSetupper.validNickname(nicknameAreaText.getText());
     }
 
@@ -517,7 +503,7 @@ public class ControllerMatchTable implements Initializable {
 
     //ADD DINAMICO DEI 4 SCHEMI CHE L'UTENTE DEVE SCEGLIERE
     //TODO: ADD CARTA OBJ PRIVATO
-    public void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList){
+    private void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList){
 
         Platform.runLater(() -> {
             for(int i = 0; i <5; i++) {
@@ -544,7 +530,7 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    public void inizToolCard (){
+    private void inizToolCard (){
         for(int i = 0; i < 3; i++) {
             VBox vBox = new VBox();
             ImageView toolImg = new ImageView(showCard(clientBoard.getCardOnBoard().getToolCardList().get(i), "toolCard"));
@@ -576,7 +562,7 @@ public class ControllerMatchTable implements Initializable {
 
 
     //TODO: FIX, NON SAI DI CHI E' LO SCHEMA, NUM DI GIOCATORI
-    public void inizGameboard (ClientBoard clientBoard){
+    private void inizGameboard (ClientBoard clientBoard){
         Platform.runLater(() -> {
 
                 emptyPanes();
@@ -669,7 +655,7 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    public GridPane createScheme (SchemaCard schemaCard) {
+    private GridPane createScheme (SchemaCard schemaCard) {
         int col = 0;
         int row = 0;
 
@@ -677,7 +663,6 @@ public class ControllerMatchTable implements Initializable {
         gridPane.maxHeight(350);
         gridPane.maxWidth(280);
         gridPane.setGridLinesVisible(true);
-
 
         for (Cell c : schemaCard.getCellList()) {
             ImageView cellImg = configCellImg();
@@ -702,7 +687,7 @@ public class ControllerMatchTable implements Initializable {
             }
 
             if(!c.isEmpty()){
-                cellImg.setImage(ControllerMatchTable.showDie(c.getDie()));
+                cellImg.setImage(showDie(c.getDie()));
 
                 //Handle the click to see what's under a die placed in the scheme
                 cellImg.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
@@ -715,7 +700,7 @@ public class ControllerMatchTable implements Initializable {
                 });
 
                 cellImg.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-                    cellImg.setImage(ControllerMatchTable.showDie(c.getDie()));
+                    cellImg.setImage(showDie(c.getDie()));
                     event.consume();
                 });
             }
@@ -739,6 +724,11 @@ public class ControllerMatchTable implements Initializable {
         return schemeGridPane;
     }
 
+    private void setCellValueRestriction (Cell c, ImageView cellImg){
+        Image img = new Image("it/polimi/se2018/view/graphic/gui/img/dice/restriction/" + c.getValue() + ".jpg");
+        cellImg.setOpacity(0.90);
+        cellImg.setImage(img);
+    }
 
     // CHECK: invocano il syntaxController inviandogli il comando valido //
 
@@ -877,13 +867,5 @@ public class ControllerMatchTable implements Initializable {
         return cellImg;
     }
 
-    private void setCellValueRestriction (Cell c, ImageView cellImg){
-        try {
-            Image img = new Image(String.valueOf(new File("src\\main\\java\\it\\polimi\\se2018\\img\\dice\\restriction\\" +
-                    c.getValue() + ".jpg").toURI().toURL()));
-            cellImg.setOpacity(0.90);
-            cellImg.setImage(img);
-        }catch (Exception e){}
-    }
 
 }
