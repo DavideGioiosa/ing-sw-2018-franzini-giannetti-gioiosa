@@ -29,13 +29,21 @@ public class SyntaxController extends Observable<PlayerMessage> {
      * Player Move representing the action that the player wants to make
      */
     private PlayerMove playerMove;
-
+    /**
+     * Next Command type necessary for type of input
+     */
     private CommandTypeEnum commandTypeEnum;
-
+    /**
+     * Format of the string for input
+     */
     private InputFormatEnum inputFormatEnum;
-
+    /**
+     * Empty move received from Controller
+     */
     private PlayerMove receivedPlayerMove;
-
+    /**
+     * List of CommandType needed for complete the actual move
+     */
     private List<List<CommandTypeEnum>> commandTypeEnumLists;
 
     /**
@@ -109,7 +117,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
             case TOOLCARDID:
                 try{
-                    setToolCardId(inputReceived, clientBoard);
+                    setToolCardId(inputReceived, clientBoard.getCardOnBoard().getToolCardList());
                     return new TypeOfInputAsked(commandTypeEnum, inputFormatEnum,0, nextMessage(commandTypeEnum));
                 }catch(IllegalArgumentException e){
                     return new TypeOfInputAsked(TOOLCARDID, InputFormatEnum.ID_TOOL, 2005, nextMessage(commandTypeEnum));
@@ -128,12 +136,13 @@ public class SyntaxController extends Observable<PlayerMessage> {
         }
     }
 
-    private void setPassMove() {
-        playerMove.setTypeOfChoice(TypeOfChoiceEnum.PASS);
-    }
-
-    private void setToolCardId(String inputReceived, ClientBoard clientBoard) {
-        for (ToolCard toolCard : clientBoard.getCardOnBoard().getToolCardList()) {
+    /**
+     * Set ToolCard ID and the list of operation for input
+     * @param inputReceived ID of ToolCard
+     * @param toolCardList List of ToolCard on board
+     */
+    private void setToolCardId(String inputReceived, List<ToolCard> toolCardList) {
+        for (ToolCard toolCard : toolCardList) {
             if (Integer.valueOf(inputReceived) == toolCard.getId()) {
                 playerMove.setIdToolCard(Integer.valueOf(inputReceived));
                 commandTypeEnumLists = new ArrayList<>();
@@ -147,12 +156,16 @@ public class SyntaxController extends Observable<PlayerMessage> {
                     if(!commandTypeEnumList.isEmpty()) commandTypeEnumLists.add(commandTypeEnumList);
                 }
                 setNextCommandType(playerMove);
-
             }
         }
-        //commandTypeEnumLists.add(new ArrayList<>());
     }
 
+    /**
+     * Converts the string of Operation needed to
+     * @param operationString
+     * @param toolCard
+     * @return
+     */
     private CommandTypeEnum getCommandFromString(OperationString operationString, ToolCard toolCard) {
         switch(operationString.getOperation().toLowerCase()){
             case "pick":
@@ -195,7 +208,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
         int coordinates[] = separateCellValues(inputReceived);
 
-        if (coordinates[0] >= 0 && coordinates[0] < clientBoard.getTrackBoardDice().getDiceList().size() && coordinates[1] >= 0 &&
+        if (coordinates != null && coordinates[0] >= 0 && coordinates[0] < clientBoard.getTrackBoardDice().getDiceList().size() && coordinates[1] >= 0 &&
                 coordinates[1] < clientBoard.getTrackBoardDice().getDiceList().get(coordinates[0]).size()) {
 
             playerMove.setTrackBoardIndex(coordinates[0], coordinates[1]);
@@ -207,7 +220,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
         int coordinates[] = separateCellValues(inputReceived);
 
-        if (coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
+        if (coordinates != null && coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
             playerMove.insertDiceSchemaWhereToTake(new Position(coordinates[0] , coordinates[1]));
             setNextCommandType(playerMove);
 
@@ -223,16 +236,28 @@ public class SyntaxController extends Observable<PlayerMessage> {
     }
 
     private int[] separateCellValues(String message){
-
-        int coordinates[] = {Integer.parseInt(message.split(" ")[0]),Integer.parseInt(message.split(" ")[1])};
-        return coordinates;
+        if(message.length() == 3) {
+            try {
+                if (message.charAt(1) == (' ')) {
+                    int[] coordinates = {Integer.parseInt(message.split(" ")[0]), Integer.parseInt(message.split(" ")[1])};
+                    return coordinates;
+                }
+            }catch (IndexOutOfBoundsException e){
+                return null;
+            }
+            int[] coordinates = new int[2];
+            coordinates[0] = 0;
+            coordinates[1] = 0;
+            return coordinates;
+        }
+        return null;
     }
 
     private void setDiceSchemaWhereToLeave(String inputReceived) {
 
         int coordinates[] = separateCellValues(inputReceived);
 
-        if (coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
+        if (coordinates != null && coordinates[0] >= 0 && coordinates[0] < NUMBER_OF_SCHEMA_ROW && coordinates[1] >= 0 && coordinates[1] < NUMBER_OF_SCHEMA_COL) {
             playerMove.insertDiceSchemaWhereToLeave(new Position(coordinates[0] , coordinates[1]));
             setNextCommandType(playerMove);
 
@@ -241,12 +266,8 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
     private int nextMessage(CommandTypeEnum commandTypeEnum) {
 
-
-        //if (commandTypeEnum == COMPLETE) return 3101;
-
+        //TODO Gestire i messaggi che devono essere visualizzati dal client
         if (commandTypeEnum == COMPLETE) return 0;
-
-
 
         println(inputFormatEnum + " " + commandTypeEnum);
         return 3000;
@@ -269,10 +290,6 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
         setNextCommandType(playerMove);
     }
-
-
-
-
 
     /**
      * Sets the next command type to be received
@@ -310,7 +327,6 @@ public class SyntaxController extends Observable<PlayerMessage> {
             setCompleteMove();
             return;
         }
-
         commandTypeEnum = commandTypeEnumLists.get(playerMove.getState()).remove(0);
 
     }
@@ -344,4 +360,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
         notify(playerMessage);
     }
 
+    public void setIpPath(){
+        //TODO: Passare lo User al Client
+    }
 }

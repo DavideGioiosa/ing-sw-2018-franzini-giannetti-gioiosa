@@ -16,7 +16,7 @@ public class OperationCheckSameColourOfOneInDiceContainer implements ToolOperati
 
     @Override
     public boolean start(DiceContainer diceContainer, PlayerMove playerMove, List<Die> dieList, List<Player> roundPlayerOrder, Turn turn) {
-
+        if(dieList.isEmpty()) return true;
         if(dieList.stream().map(Die::getColour).distinct().count() == 1){
             for(Die die: diceContainer.getClonedDieList()) if (die.getColour() == dieList.get(0).getColour()) return true;
         }

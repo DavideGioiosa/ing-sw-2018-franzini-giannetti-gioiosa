@@ -21,7 +21,7 @@ public class RestrictionCellColour implements Restriction {
     public RestrictionCellColour(){
         errorMap = new HashMap<>();
         errorMap.put(true, 0);
-        errorMap.put(false, 3);
+        errorMap.put(false, 5003);
     }
 
     /**

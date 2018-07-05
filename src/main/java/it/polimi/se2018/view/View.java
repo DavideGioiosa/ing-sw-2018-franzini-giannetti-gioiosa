@@ -9,8 +9,6 @@ import it.polimi.se2018.view.graphic.cli.CommandLineGraphic;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 import it.polimi.se2018.view.graphic.gui.GuiInput;
 import it.polimi.se2018.view.graphic.gui.GuiOutput;
-//import it.polimi.se2018.view.graphic.gui.GuiInput;
-//import it.polimi.se2018.view.graphic.gui.GuiOutput;
 
 import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.println;
 
@@ -30,15 +28,11 @@ public class View extends Observable implements Observer<ClientModel> {
      */
     public View() {
 
-        //this.inputStrategy = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
-        //this.outputStrategy = new CommandLineGraphic();
+        this.inputStrategy = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
+        this.outputStrategy = new CommandLineGraphic();
 
-        this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
-        this.outputStrategy = new GuiOutput();
-
-
-
-        //commandLineGraphic = new CommandLineGraphic();
+        //this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
+        //this.outputStrategy = new GuiOutput();
 
     }
 
@@ -84,6 +78,10 @@ public class View extends Observable implements Observer<ClientModel> {
                 for(Player player: playerMessage.getMoveMessage().getPlayerList()) println( player.getNickname() + " " + player.getScore());
                 break;
 
+            case DISCONNECTED:
+                reconnection();
+                break;
+
             default:
                 reportError(1001);
         }
@@ -115,12 +113,32 @@ public class View extends Observable implements Observer<ClientModel> {
         outputStrategy.showGameBoard(clientModel);
     }
 
+    /**
+     * Gets the object that manages input
+     * @return Input manager
+     */
     public InputStrategy getInputStrategy() {
         return inputStrategy;
     }
 
+    /**
+     * Gets the object that manages output
+     * @return Output manager
+     */
     public OutputStrategy getOutputStrategy() {
         return outputStrategy;
+    }
+
+    /**
+     *
+     */
+    private void reconnection(){
+        inputStrategy.tryReconnection();
+    }
+
+    public void setConnection(){
+        inputStrategy.validPath();
+
     }
 
 }

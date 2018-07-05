@@ -65,28 +65,38 @@ public class BagDice implements DiceContainer {
 
 
     @Override
-    public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
-        dieList.add(extractDice());
-    }
-
-    @Override
-    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
-
-        int size = dieList.size();
-        for(int i = size ; i > 0; i--) {
-            insertDice(dieList.remove(0));
-        }
-
-        for(int i = 0; i < size; i++) {
+    public boolean pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
+        try {
             dieList.add(extractDice());
+        }catch (RuntimeException e){
+            return false;
         }
+        return true;
     }
 
     @Override
-    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        try {
+            int size = dieList.size();
+            for (int i = size; i > 0; i--) {
+                insertDice(dieList.remove(0));
+            }
+
+            for (int i = 0; i < size; i++) {
+                dieList.add(extractDice());
+            }
+        }catch(NullPointerException | IndexOutOfBoundsException e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
         for(Die die: dieList) {
             insertDice(die);
         }
+        return true;
     }
 
     public List<Die> getClonedDieList(){

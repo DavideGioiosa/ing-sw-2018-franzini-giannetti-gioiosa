@@ -17,17 +17,14 @@ public class Client implements Observer<PlayerMessage> {
      * User attached to this client
      */
     private User thisUser;
-
     /**
      * Strategy used to connect the client on RMI or Socket
      */
     private ClientStrategy clientStrategy;
-
     /**
      * MVC's view to communicate with the user
      */
     private View view;
-
     /**
      * Nickname chosen by the client
      */
@@ -73,7 +70,7 @@ public class Client implements Observer<PlayerMessage> {
     /**
      * Method used to create a connection with the server
      */
-    void connect(){
+    public void connect(){
         clientStrategy.connect();
     }
 

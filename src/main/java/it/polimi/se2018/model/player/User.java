@@ -28,7 +28,20 @@ public class User implements Serializable {
         charConnection = new HashMap<>();
         charConnection.put(TypeOfConnection.SOCKET, "s");
         charConnection.put(TypeOfConnection.RMI, "r");
+    }
 
+    /**
+     * Copy Constructor
+     * @param user Object User to be cloned
+     */
+    public User(User user){
+        this.nickname = user.nickname;
+        if(user.player != null) this.player = user.player.getClone();
+        else this.player = null;
+        this.connection = user.connection;
+        this.typeOfConnection = user.typeOfConnection;
+        this.uniqueCode = user.uniqueCode;
+        this.charConnection = user.charConnection;
     }
 
     public void setUniqueCode(String uniqueCode) {
@@ -92,5 +105,13 @@ public class User implements Serializable {
 
     public TypeOfConnection getTypeOfConnection() {
         return typeOfConnection;
+    }
+
+    /**
+     * Returns a copy of User selected
+     * @return Cloned user
+     */
+    public User getClone(){
+        return new User(this);
     }
 }

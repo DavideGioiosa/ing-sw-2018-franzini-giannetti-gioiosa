@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Date;
+import java.util.Timer;
 
 public class ClientListener extends Thread implements ClientSocketInterface {
 
@@ -22,7 +24,10 @@ public class ClientListener extends Thread implements ClientSocketInterface {
     private Gson gson;
     private Observable<PlayerMessage> obs;
     private String code;
-
+    private BufferedReader bufferedReader;
+    boolean connected;
+    boolean ping;
+    private Timer timer;
 
     ClientListener(Socket clientSocket){
         this.clientSocket = clientSocket;
@@ -30,44 +35,46 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         obs = new Observable<>();
         quit = false;
         disconnection = false;
+
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            connected = true;
+        } catch (IOException e) {
+            System.out.println("disconnesso user");
+            handleDisconnection();
+            disconnection = true;
+        }
+        timer = new Timer();
+        CheckTimeout checkTimeout = new CheckTimeout(this);
+        timer.scheduleAtFixedRate(checkTimeout, (long)30*1000, (long)15*1000);
+
     }
 
     Observable<PlayerMessage> getObs() {
         return obs;
     }
 
-    void setQuit(boolean value) {
-        this.quit = value;
-    }
-
-    @Override
-    public void run(){
-
-        while(!disconnection && !quit){
-            try {
-
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                String message = bufferedReader.readLine();
-                PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
-                if(playerMessage != null){
-                    receive(playerMessage);
-                }
-
-            } catch (IOException e) {
-                handleDisconnection();
-                disconnection = true;
-            }
+    void setQuit() {
+        this.quit = false;
+        if(timer != null){
+            timer.cancel();
         }
-
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            System.out.println("già chiusa");
+        }
     }
 
-     void handleDisconnection(){
+    void handleDisconnection(){
+        if(timer != null){
+            timer.cancel();
+        }
 
         User user = new User(TypeOfConnection.SOCKET);
         user.setUniqueCode(code);
         PlayerMessage disconnected = new PlayerMessage();
         disconnected.setUser(user);
-        disconnected.setError(100);
         disconnected.setId(PlayerMessageTypeEnum.DISCONNECTED);
         obs.notify(disconnected);
     }
@@ -89,6 +96,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
             output.flush();
 
         } catch (IOException e) {
+            System.out.println("eccezione send");
             handleDisconnection();
         }
     }
@@ -97,5 +105,38 @@ public class ClientListener extends Thread implements ClientSocketInterface {
     public synchronized void receive(PlayerMessage playerMessage) {
 
         obs.notify(playerMessage);
+    }
+
+    void setPing(boolean ping) {
+        this.ping = ping;
+    }
+
+    boolean isPing() {
+        return ping;
+    }
+
+    @Override
+    public void run(){
+
+        while(!clientSocket.isClosed() && !quit && !disconnection){
+            try {
+
+                bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String message = bufferedReader.readLine();
+                PlayerMessage playerMessage = gson.fromJson(message, PlayerMessage.class);
+                if(playerMessage != null ){
+                    if(playerMessage.getId().equals(PlayerMessageTypeEnum.PING)){
+                        System.out.println("ricevo ping");
+                        ping = true;
+                    }else receive(playerMessage);
+                }
+
+            } catch (IOException e) {
+                System.out.println("eccezione run");
+                handleDisconnection();
+                disconnection = true;
+            }
+        }
+
     }
 }

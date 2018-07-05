@@ -46,6 +46,17 @@ public class GameBoard extends ClientBoard{
     }
 
     /**
+     * Copy Constructor
+     * @param gameBoard GameBoard to be cloned
+     */
+    private GameBoard(GameBoard gameBoard){
+        super(gameBoard);
+        this.bagDice = new BagDice();
+        for(Die die: gameBoard.getBagDice().getClonedDieList()) this.bagDice.insertDice(die);
+        this.privatePlayerList = null;
+    }
+
+    /**
      * Getter method for Dice Bag
      * @return Bag containing remaining dice
      */
@@ -61,5 +72,7 @@ public class GameBoard extends ClientBoard{
         return privatePlayerList;
     }
 
-
+    public GameBoard getClone(){
+        return new GameBoard(this);
+    }
 }

@@ -23,7 +23,7 @@ public class RestrictionAdjacentColour implements Restriction{
     public RestrictionAdjacentColour(){
         errorMap = new HashMap<>();
         errorMap.put(true, 0);
-        errorMap.put(false, 5);
+        errorMap.put(false, 5005);
     }
 
     /**

@@ -10,6 +10,7 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,32 +24,29 @@ public class RMITypeServer implements Observer<PlayerMessage> {
     public RMITypeServer(int port){
 
         obs = new Observable<>();
+
         try {
-            LocateRegistry.createRegistry(port);
+            //System.setProperty("java.rmi.server.hostname", "192.168.139.100");
 
-        } catch (RemoteException e) {
-            Logger.getGlobal().log(Level.SEVERE,e.toString());
-
-        }
-        try {
-
-            this.serverImplementation = new ServerImplementation();
+            Registry registry =  LocateRegistry.createRegistry(port);
+            this.serverImplementation = new ServerImplementation(port);
             serverImplementation.addObserver(this);
-            Naming.bind("RMIServer", serverImplementation);
+            //Naming.rebind("//localhost/RMIServer", serverImplementation);
+
+            Naming.rebind("//192.168.139.101:1099/MyServer", serverImplementation);
 
             println("ServerRMI acceso");
-        } catch (RemoteException | AlreadyBoundException | MalformedURLException e) {
+        } catch (RemoteException | MalformedURLException e) {
+
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
     }
 
 
     public void send(PlayerMessage playerMessage){
-        try {
-            serverImplementation.sendToClient(playerMessage);
-        } catch (RemoteException e) {
-            serverImplementation.disconnectionHandler(playerMessage.getUser().getUniqueCode());
-        }
+
+        serverImplementation.sendToClient(playerMessage);
+
     }
 
     public void addObserver(Observer<PlayerMessage> observer){

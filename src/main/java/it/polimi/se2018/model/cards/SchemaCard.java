@@ -253,34 +253,47 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
      * @param dieList
      */
     @Override
-    public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
-
-        for(int i = 0; i <playerMove.getDiceSchemaWhereToTake().size(); i++) {
-            dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(i)));
-        }
-    }
-
-    @Override
-    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
-
-        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
-            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.remove(i));
-            dieList.add(i, pickDie(playerMove.getDiceSchemaWhereToLeave().get(i)));
-        }
-    }
-
-    @Override
-    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
-
-        for(int i = 0; i <playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
-            for(Restriction restriction: restrictionList) {
-                int errorId = restriction.checkRestriction(this, dieList.get(i), playerMove.getDiceSchemaWhereToLeave().get(i));
-                if (errorId != 0) return;
-                //TODO: ERROR O NEW EXCEPTION;
+    public boolean pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
+        try {
+            for (int i = 0; i < playerMove.getDiceSchemaWhereToTake().size() && i < max; i++) {
+                dieList.add(pickDie(playerMove.getDiceSchemaWhereToTake().get(0)));
+                playerMove.getDiceSchemaWhereToTake().remove(0);
             }
-            setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.get(i));
-
+        }catch(IndexOutOfBoundsException | NullPointerException e){
+            return false;
         }
+        return true;
+    }
+
+    @Override
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
+        try {
+            for (int i = 0; i < playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+                setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.remove(i));
+                dieList.add(i, pickDie(playerMove.getDiceSchemaWhereToLeave().get(i)));
+            }
+        }catch(IndexOutOfBoundsException | NullPointerException e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
+        try {
+            for (int i = 0; i < playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+                for (Restriction restriction : restrictionList) {
+                    int errorId = restriction.checkRestriction(this, dieList.get(0), playerMove.getDiceSchemaWhereToLeave().get(i));
+                    if (errorId != 0) return false;
+                    //TODO: ERROR O NEW EXCEPTION;
+                }
+                setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().remove(0), dieList.get(i));
+            }
+            dieList.remove(0);
+        }catch(NullPointerException | IndexOutOfBoundsException e){
+            return false;
+        }
+        return true;
     }
 
     @Override

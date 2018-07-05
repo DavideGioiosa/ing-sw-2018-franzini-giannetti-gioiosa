@@ -20,6 +20,7 @@ public class OperationIncDecValue implements ToolOperation {
         for(Die die: dieList) {
             if(playerMove.getValue() == 1) die.increaseValue();
             else if(playerMove.getValue() == -1) die.decreaseValue();
+            else return false;
         }
         return true;
     }

@@ -35,4 +35,11 @@ public class ChoiceController {
         if (user.getNickname() == null || user.getNickname() == "" || user.getNickname().length() > 25) return 2502;
         return 0;
     }
+
+    PlayerChoice getResetPlayerChoice(PlayerChoice playerChoice){
+        if(playerChoice.getColourEnumList().isEmpty() && playerChoice.getSchemaCardList().isEmpty())
+            return null;
+        //playerChoice.setChosenColour(null);
+        return playerChoice;
+    }
 }

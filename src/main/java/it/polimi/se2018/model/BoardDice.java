@@ -73,30 +73,39 @@ public class BoardDice implements Serializable, DiceContainer {
     }
 
     @Override
-    public void pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
-        if (min == 0 && max == 0){
-            int numberOfDice = this.dieList.size();
-            for(int i = 0; i < numberOfDice; i++) dieList.add(takeDie(0));
-        }else dieList.add(takeDie(playerMove.getDiceBoardIndex()));
-
+    public boolean pickDice(PlayerMove playerMove, List<Die> dieList, int min, int max){
+        try {
+            if (min == 0 && max == 0) {
+                int numberOfDice = this.dieList.size();
+                for (int i = 0; i < numberOfDice; i++) dieList.add(takeDie(0));
+            } else dieList.add(takeDie(playerMove.getDiceBoardIndex()));
+        }catch (IndexOutOfBoundsException | NullPointerException e){
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public void exchangeDice(PlayerMove playerMove, List<Die> dieList){
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
 
         Die die;
-        for(int i = 0; i < dieList.size(); i++){
-            die = takeDie(playerMove.getDiceBoardIndex());
-            insertDie(dieList.remove(i));
-            dieList.add(die);
+        try {
+            for (int i = 0; i < dieList.size(); i++) {
+                die = takeDie(playerMove.getDiceBoardIndex());
+                insertDie(dieList.remove(i));
+                dieList.add(die);
+            }
+            this.dieList.addAll(dieList);
+        }catch(IndexOutOfBoundsException e){
+            return  false;
         }
-        this.dieList.addAll(dieList);
-
+        return true;
     }
 
     @Override
-    public void leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
-        this.dieList.addAll(dieList);
+    public boolean leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
+        if(dieList != null) this.dieList.addAll(dieList);
+        return true;
     }
 
     @Override

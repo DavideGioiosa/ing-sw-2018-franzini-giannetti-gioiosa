@@ -46,7 +46,6 @@ public class PlayerChoice implements Serializable {
         if(user == null){
             throw new NullPointerException("Insertion of a null user");
         }
-
         this.user = user;
         schemaCardList = new ArrayList<>();
         colourEnumList = new ArrayList<>();
@@ -55,6 +54,24 @@ public class PlayerChoice implements Serializable {
         privateObjCard = null;
     }
 
+    /**
+     * Copy Constructor
+     * @param playerChoice PlayerChoice to be cloned
+     */
+    private PlayerChoice(PlayerChoice playerChoice){
+        if(playerChoice == null) throw new NullPointerException("Insertion of a null user");
+        this.user = playerChoice.getUser().getClone();
+        this.schemaCardList = new ArrayList<>();
+        for(SchemaCard schemaCard: playerChoice.getSchemaCardList()){
+            this.schemaCardList.add(schemaCard.getClone());
+        }
+        this.idChosenSchema = playerChoice.idChosenSchema;
+        if(playerChoice.privateObjCard != null) this.privateObjCard = playerChoice.privateObjCard.getClone();
+        else this.privateObjCard = null;
+        this.chosenColour = playerChoice.chosenColour;
+        this.colourEnumList = new ArrayList<>();
+        colourEnumList.addAll(playerChoice.colourEnumList);
+    }
     /**
      * Getter method for the user to whom the choice is referred
      * @return User to whom the choice is referred
@@ -146,4 +163,13 @@ public class PlayerChoice implements Serializable {
     public PrivateObjCard getPrivateObjCard() {
         return privateObjCard;
     }
+
+    /**
+     * Gets a copy of the PlayerChoice
+     * @return PlayerChoice cloned
+     */
+    public PlayerChoice getClone(){
+        return new PlayerChoice(this);
+    }
+
 }

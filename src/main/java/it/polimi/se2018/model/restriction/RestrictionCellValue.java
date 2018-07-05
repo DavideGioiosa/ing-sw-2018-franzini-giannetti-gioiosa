@@ -21,7 +21,7 @@ public class RestrictionCellValue implements Restriction {
     public RestrictionCellValue(){
         errorMap = new HashMap<>();
         errorMap.put(true, 0);
-        errorMap.put(false, 4);
+        errorMap.put(false, 5004);
     }
 
     /**

@@ -47,7 +47,7 @@ public class PickControllerTest {
 
     @Test
     public void doDefaultMoveTest(){
-        assertEquals(0, pickController.doDefaultMove());
+        assertEquals(0, pickController.doDefaultMove(null));
     }
 
     @Test

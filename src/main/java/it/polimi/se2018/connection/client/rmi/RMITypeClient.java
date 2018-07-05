@@ -2,11 +2,9 @@ package it.polimi.se2018.connection.client.rmi;
 
 import it.polimi.se2018.connection.client.Client;
 import it.polimi.se2018.connection.client.ClientStrategy;
-import it.polimi.se2018.connection.client.rmi.ClientImplementation;
-import it.polimi.se2018.connection.client.rmi.ClientRemoteInterface;
-import it.polimi.se2018.connection.client.rmi.RMIClientPing;
 import it.polimi.se2018.connection.server.rmi.ServerRemoteInterface;
 import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
@@ -21,13 +19,32 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
 import java.util.Timer;
 
+/**
+ * RMI Connection's strategy class
+ * @author Silvia Franzini
+ */
 public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
+    /**
+     * Server's remote reference
+     */
     private ServerRemoteInterface stub;
+    /**
+     * List of RMIClient's observers
+     */
     private Observable<PlayerMessage> obs;
+    /**
+     * Timer used to scheule ping at fixed rate
+     */
     private Timer timer;
+    /**
+     * Reference of remote client's object
+     */
     private ClientImplementation clientImplementation;
 
+    /**
+     * Builder method of the class
+     */
     public RMITypeClient(){
         obs = new Observable<>();
         clientImplementation = new ClientImplementation();
@@ -35,12 +52,17 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
     }
 
+    /**
+     * Method used to set connection to a chosen server
+     */
     @Override
     public void connect(){
 
         try {
 
-            this.stub = (ServerRemoteInterface) Naming.lookup("RMIServer"); //riferimento a server non sarà statico
+
+            this.stub = (ServerRemoteInterface) Naming.lookup("//localhost/RMIServer"); //riferimento a server non sarà statico
+            //this.stub = (ServerRemoteInterface) Naming.lookup("//192.168.139.100:1099/MyServer");
 
             ClientRemoteInterface remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
 
@@ -53,13 +75,16 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
         } catch (RemoteException | NotBoundException | MalformedURLException e) {
             PlayerMessage playerMessage = new PlayerMessage();
-            playerMessage.setError(200);
+            playerMessage.setId(PlayerMessageTypeEnum.DISCONNECTED);
             update(playerMessage);
         }
         println("connesso a serverRMI");
     }
 
-
+    /**
+     * Method used to reconnect to the server
+     * @param user this user
+     */
     @Override
     public void reconnect(User user){
 
@@ -74,6 +99,10 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
     }
 
+    /**
+     * Method invoked to send a message to the server
+     * @param playerMessage message that has to be sent
+     */
     @Override
     public void sendToServer(PlayerMessage playerMessage){
 
@@ -87,28 +116,43 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
         }
     }
 
+    /**
+     * Method invoked to handle connection's fall
+     */
      void disconnectionHandler(){
         PlayerMessage disconnect = new PlayerMessage();
         disconnect.setError(401); //valore da individuare
         obs.notify(disconnect);
     }
 
-
+    /**
+     * Method used to close client's connection
+     */
     @Override
     public void close(){
         timer.cancel();
         timer.purge();
     }
 
+    /**
+     * Method used add obsevers to this class
+     * @param client the observer type
+     */
     @Override
     public void addObserver(Client client) {
         obs.addObserver(client);
     }
 
-
+    /**
+     * Update method used to receive messages and send them to the user
+     * @param playerMessage message received
+     */
     @Override
     public void update(PlayerMessage playerMessage) {
 
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.WINNER)){
+            close();
+        }
         obs.notify(playerMessage);
 
     }

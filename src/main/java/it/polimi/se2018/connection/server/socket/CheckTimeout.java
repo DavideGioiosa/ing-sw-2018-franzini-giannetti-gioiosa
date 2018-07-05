@@ -13,7 +13,11 @@ public class CheckTimeout extends TimerTask {
 
         if(clientListener.isPing()){
             clientListener.setPing(false);
-        }else clientListener.handleDisconnection();
+            System.out.println("client mi ha risposto");
+        }else {
+            System.out.println("mancato ping socket");
+            clientListener.handleDisconnection();
+        }
 
     }
 }

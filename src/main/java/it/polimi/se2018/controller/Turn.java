@@ -35,7 +35,9 @@ public class Turn {
      * it can be done once a Turn for each player
      */
     private boolean isToolCardUsed;
-
+    /**
+     * Number of possible picks for turn
+     */
     private int numberOfPossiblePicks = 1;
 
     private Player actualPlayer;
@@ -56,6 +58,18 @@ public class Turn {
         this.actualPlayer = actualPlayer;
     }
 
+    /**
+     * Copy Constructor
+     * @param turn Turn to be cloned
+     */
+    private Turn(Turn turn){
+        this.numberOfPicks = turn.numberOfPossiblePicks;
+        this.isToolCardUsed = turn.isToolCardUsed;
+        this.numberOfPicks = turn.numberOfPicks;
+        if(turn.gameBoard != null) this.gameBoard = turn.gameBoard.getClone();
+        else this.gameBoard = null;
+    }
+
     void defaultMove(){
         if(turnsActionsList.isEmpty() || turnsActionsList.get(turnsActionsList.size()-1).isComplete()){
             PlayerMove playerMove = new PlayerMove();
@@ -65,7 +79,7 @@ public class Turn {
             PickController action = new PickController();
             action.doAction(gameBoard, playerMove, null,null);
             turnsActionsList.add(action);
-        }else turnsActionsList.get(turnsActionsList.size()-1).doDefaultMove();
+        }else turnsActionsList.get(turnsActionsList.size()-1).doDefaultMove(gameBoard);
     }
 
     /**
@@ -111,7 +125,7 @@ public class Turn {
                         this.numberOfPicks++;
                         if (isToolCardUsed && numberOfPicks == numberOfPossiblePicks){
                             PickController passMove = new PickController();
-                            passMove.doDefaultMove();
+                            passMove.doDefaultMove(gameBoard);
                             turnsActionsList.add(passMove);
                         }
                     }
@@ -124,15 +138,17 @@ public class Turn {
             if (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL)) {
                 if (!isToolCardUsed) {
                     for (ToolCard toolCard : gameBoard.getCardOnBoard().getToolCardList()) {
-                        if (toolCard.getId() == playerMove.getIdToolCard()) {
+                        if (toolCard.getId() == playerMove.getIdToolCard() && userCanUseTool(toolCard)) {
                             ToolController toolController = new ToolController(toolCard);
                             errorId = toolController.doAction(gameBoard, playerMove, roundPlayerOrder, this);
                             if (errorId == 0) {
+                                updateToken(toolCard);
+
                                 turnsActionsList.add(toolController);
                                 this.isToolCardUsed = true;
                                 if (toolController.isComplete() && numberOfPicks == numberOfPossiblePicks){
                                     PickController passMove = new PickController();
-                                    passMove.doDefaultMove();
+                                    passMove.doDefaultMove(gameBoard);
                                     turnsActionsList.add(passMove);
                                 }
                             }
@@ -150,13 +166,28 @@ public class Turn {
         return errorId;
     }
 
+    private boolean userCanUseTool(ToolCard toolCard) {
+        int token;
+        if(toolCard.isUsed()) token = 2;
+        else token = 1;
+        if(actualPlayer.getTokens() >= token) return true;
+        return false;
+    }
+
+    private void updateToken(ToolCard toolCard) {
+        int token;
+        if(toolCard.isUsed()) token = 2;
+        else token = 1;
+        actualPlayer.updateTokens(token);
+        toolCard.updateToken(token);
+    }
+
     /**
      * Communicate if the action received is the last of the player and ends the turn
      * @return boolean to communicate the end of the Turn for the current player
      */
-    boolean isFinished (){
-        if (turnsActionsList.isEmpty()) return false;
-        return turnsActionsList.get(turnsActionsList.size()-1).isPass();
+    boolean isFinished () {
+        return !turnsActionsList.isEmpty() && turnsActionsList.get(turnsActionsList.size() - 1).isPass();
     }
 
     public void incrementPossiblePicks(){
@@ -173,11 +204,18 @@ public class Turn {
     }
 
     public boolean lastActionFinished(){
-        return lastAction() == null || lastAction().isComplete();
+        Action lastAction = lastAction();
+        return lastAction == null || lastAction.isComplete();
     }
 
     public PlayerMove getStartedPlayerMove(){
         if(lastActionFinished()) return new PlayerMove();
-        return lastAction().getPlayerMove();
+        Action lastAction = lastAction();
+        if(lastAction != null) return lastAction.getPlayerMove();
+        return new PlayerMove();
+    }
+
+    public Turn getClone(){
+        return new Turn(this);
     }
 }

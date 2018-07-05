@@ -13,7 +13,7 @@ public interface ClientRemoteInterface extends Remote {
 
     /**
      * Receiver method, used by the server to send to the client
-     * @param playerMessage message that has been sent
+//     * @param playerMessage message that has been sent
      * @throws RemoteException exception due to communication fall
      */
     void receiveFromServer(PlayerMessage playerMessage) throws RemoteException;

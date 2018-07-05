@@ -19,6 +19,7 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
      */
     private Observable<PlayerMessage> obs;
 
+
     /**
      * Builder method of the class
      */
@@ -40,8 +41,8 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
      * @throws RemoteException exception due to communication fall
      */
     @Override
-    public void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
-
+    public synchronized void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
+        System.out.println("ricevo dal server");
         if(playerMessage != null){
             new Thread(new RMIReceiveThread(playerMessage, this)).start();
         }
@@ -53,7 +54,7 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
      * @param playerMessage message received from the server
      */
     @Override
-    public void update(PlayerMessage playerMessage) {
+    public synchronized void update(PlayerMessage playerMessage) {
         obs.notify(playerMessage);
     }
 

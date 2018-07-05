@@ -23,7 +23,7 @@ public class RestrictionAdjacentValue implements Restriction{
     public RestrictionAdjacentValue(){
         errorMap = new HashMap<>();
         errorMap.put(true, 0);
-        errorMap.put(false, 6);
+        errorMap.put(false, 5006);
     }
 
     /**

@@ -80,4 +80,35 @@
         <id>2504</id>
         <description>Hai effettuato una scelta non valida</description>
     </error>
+
+    <error>
+        <id>3000</id>
+        <description>La mossa inviata ha un formato errato</description>
+    </error>
+
+
+    <error>
+        <id>5001</id>
+        <description>Il primo dado deve essere inserito sul bordo</description>
+    </error>
+    <error>
+        <id>5002</id>
+        <description>Il dado deve essere inserito vicino ad un altro</description>
+    </error>
+    <error>
+        <id>5003</id>
+        <description>L'inserimento non rispetta la restrizione di colore</description>
+    </error>
+    <error>
+        <id>5004</id>
+        <description>L'inserimento non rispetta la restrizione di valore</description>
+    </error>
+    <error>
+        <id>5005</id>
+        <description>Il dado non puo' essere a fianco ad un altro con stesso colore</description>
+    </error>
+    <error>
+        <id>5006</id>
+        <description>Il dado non puo' essere a fianco ad un altro con stesso valore</description>
+    </error>
 </errors>

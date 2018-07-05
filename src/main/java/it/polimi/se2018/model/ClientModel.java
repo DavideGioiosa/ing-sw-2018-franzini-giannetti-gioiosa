@@ -2,7 +2,7 @@ package it.polimi.se2018.model;
 
 import it.polimi.se2018.model.cards.PrivateObjCard;
 import it.polimi.se2018.model.player.Player;
-import it.polimi.se2018.model.player.PrivatePlayer;
+import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
 
 /**
@@ -16,7 +16,11 @@ public class ClientModel extends Observable<ClientModel>{
      */
     private ClientBoard clientBoard;
 
-    private PrivatePlayer privatePlayer;
+    private Player actualPlayer;
+
+    private PrivateObjCard privateObjCard;
+
+    private User actualUser;
 
     /**
      * Constructor
@@ -27,8 +31,10 @@ public class ClientModel extends Observable<ClientModel>{
 
     private ClientModel(ClientModel clientModel){
         this.clientBoard = clientModel.getClientBoard().getClone();
-        if(clientModel.getPrivatePlayer() != null) this.privatePlayer = clientModel.getPrivatePlayer().getClone();
-        else privatePlayer = null;
+        if(this.actualPlayer != null) this.actualPlayer = clientModel.actualPlayer.getClone();
+        else actualPlayer = null;
+        if(this.privateObjCard != null) this.privateObjCard = clientModel.privateObjCard.getClone();
+        else privateObjCard = null;
     }
 
     /**
@@ -44,14 +50,6 @@ public class ClientModel extends Observable<ClientModel>{
         }
     }
 
-    public void setPrivatePlayer(Player player, PrivateObjCard privateObjCard) {
-        this.privatePlayer = new PrivatePlayer(player, privateObjCard);
-    }
-
-    public PrivatePlayer getPrivatePlayer() {
-        return privatePlayer;
-    }
-
     /**
      * Getter method for Client Board
      * @return Status of ClientBoard
@@ -60,7 +58,36 @@ public class ClientModel extends Observable<ClientModel>{
         return clientBoard;
     }
 
+    public void setPrivateObjCard(PrivateObjCard privateObjCard) {
+        this.privateObjCard = privateObjCard;
+    }
+
+    public PrivateObjCard getPrivateObjCard() {
+        return privateObjCard;
+    }
+
+    public Player getPlayer() {
+        return actualPlayer;
+    }
+
     public ClientModel getClone(){
         return new ClientModel(this);
     }
+
+    public void setActualPlayer(Player actualPlayer) {
+        this.actualPlayer = actualPlayer;
+    }
+
+    public Player getActualPlayer() {
+        return actualPlayer;
+    }
+
+    public void setActualUser(User actualUser) {
+        this.actualUser = actualUser;
+    }
+
+    public User getActualUser() {
+        return actualUser;
+    }
+
 }

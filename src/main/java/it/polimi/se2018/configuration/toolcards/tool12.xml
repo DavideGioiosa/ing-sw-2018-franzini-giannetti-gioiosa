@@ -5,11 +5,25 @@
     <colour>BLUE</colour>
     <turn>0</turn>
     <minQuantity>1</minQuantity>
-    <maxQuantity>2</maxQuantity>
+    <maxQuantity>1</maxQuantity>
     <restriction></restriction>
     <state>
         <operation>
             <action>pick</action>
+            <diceContainer>schemacard</diceContainer>
+        </operation>
+        <operation>
+            <action>checksamecolour</action>
+            <diceContainer>trackboard</diceContainer>
+        </operation>
+        <operation>
+            <action>leave</action>
+            <diceContainer>schemacard</diceContainer>
+        </operation>
+    </state>
+    <state>
+        <operation>
+            <action>pickcanpass</action>
             <diceContainer>schemacard</diceContainer>
         </operation>
         <operation>

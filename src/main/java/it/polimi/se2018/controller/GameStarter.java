@@ -11,7 +11,6 @@ import it.polimi.se2018.view.RemoteView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Controller's Class GameStarter
@@ -53,29 +52,31 @@ public class GameStarter {
         config = new Config();
     }
 
+    /**
+     * Default choice called for timeout
+     * @return Setup Game finished or not
+     */
+    boolean defaultMove(){
 
-    void defaultMove(){
-        if(playerChoiceSaved.size() == userList.size()){
-            for(PlayerChoice playerChoice : playerChoiceSaved){
-                if(playerChoice.getChosenColour() == null){
-                    ColourEnum colour = playerChoice.getColourEnumList().get(new Random().nextInt(playerChoice.getColourEnumList().size()));
-                    playerChoice.setChosenColour(colour);
-                    List<ColourEnum> colours = new ArrayList<>();
-                    colours.add(colour);
-                    playerChoice.setColourEnumList(colours);
-                }
-                if(playerChoice.getIdChosenSchema() == 0){
-                    SchemaCard card = playerChoice.getSchemaCardList().get(new Random().nextInt(playerChoice.getSchemaCardList().size()));
-                    playerChoice.setIdChosenSchema(card.getId());
-                    List<SchemaCard> schemas = new ArrayList<>();
-                    schemas.add(card);
-                    playerChoice.setSchemaCardList(schemas);
-                }
+        if(playerChoiceSaved.get(playerChoiceSaved.size() - 1).getChosenColour() == null){
+            PlayerChoice playerChoice = playerChoiceSaved.get(playerChoiceSaved.size() - 1).getClone();
+            playerChoice.setChosenColour(playerChoice.getColourEnumList().get(0));
+            newColourChoice(playerChoice, playerChoiceSaved.get(indexNextUser - 1));
+            return false;
+
+        }else for(PlayerChoice playerChoice: playerChoiceSaved){
+            if(playerChoice.getIdChosenSchema() == 0){
+                PlayerChoice playerChoiceCloned = playerChoice.getClone();
+                playerChoiceCloned.setIdChosenSchema(playerChoice.getSchemaCardList().get(0).getId());
+                receivedSchema(playerChoiceCloned, playerChoice);
+                playerChoiceList.add(playerChoice);
             }
-            remoteView.sendDefaultChoices(playerChoiceSaved);
-            playerChoiceList = playerChoiceSaved;
-            startGame(playerChoiceList);
         }
+
+        startGame(playerChoiceList);
+        remoteView.sendTable( new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
+
+        return true;
     }
 
     /**
@@ -83,7 +84,6 @@ public class GameStarter {
      * @param playerChoiceList list player choices made to set up the game
      */
     private void startGame(List<PlayerChoice> playerChoiceList){
-
         BoardCard boardCard;
         List<PrivatePlayer> privatePlayerList = new ArrayList<>();
         List<PublicObjCard> publicObjCardList = new ArrayList<>();
@@ -100,7 +100,9 @@ public class GameStarter {
             }
         }
 
-        for (int i = 0; i < config.getNumberOfToolCardOnBoard(); i++){
+        for (int i = 0; i < 12; i++){
+
+//            for (int i = 0; i < config.getNumberOfToolCardOnBoard(); i++){
             try{
                 toolCardList.add((ToolCard)extractCard(gameLoader.getToolDeck()));
             }catch(RuntimeException e){
@@ -120,7 +122,7 @@ public class GameStarter {
 
         }
 
-        this.gameBoard = new GameBoard(playerList,bagDice, boardDice, trackBoard, boardCard, privatePlayerList);
+        this.gameBoard = new GameBoard(playerList, bagDice, boardDice, trackBoard, boardCard, privatePlayerList);
     }
 
     public GameBoard getGameBoard() {
@@ -214,20 +216,7 @@ public class GameStarter {
     private void receivedColour(PlayerChoice playerChoice, PlayerChoice choiceSaved){
 
         if(choiceSaved.getColourEnumList().contains(playerChoice.getChosenColour())) {
-
-            colourEnumList.remove(playerChoice.getChosenColour());
-            choiceSaved.setChosenColour(playerChoice.getChosenColour());
-
-            //Sets the player's colour choice in his possible choices, so it cannot be changed
-            List<ColourEnum> colourSelected = new ArrayList<>();
-            colourSelected.add(choiceSaved.getChosenColour());
-            choiceSaved.setColourEnumList(colourSelected);
-
-            indexNextUser++;
-            sendCardChoices(choiceSaved);
-            if (indexNextUser < userList.size()) {
-                sendColours(colourEnumList, playerChoiceSaved.get(indexNextUser));
-            }
+            newColourChoice(playerChoice, choiceSaved);
         }else{
             remoteView.reportError(1000, null);
         }
@@ -259,4 +248,19 @@ public class GameStarter {
         }else return false;
     }
 
+    private void newColourChoice(PlayerChoice playerChoice, PlayerChoice choiceSaved){
+        colourEnumList.remove(playerChoice.getChosenColour());
+        choiceSaved.setChosenColour(playerChoice.getChosenColour());
+
+        //Sets the player's colour choice in his possible choices, so it cannot be changed
+        List<ColourEnum> colourSelected = new ArrayList<>();
+        colourSelected.add(choiceSaved.getChosenColour());
+        choiceSaved.setColourEnumList(colourSelected);
+
+        indexNextUser++;
+        sendCardChoices(choiceSaved);
+        if (indexNextUser < userList.size()) {
+            sendColours(colourEnumList, playerChoiceSaved.get(indexNextUser));
+        }
+    }
 }

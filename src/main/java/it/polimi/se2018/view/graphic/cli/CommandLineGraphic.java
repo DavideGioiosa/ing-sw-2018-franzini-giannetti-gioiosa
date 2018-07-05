@@ -15,7 +15,6 @@ import static org.fusesource.jansi.Ansi.*;
 import it.polimi.se2018.view.OutputStrategy;
 import org.fusesource.jansi.AnsiConsole;
 
-
 import static it.polimi.se2018.model.Config.NUMBER_OF_SCHEMA_COL;
 import static it.polimi.se2018.model.Config.NUMBER_OF_SCHEMA_ROW;
 
@@ -36,7 +35,7 @@ public class CommandLineGraphic implements OutputStrategy {
     /**
      * Number of rows used for displaying card's title
      */
-    private static final int CARD_TITLE_HEIGHT = 4;
+    private static final int CARD_TITLE_HEIGHT = 3;
     /**
      * Number of rows used for displaying card's description
      */
@@ -44,7 +43,7 @@ public class CommandLineGraphic implements OutputStrategy {
     /**
      * Number of rows used for displaying card's details
      */
-    private static final int CARD_DETAILS_HEIGHT = 4;
+    private static final int CARD_DETAILS_HEIGHT = 5;
     /**
      * HashMap for converting ColourEnum in Colour for coloured output
      */
@@ -90,31 +89,8 @@ public class CommandLineGraphic implements OutputStrategy {
      * Print message in command line using his ID
      * @param error ID of the message to display
      */
-    public void showError(Integer error){
+    public void showError(int error){
         printError(error);
-    }
-
-    /**
-     * Print available choices in Player Choice
-     * @param playerChoice Player Choice to show
-     */
-    public void showChoice(PlayerChoice playerChoice){
-        println(playerChoice.getUser().getNickname());
-        for (ColourEnum colour: playerChoice.getColourEnumList()){
-            println(colour.toString());
-        }
-        for (SchemaCard schema: playerChoice.getSchemaCardList()){
-            showSchemaCard(schema);
-        }
-    }
-
-    /**
-     * Print Move made
-     * @param playerMove Player Move to show
-     */
-    public void showPlayerMove(PlayerMove playerMove){
-        println(playerMove.getPlayer().getNickname());
-        println(playerMove.getTypeOfChoice().toString());
     }
 
     /**
@@ -131,7 +107,7 @@ public class CommandLineGraphic implements OutputStrategy {
      * Show Public Objective Card
      * @param publicObjCard Public Objective Card to display
      */
-    void showPublicObjCard(PublicObjCard publicObjCard){
+    private void showPublicObjCard(PublicObjCard publicObjCard){
         printCardUpperFrame();
         showBasicCard(publicObjCard);
         printCardDetails(PUBLIC_OBJ_CARD_VALUE_STRING + publicObjCard.getBonus(), CARD_DETAILS_HEIGHT);
@@ -142,7 +118,7 @@ public class CommandLineGraphic implements OutputStrategy {
      * Show Private Objective Card
      * @param card Private Objective Card to display
      */
-    static void showPrivateObjCard(PrivateObjCard card){
+    private static void showPrivateObjCard(PrivateObjCard card){
         printCardUpperFrame();
         printCardDetails(card.getName().toUpperCase(), CARD_TITLE_HEIGHT);
         printCardDetails(card.getDescription(), CARD_DESCRIPTION_HEIGHT);
@@ -154,10 +130,11 @@ public class CommandLineGraphic implements OutputStrategy {
      * Show Tool Card
      * @param toolCard Tool Card to display
      */
-    public void showToolCard(ToolCard toolCard){
+    private void showToolCard(ToolCard toolCard){
         printCardUpperFrame();
         showBasicCard(toolCard);
         printCardColour(toolCard.getColour());
+        printCardDetails("ID: " + toolCard.getId() + "          Token: " + toolCard.getToken(), 2);
         printCardUpperFrame();
     }
 
@@ -165,7 +142,7 @@ public class CommandLineGraphic implements OutputStrategy {
      * Show Schema Card
      * @param schemaCard Schema Card to display
      */
-    static void showSchemaCard(SchemaCard schemaCard){
+    private static void showSchemaCard(SchemaCard schemaCard){
         String frameCardCharacter = " # ";
 
         Cell cell;
@@ -178,7 +155,7 @@ public class CommandLineGraphic implements OutputStrategy {
         println(upperCardFrame);
         print(frameCardCharacter);
         for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
-            System.out.print(upperFrame);
+            print(upperFrame);
         }
 
         for (int row = 0; row < NUMBER_OF_SCHEMA_ROW; row++) {
@@ -194,15 +171,13 @@ public class CommandLineGraphic implements OutputStrategy {
                     } else {
                         commandLinePrint.colouredDiePrint(i, cell.getDie().getColour(), cell.getDie().getValue());
                     }
-
                 }
 
                 print(frameCardCharacter + "\n" + frameCardCharacter);
-
             }
 
             for (int col = 0; col < NUMBER_OF_SCHEMA_COL; col ++){
-                System.out.print(upperFrame);
+                print(upperFrame);
             }
         }
         print(frameCardCharacter + "\n");
@@ -216,19 +191,17 @@ public class CommandLineGraphic implements OutputStrategy {
      * Print Private Objective Card colour
      * @param cardColour Colour to display
      */
-    public static void printCardColour(ColourEnum cardColour){
+    private static void printCardColour(ColourEnum cardColour){
         System.setProperty("jansi.passthrough", "true");
         AnsiConsole.systemInstall();
         Color color = selectColour(cardColour);
 
-        for(int i = 0; i < CARD_DETAILS_HEIGHT - 1; i++) {
+        for(int i = 0; i < CARD_DETAILS_HEIGHT - 2; i++) {
             print(preCardDescription(COLOUR_STRING));
             System.out.print(ansi().eraseScreen().fg(color).a(COLOUR_STRING).reset());
             print(postCardDescription(COLOUR_STRING));
             println("");
         }
-        printCardEmptyLine();
-
     }
 
     /**
@@ -252,14 +225,13 @@ public class CommandLineGraphic implements OutputStrategy {
         }
 
         showBoardDice(clientBoard.getBoardDice());
-
     }
 
     /**
      * Shows entire Draft Pool
      * @param boardDice Draft Pool to display
      */
-    public void showBoardDice(BoardDice boardDice){
+    private void showBoardDice(BoardDice boardDice){
         int i = 0;
         for(Die die: boardDice.getDieList()){
             print(i + " - ");
@@ -408,6 +380,11 @@ public class CommandLineGraphic implements OutputStrategy {
         return startingString;
     }
 
+    /**
+     * Shows Schema and Colours to be shown for Player's choice
+     * @param playerChoice Containing Colours and Schemas available
+     * @param commandType Indicates what the User have to chose
+     */
     static void showChoice(PlayerChoice playerChoice, CommandTypeEnum commandType){
 
         switch(commandType){

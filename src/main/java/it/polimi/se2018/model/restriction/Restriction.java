@@ -6,6 +6,6 @@ import it.polimi.se2018.model.cards.SchemaCard;
 
 public interface Restriction {
 
-    public int checkRestriction(SchemaCard schemaCard, Die die, Position position);
+    int checkRestriction(SchemaCard schemaCard, Die die, Position position);
 
 }

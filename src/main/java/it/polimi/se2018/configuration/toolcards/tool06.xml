@@ -17,14 +17,8 @@
             <diceContainer></diceContainer>
         </operation>
         <operation>
-            <action>canbeplaced</action>
-            <diceContainer>diceboard</diceContainer>
-        </operation>
-    </state>
-    <state>
-        <operation>
             <action>leave</action>
-            <diceContainer>schemacard</diceContainer>
+            <diceContainer>diceboard</diceContainer>
         </operation>
     </state>
 </toolCard>

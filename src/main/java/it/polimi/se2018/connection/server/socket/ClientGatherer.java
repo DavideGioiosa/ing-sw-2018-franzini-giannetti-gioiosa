@@ -8,6 +8,7 @@ import it.polimi.se2018.model.player.User;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,10 +16,12 @@ public class ClientGatherer extends Thread{
 
     private SocketTypeServer server;
     private ServerSocket serverSocket;
+    private HashMap<String, Timer> timerHashMap;
 
 
     public ClientGatherer(SocketTypeServer server, int port){
 
+        timerHashMap = new HashMap<>();
         this.server = server;
         try {
             this.serverSocket = new ServerSocket(port);
@@ -28,11 +31,22 @@ public class ClientGatherer extends Thread{
     }
 
     public void close(){
+
+        Iterator<Map.Entry<String, Timer>> iterator = timerHashMap.entrySet().iterator();
+        while(iterator.hasNext()){
+            iterator.next();
+            iterator.remove();
+        }
         try {
             serverSocket.close();
         } catch (IOException e) {
             Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
+    }
+
+
+     HashMap<String, Timer> getTimerHashMap() {
+        return timerHashMap;
     }
 
     @Override
@@ -42,7 +56,7 @@ public class ClientGatherer extends Thread{
         String code;
         Socket clientSocket;
         ClientListener clientListener = null;
-        while(!serverSocket.isClosed()){
+         while(!serverSocket.isClosed()){
             try {
                 clientSocket = serverSocket.accept();
                 clientListener = new ClientListener(clientSocket);
@@ -55,6 +69,7 @@ public class ClientGatherer extends Thread{
 
                 }while(server.getCodeList().contains(code));
 
+                //timerHashMap.put(code, timer);
                 server.addCode(code);
                 server.addClient(code, clientListener);
                 clientListener.setCode(code);

@@ -27,6 +27,7 @@ public class ServerManager implements Observer<PlayerMessage> {
     private Timer senderTimer;
     private UsersDelayer usersDelayer;
     private boolean setUp;
+    private static final int MAXUSER = 2;
 
 
 
@@ -78,7 +79,7 @@ public class ServerManager implements Observer<PlayerMessage> {
     }
 
      void createGame(){
-
+         System.out.println("creo gioco");
          setUp = false;
          userSetupTimer.cancel();
          userSetupTimer.purge();
@@ -106,11 +107,11 @@ public class ServerManager implements Observer<PlayerMessage> {
             userList.add(user);
             println("aggiunto user: "+ user.getNickname());
             if(gameCreator == null){
-                if(userList.size()== 2){
+                if(userList.size()== 1){
                     userSetupTimer = new Timer();
                     usersDelayer = new UsersDelayer(this);
                     userSetupTimer.schedule(usersDelayer, (long)90*1000);
-                }else if(userList.size() == 4 && userSetupTimer != null ){
+                }else if(userList.size() == 2 && userSetupTimer != null ){
                     createGame();
                 }
             }
@@ -130,8 +131,14 @@ public class ServerManager implements Observer<PlayerMessage> {
                          userSetupTimer.purge();
                          userSetupTimer = null;
                      }
-                 }else disconnectedUserList.add(user);
-                 println("disconnesso user: "+ us.getNickname());
+                 }else {
+                     println("disconnesso user: "+ us.getNickname());
+                     disconnectedUserList.add(us);
+                     us.getPlayer().setConnectionStatus(false);
+                     gameCreator.modifyStatus();
+                 }
+
+
              }
          }
     }
@@ -139,12 +146,20 @@ public class ServerManager implements Observer<PlayerMessage> {
     private void reconnection(PlayerMessage playerMessage){
 
         boolean found = false;
-        for(Iterator<User> userIterator = disconnectedUserList.iterator(); userIterator.hasNext();){
+        println("Riconnessione");
+        println("ricevuto: " + playerMessage.getUser().getNickname());
+
+        Iterator<User> userIterator = disconnectedUserList.iterator();
+
+        while(userIterator.hasNext()){
             User user = userIterator.next();
-            if(user.getUniqueCode().equals(playerMessage.getUser().getUniqueCode())){
-                disconnectedUserList.remove(user);
+            println(user.getNickname());
+            if(user.getNickname().equals(playerMessage.getUser().getNickname())){
+                userIterator.remove();
+                gameCreator.modifyStatus();
                 addUser(playerMessage.getUser());
                 found = true;
+                println("trovato");
             }
         }
         if(!found){
@@ -160,7 +175,7 @@ public class ServerManager implements Observer<PlayerMessage> {
     public synchronized void update(PlayerMessage playerMessage) {
 
         if(gameCreator == null){
-            if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER)){
+            if(playerMessage.getId().equals(PlayerMessageTypeEnum.USER) && userList.size()< MAXUSER){
                 addUser(playerMessage.getUser());
             }else if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED)){
                 removeUser(playerMessage.getUser());

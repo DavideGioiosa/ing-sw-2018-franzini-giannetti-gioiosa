@@ -8,15 +8,13 @@ import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
 import it.polimi.se2018.utils.Observer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 public class SocketTypeServer implements Observer<PlayerMessage> {
 
     private List<String> codeList;
-    private  ClientGatherer clientGatherer;
+    private ClientGatherer clientGatherer;
     private HashMap<String, ClientListener> clientListenerList;
     private Observable<PlayerMessage> obs;
     private List<String> disconnectedCodes;
@@ -52,40 +50,45 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         this.clientListenerList.put(code,clientListener);
     }
 
-    private void removeClient(String code){
-        ClientListener clientListener = clientListenerList.get(code);
-        clientListener.setQuit(true);
-        this.clientListenerList.remove(code);
-    }
-
     public void shutdown(){
-       for(String code : clientListenerList.keySet()){
-           removeClient(code);
-       }
-       clientGatherer.close();
+
+        Iterator<Map.Entry<String, ClientListener>> iterator = clientListenerList.entrySet().iterator();
+
+        for(int i = codeList.size() - 1; i >= 0; i--){
+            clientListenerList.get(codeList.get(i)).setQuit();
+        }
+        while(iterator.hasNext()){
+            iterator.next();
+            iterator.remove();
+        }
+
+        clientGatherer.close();
     }
 
     public void send (PlayerMessage playerMessage){
-
-        if(playerMessage.getUser() == null){
-            for(ClientListener clientListener : clientListenerList.values()){
-                clientListener.send(playerMessage);
-            }
-        }else {
-            if(clientListenerList.containsKey(playerMessage.getUser().getUniqueCode()))
-            {
-                ClientListener clientListener = clientListenerList.get(playerMessage.getUser().getUniqueCode());
-                clientListener.send(playerMessage);
+        if(!clientListenerList.isEmpty()){
+            if(playerMessage.getUser() == null){
+                for(ClientListener clientListener : clientListenerList.values()){
+                    clientListener.send(playerMessage);
+                }
+            }else {
+                if(clientListenerList.containsKey(playerMessage.getUser().getUniqueCode()))
+                {
+                    ClientListener clientListener = clientListenerList.get(playerMessage.getUser().getUniqueCode());
+                    clientListener.send(playerMessage);
+                }
             }
         }
+
     }
 
     @Override
     public synchronized void update(PlayerMessage playerMessage) {
 
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.isEmpty() && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
             disconnectedCodes.add(playerMessage.getUser().getUniqueCode());
-            clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit(true);
+            clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit();
+            clientGatherer.getTimerHashMap().get(playerMessage.getUser().getUniqueCode()).cancel();
         }
         obs.notify(playerMessage);
     }

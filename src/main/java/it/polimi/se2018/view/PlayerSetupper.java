@@ -1,9 +1,6 @@
 package it.polimi.se2018.view;
 
-import it.polimi.se2018.model.ColourEnum;
-import it.polimi.se2018.model.CommandTypeEnum;
-import it.polimi.se2018.model.PlayerChoice;
-import it.polimi.se2018.model.PlayerMessage;
+import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.SchemaCard;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observable;
@@ -12,6 +9,7 @@ import it.polimi.se2018.view.graphic.TypeOfInputAsked;
 import java.util.HashMap;
 
 import static it.polimi.se2018.model.CommandTypeEnum.*;
+
 
 /**
  * Manages the setup of the player at the beginning of the game
@@ -39,6 +37,7 @@ public class PlayerSetupper extends Observable<PlayerMessage>{
         messageMap.put(IDSCHEMA, 3501);
         messageMap.put(NICKNAME, 3503);
         messageMap.put(COMPLETE, 3510);
+
     }
 
     /**
@@ -178,51 +177,22 @@ public class PlayerSetupper extends Observable<PlayerMessage>{
 
 
 
-
-
-
-
-
-
-
-
-    /**
-     * Manages the choice of Pattern colour
-     * @param playerChoice PlayerChoice containing available colours
-     */
-/*    private void chosePatternColour(PlayerChoice playerChoice){
-        String message = commandLineInput.getInput("Inserisci colore: " + playerChoice.getColourEnumList().toString() + "\n");
-        message = message.toUpperCase();
-        ColourEnum colourToCheck;
-
-        try{
-            colourToCheck = ColourEnum.valueOf(message);
-        }catch (IllegalArgumentException e){
-            return;
+    /*public TypeOfInputAsked validPath(String message){
+        if(message == "" || message == null){
+            PlayerMessage playerMessage = new PlayerMessage();
+            playerMessage.setId(PlayerMessageTypeEnum.DISCONNECTED);
+            playerMessage.setServerPath();
         }
 
-        for (ColourEnum colour : playerChoice.getColourEnumList()) {
-            if (colourToCheck == colour) playerChoice.setChosenColour(colour);
+    }*/
+
+    public boolean reconnect(String message){
+        if (!(message.equalsIgnoreCase("no") || message.equalsIgnoreCase("n"))){
+            PlayerMessage playerMessage = new PlayerMessage();
+            playerMessage.setId(PlayerMessageTypeEnum.DISCONNECTED);
+            notify(playerMessage);
+            return true;
         }
+        return false;
     }
-
-    /**
-     * Checks the Schema Card choice made by the player
-     */
-/*    public void choseSchema(PlayerChoice playerChoice){
-
-        String availableSchema = "";
-        for(SchemaCard schemaCard: playerChoice.getSchemaCardList()){
-            availableSchema = availableSchema.concat(schemaCard.getId() + " ");
-        }
-
-        String message = commandLineInput.getInput("Schemi disponibili: " + availableSchema + "\nInserisci id schema: \n");
-        int idSchema = Integer.parseInt(message);
-
-        for(SchemaCard schema: playerChoice.getSchemaCardList()){
-            if (schema.getId() == idSchema) playerChoice.setIdChosenSchema(idSchema);
-        }
-
-    }
-*/
 }

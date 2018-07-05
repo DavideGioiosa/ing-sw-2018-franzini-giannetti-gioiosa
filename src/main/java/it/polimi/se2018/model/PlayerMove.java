@@ -260,10 +260,18 @@ public class PlayerMove implements Serializable {
         return new PlayerMove(this);
     }
 
+    /**
+     * Sets the index of State for ToolCard use
+     * @param state Index of State
+     */
     public void setState(int state) {
         this.state = state;
     }
 
+    /**
+     * Gets the index of State for ToolCard use
+     * @return State of ToolCard
+     */
     public int getState() {
         return state;
     }

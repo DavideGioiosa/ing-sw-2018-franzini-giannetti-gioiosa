@@ -14,16 +14,69 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class CommandLinePrint {
 
     private static EnumMap<ColourEnum, Color> hashMapColours;
 
-    private List<HashMap<Integer, String>> dieRowStringList;
+    private static List<HashMap<Integer, String>> dieRowStringList;
 
     public static HashMap<Integer, String> messageMap;
     public static HashMap<Integer, String> errorMap;
     static {
+
+        String dieLineVoid       = "|       |";
+        String dieLineTwo        = "| O   O |";
+        String dieLineOneLeft    = "| O     |";
+        String dieLineOneCenter  = "|   O   |";
+        String dieListOneRight   = "|     O |";
+        String dieListColourEven = "| # # # |";
+        String dieListColourOdd  = "|# # # #|";
+
+        HashMap<Integer, String> dieRowString1;
+        HashMap<Integer, String> dieRowString2;
+        HashMap<Integer, String> dieRowString3;
+
+        dieRowString1 = new HashMap<>();
+        dieRowString2 = new HashMap<>();
+        dieRowString3 = new HashMap<>();
+
+        dieRowString1.put(0, dieLineVoid);
+        dieRowString2.put(0, dieLineVoid);
+        dieRowString3.put(0, dieLineVoid);
+
+        dieRowString1.put(1, dieLineVoid);
+        dieRowString2.put(1, dieLineOneCenter);
+        dieRowString3.put(1, dieLineVoid);
+
+        dieRowString1.put(2, dieLineOneLeft);
+        dieRowString2.put(2, dieLineVoid);
+        dieRowString3.put(2, dieListOneRight);
+
+        dieRowString1.put(3, dieLineOneLeft);
+        dieRowString2.put(3, dieLineVoid);
+        dieRowString3.put(3, dieListOneRight);
+
+        dieRowString1.put(4, dieLineTwo);
+        dieRowString2.put(4, dieLineVoid);
+        dieRowString3.put(4, dieLineTwo);
+
+        dieRowString1.put(5, dieLineTwo);
+        dieRowString2.put(5, "|   O   |");
+        dieRowString3.put(5, dieLineTwo);
+
+        dieRowString1.put(6, dieLineTwo);
+        dieRowString2.put(6, dieLineTwo);
+        dieRowString3.put(6, dieLineTwo);
+
+        dieRowString1.put(-1, dieListColourEven);
+        dieRowString2.put(-1, dieListColourOdd);
+        dieRowString3.put(-1, dieListColourEven);
+
+        dieRowStringList = new ArrayList<>();
+        dieRowStringList.add(dieRowString1);
+        dieRowStringList.add(dieRowString2);
+        dieRowStringList.add(dieRowString3);
+
         loadMessageMap();
         loadErrorMap();
     }
@@ -33,52 +86,8 @@ public class CommandLinePrint {
         loadErrorMap();
         loadMessageMap();
 
-        HashMap<Integer, String> dieRowString1;
-        HashMap<Integer, String> dieRowString2;
-        HashMap<Integer, String> dieRowString3;
-
         this.hashMapColours = hashMapColours;
 
-        dieRowString1 = new HashMap<>();
-        dieRowString2 = new HashMap<>();
-        dieRowString3 = new HashMap<>();
-
-        dieRowString1.put(0, "|       |");
-        dieRowString2.put(0, "|       |");
-        dieRowString3.put(0, "|       |");
-
-        dieRowString1.put(1, "|       |");
-        dieRowString2.put(1, "|   O   |");
-        dieRowString3.put(1, "|       |");
-
-        dieRowString1.put(2, "| O     |");
-        dieRowString2.put(2, "|       |");
-        dieRowString3.put(2, "|     O |");
-
-        dieRowString1.put(3, "| O     |");
-        dieRowString2.put(3, "|   O   |");
-        dieRowString3.put(3, "|     O |");
-
-        dieRowString1.put(4, "| O   O |");
-        dieRowString2.put(4, "|       |");
-        dieRowString3.put(4, "| O   O |");
-
-        dieRowString1.put(5, "| O   O |");
-        dieRowString2.put(5, "|   O   |");
-        dieRowString3.put(5, "| O   O |");
-
-        dieRowString1.put(6, "| O   O |");
-        dieRowString2.put(6, "| O   O |");
-        dieRowString3.put(6, "| O   O |");
-
-        dieRowString1.put(-1, "| # # # |");
-        dieRowString2.put(-1, "|# # # #|");
-        dieRowString3.put(-1, "| # # # |");
-
-         dieRowStringList = new ArrayList<>();
-         dieRowStringList.add(dieRowString1);
-         dieRowStringList.add(dieRowString2);
-         dieRowStringList.add(dieRowString3);
     }
 
     private static void loadErrorMap() {

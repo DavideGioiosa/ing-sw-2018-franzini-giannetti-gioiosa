@@ -23,9 +23,9 @@ public class CommandLineInput implements InputStrategy {
     private PlayerSetupper playerSetupper;
 
     /**
-     * Constructor sets
-     * @param syntaxController
-     * @param playerSetupper
+     * Constructor sets Controllers for Syntax of Input
+     * @param syntaxController Syntax controller for input in Game
+     * @param playerSetupper Syntax Controller for Player's setup
      */
     public CommandLineInput(SyntaxController syntaxController, PlayerSetupper playerSetupper){
         this.syntaxController = syntaxController;
@@ -91,20 +91,17 @@ public class CommandLineInput implements InputStrategy {
         printMessage(1000);
     }
 
-    public String getInput(String requestMessage) {
-
+    @Override
+    public void tryReconnection() {
         Scanner scanner = new Scanner(System.in);
+        printMessage(4000);
+        boolean choice = playerSetupper.reconnect(scanner.nextLine());
 
-        boolean okMessage = false;
-        String message = null;
+    }
 
-        while (!okMessage) {
-            print(requestMessage);
+    @Override
+    public void validPath() {
 
-            message = scanner.nextLine();
-            okMessage = true;
-        }
-        return message;
     }
 
     public void showMessage(int idMessage){

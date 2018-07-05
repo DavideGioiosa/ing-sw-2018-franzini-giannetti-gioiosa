@@ -31,14 +31,6 @@ public class PlayerMessage implements Serializable {
         id = PlayerMessageTypeEnum.CHECK_MOVE;
     }
 
-    public void setApplyMove(PlayerMove playerMove) {
-        if(playerMove == null){
-            throw new NullPointerException("Sent a null playerMove");
-        }
-        this.playerMove = playerMove;
-        id = PlayerMessageTypeEnum.APPLY_MOVE;
-    }
-
     public void setChoice(PlayerChoice playerChoice) {
         if(playerChoice == null){
             throw new NullPointerException("Sent a null playerChoice");
@@ -58,6 +50,7 @@ public class PlayerMessage implements Serializable {
     public void setRecipient(User recipient){
         this.user = recipient;
     }
+
     public void setUser(User user){
         this.user = user;
         id = PlayerMessageTypeEnum.USER;
@@ -69,7 +62,7 @@ public class PlayerMessage implements Serializable {
 
     public void setClosure() {
         this.closure = true;
-        id = PlayerMessageTypeEnum.CLOSURE;
+        id = PlayerMessageTypeEnum.EXIT;
     }
 
     public boolean isClosed() {
