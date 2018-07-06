@@ -3,7 +3,11 @@ import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import it.polimi.se2018.connection.client.rmi.RMITypeClient;
 import it.polimi.se2018.connection.client.socket.SocketTypeClient;
 import it.polimi.se2018.controller.client.ClientController;
+import it.polimi.se2018.view.PlayerSetupper;
+import it.polimi.se2018.view.SyntaxController;
 import it.polimi.se2018.view.View;
+import it.polimi.se2018.view.graphic.cli.CommandLineGraphic;
+import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 
 import java.util.Scanner;
 
@@ -12,7 +16,8 @@ public class ClientLauncher {
 
     private static void createRMI(String host, int port){
         //host "//192.168.139.101:1099/MyServer"
-        View viewRMI = new View();
+
+        View viewRMI = new View(new CommandLineInput(new SyntaxController(), new PlayerSetupper()), new CommandLineGraphic());
         Client clientRMI = new Client(new RMITypeClient(host, port), viewRMI);
 
         ClientController clientControllerRMI = new ClientController(clientRMI, viewRMI);
@@ -25,7 +30,7 @@ public class ClientLauncher {
 
     private static void createSocket(String host, int port){
 
-        View viewSocket = new View();
+        View viewSocket = new View(new CommandLineInput(new SyntaxController(), new PlayerSetupper()), new CommandLineGraphic());
         Client clientSocket = new Client(new SocketTypeClient(host, port), viewSocket);
 
         ClientController clientControllerSocket = new ClientController(clientSocket, viewSocket);
@@ -65,7 +70,7 @@ public class ClientLauncher {
                 createSocket(host, port);
                 break;
             default:
-                View viewSocket = new View();
+                View viewSocket = new View(new CommandLineInput(new SyntaxController(), new PlayerSetupper()), new CommandLineGraphic());
                 Client clientSocket = new Client(new SocketTypeClient("localhost", 1111), viewSocket);
 
                 ClientController clientControllerSocket = new ClientController(clientSocket, viewSocket);

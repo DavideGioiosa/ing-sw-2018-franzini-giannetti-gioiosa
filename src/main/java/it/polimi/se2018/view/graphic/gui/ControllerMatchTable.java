@@ -209,7 +209,7 @@ public class ControllerMatchTable implements Initializable {
         cardSize(cardImg);
         disablePanes();
 
-        viewGraphic = new View();
+        viewGraphic = new View(new GuiInput(new SyntaxController(), new PlayerSetupper()), new GuiOutput());
         GuiInput guiInput = (GuiInput) viewGraphic.getInputStrategy();
         guiInput.setControllerMatchTable(this);
         GuiOutput guiOutput = (GuiOutput) viewGraphic.getOutputStrategy();

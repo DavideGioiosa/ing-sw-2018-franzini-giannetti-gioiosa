@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <errors>
     <error>
+        <id>450</id>
+        <description>Username esistente</description>
+    </error>
+    <error>
         <id>1000</id>
         <description>Errore nella scelta</description>
     </error>
