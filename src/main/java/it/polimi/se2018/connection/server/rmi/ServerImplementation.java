@@ -71,20 +71,23 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
      */
     void sendToClient(PlayerMessage playerMessage) {
 
+        List<String> disconnecteds = new ArrayList<>();
         if(!clientList.isEmpty()){
             if(playerMessage.getUser()== null){
                 for(ClientRemoteInterface clientRemoteInterface : clientList.values()){
                     try {
                         clientRemoteInterface.receiveFromServer(playerMessage);
                     } catch (RemoteException e) {
-                        String remove = null;
+
                         for(String code : clientList.keySet()){
                             if(clientList.get(code).equals(clientRemoteInterface)){ //override equals
-                                remove= code;
+                                disconnecteds.add(code);
                             }
                         }
-                        if(remove != null){disconnectionHandler(remove);}
                     }
+                }
+                for(String code: disconnecteds){
+                    disconnectionHandler(code);
                 }
 
             }else{

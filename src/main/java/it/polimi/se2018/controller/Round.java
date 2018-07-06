@@ -146,8 +146,7 @@ public class Round implements Observer<PlayerMove>{
         while(!gameBoard.getBoardDice().getDieList().isEmpty()){
             dieList.add(gameBoard.getBoardDice().takeDie(0));
         }
-        gameBoard.getTrackBoardDice().insertDice(dieList);
-        //notify(); //TODO: CHECK CORRECT
+        if(!dieList.isEmpty()) gameBoard.getTrackBoardDice().insertDice(dieList);
     }
 
     /**

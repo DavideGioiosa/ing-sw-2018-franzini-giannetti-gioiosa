@@ -123,7 +123,6 @@ public class CommandLinePrint {
 
     }
 
-
     private static void loadMessageMap() {
         messageMap = new HashMap<>();
         String pathName = "MessageCodes.xml";
@@ -163,10 +162,16 @@ public class CommandLinePrint {
     }
 
     static void printMessage(int id){
-        if(id != 0) System.out.println(messageMap.get(id));
+        String message = messageMap.get(id);
+            if(message == null) message = "Errore";
+        System.out.println(message);
     }
 
     static void printError(int id){
+        String error = errorMap.get(id);
+        if(error == null) error = "Errore";
+        System.out.println(error);
+        
         if(id != 0) System.out.println(errorMap.get(id));
     }
 
@@ -202,10 +207,6 @@ public class CommandLinePrint {
             print(dieRowStringList.get(row).get(value));
         }
         else System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(dieRowStringList.get(row).get(value)).reset());
-    }
-
-    static void colouredPrint(char character, ColourEnum colour){
-        System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(character).reset());
     }
 
     static void colouredPrint(String string, ColourEnum colour){

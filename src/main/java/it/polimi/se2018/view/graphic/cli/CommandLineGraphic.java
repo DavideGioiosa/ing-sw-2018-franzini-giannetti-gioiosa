@@ -276,14 +276,6 @@ public class CommandLineGraphic implements OutputStrategy {
     }
 
     /**
-     * Shows a single Die
-     * @param die Die to display
-     */
-    private void showDie(Die die){
-
-    }
-
-    /**
      * Shows TrackBoard
      * @param trackBoard TrackBoard to display
      */
