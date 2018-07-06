@@ -76,7 +76,6 @@ public class ClientListener extends Thread implements ClientSocketInterface {
             bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             connected = true;
         } catch (IOException e) {
-            System.out.println("disconnesso user");
             handleDisconnection();
             disconnection = true;
         }
@@ -105,7 +104,7 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         try {
             clientSocket.close();
         } catch (IOException e) {
-            System.out.println("già chiusa");
+            System.out.println("connessione già chiusa");
         }
     }
 
@@ -154,7 +153,6 @@ public class ClientListener extends Thread implements ClientSocketInterface {
             output.flush();
 
         } catch (IOException e) {
-            System.out.println("eccezione send");
             handleDisconnection();
         }
     }
@@ -204,7 +202,6 @@ public class ClientListener extends Thread implements ClientSocketInterface {
                 }
 
             } catch (IOException e) {
-                System.out.println("eccezione run");
                 handleDisconnection();
                 disconnection = true;
             }

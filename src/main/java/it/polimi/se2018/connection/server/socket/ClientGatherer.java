@@ -26,10 +26,6 @@ public class ClientGatherer extends Thread{
      * Server's port
      */
     private ServerSocket serverSocket;
-    /**
-     * client's timer ping map
-     */
-    private HashMap<String, Timer> timerHashMap;
 
     /**
      * Builder method of the class
@@ -38,34 +34,14 @@ public class ClientGatherer extends Thread{
      */
     public ClientGatherer(SocketTypeServer server, int port){
 
-        timerHashMap = new HashMap<>();
         this.server = server;
         try {
             this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            Logger.getGlobal().log(Level.SEVERE,e.toString());
+            println("impossibile aprire connessione");
         }
     }
 
-    /**
-     * Method used to close the connection
-     */
-    public void close(){
-
-        Iterator<Map.Entry<String, Timer>> iterator = timerHashMap.entrySet().iterator();
-        while(iterator.hasNext()){
-            iterator.next().getValue().cancel();
-            iterator.remove();
-        }
-    }
-
-    /**
-     * Getter method of timer's hashmap
-     * @return
-     */
-     HashMap<String, Timer> getTimerHashMap() {
-        return timerHashMap;
-    }
 
     /**
      * Thread's run method to gather new clients
@@ -90,7 +66,6 @@ public class ClientGatherer extends Thread{
 
                 }while(server.getCodeList().contains(code));
 
-                //timerHashMap.put(code, timer);
                 server.addCode(code);
                 server.addClient(code, clientListener);
                 clientListener.setCode(code);
@@ -102,7 +77,7 @@ public class ClientGatherer extends Thread{
             } catch (IOException e) {
                 if(clientListener != null){
                     clientListener.handleDisconnection();
-                }else Logger.getGlobal().log(Level.SEVERE,e.toString());
+                }else println("errrore in creazione clientListener");
 
             }
         }
