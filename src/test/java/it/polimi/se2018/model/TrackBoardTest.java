@@ -37,8 +37,8 @@ public class TrackBoardTest {
      */
     @Test
     public void insertDice() {
-            trackBoard.insertDice(surplus);
-            assertEquals(surplus, trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1));
+        trackBoard.insertDice(surplus);
+        assertEquals(surplus, trackBoard.getDiceList().get(trackBoard.getDiceList().size() -1));
     }
 
     /**
@@ -98,5 +98,81 @@ public class TrackBoardTest {
         assertFalse(result);
     }
 
+    @Test
+    public void insert_shouldCatchNullPointerException (){
+        TrackBoard trackBoard = new TrackBoard();
+
+        try{
+            trackBoard.insertDice(null);
+            fail();
+        }catch (NullPointerException e){}
+    }
+
+    @Test
+    public void insert_shouldCatchIllegalArgumentException (){
+        TrackBoard trackBoard = new TrackBoard();
+        List<Die> dieList = new ArrayList<>();
+
+        try{
+            trackBoard.insertDice(dieList);
+            fail();
+        }catch (IllegalArgumentException e){}
+    }
+
+
+    @Test
+    public void clone_shouldBeCorrect (){
+        List<Die> dieList = new ArrayList<>();
+        TrackBoard trackBoard = new TrackBoard();
+
+        for (int i = 0; i < 10; i++) {
+            Die die = new Die(ColourEnum.BLUE);
+            die.firstRoll();
+            dieList.add(die);
+        }
+
+        trackBoard.insertDice(dieList);
+
+        TrackBoard trackBoardClone = trackBoard.getClone();
+
+
+        boolean isEqualArray = true;
+        for (int i = 0; i < dieList.size(); i++) {
+            if (trackBoard.getDiceList().get(0).get(i).getValue() != trackBoardClone.getDiceList().get(0).get(i).getValue() ||
+                    trackBoard.getDiceList().get(0).get(i).getColour() !=trackBoardClone.getDiceList().get(0).get(i).getColour()) {
+                isEqualArray = false;
+            }
+        }
+
+        assertTrue(isEqualArray);
+    }
+
+    @Test
+    public void exchangeDice_shouldCatchIllegalArgumentException () {
+        TrackBoard trackBoard = new TrackBoard();
+        List<Die> dieList = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Die die = new Die(ColourEnum.BLUE);
+            die.firstRoll();
+            dieList.add(die);
+        }
+        Die die = new Die (ColourEnum.RED);
+        trackBoard.getDiceList().add(dieList);
+
+        try{
+            trackBoard.exchangeDice(-1, 0, die);
+            fail();
+        }catch (IllegalArgumentException e){}
+        try {
+            trackBoard.exchangeDice(0, -1, die);
+            fail();
+        }catch (IllegalArgumentException e){}
+        try {
+            trackBoard.exchangeDice(0, 0, null);
+            fail();
+        }catch (IllegalArgumentException e){}
+
+    }
 
 }
