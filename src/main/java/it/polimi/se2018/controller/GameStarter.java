@@ -56,7 +56,7 @@ public class GameStarter {
      * Default choice called for timeout
      * @return Setup Game finished or not
      */
-    boolean defaultMove(){
+    /*boolean defaultMove(){
 
         if(playerChoiceSaved.get(playerChoiceSaved.size() - 1).getChosenColour() == null){
             PlayerChoice playerChoice = playerChoiceSaved.get(playerChoiceSaved.size() - 1).getClone();
@@ -78,7 +78,7 @@ public class GameStarter {
 
         return true;
     }
-
+*/
     /**
      * Method prepares the board by extracting cards
      * @param playerChoiceList list player choices made to set up the game
@@ -96,7 +96,7 @@ public class GameStarter {
             try{
                 publicObjCardList.add((PublicObjCard)extractCard(gameLoader.getPublicObjDeck()));
             }catch(RuntimeException e){
-                remoteView.reportError(1000, null); //probabilmente necessario passare un parametro
+                remoteView.reportError(7000, null);
             }
         }
 
@@ -106,7 +106,7 @@ public class GameStarter {
             try{
                 toolCardList.add((ToolCard)extractCard(gameLoader.getToolDeck()));
             }catch(RuntimeException e){
-                remoteView.reportError(1000, null);
+                remoteView.reportError(7001, null);
             }
         }
         boardCard = new BoardCard(publicObjCardList, toolCardList);
@@ -176,7 +176,9 @@ public class GameStarter {
             }
             remoteView.sendChoice(playerChoice);
 
-        }catch (RuntimeException e){remoteView.reportError(1000, playerChoice.getUser().getNickname());}
+        }catch (RuntimeException e){
+            remoteView.reportError(1000, playerChoice.getUser().getNickname());
+        }
 
     }
 

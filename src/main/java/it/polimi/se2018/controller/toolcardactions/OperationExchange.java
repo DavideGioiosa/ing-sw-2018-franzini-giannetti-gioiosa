@@ -17,7 +17,7 @@ public class OperationExchange implements ToolOperation {
     @Override
     public boolean start(DiceContainer diceContainer, PlayerMove playerMove, List<Die> dieList, List<Player> roundPlayerOrder, Turn turn) {
 
-        diceContainer.exchangeDice(playerMove, dieList);
+        diceContainer.exchangeDice(playerMove, dieList, diceContainer);
         return true;
     }
 

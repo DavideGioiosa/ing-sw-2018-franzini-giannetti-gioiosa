@@ -16,15 +16,23 @@
             <action>exchange</action>
             <diceContainer>dicebag</diceContainer>
         </operation>
+        <operation>
+            <action>leave</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
     </state>
     <state>
+        <operation>
+            <action>pick</action>
+            <diceContainer>diceboard</diceContainer>
+        </operation>
         <operation>
             <action>setdievalue</action>
             <diceContainer></diceContainer>
         </operation>
         <operation>
             <action>leave</action>
-            <diceContainer>diceboard</diceContainer>
+            <diceContainer>schemacard</diceContainer>
         </operation>
     </state>
 </toolCard>

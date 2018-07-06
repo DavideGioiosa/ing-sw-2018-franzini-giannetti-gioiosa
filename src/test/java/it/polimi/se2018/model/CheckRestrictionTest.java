@@ -106,7 +106,7 @@ public class CheckRestrictionTest {
 
         int result = restriction.checkRestriction (schemaCard, die, position);
 
-        assertEquals(1, result);
+        assertEquals(5001, result);
     }
 
     /**
@@ -159,7 +159,7 @@ public class CheckRestrictionTest {
         die2.firstRoll();
         Position position = new Position(4);
 
-        assertEquals(2, restriction.checkRestriction(schemaCard, die2, position));
+        assertEquals(5002, restriction.checkRestriction(schemaCard, die2, position));
     }
 
     /**
@@ -197,7 +197,7 @@ public class CheckRestrictionTest {
         die.setValue(2);
         Position position = new Position(19);
 
-        assertEquals(4, restriction.checkRestriction(schemaCard, die, position));
+        assertEquals(5004, restriction.checkRestriction(schemaCard, die, position));
 
     }
 
@@ -237,7 +237,7 @@ public class CheckRestrictionTest {
         die.firstRoll();
         Position position = new Position(19);
 
-        assertEquals(3, restriction.checkRestriction(schemaCard, die, position));
+        assertEquals(5003, restriction.checkRestriction(schemaCard, die, position));
     }
 
     /**
@@ -269,7 +269,7 @@ public class CheckRestrictionTest {
         die4.firstRoll();
         Position position = new Position(6);
 
-        assertEquals(5, restriction.checkRestriction(schemaCard, die4, position));
+        assertEquals(5005, restriction.checkRestriction(schemaCard, die4, position));
     }
 
     /**
@@ -344,8 +344,8 @@ public class CheckRestrictionTest {
 
         Position position2 = new Position(12);
 
-        assertEquals(6, restriction.checkRestriction(schemaCard, die5, position));
-        assertEquals(6, restriction.checkRestriction(schemaCard, die5, position2));
+        assertEquals(5006, restriction.checkRestriction(schemaCard, die5, position));
+        assertEquals(5006, restriction.checkRestriction(schemaCard, die5, position2));
 
     }
 

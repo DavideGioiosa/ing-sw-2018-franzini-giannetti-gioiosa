@@ -119,11 +119,15 @@ public class CommandLineGraphic implements OutputStrategy {
      * @param card Private Objective Card to display
      */
     private static void showPrivateObjCard(PrivateObjCard card){
-        printCardUpperFrame();
-        printCardDetails(card.getName().toUpperCase(), CARD_TITLE_HEIGHT);
-        printCardDetails(card.getDescription(), CARD_DESCRIPTION_HEIGHT);
-        printCardColour(card.getColour());
-        printCardUpperFrame();
+        if(card != null) {
+            printCardUpperFrame();
+            printCardDetails(card.getName().toUpperCase(), CARD_TITLE_HEIGHT);
+            printCardDetails(card.getDescription(), CARD_DESCRIPTION_HEIGHT);
+            printCardColour(card.getColour());
+            printCardEmptyLine();
+            printCardEmptyLine();
+            printCardUpperFrame();
+        }
     }
 
     /**
@@ -206,16 +210,40 @@ public class CommandLineGraphic implements OutputStrategy {
 
     /**
      * Shows entire Game Board
-     * @param clientBoard Game Board to display
+     * @param clientModel Game Board to display
      */
     @Override
-    public void showGameBoard(ClientBoard clientBoard){
+    public void showGameBoard(ClientModel clientModel){
+        showPrivateObjCard(clientModel.getPrivateObjCard());
+        ClientBoard clientBoard = clientModel.getClientBoard();
         for(PublicObjCard publicObjCard: clientBoard.getCardOnBoard().getPublicObjCardList()) showPublicObjCard(publicObjCard);
         for(ToolCard toolCard: clientBoard.getCardOnBoard().getToolCardList()) showToolCard(toolCard);
-
         showTrackBoard(clientBoard.getTrackBoardDice());
         println("");
         for(Player player: clientBoard.getPlayerList()) {
+            showPlayerDetails(player);
+        }
+        showPlayerDetails(clientModel.getActualPlayer());
+        showDieList(clientBoard.getBoardDice().getDieList());
+    }
+
+    @Override
+    public void showScore(List<Player> playerList) {
+        if (playerList != null && !playerList.isEmpty()){ Player winner = playerList.get(0);
+            for (Player player : playerList) {
+                println(player.getNickname() + " " + player.getScore());
+                if(player.getScore() >= winner.getScore()) winner = player;
+            }
+            println("");
+            showMessage(1500);
+            println(winner.getNickname());
+        }
+        else showMessage(1501);
+
+    }
+
+    private void showPlayerDetails(Player player) {
+        if (player != null){
             printMessage(2020);
             println(player.getNickname());
             printMessage(2021);
@@ -223,21 +251,28 @@ public class CommandLineGraphic implements OutputStrategy {
             showSchemaCard(player.getSchemaCard());
             println("");
         }
-
-        showBoardDice(clientBoard.getBoardDice());
     }
 
     /**
      * Shows entire Draft Pool
-     * @param boardDice Draft Pool to display
+     * @param dieList List of Dice to display
      */
-    private void showBoardDice(BoardDice boardDice){
-        int i = 0;
-        for(Die die: boardDice.getDieList()){
-            print(i + " - ");
-            showDie(die);
-            i++;
+    private void showDieList(List<Die> dieList){
+        if(dieList != null && !dieList.isEmpty()) {
+            for (int i = 0; i < dieList.size(); i++) {
+                print("\t" + i + "\t\t");
+            }
+            for (int j = 0; j < 3; j++) {
+                println("");
+
+                for (int i = 0; i < dieList.size(); i++) {
+                    Die die = dieList.get(i);
+                    colouredPrint(dieRowStringList.get(j).get(die.getValue()), die.getColour());
+                    print('\t');
+                }
+            }
         }
+        println("");
     }
 
     /**
@@ -245,7 +280,7 @@ public class CommandLineGraphic implements OutputStrategy {
      * @param die Die to display
      */
     private void showDie(Die die){
-        println(die.getValue() + " " + die.getColour().toString());
+
     }
 
     /**
@@ -256,9 +291,7 @@ public class CommandLineGraphic implements OutputStrategy {
         int i = 1;
         for(List<Die> dieList: trackBoard.getDiceList()){
             println("Round " + i);
-            for(Die die: dieList){
-                showDie(die);
-            }
+            showDieList(dieList);
             i++;
         }
     }

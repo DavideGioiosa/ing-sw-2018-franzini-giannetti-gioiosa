@@ -1,14 +1,17 @@
 package it.polimi.se2018.view.graphic.cli;
 
-import static it.polimi.se2018.controller.GameLoader.getNodeList;
 import static org.fusesource.jansi.Ansi.*;
 
 import it.polimi.se2018.model.ColourEnum;
 import org.fusesource.jansi.AnsiConsole;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -16,13 +19,12 @@ import java.util.List;
 
 public class CommandLinePrint {
 
-    private static EnumMap<ColourEnum, Color> hashMapColours;
+    static EnumMap<ColourEnum, Color> hashMapColours;
 
-    private static List<HashMap<Integer, String>> dieRowStringList;
+    static List<HashMap<Integer, String>> dieRowStringList;
 
-    private static HashMap<Integer, String> messageMap;
-    private static HashMap<Integer, String> errorMap;
-
+    public static HashMap<Integer, String> messageMap;
+    public static HashMap<Integer, String> errorMap;
     static {
 
         String dieLineVoid       = "|       |";
@@ -50,7 +52,7 @@ public class CommandLinePrint {
         dieRowString3.put(1, dieLineVoid);
 
         dieRowString1.put(2, dieLineOneLeft);
-        dieRowString2.put(2, dieLineVoid);
+        dieRowString2.put(2, dieLineOneCenter);
         dieRowString3.put(2, dieListOneRight);
 
         dieRowString1.put(3, dieLineOneLeft);
@@ -93,7 +95,7 @@ public class CommandLinePrint {
 
     private static void loadErrorMap() {
         errorMap = new HashMap<>();
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\ErrorCodes.xml";
+        String pathName = "ErrorCodes.xml";
 
         NodeList errorNodeList = getNodeList(pathName, "errors");
         if (errorNodeList == null) throw new NullPointerException("File non valido");
@@ -124,7 +126,7 @@ public class CommandLinePrint {
 
     private static void loadMessageMap() {
         messageMap = new HashMap<>();
-        String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\MessageCodes.xml";
+        String pathName = "MessageCodes.xml";
 
         NodeList errorNodeList = getNodeList(pathName, "messages");
         if (errorNodeList == null) throw new NullPointerException("File non valido");
@@ -205,4 +207,33 @@ public class CommandLinePrint {
     static void colouredPrint(char character, ColourEnum colour){
         System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(character).reset());
     }
+
+    static void colouredPrint(String string, ColourEnum colour){
+        System.out.print(ansi().eraseScreen().fg(hashMapColours.get(colour)).a(string).reset());
+    }
+
+    public static HashMap getErrorMap(){
+        return errorMap;
+    }
+
+    public static HashMap getMessageMap(){
+        return messageMap;
+    }
+
+    private static NodeList getNodeList(String pathName, String tag){
+        try{
+            File file = new File(pathName);
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+            Document document = documentBuilder.parse(CommandLineGraphic.class.getResource(pathName).toURI().toString());
+
+            return document.getElementsByTagName(tag);
+        }catch (Exception e){
+                println("Impossibile trovare uno o piu' file di configurazione");
+        }
+        return null;
+    }
+
 }

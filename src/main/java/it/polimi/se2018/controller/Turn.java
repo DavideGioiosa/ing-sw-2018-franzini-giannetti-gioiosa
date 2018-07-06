@@ -138,20 +138,22 @@ public class Turn {
             if (playerMove.getTypeOfChoice().equals(TypeOfChoiceEnum.TOOL)) {
                 if (!isToolCardUsed) {
                     for (ToolCard toolCard : gameBoard.getCardOnBoard().getToolCardList()) {
-                        if (toolCard.getId() == playerMove.getIdToolCard() && userCanUseTool(toolCard)) {
-                            ToolController toolController = new ToolController(toolCard);
-                            errorId = toolController.doAction(gameBoard, playerMove, roundPlayerOrder, this);
-                            if (errorId == 0) {
-                                updateToken(toolCard);
+                        if (toolCard.getId() == playerMove.getIdToolCard()) {
+                            if(userCanUseTool(toolCard)) {
+                                ToolController toolController = new ToolController(toolCard);
+                                errorId = toolController.doAction(gameBoard, playerMove, roundPlayerOrder, this);
+                                if (errorId == 0) {
+                                    updateToken(toolCard);
 
-                                turnsActionsList.add(toolController);
-                                this.isToolCardUsed = true;
-                                if (toolController.isComplete() && numberOfPicks == numberOfPossiblePicks){
-                                    PickController passMove = new PickController();
-                                    passMove.doDefaultMove(gameBoard);
-                                    turnsActionsList.add(passMove);
+                                    turnsActionsList.add(toolController);
+                                    this.isToolCardUsed = true;
+                                    if (toolController.isComplete() && numberOfPicks == numberOfPossiblePicks) {
+                                        PickController passMove = new PickController();
+                                        passMove.doDefaultMove(gameBoard);
+                                        turnsActionsList.add(passMove);
+                                    }
                                 }
-                            }
+                            }else errorId = 2106;
                             return errorId;
 
                         }

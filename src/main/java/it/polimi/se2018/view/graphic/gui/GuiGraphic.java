@@ -36,12 +36,8 @@ public class GuiGraphic extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        //URL url = new File("src\\main\\java\\it\\polimi\\se2018\\view\\graphic\\gui\\SchemeCard.fxml").toURI().toURL();
-        //Parent root = FXMLLoader.load(url);
-
 
         Parent root = FXMLLoader.load(getClass().getResource("GameTable.fxml"));
-
 
         primaryStage.setTitle("Sagrada");
         int width = (int) Screen.getPrimary().getBounds().getWidth() ;

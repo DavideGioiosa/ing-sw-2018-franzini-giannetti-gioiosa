@@ -55,14 +55,14 @@ public class CommandController{
 
             case EXTRACT:
                 if (clientBoard.getBoardDice().getDieList().isEmpty()) return 0;
-                else return 1000;
+                else return 2105;
 
             case ROLL:
                 try {
                     if (clientBoard.getBoardDice().getDieList().get(0).getValue() == 0) return 0;
-                    else return 1000;
+                    else return 2000;
                 } catch (NullPointerException e) {
-                    return 1000;
+                    return 2000;
                 }
 
             case PICK:

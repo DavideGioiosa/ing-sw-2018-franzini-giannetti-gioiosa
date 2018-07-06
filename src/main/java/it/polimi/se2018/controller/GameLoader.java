@@ -1,5 +1,6 @@
 package it.polimi.se2018.controller;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import it.polimi.se2018.model.CardTypeEnum;
 import it.polimi.se2018.model.Cell;
 import it.polimi.se2018.model.ColourEnum;
@@ -120,7 +121,7 @@ public class GameLoader {
         int id = ID_FIRST_PRIVATE_OBJ_CARD;
         String stringId;
 
-        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\privateobjcards\\private";
+        final String pathName = "private";
 
         try {
             privateObjDeck = new CardDeck(CardTypeEnum.PRIVATEOBJCARD);
@@ -177,7 +178,7 @@ public class GameLoader {
         int id = ID_FIRST_PUBLIC_OBJ_CARD;
         String stringId;
 
-        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\publicobjcards\\public";
+        final String pathName = "public";
 
         try {
             publicObjDeck = new CardDeck(CardTypeEnum.PUBLICOBJCARD);
@@ -232,7 +233,7 @@ public class GameLoader {
         int id = ID_FIRST_SCHEMA_CARD;
         String stringId;
 
-        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\schemacards\\schema";
+        final String pathName = "schema";
 
         try {
             schemaDeck = new CardDeck(CardTypeEnum.SCHEMACARD);
@@ -303,7 +304,7 @@ public class GameLoader {
         int id = ID_FIRST_TOOL_CARD;
         String stringId;
 
-        final String pathName = "src\\main\\java\\it\\polimi\\se2018\\configuration\\toolcards\\tool";
+        final String pathName = "tool";
 
         try {
             toolDeck = new CardDeck(CardTypeEnum.TOOLCARD);
@@ -444,15 +445,22 @@ public class GameLoader {
      * @param tag Tag of a single element in the file
      * @return List of elements divided by the tag selected
      */
-    public static NodeList getNodeList(String pathName, String tag){
+    private static NodeList getNodeList(String pathName, String tag){
         try{
             File file = new File(pathName);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document document = documentBuilder.parse(file);
+            System.out.println(GameLoader.class.toString());
+            System.out.println(GameLoader.class.getResource(pathName));
+            System.out.println(GameLoader.class.getResource(pathName).toURI());
+            System.out.println(GameLoader.class.getResource(pathName).toURI().toString());
+
+            Document document = documentBuilder.parse(GameLoader.class.getResource(pathName).toURI().toString());
+
             return document.getElementsByTagName(tag);
         }catch (Exception e){
+            System.out.println("NON CARICO CARTE");
 
         }
         return null;

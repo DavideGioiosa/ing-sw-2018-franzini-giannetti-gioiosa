@@ -4,6 +4,14 @@
         <id>1000</id>
         <description>Attendi un messaggio dal server.</description>
     </message>
+    <error>
+        <id>1500</id>
+        <description>Ha vinto: </description>
+    </error>
+    <error>
+        <id>1501</id>
+        <description>Partita terminata</description>
+    </error>
     <message>
         <id>2000</id>
         <description>Codice Schema:</description>
@@ -68,4 +76,5 @@
         <id>4001</id>
         <description>Tentativo di riconnessione</description>
     </error>
+
 </messages>

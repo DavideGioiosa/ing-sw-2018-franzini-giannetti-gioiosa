@@ -321,14 +321,18 @@ public class ToolControllerTest {
 
         toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
 
-        playerMove = new PlayerMove();
+        playerMove = toolController.getPlayerMove();
         playerMove.setPlayer(player);
+        playerMove.setDiceBoardIndex(gameBoard.getBoardDice().getDieList().size() -1);
         playerMove.setValue(3);
+        playerMove.insertDiceSchemaWhereToLeave(new Position(2,0));
 
-        toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
+        int idError = toolController.doAction(gameBoard, playerMove, gameBoard.getPlayerList(),turn);
 
-        assertEquals(3, gameBoard.getBoardDice().getDieList().size());
-        assertEquals(3, gameBoard.getBoardDice().getDieList().get(2).getValue());
+        assertEquals(0, idError);
+        //assertEquals(3, );
+        assertEquals(2, gameBoard.getBoardDice().getDieList().size());
+        assertEquals(3, player.getSchemaCard().getCellList().get(10).getValue());
     }
 
     @Test

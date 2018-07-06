@@ -41,8 +41,6 @@ public class Round implements Observer<PlayerMove>{
      */
     private boolean isDraftPoolSet;
 
-    private Player nextRoundFirstPlayer;
-
     private RemoteView view;
 
     /**
@@ -60,7 +58,8 @@ public class Round implements Observer<PlayerMove>{
         this.isDraftPoolSet = false;
         initializeRound(indexRound);
         this.view = view;
-        if(getCurrPlayer().getConnectionStatus()) view.isYourTurn(getCurrPlayer(), new PlayerMove());
+        Player player = getCurrPlayer();
+        if(player != null && player.getConnectionStatus()) view.isYourTurn(getCurrPlayer(), new PlayerMove());
         else defaultMove();
     }
 
@@ -72,7 +71,6 @@ public class Round implements Observer<PlayerMove>{
     private void initializeRound(int indexRound) {
         turnsList = new ArrayList<>();
         setRoundPlayerOrder(indexRound);
-        nextRoundFirstPlayer = roundPlayerOrder.get(1);
         turn = new Turn(gameBoard, getCurrPlayer());
         turnsList.add(turn);
     }
@@ -93,9 +91,7 @@ public class Round implements Observer<PlayerMove>{
         }
     }
 
-
     void defaultMove(){
-        System.out.println("Default move invocata per: " + roundPlayerOrder.get(0).getNickname());
         if(!isDraftPoolSet) {
             PlayerMove playerMove = new PlayerMove();
             playerMove.setPlayer(roundPlayerOrder.get(0));
@@ -107,7 +103,7 @@ public class Round implements Observer<PlayerMove>{
         }
         Player player = getCurrPlayer();
         if(player != null && player.getConnectionStatus())
-            view.isYourTurn(getCurrPlayer(), getStartedPlayerMove());
+            view.isYourTurn(player, getStartedPlayerMove());
         else defaultMove();
     }
 
@@ -175,24 +171,29 @@ public class Round implements Observer<PlayerMove>{
      * @param playerMove action of the current player
      */
     public void update (PlayerMove playerMove){
+        Player player = getCurrPlayer();
+        Player currPlayer = getCurrPlayer();
         int idError;
-        if(playerMove.getPlayer() != null && playerMove.getPlayer().getNickname().equals(getCurrPlayer().getNickname())) {
+
+        if(playerMove.getPlayer() != null && currPlayer != null && playerMove.getPlayer().getNickname().equals(currPlayer.getNickname())) {
 
             if (!isDraftPoolSet) {
                 boolean rightMove = setDraftPoolDice(playerMove);
                 view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
-                if(!rightMove) view.reportError(2104, getCurrPlayer().getNickname());
+
+                if(!rightMove && getCurrPlayer()!= null) view.reportError(2104, currPlayer.getNickname());
 
             } else {
                 idError = turn.runTurn(playerMove, roundPlayerOrder);
                 view.sendTable(new MoveMessage(gameBoard.getPlayerList(), gameBoard.getBoardDice(), gameBoard.getCardOnBoard(), gameBoard.getTrackBoardDice()));
-                if (idError != 0) view.reportError(idError, getCurrPlayer().getNickname());
+                if (idError != 0) view.reportError(idError, currPlayer.getNickname());
 
                 if (turn.isFinished()) {
                     if(terminateTurn()) return;
                 }
             }
-            if(getCurrPlayer().getConnectionStatus()) view.isYourTurn(getCurrPlayer(), getStartedPlayerMove());
+            currPlayer = getCurrPlayer();
+            if(currPlayer != null && currPlayer.getConnectionStatus()) view.isYourTurn(getCurrPlayer(), getStartedPlayerMove());
             else defaultMove();
         }
 

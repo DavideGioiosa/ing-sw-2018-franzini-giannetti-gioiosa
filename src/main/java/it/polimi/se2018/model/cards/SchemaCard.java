@@ -266,7 +266,7 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
     }
 
     @Override
-    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList, DiceContainer diceContainer){
         try {
             for (int i = 0; i < playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
                 setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().get(i), dieList.remove(i));
@@ -281,14 +281,14 @@ public class SchemaCard extends Card implements Serializable, DiceContainer {
     @Override
     public boolean leaveDice(PlayerMove playerMove, List<Die> dieList, List<Restriction> restrictionList){
         try {
-            for (int i = 0; i < playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
+            //for (int i = 0; i < playerMove.getDiceSchemaWhereToLeave().size() && i < dieList.size(); i++) {
                 for (Restriction restriction : restrictionList) {
-                    int errorId = restriction.checkRestriction(this, dieList.get(0), playerMove.getDiceSchemaWhereToLeave().get(i));
+                    int errorId = restriction.checkRestriction(this, dieList.get(0), playerMove.getDiceSchemaWhereToLeave().get(0));
                     if (errorId != 0) return false;
                     //TODO: ERROR O NEW EXCEPTION;
                 }
-                setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().remove(0), dieList.get(i));
-            }
+                setDiceIntoCell(playerMove.getDiceSchemaWhereToLeave().remove(0), dieList.get(0));
+            //}
             dieList.remove(0);
         }catch(NullPointerException | IndexOutOfBoundsException e){
             return false;

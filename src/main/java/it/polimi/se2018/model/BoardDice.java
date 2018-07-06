@@ -86,7 +86,7 @@ public class BoardDice implements Serializable, DiceContainer {
     }
 
     @Override
-    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList, DiceContainer diceContainer){
 
         Die die;
         try {

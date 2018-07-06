@@ -32,11 +32,12 @@ public class GuiInput implements InputStrategy {
 
     @Override
     public void showMessage(int idMessage) {
-
+        ControllerMatchTable.inizMsgAreaMessage(idMessage);
     }
 
     @Override
     public void showError(int idError) {
+        ControllerMatchTable.inizMsgAreaError(idError);
 
     }
 
@@ -53,12 +54,13 @@ public class GuiInput implements InputStrategy {
     @Override
     public void makeChoice(PlayerChoice playerChoice) {
         playerSetupper.newChoiceReceived(playerChoice);
-
+        
         if(playerChoice.getChosenColour() == null){
             playerSetupper.validCommand(playerChoice.getColourEnumList().get(0).toString());
         }else {
             controllerMatchTable.requestSchemeSelection(playerChoice);
         }
+
     }
 
     @Override

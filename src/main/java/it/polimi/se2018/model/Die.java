@@ -59,14 +59,6 @@ public class Die implements Serializable {
     }
 
     /**
-     * Method assigns a value between 1 and 6 to a die
-     */
-    private void roll(){
-        Random randomGenerator = new Random();
-        this.value = 1 + randomGenerator.nextInt(DIE_MAX_VALUE);
-    }
-
-    /**
      * Sets a specific value to a die
      * @param val value to set on a die
      */
@@ -74,6 +66,14 @@ public class Die implements Serializable {
         if (val > DIE_MAX_VALUE || val < DIE_MIN_VALUE) throw new IllegalArgumentException("ERROR: Incorrect value of dice");
 
         this.value = val;
+    }
+
+    /**
+     * Method assigns a value between 1 and 6 to a die
+     */
+    private void roll(){
+        Random randomGenerator = new Random();
+        this.value = 1 + randomGenerator.nextInt(DIE_MAX_VALUE);
     }
 
     /**

@@ -70,11 +70,12 @@ public class GameManager {
                 gameWinner = player;
             }
         }
-        if(connected <= 1){
+        if(connected <= 1) {
             winner = gameWinner;
-            System.out.println("rimasto un giocatore solo: "+ winner.getNickname());
-            winner.setScore(99);
-            view.sendWinner(gameBoard);
+            if (winner != null){
+                winner.setScore(99);
+                view.sendWinner(gameBoard);
+            }
         }
     }
 
@@ -100,7 +101,7 @@ public class GameManager {
                 try{
                     score += publicObjCard.scoreCalculation(player.getSchemaCard());
                 }catch (NullPointerException e){
-                    view.reportError(1000, null);
+                    view.reportError(7002, null);
                 }
 
             }
@@ -141,7 +142,7 @@ public class GameManager {
      */
     private void endRound(){
 
-        if(roundList.size() == 2){
+        if(roundList.size() == 5){
             closeGame();
         }else {
             Round newRound = new Round(gameBoard, roundList.size(), view);

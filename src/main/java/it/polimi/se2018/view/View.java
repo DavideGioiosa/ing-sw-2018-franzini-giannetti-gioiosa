@@ -1,16 +1,12 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.model.cards.SchemaCard;
-import it.polimi.se2018.model.player.Player;
-import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.view.graphic.cli.CommandLineGraphic;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 import it.polimi.se2018.view.graphic.gui.GuiInput;
 import it.polimi.se2018.view.graphic.gui.GuiOutput;
 
-import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.println;
 
 /**
  * Used for interaction with the player
@@ -21,7 +17,7 @@ public class View extends Observable implements Observer<ClientModel> {
     protected InputStrategy inputStrategy;
     protected OutputStrategy outputStrategy;
 
-    private ClientBoard clientBoard;
+    private ClientModel clientModel;
 
     /**
      * Constructor of the class
@@ -49,7 +45,7 @@ public class View extends Observable implements Observer<ClientModel> {
 
         switch (playerMessage.getId()){
             case YOUR_TURN:
-                inputStrategy.yourTurn(clientBoard, playerMessage.getPlayerMove());
+                inputStrategy.yourTurn(clientModel.getClientBoard(), playerMessage.getPlayerMove());
                 break;
 
             case USER:
@@ -58,6 +54,7 @@ public class View extends Observable implements Observer<ClientModel> {
                 break;
 
             case CHOICE:
+                notify(playerMessage);
                 inputStrategy.makeChoice(playerMessage.getPlayerChoice());
                 break;
 
@@ -74,7 +71,7 @@ public class View extends Observable implements Observer<ClientModel> {
                 break;
 
             case WINNER:
-                for(Player player: playerMessage.getMoveMessage().getPlayerList()) println( player.getNickname() + " " + player.getScore());
+                outputStrategy.showScore(playerMessage.getMoveMessage().getPlayerList());
                 break;
 
             case DISCONNECTED:
@@ -108,8 +105,8 @@ public class View extends Observable implements Observer<ClientModel> {
      */
     @Override
     public void update(ClientModel clientModel){
-        this.clientBoard = clientModel.getClientBoard();
-        outputStrategy.showGameBoard(clientBoard);
+        this.clientModel = clientModel;
+        outputStrategy.showGameBoard(clientModel);
     }
 
     /**

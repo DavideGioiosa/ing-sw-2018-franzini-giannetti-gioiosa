@@ -135,7 +135,7 @@ public class CommandControllerTest {
 
         int resultCode = commandController.checkMoveValidity(pmPickOutOfBorderRestriction, gameBoard);
 
-        assertEquals(1, resultCode);
+        assertEquals(5001, resultCode);
     }
 
     /**
@@ -177,7 +177,7 @@ public class CommandControllerTest {
 
         int resultCode = commandController.checkMoveValidity(pmAdjNegativeRestriction, gameBoard);
 
-        assertEquals(2, resultCode);
+        assertEquals(5002, resultCode);
     }
 
     /**
@@ -219,7 +219,7 @@ public class CommandControllerTest {
 
         int resultCode = commandController.checkMoveValidity(pmPickNegativeColourRestriction, gameBoard);
 
-        assertEquals(3, resultCode);
+        assertEquals(5003, resultCode);
     }
 
     /**
@@ -259,7 +259,7 @@ public class CommandControllerTest {
 
         int resultCode = commandController.checkMoveValidity(pmPickNegativeValueRestriction, gameBoard);
 
-        assertEquals(4, resultCode);
+        assertEquals(5004, resultCode);
     }
 
     /**
@@ -301,7 +301,7 @@ public class CommandControllerTest {
 
         int resultCode = commandController.checkMoveValidity(pmPickNegativeAdjColourRestriction, gameBoard);
 
-        assertEquals(5, resultCode);
+        assertEquals(5005, resultCode);
     }
 
     /**
@@ -312,7 +312,6 @@ public class CommandControllerTest {
     public void checkMoveValidity_positiveResultAdjacentValueRestriction() {
         playerMovePick.getPlayer().getSchemaCard().setDiceIntoCell(playerMovePick.getDiceSchemaWhereToLeave().get(0),
                 gameBoard.getBoardDice().takeDie(playerMovePick.getDiceBoardIndex())); //pos: 14, die: BLUE, 4
-
 
         //PICK Move to check ADJ-Value Restriction, YELLOW colour 6 value
         PlayerMove playerMovePickAdjValue = new PlayerMove();
@@ -344,7 +343,7 @@ public class CommandControllerTest {
 
         int resultCode = commandController.checkMoveValidity(pmPickNegativeAdjValueRestriction, gameBoard);
 
-        assertEquals(6, resultCode);
+        assertEquals(5006, resultCode);
     }
 
 }
