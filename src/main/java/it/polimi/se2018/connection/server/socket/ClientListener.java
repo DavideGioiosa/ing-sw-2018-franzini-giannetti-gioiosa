@@ -13,22 +13,58 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.Date;
 import java.util.Timer;
 
+/**
+ * Socket's server class to handle connetion with clients
+ */
 public class ClientListener extends Thread implements ClientSocketInterface {
 
+    /**
+     * Client's socket
+     */
     private Socket clientSocket;
+    /**
+     * Boolean used to close connection
+     */
     private boolean quit;
+    /**
+     * Boolean used to notify disconnection
+     */
     private boolean disconnection;
+    /**
+     * Gson object for sends
+     */
     private Gson gson;
+    /**
+     * Observable object to implement callback's
+     */
     private Observable<PlayerMessage> obs;
+    /**
+     * User's unique code
+     */
     private String code;
+    /**
+     *  Buffer reader for inputs
+     */
     private BufferedReader bufferedReader;
+    /**
+     * Boolean to check connection
+     */
     boolean connected;
+    /**
+     * Boolean to check pings
+     */
     boolean ping;
+    /**
+     * Client's timer
+     */
     private Timer timer;
 
+    /**
+     * Builder method of the class
+     * @param clientSocket client's socket
+     */
     ClientListener(Socket clientSocket){
         this.clientSocket = clientSocket;
         gson = new Gson();
@@ -50,10 +86,17 @@ public class ClientListener extends Thread implements ClientSocketInterface {
 
     }
 
+    /**
+     * Getter method of observable
+     * @return
+     */
     Observable<PlayerMessage> getObs() {
         return obs;
     }
 
+    /**
+     * Method to sto listening to client
+     */
     void setQuit() {
         this.quit = false;
         if(timer != null){
@@ -66,6 +109,9 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         }
     }
 
+    /**
+     * Method to handle client's disconnection
+     */
     void handleDisconnection(){
         if(timer != null){
             timer.cancel();
@@ -79,14 +125,26 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         obs.notify(disconnected);
     }
 
+    /**
+     * Setter method for unique code
+     * @param code user's unique code
+     */
     public void setCode(String code){
         this.code = code;
     }
 
+    /**
+     * Getter method for unique code
+     * @return user's unique code
+     */
     public String getCode() {
         return code;
     }
 
+    /**
+     * Sender method
+     * @param playerMessage message that has to be send
+     */
     public synchronized void send(PlayerMessage playerMessage){
         try {
 
@@ -101,20 +159,34 @@ public class ClientListener extends Thread implements ClientSocketInterface {
         }
     }
 
-
+    /**
+     * Receive method from client
+     * @param playerMessage message received
+     */
     public synchronized void receive(PlayerMessage playerMessage) {
 
         obs.notify(playerMessage);
     }
 
+    /**
+     * Setter method for ping parameter
+     * @param ping boolean to check client's connected status
+     */
     void setPing(boolean ping) {
         this.ping = ping;
     }
 
+    /**
+     * Method to check client's connected status
+     * @return status of the client
+     */
     boolean isPing() {
         return ping;
     }
 
+    /**
+     * Thread's run method for listening
+     */
     @Override
     public void run(){
 

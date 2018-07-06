@@ -47,6 +47,9 @@ public class ClientGatherer extends Thread{
         }
     }
 
+    /**
+     * Method used to close the connection
+     */
     public void close(){
 
         Iterator<Map.Entry<String, Timer>> iterator = timerHashMap.entrySet().iterator();
@@ -56,11 +59,17 @@ public class ClientGatherer extends Thread{
         }
     }
 
-
+    /**
+     * Getter method of timer's hashmap
+     * @return
+     */
      HashMap<String, Timer> getTimerHashMap() {
         return timerHashMap;
     }
 
+    /**
+     * Thread's run method to gather new clients
+     */
     @Override
     public void run(){
 

@@ -3,6 +3,7 @@ package it.polimi.se2018.controller;
 
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
+import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.RemoteView;
 
@@ -52,5 +53,11 @@ public class GameCreator {
             gameManager.tryMove(playerMessage.getPlayerMove());
         }
 
+    }
+
+    public void reconnectUser(User user){
+        if(user!=null){
+            gameManager.reconnectUser(user);
+        }
     }
 }

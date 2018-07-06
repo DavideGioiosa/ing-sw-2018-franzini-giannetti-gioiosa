@@ -25,8 +25,8 @@ public class ToolController implements Action{
     private GameBoard gameBoardCloned;
 
     /**
-     * Manages the
-     * @param toolCard
+     * Manages the ToolCard ctions
+     * @param toolCard Toolcard to be used
      */
     public ToolController(ToolCard toolCard){
         dieList = new ArrayList<>();
@@ -39,8 +39,15 @@ public class ToolController implements Action{
         state = 0;
     }
 
+    /**
+     * Tries the move selected by the user
+     * @param gameBoard Game Board status
+     * @param playerMove Move selected by the user
+     * @param roundPlayerOrder Order of user in round
+     * @param turn Actual turn
+     * @return error ID
+     */
     public int doAction(GameBoard gameBoard, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn){
-
 
         if(!isComplete) {
             this.gameBoardCloned = gameBoard.getClone();
@@ -67,6 +74,7 @@ public class ToolController implements Action{
         }
         return 2000;
     }
+
 
     private int tryMove(GameBoard gameBoard, List<List<ToolOperation>> toolOperationLists, int state, List<List<OperationString>> operationStrings, List<Die> dieList, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn) {
         HashMap<String,DiceContainer> diceContainerHashMap = setDiceContainerHashMap(gameBoard, playerMove.getPlayer());

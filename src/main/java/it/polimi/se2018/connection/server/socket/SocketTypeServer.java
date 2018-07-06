@@ -1,8 +1,6 @@
 package it.polimi.se2018.connection.server.socket;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
-import it.polimi.se2018.connection.server.socket.ClientGatherer;
-import it.polimi.se2018.connection.server.socket.ClientListener;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
@@ -10,16 +8,38 @@ import it.polimi.se2018.utils.Observer;
 
 import java.util.*;
 
-
+/**
+ * Socket sever's class
+ * @author Silvia Franzini
+ */
 public class SocketTypeServer implements Observer<PlayerMessage> {
 
+    /**
+     * List of client's unique codes
+     */
     private List<String> codeList;
+    /**
+     * Reference to client gatherer
+     */
     private ClientGatherer clientGatherer;
+    /**
+     * Map of connected clients
+     */
     private HashMap<String, ClientListener> clientListenerList;
+    /**
+     * Observable object for callbacks
+     */
     private Observable<PlayerMessage> obs;
+    /**
+     * List of disconnected users
+     */
     private List<String> disconnectedCodes;
     //private static int port = 1111; verrà preso da file config
 
+    /**
+     * Builder method of the class
+     * @param port host's port
+     */
     public SocketTypeServer(int port){
         disconnectedCodes = new ArrayList<>();
         codeList = new ArrayList<>();
@@ -30,34 +50,59 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         println("ServerSocket acceso");
     }
 
+    /**
+     * Method to add observer to implement callbacks
+     * @param observer observe class
+     */
     public void addObserver(Observer<PlayerMessage> observer){
         obs.addObserver(observer);
     }
 
+    /**
+     * Getter method for observable
+     * @return observable
+     */
     public Observable<PlayerMessage> getObs() {
         return obs;
     }
 
+    /**
+     * Getter method for code list
+     * @return list of unique codes
+     */
     List<String> getCodeList() {
         return codeList;
     }
 
+    /**
+     * Method used to add codes to the list
+     * @param code new code
+     */
     void addCode(String code){
         this.codeList.add(code);
     }
 
+    /**
+     * Method used to add a new client
+     * @param code user's code
+     * @param clientListener user's listener
+     */
     void addClient(String code, ClientListener clientListener){
         this.clientListenerList.put(code,clientListener);
     }
 
+    /**
+     * Closure method
+     */
     public void shutdown(){
 
         if(clientListenerList != null){
             Iterator<Map.Entry<String, ClientListener>> iterator = clientListenerList.entrySet().iterator();
 
-            for(int i = codeList.size() - 1; i >= 0; i--){
-                clientListenerList.get(codeList.get(i)).setQuit();
+            for(Map.Entry<String, ClientListener> code: clientListenerList.entrySet()){
+                code.getValue().setQuit();
             }
+
             while(iterator.hasNext()){
                 iterator.next();
                 iterator.remove();
@@ -68,6 +113,10 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
 
     }
 
+    /**
+     * Send method to communicate with clients
+     * @param playerMessage message that has to be send
+     */
     public void send (PlayerMessage playerMessage){
         if(!clientListenerList.isEmpty()){
             if(playerMessage.getUser() == null){
@@ -85,6 +134,10 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
 
     }
 
+    /**
+     * Update method used for callbacks, to receive a message
+     * @param playerMessage message received
+     */
     @Override
     public synchronized void update(PlayerMessage playerMessage) {
 

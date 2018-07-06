@@ -4,13 +4,14 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
-import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static it.polimi.se2018.model.Config.NUMBER_OF_ROUND;
 
 /**
  * Controller's Class GameManager
@@ -61,8 +62,7 @@ public class GameManager {
     }
 
     public void checkStatus(){
-        System.out.println("entro in gameManager per modifyStatus");
-        int connected=0;
+        int connected = 0;
         Player gameWinner = null;
         for(Player player : gameBoard.getPlayerList()){
             if(player.getConnectionStatus()){
@@ -70,7 +70,8 @@ public class GameManager {
                 gameWinner = player;
             }
         }
-        if(connected <= 1) {
+        if(!(roundList.size() == NUMBER_OF_ROUND && roundList.get(NUMBER_OF_ROUND - 1).isEnded()) &&
+                connected <= 1) {
             winner = gameWinner;
             if (winner != null){
                 winner.setScore(99);
@@ -142,7 +143,7 @@ public class GameManager {
      */
     private void endRound(){
 
-        if(roundList.size() == 5){
+        if(roundList.size() == NUMBER_OF_ROUND){
             closeGame();
         }else {
             Round newRound = new Round(gameBoard, roundList.size(), view);
@@ -154,6 +155,15 @@ public class GameManager {
         roundList.get(roundList.size() - 1).update(playerMove);
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
+        }
+    }
+
+    public void reconnectUser(User user){
+        for(Player player: gameBoard.getPlayerList()){
+            if(player.getNickname().equals(user.getNickname())){
+                user.setPlayer(player);
+                player.setConnectionStatus(true);
+            }
         }
     }
 
