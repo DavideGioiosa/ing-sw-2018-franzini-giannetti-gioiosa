@@ -1,6 +1,7 @@
 package it.polimi.se2018.view.graphic.gui;
 
 import it.polimi.se2018.connection.client.Client;
+import it.polimi.se2018.connection.client.rmi.RMITypeClient;
 import it.polimi.se2018.connection.client.socket.SocketTypeClient;
 import it.polimi.se2018.controller.client.ClientController;
 import it.polimi.se2018.model.*;
@@ -21,6 +22,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,23 +49,39 @@ import java.util.List;
 
 public class ControllerMatchTable implements Initializable {
 
-    //Lista delle ImageView dei dadi nel DraftPool
+    /**
+     * list of dice in the DraftPool
+     */
     private List<ImageView> diceOnDraftList;
 
-    //Lista delle celle dello schema scelto dall'utente
+    /**
+     * list of cells componing the scheme of the player
+     */
     private List<AnchorPane> cellSchemeList;
 
-    //Lista dei bottoni delle ToolCard da usare
+    /**
+     * list of tool's button choice
+     */
     private List<Button> toolChoiceButtonList;
 
-    //Lista di liste per dadi sul trackboard
+    /**
+     * list of dice on the trackboard
+     */
     private List<ImageView> diceExtraImgTrackboardList;
 
+    /**
+     * list of switch trackboard's die button
+     */
     private List<Button> buttonTrackBoarIndexList;
 
-    //Lista index dello switch dei dadi sulla track
+    /**
+     * list of index of the list of dice on the trackboard in a round
+     */
     private List<Integer> indexChangeDiceTrackBoard;
 
+    /**
+     * Panes componing gameTable
+     */
     @FXML private GridPane schemeSelectionGrid;
     @FXML private AnchorPane toolCardPane;
     @FXML private HBox hBoxDraftDice;
@@ -71,29 +89,35 @@ public class ControllerMatchTable implements Initializable {
     @FXML private ImageView cardImg;
     @FXML private HBox publicCardPane;
     @FXML private GridPane gridPane;
+    @FXML private GridPane trackBoardGrid;
 
-    //TASTI SUL TAVOLO
 
+    /**
+     * Buttons on the table
+     */
     @FXML private Button extractButton;
     @FXML private Button toolCardButton;
     @FXML private Button resetMoveButton;
     @FXML private Button passButton;
-    //-------------------------------------------- SCHEME SELECTION -----------------------------
 
-    @FXML AnchorPane backgroundPane;
-    @FXML AnchorPane loginPane;
 
     //-----------
-    //VBOX CONTENENTE GLI SCHEMI DEI 4 GIOCATORI DURANTE LA PARTITA
 
     @FXML private VBox schemeVBOX;
+    /**
+     * List of the opponents vBox schemes
+     */
     private List<VBox> schemeVBoxList;
-    //--------------------------------------------------------------------------------
 
+    /**
+     * Main panes of different scenes
+     */
     @FXML private AnchorPane schemeSelectionPane;
     @FXML private AnchorPane gameboardPane;
     @FXML private AnchorPane lobbyPane;
     @FXML private AnchorPane scorePane;
+    @FXML private AnchorPane backgroundPane;
+    @FXML private AnchorPane nicknamePane;
 
     /**
      * Message Area in the table
@@ -101,6 +125,15 @@ public class ControllerMatchTable implements Initializable {
     private static TextArea msgArea;
     @FXML private TextArea msgWinnerArea;
 
+
+    /**
+     * Login pane
+     */
+    @FXML private AnchorPane loginPane;
+    @FXML private TextArea ipAreaText;
+    @FXML private TextArea portAreaText;
+    @FXML private RadioButton socketRadioButton;
+    @FXML private RadioButton RMIRadioButton;
 
     /**
      * Img die selected from the DraftPool
@@ -132,38 +165,30 @@ public class ControllerMatchTable implements Initializable {
      */
     private Button selectedButtonTrackBoardNext;
 
-    //-----------------------------
-
     private PlayerChoice playerChoice;
 
     @FXML private GridPane choiceToolCardGrid;
 
-    //-------------------
-
-    @FXML private AnchorPane nicknamePane;
     @FXML private TextArea nicknameAreaText;
-    @FXML private GridPane trackBoardGrid;
-
-    //---------------------
 
     private ClientBoard clientBoard;
 
     private ClientModel clientModel;
 
     @FXML private HBox hBoxMsgArea;
+    @FXML private AnchorPane loginAnchorPaneInfo;
 
-    //----------------------
 
     /**
      * index for sliding reading of public card and objPrivateCard
      */
     private int indexChangeCard;
 
-    private View viewSocket;
+    private View viewGraphic;
 
-    private Client clientSocket;
+    private Client clientGui;
 
-    private ClientController clientControllerSocket;
+    private ClientController clientControllerGui;
 
     private PlayerSetupper playerSetupper;
 
@@ -181,29 +206,22 @@ public class ControllerMatchTable implements Initializable {
         primaryScene.setPrefWidth(width);
         primaryScene.setPrefHeight(height);
 
-
         cardSize(cardImg);
         disablePanes();
 
-        viewSocket = new View();
-        GuiInput guiInput = (GuiInput) viewSocket.getInputStrategy();
+        viewGraphic = new View();
+        GuiInput guiInput = (GuiInput) viewGraphic.getInputStrategy();
         guiInput.setControllerMatchTable(this);
-        GuiOutput guiOutput = (GuiOutput) viewSocket.getOutputStrategy();
+        GuiOutput guiOutput = (GuiOutput) viewGraphic.getOutputStrategy();
         guiOutput.setControllerMatchTable(this);
-        clientSocket = new Client(new SocketTypeClient("localhost", 1111), viewSocket);
-        playerSetupper = viewSocket.getInputStrategy().getPlayerSetupper();
-        syntaxController = viewSocket.getInputStrategy().getSyntaxController();
-        clientControllerSocket = new ClientController(clientSocket, viewSocket);
-
-        viewSocket.getInputStrategy().getPlayerSetupper().addObserver(clientControllerSocket);
-        viewSocket.getInputStrategy().getSyntaxController().addObserver(clientControllerSocket);
-        clientSocket.connect();
-
-        //------------------------------------
+        playerSetupper = viewGraphic.getInputStrategy().getPlayerSetupper();
+        syntaxController = viewGraphic.getInputStrategy().getSyntaxController();
 
         arrayCreation();
         typeOfInputAsked = null;
         createMsgArea();
+
+        enableLoginPane(); //first pane
 
     }
 
@@ -239,8 +257,7 @@ public class ControllerMatchTable implements Initializable {
      * @return image of the card requested
      */
     private Image showCard(Card card, String string) {
-        String path = "it/polimi/se2018/view/graphic/gui/img/" + string + "/" +
-                card.getName().replaceAll(" ", "") + ".jpg" ;
+        String path = "it/polimi/se2018/view/graphic/gui/img/" + string + "/" + card.getName().replaceAll(" ", "") + ".jpg" ;
 
         return new Image(path);
 
@@ -384,13 +401,18 @@ public class ControllerMatchTable implements Initializable {
     }
 
     @FXML private void disableLoginPane (){
-        loginPane.setOpacity(0);
-        loginPane.setVisible(false);
-        loginPane.setDisable(true);
-        disableBackgroundPane();
-
-        //dà l'indirizzo IP inserito
-
+        if(socketRadioButton.isSelected() || RMIRadioButton.isSelected()) {
+            disableBackgroundPane();
+            loginPane.setOpacity(0);
+            loginPane.setVisible(false);
+            loginPane.setDisable(true);
+            createNetworking();
+        }
+        else{
+            Text text = new Text("*Non hai compilato tutto i campi richiesti");
+            text.setFill(Color.WHITE);
+            loginAnchorPaneInfo.getChildren().addAll(text);
+        }
     }
 
     @FXML private void enableLoginPane (){
@@ -459,11 +481,33 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    // REQUEST: richieste invocate dal GuiInput //
+    /**
+     * Creates the correct client depending on the type of Connection chosen by the user
+     */
+    private void createNetworking (){
+
+        if(socketRadioButton.isSelected())
+            clientGui = new Client(new SocketTypeClient(ipAreaText.getText(), Integer.parseInt(portAreaText.getText())),
+                    viewGraphic);
+        else if (RMIRadioButton.isSelected()){
+            clientGui = new Client (new RMITypeClient(ipAreaText.getText(), Integer.parseInt(portAreaText.getText())),
+                    viewGraphic);
+        }
+        clientControllerGui = new ClientController(clientGui, viewGraphic);
+
+        viewGraphic.getInputStrategy().getPlayerSetupper().addObserver(clientControllerGui);
+        viewGraphic.getInputStrategy().getSyntaxController().addObserver(clientControllerGui);
+        clientGui.connect();
+    }
+
+
+    /**
+     * Requests invokated by the GuiInput
+     */
 
     public void requestSchemeSelection (PlayerChoice playerChoice){
         this.playerChoice=playerChoice;
-        playerSetupper.newChoiceReceived(playerChoice); //la stringa che ti invio è per scelta scheme
+        playerSetupper.newChoiceReceived(playerChoice); //string of request scheme selection
 
         enableSchemeSelectionPane(playerChoice.getSchemaCardList(), playerChoice.getPrivateObjCard());
     }
@@ -475,23 +519,25 @@ public class ControllerMatchTable implements Initializable {
 
         typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
         this.nextCommandType = typeOfInputAsked.getCommandTypeEnum(); //move requested
-
-        //extractButton.setEffect(Shadow);
     }
 
     public void requestNickname (User user){
         enableNicknamePane();
 
-        playerSetupper.newUserReceived(user); //la stringa che ti invio è per il nick dell'user
+        playerSetupper.newUserReceived(user); //nickname string
     }
 
-    //UPDATE
+
+    /**
+     * Update of the current situation of the game Table
+     * @param clientModel contains all the updates
+     */
     public void requestShowGameboard (ClientModel clientModel){
         this.clientBoard = clientModel.getClientBoard();
         this.clientModel = clientModel;
+        disableNotYourTurn();
         enableGameboardPane();
         inizGameboard(clientBoard);
-        disableNotYourTurn();
     }
 
     public void requestShowScore (List<Player> playerList){
@@ -513,7 +559,7 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    //SEND: invio della scelta fatta dall'utente
+    //SEND:send of the player choice
 
     /**
      * Send's the scheme selected which the player wants to player
@@ -541,8 +587,6 @@ public class ControllerMatchTable implements Initializable {
         playerSetupper.validNickname(nicknameAreaText.getText());
     }
 
-
-    //INIZ: chiamati per posizionare le carte nel corrispettivo pane //
 
     /**
      * Dynamic creation of 4 scheme, the player will choose which one he wants to use
@@ -587,7 +631,6 @@ public class ControllerMatchTable implements Initializable {
             ImageView toolImg = new ImageView(showCard(clientBoard.getCardOnBoard().getToolCardList().get(i), "toolCard"));
             toolImg.setPreserveRatio(true);
             toolImg.setFitWidth(300);
-            //toolImg.fitWidthProperty().bind(vBox.widthProperty());
 
             Button button = new Button("ToolCard " + (i + 1));
             button.setOnAction(e -> {
@@ -636,12 +679,18 @@ public class ControllerMatchTable implements Initializable {
                 hBoxActualPl.setAlignment(Pos.CENTER);
                 Text numTokenActualPl = new Text("Tokens disponibili : ");
                 numTokenActualPl.setFont(Font.font("Verdana", FontPosture.ITALIC, 15));
+                Text nicknameMe = new Text ("  " +clientModel.getActualPlayer().getNickname());
+                nicknameMe.setFont(Font.font("Verdana", FontPosture.ITALIC, 10));
+
+
                 hBoxActualPl.getChildren().addAll(numTokenActualPl);
 
                 for(int j = 0; j < clientModel.getActualPlayer().getTokens(); j++){
                     Circle circle = createTokens();
                     hBoxActualPl.getChildren().add(circle);
                  }
+
+                 hBoxActualPl.getChildren().addAll(nicknameMe);
                  schemeVBOX.getChildren().addAll(hBoxActualPl);
 
                 int i;
@@ -658,20 +707,22 @@ public class ControllerMatchTable implements Initializable {
                         Circle circle = createTokens();
                         hBox.getChildren().add(circle);
                     }
-
+                    Text nicknameText = new Text ("  " +clientBoard.getPlayerList().get(i).getNickname());
+                    nicknameText.setFont(Font.font("Verdana", FontPosture.ITALIC, 10));
+                    hBox.getChildren().add(nicknameText);
                     vBox.getChildren().addAll(createScheme(clientBoard.getPlayerList().get(i).getSchemaCard()), hBox);
                     vBox.prefWidthProperty().bind(schemeVBOX.widthProperty());
                     vBox.prefHeightProperty().bind(schemeVBOX.heightProperty());
                     schemeVBoxList.add(vBox);
+
                     if(i == 2) {
                         gridPane.add(vBox, 0, 0);
                     }
+                    else if(i == 3){}
                     else {
                         gridPane.add(vBox, i + 1, 0);
                     }
                 }
-                //delete extra one
-                schemeVBoxList.get(0).getChildren().clear();
 
                 System.out.println("..update..");
                 inizToolCard();
@@ -687,15 +738,13 @@ public class ControllerMatchTable implements Initializable {
     public static void inizMsgAreaError (int id){
         if(id != 0) {
             String string = msgArea.getText();
-            msgArea.setText("ERROR: " + CommandLinePrint.errorMap.get(id) + "\n" + string);
-        }
+            msgArea.setText("ERROR: " + CommandLinePrint.getErrorMap().get(id) + "\n" + string);        }
     }
 
     public static void inizMsgAreaMessage (int id){
         if(id != 0) {
             String string = msgArea.getText();
-            msgArea.setText("Message: " + CommandLinePrint.messageMap.get(id) + "\n" + string);
-        }
+            msgArea.setText("Message: " + CommandLinePrint.getMessageMap().get(id) + "\n" + string);        }
     }
 
     /**
@@ -705,8 +754,9 @@ public class ControllerMatchTable implements Initializable {
         schemeVBOX.getChildren().clear();
         for (int i = 0; i < schemeVBoxList.size(); i++){
             schemeVBoxList.get(i).getChildren().clear();
-            schemeVBoxList.remove(i);
         }
+        schemeVBoxList.clear();
+
         choiceToolCardGrid.getChildren().clear();
         hBoxDraftDice.getChildren().clear();
         cellSchemeList.clear();
@@ -912,8 +962,6 @@ public class ControllerMatchTable implements Initializable {
                 return;
             }
         }
-
-        //TODO: SE HO ERRORE?
     }
 
     /**
@@ -950,9 +998,8 @@ public class ControllerMatchTable implements Initializable {
                 hBoxDraftDice.setDisable(false);    //abilita diceboard
                 break;
             case DICESCHEMAWHERETOLEAVE:
-            case DICESCHEMAWHERETOTAKE:             //TODO: Abilitare solo il tuo
+            case DICESCHEMAWHERETOTAKE:
                 schemeVBOX.setDisable(false);
-            //    schemeVBOX2.setDisable(false);
                 break;
             case VALUE:
                 ValueRequest.display(syntaxController);
@@ -977,8 +1024,6 @@ public class ControllerMatchTable implements Initializable {
         }
         hBoxDraftDice.setDisable(true);
 
-      //  schemeVBOX.setDisable(true);      //TODO: DISABILITARLI?
-      //  schemeVBOX1.setDisable(true);
     }
 
     /**
@@ -1037,7 +1082,7 @@ public class ControllerMatchTable implements Initializable {
         return map;
     }
 
-    // CONFIG: set delle dimensioni corrette dei pane & binding
+    // CONFIG: set of correct size of pane & binding
 
     /**
      * Configuration of an AnchorPane of the size needed
@@ -1100,7 +1145,7 @@ public class ControllerMatchTable implements Initializable {
         msgArea.setFocusTraversable(false);
         msgArea.maxHeight(215);
         msgArea.maxWidth(338);
-        msgArea.setStyle("-fx-background-color: #808080;"); //TODO: CHECK NOT WORKING
+        msgArea.setStyle("-fx-background-color: #808080;");
         hBoxMsgArea.getChildren().addAll(msgArea);
     }
 
