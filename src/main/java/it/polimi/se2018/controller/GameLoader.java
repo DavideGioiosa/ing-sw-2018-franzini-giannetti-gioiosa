@@ -451,10 +451,6 @@ public class GameLoader {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            System.out.println(GameLoader.class.toString());
-            System.out.println(GameLoader.class.getResource(pathName));
-            System.out.println(GameLoader.class.getResource(pathName).toURI());
-            System.out.println(GameLoader.class.getResource(pathName).toURI().toString());
 
             Document document = documentBuilder.parse(GameLoader.class.getResource(pathName).toURI().toString());
 

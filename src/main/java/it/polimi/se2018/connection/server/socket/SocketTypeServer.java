@@ -1,8 +1,6 @@
 package it.polimi.se2018.connection.server.socket;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 
-import it.polimi.se2018.connection.server.socket.ClientGatherer;
-import it.polimi.se2018.connection.server.socket.ClientListener;
 import it.polimi.se2018.model.PlayerMessage;
 import it.polimi.se2018.model.PlayerMessageTypeEnum;
 import it.polimi.se2018.utils.Observable;
@@ -10,7 +8,9 @@ import it.polimi.se2018.utils.Observer;
 
 import java.util.*;
 
-
+/**
+ * Socket sever's class
+ */
 public class SocketTypeServer implements Observer<PlayerMessage> {
 
     private List<String> codeList;
@@ -55,9 +55,10 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         if(clientListenerList != null){
             Iterator<Map.Entry<String, ClientListener>> iterator = clientListenerList.entrySet().iterator();
 
-            for(int i = codeList.size() - 1; i >= 0; i--){
-                clientListenerList.get(codeList.get(i)).setQuit();
+            for(Map.Entry<String, ClientListener> code: clientListenerList.entrySet()){
+                code.getValue().setQuit();
             }
+
             while(iterator.hasNext()){
                 iterator.next();
                 iterator.remove();

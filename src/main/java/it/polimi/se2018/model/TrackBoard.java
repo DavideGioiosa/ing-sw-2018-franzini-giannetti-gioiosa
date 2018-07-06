@@ -111,7 +111,7 @@ public class TrackBoard implements Serializable, DiceContainer {
     public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList, DiceContainer diceContainer){
         try {
             dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
-            this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(dieList.get(0));
+            this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(dieList.remove(0));
         } catch(IndexOutOfBoundsException | NullPointerException e){
             return false;
         }

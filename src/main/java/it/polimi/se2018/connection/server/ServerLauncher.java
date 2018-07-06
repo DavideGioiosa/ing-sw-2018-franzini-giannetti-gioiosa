@@ -19,10 +19,8 @@ public class ServerLauncher {
 
         Scanner input = new Scanner(System.in);
         int portSocket = 0;
-        while(portSocket < 1){
             println("Inserisci porta server Socket: ");
             portSocket = input.nextInt();
-        }
         SocketTypeServer socketTypeServer = new SocketTypeServer(portSocket);
         int portRmi = 0;
         while(portRmi < 1){
@@ -33,8 +31,5 @@ public class ServerLauncher {
         ServerManager serverManager = new ServerManager(socketTypeServer,rmiTypeServer);
         serverManager.operate();
 
-
     }
-
-
 }
