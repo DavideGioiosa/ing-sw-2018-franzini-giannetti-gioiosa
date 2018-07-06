@@ -72,7 +72,7 @@ public class ServerManager implements Observer<PlayerMessage> {
                 TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
                 senderTimer = new Timer();
 
-                senderTimer.schedule(timerDelayer, (long)30*1000);
+                senderTimer.schedule(timerDelayer, (long)90*1000);
             }
         }
         else{
@@ -81,7 +81,7 @@ public class ServerManager implements Observer<PlayerMessage> {
 
             senderTimer = new Timer();
             TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
-            senderTimer.schedule(timerDelayer, (long)30*1000);
+            senderTimer.schedule(timerDelayer, (long)90*1000);
         }
     }
 

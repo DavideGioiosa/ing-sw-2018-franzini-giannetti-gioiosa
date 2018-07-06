@@ -171,7 +171,7 @@ public class CommandLinePrint {
         String error = errorMap.get(id);
         if(error == null) error = "Errore";
         System.out.println(error);
-        
+
         if(id != 0) System.out.println(errorMap.get(id));
     }
 

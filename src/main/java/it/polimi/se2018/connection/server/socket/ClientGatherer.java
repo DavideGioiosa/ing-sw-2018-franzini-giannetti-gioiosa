@@ -53,7 +53,7 @@ public class ClientGatherer extends Thread{
         String code;
         Socket clientSocket;
         ClientListener clientListener = null;
-         while(!serverSocket.isClosed()){
+        while(!serverSocket.isClosed()){
             try {
                 clientSocket = serverSocket.accept();
                 clientListener = new ClientListener(clientSocket);
@@ -61,8 +61,8 @@ public class ClientGatherer extends Thread{
                 clientListener.start();
 
                 do{
-                     user = new User(TypeOfConnection.SOCKET);
-                     code = user.createUniqueCode();
+                    user = new User(TypeOfConnection.SOCKET);
+                    code = user.createUniqueCode();
 
                 }while(server.getCodeList().contains(code));
 
