@@ -71,7 +71,7 @@ public class GuiInput implements InputStrategy {
 
     @Override
     public void tryReconnection() {
-
+        controllerMatchTable.requestLogin();
     }
 
     @Override

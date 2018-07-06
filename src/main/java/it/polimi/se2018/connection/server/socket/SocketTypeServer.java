@@ -108,7 +108,6 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
                 iterator.remove();
             }
 
-            clientGatherer.close();
         }
 
     }
@@ -141,11 +140,10 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
     @Override
     public synchronized void update(PlayerMessage playerMessage) {
 
-        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.isEmpty() && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
+        if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
             disconnectedCodes.add(playerMessage.getUser().getUniqueCode());
             clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit();
             clientListenerList.remove(playerMessage.getUser().getUniqueCode());
-            clientGatherer.getTimerHashMap().get(playerMessage.getUser().getUniqueCode()).cancel();
         }
         obs.notify(playerMessage);
     }
