@@ -59,6 +59,10 @@ public class BagDice implements DiceContainer {
         return die;
     }
 
+    /**
+     * Number of dice remaining in the bagDice
+     * @return size of the dieList
+     */
     public int numberOfRemainingDice(){
         return dieList.size();
     }

@@ -527,6 +527,10 @@ public class ControllerMatchTable implements Initializable {
         playerSetupper.newUserReceived(user); //nickname string
     }
 
+    public void requestLogin (){
+        enableLoginPane();
+    }
+
 
     /**
      * Update of the current situation of the game Table

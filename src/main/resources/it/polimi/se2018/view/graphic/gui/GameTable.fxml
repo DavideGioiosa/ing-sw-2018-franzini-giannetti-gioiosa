@@ -142,17 +142,17 @@
                               <AnchorPane layoutX="110.0" layoutY="69.0" maxWidth="711.0" prefHeight="509.0" prefWidth="528.0" style="-fx-background-color: #800000;" AnchorPane.bottomAnchor="72.0" AnchorPane.rightAnchor="104.0" AnchorPane.topAnchor="70.0">
                                  <children>
                                     <Text fill="WHITE" layoutX="56.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" />
-                                    <TextArea fx:id="nicknameAreaText" layoutX="56.0" layoutY="237.0" prefHeight="35.0" prefWidth="445.0">
+                                    <TextArea fx:id="nicknameAreaText" layoutX="56.0" layoutY="237.0" maxHeight="35.0" prefHeight="35.0" prefWidth="445.0">
                                        <padding>
                                           <Insets left="2.0" top="2.0" />
                                        </padding>
                                     </TextArea>
-                                    <Text fill="WHITE" layoutX="6.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER" wrappingWidth="556.953125" AnchorPane.bottomAnchor="3365.462890625" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-7.953" AnchorPane.topAnchor="92.994140625">
+                                    <Text fill="WHITE" layoutX="6.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER" wrappingWidth="556.953125" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-7.953" AnchorPane.topAnchor="92.994140625">
                                        <font>
                                           <Font name="Yu Gothic UI Semibold" size="38.0" />
                                        </font>
                                     </Text>
-                                    <Button layoutX="56.0" layoutY="335.0" mnemonicParsing="false" onAction="#disableNicknamePane" prefHeight="39.0" prefWidth="445.0" text="Join">
+                                    <Button layoutX="56.0" layoutY="335.0" maxHeight="50.0" maxWidth="450.0" mnemonicParsing="false" onAction="#disableNicknamePane" prefHeight="39.0" prefWidth="445.0" text="Join">
                                        <font>
                                           <Font name="Californian FB" size="20.0" />
                                        </font>
@@ -177,9 +177,9 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="gameboardPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="gameboardPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #2E8B57;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <GridPane fx:id="gridPane" alignment="CENTER" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #b8b8b8;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <GridPane fx:id="gridPane" alignment="CENTER" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <HBox fx:id="hBoxDraftDice" maxHeight="80.0" maxWidth="1085.0" minHeight="50.0" minWidth="500.0" prefHeight="70.0" prefWidth="574.0" spacing="5.0" style="-fx-background-color: #B0C4DE;" GridPane.columnSpan="3" GridPane.rowIndex="1">
                      <cursor>
@@ -222,7 +222,7 @@
                   </VBox>
                   <GridPane fx:id="ss" GridPane.rowIndex="2">
                      <children>
-                        <HBox fx:id="publicCardPane" minHeight="160.0" minWidth="60.0" prefHeight="307.0" prefWidth="234.0" spacing="2.0" style="-fx-background-color: #87cefa;">
+                        <HBox fx:id="publicCardPane" minHeight="160.0" minWidth="60.0" prefHeight="307.0" prefWidth="234.0" spacing="2.0">
                            <children>
                               <ImageView fx:id="cardImg" pickOnBounds="true" preserveRatio="true" />
                               <Button fx:id="nextCardButton" mnemonicParsing="false" onAction="#nextCard" prefHeight="22.0" prefWidth="27.0" style="-fx-background-radius: 100;" text="&gt;">
