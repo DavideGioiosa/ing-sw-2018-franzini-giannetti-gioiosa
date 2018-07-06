@@ -91,19 +91,16 @@ public class ControllerMatchTable implements Initializable {
     //--------------------------------------------------------------------------------
 
     @FXML private AnchorPane schemeSelectionPane;
-
     @FXML private AnchorPane gameboardPane;
-
     @FXML private AnchorPane lobbyPane;
-
     @FXML private AnchorPane scorePane;
+
     /**
      * Message Area in the table
      */
     private static TextArea msgArea;
     @FXML private TextArea msgWinnerArea;
 
-    @FXML Text numTokens;
 
     /**
      * Img die selected from the DraftPool
@@ -294,15 +291,23 @@ public class ControllerMatchTable implements Initializable {
         showNextDieTrackBoard(indexValue + 1, selectedButtonIndex);
     }
 
-
+    /**
+     * Command move 'extract'
+     */
     @FXML private void extractClick() {
         syntaxController.validCommand("extract");
     }
 
+    /**
+     * Command move 'pass'
+     */
     @FXML private void passClick () {
         syntaxController.validCommand("pass");
     }
 
+    /**
+     * Command move 'cancel'
+     */
     @FXML private void cancelClick () {
         syntaxController.validCommand("cancel");
     }
@@ -469,7 +474,7 @@ public class ControllerMatchTable implements Initializable {
         hBoxDraftDice.setDisable(false);
 
         typeOfInputAsked = syntaxController.newMoveReceived(playerMove, clientBoard);
-        this.nextCommandType = typeOfInputAsked.getCommandTypeEnum(); //la mossa richiesta
+        this.nextCommandType = typeOfInputAsked.getCommandTypeEnum(); //move requested
 
         //extractButton.setEffect(Shadow);
     }
@@ -510,6 +515,9 @@ public class ControllerMatchTable implements Initializable {
 
     //SEND: invio della scelta fatta dall'utente
 
+    /**
+     * Send's the scheme selected which the player wants to player
+     */
     private void sendSelectedScheme (){
 
         if(selectedButtonScheme.getText().equals("Schema 1")){
@@ -526,7 +534,9 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
-
+    /**
+     * Sends player's nickname
+     */
     private void sendNickname (){
         playerSetupper.validNickname(nicknameAreaText.getText());
     }
@@ -568,7 +578,9 @@ public class ControllerMatchTable implements Initializable {
         });
     }
 
-
+    /**
+     * Allocates dynamically toolCard's extracted
+     */
     private void inizToolCard (){
         for(int i = 0; i < 3; i++) {
             VBox vBox = new VBox();
@@ -611,12 +623,26 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
-
+    /**
+     * Updates the current state of the game Table
+     * @param clientBoard contains all the information about the current state of the game Table
+     */
     private void inizGameboard (ClientBoard clientBoard){
         Platform.runLater(() -> {
 
                 emptyPanes();
                 schemeVBOX.getChildren().add(createScheme(clientModel.getActualPlayer().getSchemaCard()));
+                HBox hBoxActualPl = new HBox();
+                hBoxActualPl.setAlignment(Pos.CENTER);
+                Text numTokenActualPl = new Text("Tokens disponibili : ");
+                numTokenActualPl.setFont(Font.font("Verdana", FontPosture.ITALIC, 15));
+                hBoxActualPl.getChildren().addAll(numTokenActualPl);
+
+                for(int j = 0; j < clientModel.getActualPlayer().getTokens(); j++){
+                    Circle circle = createTokens();
+                    hBoxActualPl.getChildren().add(circle);
+                 }
+                 schemeVBOX.getChildren().addAll(hBoxActualPl);
 
                 int i;
                 for(i = 0; i < clientBoard.getPlayerList().size(); i++) {
@@ -624,12 +650,15 @@ public class ControllerMatchTable implements Initializable {
                     vBox.setPadding(new Insets(10,60,0,60));
                     HBox hBox = new HBox();
                     hBox.setAlignment(Pos.CENTER);
+                    Text numTokenPl = new Text("Tokens disponibili : ");
+                    numTokenPl.setFont(Font.font("Verdana", FontPosture.ITALIC, 15));
+                    hBox.getChildren().addAll(numTokenPl);
+
                     for(int j = 0; j < clientBoard.getPlayerList().get(i).getTokens(); j++){
-                        ImageView tokenImg = new ImageView("it/polimi/se2018/view/graphic/gui/img/Token.png");
-                        tokenImg.setPreserveRatio(true);
-                        tokenImg.setFitWidth(25);
-                        hBox.getChildren().add(tokenImg);
+                        Circle circle = createTokens();
+                        hBox.getChildren().add(circle);
                     }
+
                     vBox.getChildren().addAll(createScheme(clientBoard.getPlayerList().get(i).getSchemaCard()), hBox);
                     vBox.prefWidthProperty().bind(schemeVBOX.widthProperty());
                     vBox.prefHeightProperty().bind(schemeVBOX.heightProperty());
@@ -652,7 +681,6 @@ public class ControllerMatchTable implements Initializable {
                 showPublicCards(clientBoard,0);
                 showDiceBoard();
                 insertDiceTrackboard();
-                setNumTokens(String.valueOf(clientModel.getActualPlayer().getTokens()));
         });
     }
 
@@ -813,11 +841,7 @@ public class ControllerMatchTable implements Initializable {
             infoScheme.getChildren().addAll(text, emptyText);
 
             for(int i = 0; i < schemaCard.getDifficulty(); i++) {
-                Circle circle = new Circle(5, 5, 4);
-                circle.setStroke(Color.WHITE);
-                circle.setStrokeWidth(2);
-                circle.setFill(Color.web("#2C3E50"));
-
+                Circle circle = createTokens();
                 infoScheme.getChildren().add(circle);
             }
 
@@ -858,7 +882,9 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
-
+    /**
+     * Checks which useToolCard button is selected and sends it to the syntaxController
+     */
     private void checkToolIndex() {
         syntaxController.validCommand("tool");
 
@@ -873,7 +899,9 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
-
+    /**
+     * Checks which draftPool die is selected and sends it to the syntaxController
+     */
     private void checkDiceBoardIndex(){
         syntaxController.validCommand("pick");
 
@@ -888,6 +916,9 @@ public class ControllerMatchTable implements Initializable {
         //TODO: SE HO ERRORE?
     }
 
+    /**
+     * Checks Trackboard die is selected and sends it to the syntaxController
+     */
     private void checkDieTrackBoardIndex (){
 
         for(int i = 0; i < clientBoard.getTrackBoardDice().getDiceList().size(); i++) {
@@ -900,6 +931,9 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
+    /**
+     * Checks which nextDieTrackboard button is selected and switch the die to the next one
+     */
     private int checkButtonTrackBoardIndex (){
 
         for(int i = 0; i < buttonTrackBoarIndexList.size(); i++) {
@@ -931,6 +965,9 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
+    /**
+     * Disabling of the operation that a player can't do when it isn't his turn
+     */
     private void disableNotYourTurn (){
         extractButton.setDisable(true);
         resetMoveButton.setDisable(true);
@@ -963,9 +1000,9 @@ public class ControllerMatchTable implements Initializable {
      */
     private void enableToolChoiceButton (){
         Platform.runLater(() -> {
-            for (int i = 0; i < toolChoiceButtonList.size(); i++) {
-                toolChoiceButtonList.get(i).setDisable(false);
-                toolChoiceButtonList.get(i).setCursor(Cursor.HAND);
+            for (Button aToolChoiceButtonList : toolChoiceButtonList) {
+                aToolChoiceButtonList.setDisable(false);
+                aToolChoiceButtonList.setCursor(Cursor.HAND);
             }
         });
     }
@@ -1067,13 +1104,7 @@ public class ControllerMatchTable implements Initializable {
         hBoxMsgArea.getChildren().addAll(msgArea);
     }
 
-    /**
-     * Sets the number of token of the player in the current turn
-     * @param numPlayerTokens current number of token of the player
-     */
-    private void setNumTokens(String numPlayerTokens) {
-        numTokens.setText(numPlayerTokens);
-    }
+
 
     /**
      * Disables all the panes that compose the Scene
@@ -1088,6 +1119,9 @@ public class ControllerMatchTable implements Initializable {
         scorePane.setDisable(true);
     }
 
+    /**
+     * Allocates arraylist needed to group elements of the FXML create dynamically
+     */
     private void arrayCreation (){
         cellSchemeList = new ArrayList<>();
         diceOnDraftList = new ArrayList();
@@ -1097,4 +1131,17 @@ public class ControllerMatchTable implements Initializable {
         indexChangeDiceTrackBoard = new ArrayList<>();
         schemeVBoxList = new ArrayList<>();
     }
+
+    /**
+     * Creates the number of token of the player in the current turn
+     */
+    private Circle createTokens (){
+        Circle circle = new Circle(5, 5, 4);
+        circle.setStroke(Color.WHITE);
+        circle.setStrokeWidth(2);
+        circle.setFill(Color.web("#2C3E50"));
+
+        return circle;
+    }
+
 }
