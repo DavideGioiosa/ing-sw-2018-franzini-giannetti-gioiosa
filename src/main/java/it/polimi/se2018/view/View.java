@@ -31,8 +31,8 @@ public class View extends Observable implements Observer<ClientModel> {
         this.inputStrategy = new CommandLineInput(new SyntaxController(), new PlayerSetupper());
         this.outputStrategy = new CommandLineGraphic();
 
-//        this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
-  //      this.outputStrategy = new GuiOutput();
+        //this.inputStrategy = new GuiInput(new SyntaxController(), new PlayerSetupper());
+        //this.outputStrategy = new GuiOutput();
 
     }
 
@@ -71,7 +71,6 @@ public class View extends Observable implements Observer<ClientModel> {
                 break;
 
             case UPDATE:
-
                 notify(playerMessage);
                 break;
 
@@ -81,10 +80,6 @@ public class View extends Observable implements Observer<ClientModel> {
 
             case DISCONNECTED:
                 reconnection();
-                break;
-
-            case APPLY_CHOICE:
-                notify(playerMessage);
                 break;
 
             default:
@@ -143,6 +138,7 @@ public class View extends Observable implements Observer<ClientModel> {
 
     public void setConnection(){
         inputStrategy.validPath();
+
     }
 
 }
