@@ -168,6 +168,7 @@ public class SyntaxController extends Observable<PlayerMessage> {
      */
     private CommandTypeEnum getCommandFromString(OperationString operationString, ToolCard toolCard) {
         switch(operationString.getOperation().toLowerCase()){
+            case "pickcanpass":
             case "pick":
                 if(operationString.getDiceContainer().equalsIgnoreCase("schemacard")) return DICESCHEMAWHERETOTAKE;
                 if(operationString.getDiceContainer().equalsIgnoreCase("trackboard")) return TRACKBOARDINDEX;
@@ -192,6 +193,9 @@ public class SyntaxController extends Observable<PlayerMessage> {
 
             case "setdievalue":
                 return VALUE;
+
+            case "checksamecolour":
+                return null;
 
             default:
                 return COMPLETE;

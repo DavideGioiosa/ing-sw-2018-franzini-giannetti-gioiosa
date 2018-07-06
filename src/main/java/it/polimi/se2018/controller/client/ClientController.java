@@ -71,7 +71,6 @@ public class ClientController implements Observer<PlayerMessage> {
                 return;
             }
 
-
             idError = choiceController.checkChoice(playerMessage.getPlayerChoice());
             if(idError != 0) {
                 view.reportError(idError);

@@ -108,7 +108,7 @@ public class TrackBoard implements Serializable, DiceContainer {
     }
 
     @Override
-    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList, DiceContainer diceContainer){
         try {
             dieList.add(this.diceLists.get(playerMove.getTrackBoardIndex()[0]).remove(playerMove.getTrackBoardIndex()[1]));
             this.diceLists.get(playerMove.getTrackBoardIndex()[0]).add(dieList.get(0));

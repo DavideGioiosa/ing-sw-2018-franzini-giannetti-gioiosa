@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <errors>
     <error>
+        <id>1000</id>
+        <description>Errore nella scelta</description>
+    </error>
+    <error>
         <id>1001</id>
         <description>C'e' stato un errore nella ricezione ricezione di un aggiornamento. Attendi un nuovo messaggio dal server.</description>
     </error>
     <error>
         <id>2000</id>
-        <description>ERRORE GENERICO</description>
+        <description>Errore nell'esecuzione della mossa</description>
     </error>
     <error>
         <id>2001</id>
@@ -61,6 +65,14 @@
         <description>Devi prima estrarre i dadi dal sacchetto</description>
     </error>
     <error>
+        <id>2105</id>
+        <description>In questo round i dadi sono gia' estratti</description>
+    </error>
+    <error>
+        <id>2106</id>
+        <description>Non hai abbastanza token per utilizzare la Toolcard</description>
+    </error>
+    <error>
         <id>2500</id>
         <description>Hai scelto un colore non valido</description>
     </error>
@@ -86,7 +98,6 @@
         <description>La mossa inviata ha un formato errato</description>
     </error>
 
-
     <error>
         <id>5001</id>
         <description>Il primo dado deve essere inserito sul bordo</description>
@@ -110,5 +121,17 @@
     <error>
         <id>5006</id>
         <description>Il dado non puo' essere a fianco ad un altro con stesso valore</description>
+    </error>
+    <error>
+        <id>7000</id>
+        <description>Non esistono abbastanza Carte Obiettivo Pubblicc</description>
+    </error>
+    <error>
+        <id>7001</id>
+        <description>Non esistono abbastanza carte Schema</description>
+    </error>
+    <error>
+        <id>7002</id>
+        <description>Errore nel calcolo dei punteggi</description>
     </error>
 </errors>

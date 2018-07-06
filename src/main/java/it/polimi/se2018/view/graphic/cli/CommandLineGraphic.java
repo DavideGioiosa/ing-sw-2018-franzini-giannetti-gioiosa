@@ -224,7 +224,22 @@ public class CommandLineGraphic implements OutputStrategy {
             showPlayerDetails(player);
         }
         showPlayerDetails(clientModel.getActualPlayer());
-        showBoardDice(clientBoard.getBoardDice());
+        showDieList(clientBoard.getBoardDice().getDieList());
+    }
+
+    @Override
+    public void showScore(List<Player> playerList) {
+        if (playerList != null && !playerList.isEmpty()){ Player winner = playerList.get(0);
+            for (Player player : playerList) {
+                println(player.getNickname() + " " + player.getScore());
+                if(player.getScore() >= winner.getScore()) winner = player;
+            }
+            println("");
+            showMessage(1500);
+            println(winner.getNickname());
+        }
+        else showMessage(1501);
+
     }
 
     private void showPlayerDetails(Player player) {
@@ -240,18 +255,18 @@ public class CommandLineGraphic implements OutputStrategy {
 
     /**
      * Shows entire Draft Pool
-     * @param boardDice Draft Pool to display
+     * @param dieList List of Dice to display
      */
-    private void showBoardDice(BoardDice boardDice){
-        if(boardDice != null && !boardDice.getDieList().isEmpty()) {
-            for (int i = 0; i < boardDice.getDieList().size(); i++) {
+    private void showDieList(List<Die> dieList){
+        if(dieList != null && !dieList.isEmpty()) {
+            for (int i = 0; i < dieList.size(); i++) {
                 print("\t" + i + "\t\t");
             }
             for (int j = 0; j < 3; j++) {
                 println("");
 
-                for (int i = 0; i < boardDice.getDieList().size(); i++) {
-                    Die die = boardDice.getDieList().get(i);
+                for (int i = 0; i < dieList.size(); i++) {
+                    Die die = dieList.get(i);
                     colouredPrint(dieRowStringList.get(j).get(die.getValue()), die.getColour());
                     print('\t');
                 }
@@ -276,9 +291,7 @@ public class CommandLineGraphic implements OutputStrategy {
         int i = 1;
         for(List<Die> dieList: trackBoard.getDiceList()){
             println("Round " + i);
-            for(Die die: dieList){
-                showDie(die);
-            }
+            showDieList(dieList);
             i++;
         }
     }

@@ -72,6 +72,7 @@ public class GameBoard extends ClientBoard{
         return privatePlayerList;
     }
 
+    @Override
     public GameBoard getClone(){
         return new GameBoard(this);
     }

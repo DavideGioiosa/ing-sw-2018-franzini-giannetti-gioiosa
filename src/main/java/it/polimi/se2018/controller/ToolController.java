@@ -65,7 +65,7 @@ public class ToolController implements Action{
             playerMoveSaved = playerMove.getClone();
             return 0;
         }
-        return 1000;
+        return 2000;
     }
 
     private int tryMove(GameBoard gameBoard, List<List<ToolOperation>> toolOperationLists, int state, List<List<OperationString>> operationStrings, List<Die> dieList, PlayerMove playerMove, List<Player> roundPlayerOrder, Turn turn) {

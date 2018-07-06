@@ -71,11 +71,12 @@ public class BagDice implements DiceContainer {
         }catch (RuntimeException e){
             return false;
         }
+        for(Die die: dieList) if(die.getValue() == 0) die.setValue(1);
         return true;
     }
 
     @Override
-    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList){
+    public boolean exchangeDice(PlayerMove playerMove, List<Die> dieList, DiceContainer diceContainer){
         try {
             int size = dieList.size();
             for (int i = size; i > 0; i--) {
@@ -83,11 +84,15 @@ public class BagDice implements DiceContainer {
             }
 
             for (int i = 0; i < size; i++) {
-                dieList.add(extractDice());
+                Die die = extractDice();
+                dieList.add(die);
             }
         }catch(NullPointerException | IndexOutOfBoundsException e){
             return false;
         }
+        for(Die die: dieList) if(die.getValue() == 0) die.setValue(1);
+        //diceContainer.leaveDice(playerMove, dieList, null);
+        playerMove.setDiceBoardIndex(diceContainer.getClonedDieList().size() -1);
         return true;
     }
 

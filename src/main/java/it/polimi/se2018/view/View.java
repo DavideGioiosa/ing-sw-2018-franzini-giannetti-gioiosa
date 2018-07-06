@@ -1,16 +1,12 @@
 package it.polimi.se2018.view;
 
 import it.polimi.se2018.model.*;
-import it.polimi.se2018.model.cards.SchemaCard;
-import it.polimi.se2018.model.player.Player;
-import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.*;
 import it.polimi.se2018.view.graphic.cli.CommandLineGraphic;
 import it.polimi.se2018.view.graphic.cli.CommandLineInput;
 import it.polimi.se2018.view.graphic.gui.GuiInput;
 import it.polimi.se2018.view.graphic.gui.GuiOutput;
 
-import static it.polimi.se2018.view.graphic.cli.CommandLinePrint.println;
 
 /**
  * Used for interaction with the player
@@ -75,7 +71,7 @@ public class View extends Observable implements Observer<ClientModel> {
                 break;
 
             case WINNER:
-                for(Player player: playerMessage.getMoveMessage().getPlayerList()) println( player.getNickname() + " " + player.getScore());
+                outputStrategy.showScore(playerMessage.getMoveMessage().getPlayerList());
                 break;
 
             case DISCONNECTED:

@@ -1,6 +1,5 @@
 package it.polimi.se2018.model;
 
-
 import it.polimi.se2018.model.player.User;
 
 import java.io.Serializable;
