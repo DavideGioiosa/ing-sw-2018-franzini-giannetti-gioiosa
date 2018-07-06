@@ -21,7 +21,7 @@ public class SocketClientPing  extends TimerTask {
     }
 
     /**
-     * Thread's run method for ping invocations
+     * Thread's run method for ping the server to notify that client is still connected
      */
     @Override
     public void run() {

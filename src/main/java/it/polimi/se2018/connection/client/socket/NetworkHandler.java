@@ -82,7 +82,6 @@ public class NetworkHandler extends Thread implements ClientSocketInterface {
 
         while(!connected){
             try {
-                println("tento connessione");
                 InetAddress addr = InetAddress.getByName(host);
                 socket = new Socket(addr, port);
                 bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -91,15 +90,11 @@ public class NetworkHandler extends Thread implements ClientSocketInterface {
                 timerPing.scheduleAtFixedRate(new SocketClientPing(this), (long)5*1000, (long)5*1000);
 
             } catch (IOException e) {
-                println("connessione non riuscita");
                 PlayerMessage playerMessage = new PlayerMessage();
-                playerMessage.setError(400);
+                playerMessage.setId(PlayerMessageTypeEnum.DISCONNECTED);
                 receive(playerMessage);
             }
-
         }
-
-        println("connesso a ServerSocket");
     }
 
     /**
@@ -152,7 +147,7 @@ public class NetworkHandler extends Thread implements ClientSocketInterface {
             this.closeConnection();
         }catch (IOException e){
             PlayerMessage playerMessage = new PlayerMessage();
-            playerMessage.setError(401);
+            playerMessage.setId(PlayerMessageTypeEnum.DISCONNECTED);
             receive(playerMessage);
         }
 
@@ -191,7 +186,6 @@ public class NetworkHandler extends Thread implements ClientSocketInterface {
     private void disconnectionHandler(){
         if(connected){
             connected = false;
-            System.out.println("server disconnesso");
             timerPing.cancel();
             timerPing.purge();
 

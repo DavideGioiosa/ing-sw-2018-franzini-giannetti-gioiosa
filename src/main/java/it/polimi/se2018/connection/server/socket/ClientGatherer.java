@@ -12,13 +12,30 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Socket server's class to gather new clients
+ * @author Silvia Franzini
+ */
 public class ClientGatherer extends Thread{
 
+    /**
+     * Socket server's class
+     */
     private SocketTypeServer server;
+    /**
+     * Server's port
+     */
     private ServerSocket serverSocket;
+    /**
+     * client's timer ping map
+     */
     private HashMap<String, Timer> timerHashMap;
 
-
+    /**
+     * Builder method of the class
+     * @param server socket server
+     * @param port port of the connection
+     */
     public ClientGatherer(SocketTypeServer server, int port){
 
         timerHashMap = new HashMap<>();
@@ -34,13 +51,8 @@ public class ClientGatherer extends Thread{
 
         Iterator<Map.Entry<String, Timer>> iterator = timerHashMap.entrySet().iterator();
         while(iterator.hasNext()){
-            iterator.next();
+            iterator.next().getValue().cancel();
             iterator.remove();
-        }
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            Logger.getGlobal().log(Level.SEVERE,e.toString());
         }
     }
 

@@ -13,27 +13,62 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-
+/**
+ * Server's class for implementation of remote interface's methods
+ * @author Silvia Franzini
+ */
 public class ServerImplementation extends UnicastRemoteObject implements ServerRemoteInterface {
+
+    /**
+     * Map of all connected RMI's clients, searched by user's unique code
+     */
     private HashMap<String,ClientRemoteInterface> clientList = new HashMap<>();
+    /**
+     * Map of all client's ping, searched by user's unique code
+     */
     private HashMap<String, Timer> pingMap = new HashMap<>();
+    /**
+     * Server's disconnected client's list
+     */
     private List<String> disconnected = new ArrayList<>();
+    /**
+     * RMI user's unique codes list
+     */
     private List<String> codeList = new ArrayList<>();
+    /**
+     * Observable object to implements connection's callbacks
+     */
     private transient Observable<PlayerMessage> obs = new Observable<>();
 
-
+    /**
+     * Builder method of the class
+     * @param port server's port
+     * @throws RemoteException if cannot open server on that specific port
+     */
     ServerImplementation(int port) throws RemoteException{
         super(port);
     }
 
+    /**
+     * Method used to add observers to the class, to implement callbacks
+     * @param observer obeserver of the class
+     */
     public void addObserver(Observer<PlayerMessage> observer){
         obs.addObserver(observer);
     }
 
+    /**
+     * Getter method for observable object
+     * @return the observable object
+     */
     public Observable<PlayerMessage> getObs() {
         return obs;
     }
 
+    /**
+     * Method used to send messages to the client
+     * @param playerMessage message that has to be send
+     */
     void sendToClient(PlayerMessage playerMessage) {
 
         if(!clientList.isEmpty()){
@@ -64,6 +99,11 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
 
     }
 
+    /**
+     * Method invoked to add RMI clients to the client's list
+     * @param client RMI client that has to be add
+     * @throws RemoteException
+     */
     @Override
     public void addClient(ClientRemoteInterface client) throws RemoteException{
 
@@ -86,21 +126,28 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         try {
             client.receiveFromServer(playerMessage);
         } catch (RemoteException e) {
-            println("errore nella send");
-            String string = clientList.entrySet().stream().filter(entry -> entry.getValue().equals(client)).map(Map.Entry::getKey).findFirst().orElse(null);
-            disconnectionHandler(string);
+            String string = null;
+            for(Map.Entry<String, ClientRemoteInterface> entry : clientList.entrySet()){
+                if(entry.getValue().equals(client)){
+                     string = entry.getKey();
+                }
+            }
+            if(string!= null){disconnectionHandler(string);}
         }
     }
 
-
+    /**
+     * Method used to handle a client's disconnection
+     * @param code unique code of that specific user
+     */
     void disconnectionHandler(String code){
         if(!disconnected.contains(code)){
             disconnected.add(code);
+            clientList.remove(code);
             User user = new User(TypeOfConnection.RMI);
             user.setUniqueCode(code);
             PlayerMessage disconnect = new PlayerMessage();
             disconnect.setUser(user);
-            disconnect.setError(100); //valore da individuare
             disconnect.setId(PlayerMessageTypeEnum.DISCONNECTED);
             obs.notify(disconnect);
         }
@@ -112,18 +159,28 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         }
     }
 
+    /**
+     * Method used to transmit received messages to upper-classes
+     * @param playerMessage message received
+     */
     void transmit(PlayerMessage playerMessage){
+
         obs.notify(playerMessage);
+
     }
 
+    /**
+     * Method invoked by the client to send a message, starts a thread to handle the request
+     * @param playerMessage message received
+     * @throws RemoteException if connection has fallen
+     */
     @Override
     public void receive(PlayerMessage playerMessage) throws RemoteException {
 
-        if(playerMessage.getIdError() == 100 ){
-            disconnectionHandler(playerMessage.getUser().getUniqueCode());
+        if(playerMessage != null){
+            new Thread(new RMIServerThread(playerMessage, this)).start();
         }
 
-        new Thread(new RMIServerThread(playerMessage, this)).start();
     }
 
     /**
@@ -135,7 +192,9 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
         //detects disconnection by throwing RemoteException
     }
 
-
+    /**
+     * Closure method to stop execution
+     */
     public void close(){
         for(Timer timer : pingMap.values()){
             timer.cancel();

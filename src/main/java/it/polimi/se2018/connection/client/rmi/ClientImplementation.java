@@ -42,7 +42,6 @@ public class ClientImplementation implements Observer<PlayerMessage>,ClientRemot
      */
     @Override
     public synchronized void receiveFromServer(PlayerMessage playerMessage) throws RemoteException {
-        System.out.println("ricevo dal server");
         if(playerMessage != null){
             new Thread(new RMIReceiveThread(playerMessage, this)).start();
         }

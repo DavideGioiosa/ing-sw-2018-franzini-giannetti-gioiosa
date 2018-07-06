@@ -27,7 +27,7 @@ public class ServerManager implements Observer<PlayerMessage> {
     private Timer senderTimer;
     private UsersDelayer usersDelayer;
     private boolean setUp;
-    private static final int MAXUSER = 2;
+    private static final int MAXUSER = 3;
 
 
 
@@ -65,7 +65,7 @@ public class ServerManager implements Observer<PlayerMessage> {
                 TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
                 senderTimer = new Timer();
 
-                senderTimer.schedule(timerDelayer, (long)90*1000);
+                senderTimer.schedule(timerDelayer, (long)30*1000);
             }
         }
         else{
@@ -74,7 +74,7 @@ public class ServerManager implements Observer<PlayerMessage> {
 
             senderTimer = new Timer();
             TimerDelayer timerDelayer = new TimerDelayer(playerMessage, this);
-            senderTimer.schedule(timerDelayer, (long)90*1000);
+            senderTimer.schedule(timerDelayer, (long)30*1000);
         }
     }
 
@@ -111,7 +111,7 @@ public class ServerManager implements Observer<PlayerMessage> {
                     userSetupTimer = new Timer();
                     usersDelayer = new UsersDelayer(this);
                     userSetupTimer.schedule(usersDelayer, (long)90*1000);
-                }else if(userList.size() == 2 && userSetupTimer != null ){
+                }else if(userList.size() == 3 && userSetupTimer != null ){
                     createGame();
                 }
             }

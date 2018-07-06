@@ -52,17 +52,20 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
 
     public void shutdown(){
 
-        Iterator<Map.Entry<String, ClientListener>> iterator = clientListenerList.entrySet().iterator();
+        if(clientListenerList != null){
+            Iterator<Map.Entry<String, ClientListener>> iterator = clientListenerList.entrySet().iterator();
 
-        for(int i = codeList.size() - 1; i >= 0; i--){
-            clientListenerList.get(codeList.get(i)).setQuit();
-        }
-        while(iterator.hasNext()){
-            iterator.next();
-            iterator.remove();
+            for(int i = codeList.size() - 1; i >= 0; i--){
+                clientListenerList.get(codeList.get(i)).setQuit();
+            }
+            while(iterator.hasNext()){
+                iterator.next();
+                iterator.remove();
+            }
+
+            clientGatherer.close();
         }
 
-        clientGatherer.close();
     }
 
     public void send (PlayerMessage playerMessage){
@@ -88,6 +91,7 @@ public class SocketTypeServer implements Observer<PlayerMessage> {
         if(playerMessage.getId().equals(PlayerMessageTypeEnum.DISCONNECTED) && !disconnectedCodes.isEmpty() && !disconnectedCodes.contains(playerMessage.getUser().getUniqueCode())){
             disconnectedCodes.add(playerMessage.getUser().getUniqueCode());
             clientListenerList.get(playerMessage.getUser().getUniqueCode()).setQuit();
+            clientListenerList.remove(playerMessage.getUser().getUniqueCode());
             clientGatherer.getTimerHashMap().get(playerMessage.getUser().getUniqueCode()).cancel();
         }
         obs.notify(playerMessage);

@@ -31,12 +31,13 @@ public class RMIClientPing extends TimerTask {
     }
 
     /**
-     * Thread's run method where client pings the server
+     * Thread's run method where client pings the server server checking if is still connected, otherwise it handles disconnection
      */
     @Override
     public void run() {
         try {
             serverRemoteInterface.lifeLine();
+
         } catch (RemoteException e) {
 
             rmiTypeClient.disconnectionHandler();

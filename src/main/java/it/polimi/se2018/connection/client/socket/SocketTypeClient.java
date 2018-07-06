@@ -43,7 +43,7 @@ public class SocketTypeClient implements ClientStrategy, Observer<PlayerMessage>
     }
 
     /**
-     *
+     * Mothod invoked to start a connection with the server
      */
     @Override
     public void connect(){
@@ -53,6 +53,10 @@ public class SocketTypeClient implements ClientStrategy, Observer<PlayerMessage>
         networkHandler.start();
     }
 
+    /**
+     * Method used to reconnect to the server once the connection has been compromised
+     * @param user this user
+     */
     @Override
     public void reconnect(User user){
         networkHandler.setQuit();
@@ -70,21 +74,36 @@ public class SocketTypeClient implements ClientStrategy, Observer<PlayerMessage>
 
     }
 
+    /**
+     * Strategy's sender method of client's socket connection
+     * @param playerMessage message that has to be send
+     */
     @Override
     public void sendToServer(PlayerMessage playerMessage){
         networkHandler.send(playerMessage);
     }
 
+    /**
+     * Strategy's method to close connection
+     */
     @Override
     public void close(){
         networkHandler.setQuit();
     }
 
+    /**
+     * Strategy's method to add observers to this class
+     * @param client typer of the observer added
+     */
     @Override
     public void addObserver(Client client) {
         obs.addObserver(client);
     }
 
+    /**
+     * Method invoked by subclasses to receive a message from the server
+     * @param playerMessage
+     */
     @Override
     public void update(PlayerMessage playerMessage) {
         obs.notify(playerMessage);

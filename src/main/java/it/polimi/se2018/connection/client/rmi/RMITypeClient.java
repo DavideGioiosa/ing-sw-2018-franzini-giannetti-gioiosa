@@ -41,11 +41,22 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
      * Reference of remote client's object
      */
     private ClientImplementation clientImplementation;
+    /**
+     * Host's ip address
+     */
+    private String host;
+    /**
+     * Host's port
+     */
+    private int port;
+
 
     /**
      * Builder method of the class
      */
-    public RMITypeClient(){
+    public RMITypeClient(String host, int port){
+        this.port = port;
+        this.host = host;
         obs = new Observable<>();
         clientImplementation = new ClientImplementation();
         clientImplementation.getObs().addObserver(this);
@@ -60,9 +71,8 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
 
         try {
 
-
-            this.stub = (ServerRemoteInterface) Naming.lookup("//localhost/RMIServer"); //riferimento a server non sarà statico
-            //this.stub = (ServerRemoteInterface) Naming.lookup("//192.168.139.100:1099/MyServer");
+            //this.stub = (ServerRemoteInterface) Naming.lookup("//localhost/RMIServer"); //riferimento a server non sarà statico
+            this.stub = (ServerRemoteInterface) Naming.lookup(host);
 
             ClientRemoteInterface remoteRef = (ClientRemoteInterface) UnicastRemoteObject.exportObject(clientImplementation, 0);
 
@@ -78,11 +88,10 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
             playerMessage.setId(PlayerMessageTypeEnum.DISCONNECTED);
             update(playerMessage);
         }
-        println("connesso a serverRMI");
     }
 
     /**
-     * Method used to reconnect to the server
+     * Strategy's method used to reconnect to the server
      * @param user this user
      */
     @Override
@@ -100,7 +109,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
     }
 
     /**
-     * Method invoked to send a message to the server
+     * Strategy's method invoked to send a message to the server
      * @param playerMessage message that has to be sent
      */
     @Override
@@ -121,12 +130,12 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
      */
      void disconnectionHandler(){
         PlayerMessage disconnect = new PlayerMessage();
-        disconnect.setError(401); //valore da individuare
+        disconnect.setId(PlayerMessageTypeEnum.DISCONNECTED);
         obs.notify(disconnect);
     }
 
     /**
-     * Method used to close client's connection
+     * Strategy's method used to close client's connection
      */
     @Override
     public void close(){
@@ -135,7 +144,7 @@ public class RMITypeClient implements ClientStrategy, Observer<PlayerMessage> {
     }
 
     /**
-     * Method used add obsevers to this class
+     * Strategy's method used add obsevers to this class
      * @param client the observer type
      */
     @Override
