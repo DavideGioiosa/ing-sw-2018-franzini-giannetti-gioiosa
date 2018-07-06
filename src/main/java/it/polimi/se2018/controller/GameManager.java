@@ -62,7 +62,7 @@ public class GameManager {
 
     public void checkStatus(){
         System.out.println("entro in gameManager per modifyStatus");
-        int connected=0;
+        int connected = 0;
         Player gameWinner = null;
         for(Player player : gameBoard.getPlayerList()){
             if(player.getConnectionStatus()){
@@ -154,6 +154,15 @@ public class GameManager {
         roundList.get(roundList.size() - 1).update(playerMove);
         if(roundList.get(roundList.size() - 1).isEnded()){
             endRound();
+        }
+    }
+
+    public void reconnectUser(User user){
+        for(Player player: gameBoard.getPlayerList()){
+            if(player.getNickname().equals(user.getNickname())){
+                user.setPlayer(player);
+                player.setConnectionStatus(true);
+            }
         }
     }
 

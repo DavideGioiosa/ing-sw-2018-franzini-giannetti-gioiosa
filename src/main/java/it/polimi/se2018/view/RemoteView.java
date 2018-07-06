@@ -106,7 +106,7 @@ public class RemoteView extends Observable<PlayerMessage> {
     private void setRecipient(String nickname, PlayerMessage playerMessage, List<User> userList){
         playerMessage.setRecipient(null);
         for(User user: userList){
-            if (user.getNickname() == nickname) playerMessage.setRecipient(user);
+            if (user.getNickname().equals(nickname)) playerMessage.setRecipient(user);
         }
 
     }

@@ -180,27 +180,22 @@ public class GameLoader {
 
         final String pathName = "public";
 
-        try {
-            publicObjDeck = new CardDeck(CardTypeEnum.PUBLICOBJCARD);
+        publicObjDeck = new CardDeck(CardTypeEnum.PUBLICOBJCARD);
 
-            for (int i = 1; i <= NUMBER_OF_PUBLIC_OBJ_CARD; i++) {
+        for (int i = 1; i <= NUMBER_OF_PUBLIC_OBJ_CARD; i++) {
 
-                stringId = getTwoCharacterId(i);
-                NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
+            stringId = getTwoCharacterId(i);
+            NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
 
-                if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
+            if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
 
-                Node node = cardNodeList.item(0);
+            Node node = cardNodeList.item(0);
 
-                PublicObjCard card = loadPublicObjCard(id, node);
-                if (card != null) publicObjDeck.insertCard(card);
+            PublicObjCard card = loadPublicObjCard(id, node);
+            if (card != null) publicObjDeck.insertCard(card);
 
-                id ++;
-            }
-        } catch (Exception e) {
-            //TODO: Gestione Exceptions
+            id ++;
         }
-
     }
 
     /**
@@ -235,7 +230,6 @@ public class GameLoader {
 
         final String pathName = "schema";
 
-        try {
             schemaDeck = new CardDeck(CardTypeEnum.SCHEMACARD);
 
             for (int i = 1; i <= NUMBER_OF_SCHEMA_CARD; i++) {
@@ -252,9 +246,6 @@ public class GameLoader {
 
                 id += 2;
             }
-        } catch (Exception e) {
-            //TODO: Gestione Exceptions
-        }
 
     }
 
@@ -306,25 +297,21 @@ public class GameLoader {
 
         final String pathName = "tool";
 
-        try {
-            toolDeck = new CardDeck(CardTypeEnum.TOOLCARD);
+        toolDeck = new CardDeck(CardTypeEnum.TOOLCARD);
 
-            for(int i = 1; i <= NUMBER_OF_TOOL_CARD; i++) {
+        for(int i = 1; i <= NUMBER_OF_TOOL_CARD; i++) {
 
-                stringId = getTwoCharacterId(i);
-                NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
+            stringId = getTwoCharacterId(i);
+            NodeList cardNodeList = getNodeList(pathName + stringId + ".xml", cardTag);
 
-                if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
+            if (cardNodeList == null) throw new NullPointerException(FILE_ERROR_MESSAGE);
 
-                Node node = cardNodeList.item(0);
+            Node node = cardNodeList.item(0);
 
-                ToolCard card = loadToolCard(id, node);
-                if(card != null) toolDeck.insertCard(card);
+            ToolCard card = loadToolCard(id, node);
+            if(card != null) toolDeck.insertCard(card);
 
-                id++;
-            }
-        } catch (Exception e) {
-            //TODO: Gestione Exceptions
+            id++;
         }
 
     }
@@ -451,16 +438,11 @@ public class GameLoader {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            System.out.println(GameLoader.class.toString());
-            System.out.println(GameLoader.class.getResource(pathName));
-            System.out.println(GameLoader.class.getResource(pathName).toURI());
-            System.out.println(GameLoader.class.getResource(pathName).toURI().toString());
 
             Document document = documentBuilder.parse(GameLoader.class.getResource(pathName).toURI().toString());
 
             return document.getElementsByTagName(tag);
         }catch (Exception e){
-            System.out.println("NON CARICO CARTE");
 
         }
         return null;
