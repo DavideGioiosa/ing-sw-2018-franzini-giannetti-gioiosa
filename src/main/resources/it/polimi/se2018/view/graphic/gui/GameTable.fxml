@@ -18,9 +18,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="primaryScene" prefHeight="650.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.graphic.gui.ControllerMatchTable">
+<AnchorPane fx:id="primaryScene" maxHeight="650.0" maxWidth="1286.0" prefHeight="650.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.se2018.view.graphic.gui.ControllerMatchTable">
    <children>
-      <AnchorPane fx:id="backgroundPane" layoutX="50.0" layoutY="50.0" opacity="0.0" prefHeight="720.0" prefWidth="1350.0" style="-fx-background-color: #1c1c1c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="backgroundPane" layoutX="50.0" layoutY="50.0" maxHeight="650.0" maxWidth="1286.0" opacity="0.0" prefHeight="720.0" prefWidth="1350.0" style="-fx-background-color: #1c1c1c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane fx:id="loginPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -141,8 +141,8 @@
                            <children>
                               <AnchorPane layoutX="110.0" layoutY="69.0" maxWidth="711.0" prefHeight="509.0" prefWidth="528.0" style="-fx-background-color: #800000;" AnchorPane.bottomAnchor="72.0" AnchorPane.rightAnchor="104.0" AnchorPane.topAnchor="70.0">
                                  <children>
-                                    <Text fill="WHITE" layoutX="56.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" />
-                                    <TextArea fx:id="nicknameAreaText" layoutX="56.0" layoutY="237.0" maxHeight="35.0" prefHeight="35.0" prefWidth="445.0">
+                                    <Text fill="WHITE" layoutX="56.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" AnchorPane.bottomAnchor="278.0" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="428.65234375" AnchorPane.topAnchor="203.0" />
+                                    <TextArea fx:id="nicknameAreaText" layoutX="56.0" layoutY="237.0" maxHeight="35.0" prefHeight="35.0" prefWidth="445.0" AnchorPane.bottomAnchor="236.0" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="63.0" AnchorPane.topAnchor="237.0">
                                        <padding>
                                           <Insets left="2.0" top="2.0" />
                                        </padding>
@@ -152,7 +152,7 @@
                                           <Font name="Yu Gothic UI Semibold" size="38.0" />
                                        </font>
                                     </Text>
-                                    <Button layoutX="56.0" layoutY="335.0" maxHeight="50.0" maxWidth="450.0" mnemonicParsing="false" onAction="#disableNicknamePane" prefHeight="39.0" prefWidth="445.0" text="Join">
+                                    <Button layoutX="56.0" layoutY="335.0" maxHeight="50.0" maxWidth="450.0" mnemonicParsing="false" onAction="#disableNicknamePane" prefHeight="39.0" prefWidth="445.0" text="Join" AnchorPane.bottomAnchor="134.0" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="63.0">
                                        <font>
                                           <Font name="Californian FB" size="20.0" />
                                        </font>
@@ -177,7 +177,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="gameboardPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #2E8B57;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="gameboardPane" maxHeight="650.0" maxWidth="1286.0" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #2E8B57;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <GridPane fx:id="gridPane" alignment="CENTER" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -295,7 +295,7 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="lobbyPane" opacity="0.0" prefHeight="650.0" prefWidth="1286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="lobbyPane" maxHeight="650.0" maxWidth="1286.0" opacity="0.0" prefHeight="650.0" prefWidth="1286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="650.0" fitWidth="1286.0" opacity="0.9" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
@@ -316,7 +316,7 @@
             <Cursor fx:constant="WAIT" />
          </cursor>
       </AnchorPane>
-      <AnchorPane fx:id="scorePane" layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="660.0" prefWidth="1290.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="scorePane" layoutX="10.0" layoutY="10.0" maxHeight="650.0" maxWidth="1286.0" opacity="0.0" prefHeight="650.0" prefWidth="1286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="CENTER" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #1c1c1c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>

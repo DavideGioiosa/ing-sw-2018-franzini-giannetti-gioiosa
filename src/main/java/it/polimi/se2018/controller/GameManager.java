@@ -4,6 +4,7 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.publiccard.PublicObjCard;
 import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.PrivatePlayer;
+import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.*;
 
 import java.util.ArrayList;

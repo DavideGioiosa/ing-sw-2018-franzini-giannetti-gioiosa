@@ -89,4 +89,14 @@ public class TrackBoardTest {
         assertEquals(ColourEnum.RED,trackBoardClone.getDiceList().get(0).get(0).getColour());
 
     }
+
+    @Test
+    public void pick_shouldCallxception (){
+        TrackBoard trackBoard = new TrackBoard();
+
+        boolean result = trackBoard.pickDice(null, null, 0, 0);
+        assertFalse(result);
+    }
+
+
 }
