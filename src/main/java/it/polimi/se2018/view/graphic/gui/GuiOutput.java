@@ -2,7 +2,10 @@ package it.polimi.se2018.view.graphic.gui;
 
 import it.polimi.se2018.model.ClientBoard;
 import it.polimi.se2018.model.ClientModel;
+import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.view.OutputStrategy;
+
+import java.util.List;
 
 public class GuiOutput implements OutputStrategy {
 
@@ -15,5 +18,10 @@ public class GuiOutput implements OutputStrategy {
     @Override
     public void showGameBoard(ClientModel clientModel) {
         controllerMatchTable.requestShowGameboard(clientModel);
+    }
+
+    @Override
+    public void showScore(List<Player> playerList) {
+        controllerMatchTable.requestShowScore(playerList);
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.cards.Card;
 import it.polimi.se2018.model.cards.PrivateObjCard;
 import it.polimi.se2018.model.cards.SchemaCard;
+import it.polimi.se2018.model.player.Player;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.view.PlayerSetupper;
 import it.polimi.se2018.view.SyntaxController;
@@ -90,10 +91,7 @@ public class ControllerMatchTable implements Initializable {
     //VBOX CONTENENTE GLI SCHEMI DEI 4 GIOCATORI DURANTE LA PARTITA
 
     @FXML private VBox schemeVBOX;
-    @FXML private VBox schemeVBOX1;
-    @FXML private VBox schemeVBOX2;
-    @FXML private VBox schemeVBOX3;
-
+    private List<VBox> schemeVBoxList;
     //--------------------------------------------------------------------------------
 
     @FXML private AnchorPane schemeSelectionPane;
@@ -102,10 +100,12 @@ public class ControllerMatchTable implements Initializable {
 
     @FXML private AnchorPane lobbyPane;
 
+    @FXML private AnchorPane scorePane;
     /**
      * Message Area in the table
      */
     private static TextArea msgArea;
+    @FXML private TextArea msgWinnerArea;
 
     @FXML Text numTokens;
 
@@ -195,6 +195,7 @@ public class ControllerMatchTable implements Initializable {
         nicknamePane.setDisable(true);
         gameboardPane.setDisable(true);
         lobbyPane.setDisable(true);
+        scorePane.setDisable(true);
 
         viewSocket = new View();
         GuiInput guiInput = (GuiInput) viewSocket.getInputStrategy();
@@ -218,6 +219,8 @@ public class ControllerMatchTable implements Initializable {
         diceExtraImgTrackboardList = new ArrayList<>();
         buttonTrackBoarIndexList = new ArrayList<>();
         indexChangeDiceTrackBoard = new ArrayList<>();
+        schemeVBoxList = new ArrayList<>();
+
         typeOfInputAsked = null;
 
         createMsgArea();
@@ -443,7 +446,17 @@ public class ControllerMatchTable implements Initializable {
         gameboardPane.setDisable(false);
     }
 
+    @FXML private void disableScorePane (){
+        scorePane.setOpacity(0);
+        scorePane.setVisible(false);
+        scorePane.setDisable(true);
+    }
 
+    @FXML private void enableScorePane (){
+        scorePane.setOpacity(1);
+        scorePane.setVisible(true);
+        scorePane.setDisable(false);
+    }
 
     // REQUEST: richieste invocate dal GuiInput //
 
@@ -479,6 +492,24 @@ public class ControllerMatchTable implements Initializable {
         enableGameboardPane();
         inizGameboard(clientBoard);
         disableNotYourTurn();
+    }
+
+    public void requestShowScore (List<Player> playerList){
+        enableScorePane();
+        String string = "";
+        String winner = "Nessuno";
+        int maxScore = 0;
+        for (int i = 0; i <playerList.size(); i++) {
+            string = (i+1) + ". " + playerList.get(i).getNickname() + " " + playerList.get(i).getScore() + "\n" + string ;
+
+            if (playerList.get(i).getScore() > maxScore){
+                maxScore = playerList.get(i).getScore();
+                winner = playerList.get(i).getNickname();
+            }
+        }
+        msgWinnerArea.setText("La partita è terminata.\nLa classifica è:\n\n" + string +
+                "\nIl vincitore è :\n" + winner);
+        msgWinnerArea.setStyle("-fx-font-size: 24");
     }
 
 
@@ -531,8 +562,6 @@ public class ControllerMatchTable implements Initializable {
                         disableSchemeSelectionPane();
                     });
                     GridPane schemeGrid = createScheme(schemeToChooseList.get(i - 1));
-                 //   schemeGrid.prefWidthProperty().bind(publicCardPane.widthProperty()); //TODO: BINDING?
-                  //  schemeGrid.prefHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
                     vBox.getChildren().addAll(button, schemeGrid);
                 }
 
@@ -559,8 +588,20 @@ public class ControllerMatchTable implements Initializable {
             toolChoiceButtonList.add(button);
 
             vBox.setAlignment(Pos.CENTER);
-            vBox.setSpacing(50);
+            vBox.setSpacing(40);
             vBox.getChildren().addAll(button, toolImg);
+
+            if(clientBoard.getCardOnBoard().getToolCardList().get(i).getToken() > 0){
+                HBox hBox = new HBox();
+                hBox.setAlignment(Pos.CENTER);
+                for(int j = 0; j < clientBoard.getCardOnBoard().getToolCardList().get(i).getToken(); j++){
+                    ImageView tokenImg = new ImageView("it/polimi/se2018/view/graphic/gui/img/Token.png");
+                    tokenImg.setPreserveRatio(true);
+                    tokenImg.setFitWidth(25);
+                    hBox.getChildren().add(tokenImg);
+                }
+                vBox.getChildren().add(hBox);
+            }
 
             if(i==1){
                 Button cancelButton = new Button("Torna al menù");
@@ -579,24 +620,37 @@ public class ControllerMatchTable implements Initializable {
 
                 emptyPanes();
 
-                //clientModel.getActualPlayer().getSchemaCard() //TODO
+                schemeVBOX.getChildren().add(createScheme(clientModel.getActualPlayer().getSchemaCard()));
+                System.out.println(" SIZE " + clientBoard.getPlayerList().size());
 
-                schemeVBOX.getChildren().add(createScheme(clientBoard.getPlayerList().get(0).getSchemaCard()));
-                schemeVBOX2.getChildren().add(createScheme(clientBoard.getPlayerList().get(1).getSchemaCard()));
+                int i;
+                for(i = 0; i < clientBoard.getPlayerList().size(); i++) {
+                    VBox vBox = new VBox();
+                    vBox.setPadding(new Insets(10,60,0,60));
+                    vBox.getChildren().add(createScheme(clientBoard.getPlayerList().get(i).getSchemaCard()));
+                    vBox.prefWidthProperty().bind(schemeVBOX.widthProperty());
+                    vBox.prefHeightProperty().bind(schemeVBOX.heightProperty());
+                    schemeVBoxList.add(vBox);
+                    if(i == 2) {
+                        gridPane.add(vBox, 0, 0);
+                    }
+                    else {
+                        gridPane.add(vBox, i + 1, 0);
+                    }
+                }
+                //delete extra one
+                schemeVBoxList.get(0).getChildren().clear();
 
                 System.out.println("..update..");
                 inizToolCard();
-                 for(int i = 0; i < toolChoiceButtonList.size(); i++) {
-                     toolChoiceButtonList.get(i).setDisable(true);
+                 for(int j = 0; j < toolChoiceButtonList.size(); j++) {
+                     toolChoiceButtonList.get(j).setDisable(true);
                  }
                 showPublicCards(clientBoard,0);
                 showDiceBoard();
                 insertDiceTrackboard();
-//TODO                setNumTokens(String.valueOf(clientModel.getActualPlayer().getTokens()));
+                setNumTokens(String.valueOf(clientModel.getActualPlayer().getTokens()));
         });
-
-      //  schemeVBOX2.getChildren().add(createScheme(schemaCardList.get(2)));
-      //  schemeVBOX3.getChildren().add(createScheme(schemaCardList.get(3)));
     }
 
     public static void inizMsgAreaError (int id){
@@ -618,7 +672,11 @@ public class ControllerMatchTable implements Initializable {
      */
     private void emptyPanes(){
         schemeVBOX.getChildren().clear();
-        schemeVBOX2.getChildren().clear();
+        for (int i = 0; i < schemeVBoxList.size(); i++){
+            schemeVBoxList.get(i).getChildren().clear();
+            schemeVBoxList.remove(i);
+        }
+        choiceToolCardGrid.getChildren().clear();
         hBoxDraftDice.getChildren().clear();
         cellSchemeList.clear();
         diceOnDraftList.clear();
@@ -762,7 +820,7 @@ public class ControllerMatchTable implements Initializable {
             schemeGridPane.setColumnSpan(infoScheme, 5);
 
             schemeGridPane.setBorder(new Border(new BorderStroke(Color.web("2C3E50"),
-                BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths(1))));
+                BorderStrokeStyle.SOLID, new CornerRadii(4), new BorderWidths (0))));
 
 
         return schemeGridPane;
@@ -853,9 +911,7 @@ public class ControllerMatchTable implements Initializable {
             case DICESCHEMAWHERETOLEAVE:
             case DICESCHEMAWHERETOTAKE:             //TODO: Abilitare solo il tuo
                 schemeVBOX.setDisable(false);
-                schemeVBOX1.setDisable(false);
-                schemeVBOX2.setDisable(false);
-                schemeVBOX3.setDisable(false);
+            //    schemeVBOX2.setDisable(false);
                 break;
             case TRACKBOARDINDEX:
                 enableDiceTrackBoard();
