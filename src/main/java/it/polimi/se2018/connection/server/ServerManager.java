@@ -8,16 +8,21 @@ import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.RemoteView;
 
-import static it.polimi.se2018.model.Config.NUMBER_OF_ROUND;
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 
+/**
+ * Class that manages both servers
+ * @author Silvia Franzini
+ */
 //link tra connessione e gioco, messaggi server e controller
 public class ServerManager implements Observer<PlayerMessage> {
-//osserva sia RMITypeServer che SocketTypeServer
+    /**
+     * class t
+     */
     private GameCreator gameCreator;
     private SocketTypeServer serverSocket;
     private RMITypeServer serverRMI;
@@ -27,9 +32,9 @@ public class ServerManager implements Observer<PlayerMessage> {
     private Timer senderTimer;
     private UsersDelayer usersDelayer;
     private boolean setUp;
-    private static final int MINUSER = 1;
+    private static final int MINUSER = 2;
 
-    private static final int MAXUSER = 2;
+    private static final int MAXUSER = 4;
 
 
 

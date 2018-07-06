@@ -132,7 +132,10 @@ public class Round implements Observer<PlayerMove>{
      * Exctraction of the current player from the ordered list of turns in the Round
      */
     private void removeCurrPlayer () {
-        roundPlayerOrder.remove(0);
+        if(!roundPlayerOrder.isEmpty()){
+            roundPlayerOrder.remove(0);
+        }
+
     }
 
     /**
