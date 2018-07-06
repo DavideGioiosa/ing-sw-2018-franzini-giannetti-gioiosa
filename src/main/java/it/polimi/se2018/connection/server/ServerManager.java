@@ -111,7 +111,7 @@ public class ServerManager implements Observer<PlayerMessage> {
                     userSetupTimer = new Timer();
                     usersDelayer = new UsersDelayer(this);
                     userSetupTimer.schedule(usersDelayer, (long)90*1000);
-                }else if(userList.size() == 3 && userSetupTimer != null ){
+                }else if(userList.size() == MAXUSER && userSetupTimer != null ){
                     createGame();
                 }
             }

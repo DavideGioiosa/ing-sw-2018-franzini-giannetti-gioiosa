@@ -41,7 +41,7 @@ public class GuiGraphic extends Application {
 
         primaryStage.setTitle("Sagrada");
         int width = (int) Screen.getPrimary().getBounds().getWidth() ;
-        int height = (int) Screen.getPrimary().getBounds().getHeight() - 70;
+        int height = (int) Screen.getPrimary().getBounds().getHeight() - 70;     
 
         //per settare il full screen senza barra di uscita sopra
        // primaryStage.setFullScreen(true);

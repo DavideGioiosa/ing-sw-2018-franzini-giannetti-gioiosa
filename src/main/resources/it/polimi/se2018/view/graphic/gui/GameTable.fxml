@@ -22,6 +22,69 @@
    <children>
       <AnchorPane fx:id="backgroundPane" layoutX="50.0" layoutY="50.0" opacity="0.0" prefHeight="720.0" prefWidth="1350.0" style="-fx-background-color: #1c1c1c;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <AnchorPane fx:id="loginPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <GridPane alignment="CENTER" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #2B2B2B;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <ImageView fitHeight="648.0" fitWidth="504.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
+                                 <image>
+                                    <Image url="@img/sagradaMenu.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" GridPane.columnIndex="1">
+                           <children>
+                              <AnchorPane fx:id="loginAnchorPaneInfo" layoutX="110.0" layoutY="69.0" maxWidth="711.0" prefHeight="509.0" prefWidth="528.0" style="-fx-background-color: #800000;" AnchorPane.bottomAnchor="72.0" AnchorPane.rightAnchor="104.0" AnchorPane.topAnchor="70.0">
+                                 <children>
+                                    <Text fill="WHITE" layoutX="56.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP address" AnchorPane.bottomAnchor="279.0" AnchorPane.leftAnchor="55.10546875" AnchorPane.rightAnchor="425.89453125" AnchorPane.topAnchor="203.0" />
+                                    <TextArea fx:id="ipAreaText" layoutX="56.0" layoutY="237.0" prefHeight="35.0" prefWidth="268.0" promptText="192.168.139.101" AnchorPane.bottomAnchor="237.0" AnchorPane.leftAnchor="56.0" AnchorPane.rightAnchor="239.0" AnchorPane.topAnchor="237.0">
+                                       <padding>
+                                          <Insets left="2.0" top="2.0" />
+                                       </padding>
+                                    </TextArea>
+                                    <Text fill="WHITE" layoutX="396.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Port" AnchorPane.bottomAnchor="279.0" AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="134.0146484375" AnchorPane.topAnchor="203.0" />
+                                    <TextArea fx:id="portAreaText" layoutX="396.0" layoutY="237.0" prefHeight="35.0" prefWidth="97.0" promptText="1111" AnchorPane.bottomAnchor="237.0" AnchorPane.leftAnchor="396.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="237.0">
+                                       <padding>
+                                          <Insets left="2.0" top="2.0" />
+                                       </padding>
+                                    </TextArea>
+                                    <Text fill="WHITE" layoutX="14.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER" wrappingWidth="556.953125" AnchorPane.bottomAnchor="365.462890625" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-7.953125" AnchorPane.topAnchor="92.994140625">
+                                       <font>
+                                          <Font name="Yu Gothic UI Semibold" size="38.0" />
+                                       </font>
+                                    </Text>
+                                    <Button layoutX="59.0" layoutY="404.0" mnemonicParsing="false" onAction="#disableLoginPane" prefHeight="39.0" prefWidth="445.0" text="Connect" AnchorPane.bottomAnchor="66.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="59.0" AnchorPane.topAnchor="404.0">
+                                       <font>
+                                          <Font name="Californian FB" size="20.0" />
+                                       </font>
+                                    </Button>
+                                    <RadioButton fx:id="socketRadioButton" layoutX="165.0" layoutY="319.0" mnemonicParsing="false" text="Socket" textFill="WHITE" AnchorPane.bottomAnchor="163.0" AnchorPane.leftAnchor="165.0" AnchorPane.rightAnchor="313.0" AnchorPane.topAnchor="319.0">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="connectionGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="RMIRadioButton" layoutX="304.0" layoutY="319.0" mnemonicParsing="false" text="RMI" textFill="WHITE" toggleGroup="$connectionGroup" AnchorPane.bottomAnchor="163.0" AnchorPane.leftAnchor="320.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="319.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </AnchorPane>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="635.0" minWidth="10.0" prefWidth="503.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="777.0" minWidth="10.0" prefWidth="777.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+               </children>
+            </AnchorPane>
             <AnchorPane fx:id="toolCardPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <GridPane fx:id="choiceToolCardGrid" gridLinesVisible="true" hgap="20.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -37,38 +100,6 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                   </GridPane>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="loginPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <SplitPane dividerPositions="0.3794992175273865" layoutX="151.0" layoutY="165.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                           <children>
-                              <ImageView fitHeight="648.0" fitWidth="491.0">
-                                 <image>
-                                    <Image url="@img/sagradaMenu.jpg" />
-                                 </image>
-                              </ImageView>
-                           </children></AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #800000;">
-                           <children>
-                              <TextArea fx:id="ipAreaText" layoutX="235.0" layoutY="304.0" prefHeight="41.0" prefWidth="481.0">
-                                 <padding>
-                                    <Insets left="2.0" top="2.0" />
-                                 </padding>
-                              </TextArea>
-                              <Text layoutX="292.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER">
-                                 <font>
-                                    <Font size="40.0" />
-                                 </font>
-                              </Text>
-                              <Text layoutX="104.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP Connection" />
-                              <Button layoutX="235.0" layoutY="366.0" mnemonicParsing="false" onAction="#disableLoginPane" prefHeight="39.0" prefWidth="481.0" text="Start Game" />
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="schemeSelectionPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -99,7 +130,7 @@
                      <children>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <ImageView fitHeight="648.0" fitWidth="504.0">
+                              <ImageView fitHeight="648.0" fitWidth="504.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="0.0">
                                  <image>
                                     <Image url="@img/sagradaMenu.jpg" />
                                  </image>
@@ -108,7 +139,7 @@
                         </AnchorPane>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" GridPane.columnIndex="1">
                            <children>
-                              <AnchorPane layoutX="110.0" layoutY="69.0" maxWidth="711.0" prefHeight="509.0" prefWidth="528.0" style="-fx-background-color: #800000;">
+                              <AnchorPane layoutX="110.0" layoutY="69.0" maxWidth="711.0" prefHeight="509.0" prefWidth="528.0" style="-fx-background-color: #800000;" AnchorPane.bottomAnchor="72.0" AnchorPane.rightAnchor="104.0" AnchorPane.topAnchor="70.0">
                                  <children>
                                     <Text fill="WHITE" layoutX="56.0" layoutY="223.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nickname" />
                                     <TextArea fx:id="nicknameAreaText" layoutX="56.0" layoutY="237.0" prefHeight="35.0" prefWidth="445.0">
@@ -116,7 +147,7 @@
                                           <Insets left="2.0" top="2.0" />
                                        </padding>
                                     </TextArea>
-                                    <Text fill="WHITE" layoutX="6.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER" wrappingWidth="556.953125">
+                                    <Text fill="WHITE" layoutX="6.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Sagrada" textAlignment="CENTER" wrappingWidth="556.953125" AnchorPane.bottomAnchor="3365.462890625" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="-7.953" AnchorPane.topAnchor="92.994140625">
                                        <font>
                                           <Font name="Yu Gothic UI Semibold" size="38.0" />
                                        </font>
@@ -223,7 +254,7 @@
                               <Image url="@img/TrackBoardSagrada.png" />
                            </image>
                         </ImageView>
-                        <GridPane fx:id="trackBoardGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="641.0" prefWidth="191.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                        <GridPane fx:id="trackBoardGrid" alignment="CENTER" prefHeight="641.0" prefWidth="191.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="116.0" minWidth="10.0" prefWidth="61.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="91.0" minWidth="10.0" prefWidth="53.0" />
@@ -266,7 +297,7 @@
       </AnchorPane>
       <AnchorPane fx:id="lobbyPane" opacity="0.0" prefHeight="650.0" prefWidth="1286.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="650.0" fitWidth="1286.0" opacity="0.9">
+            <ImageView fitHeight="650.0" fitWidth="1286.0" opacity="0.9" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
                   <Image url="@img/backSagrada3.jpg" />
                </image>
@@ -296,7 +327,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <VBox alignment="CENTER" layoutY="106.0" opacity="0.98" prefHeight="426.0" prefWidth="476.0" style="-fx-background-color: white; -fx-background-radius: 80; -fx-border-color: #2C3E50; -fx-border-width: 4; -fx-border-radius: 80;" AnchorPane.bottomAnchor="118.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="806.0" AnchorPane.topAnchor="106.0">
+            <VBox alignment="CENTER" layoutY="106.0" opacity="0.98" prefHeight="426.0" prefWidth="468.0" style="-fx-background-color: white; -fx-background-radius: 80; -fx-border-color: #2C3E50; -fx-border-width: 4; -fx-border-radius: 80;" AnchorPane.leftAnchor="1.0">
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
@@ -308,7 +339,7 @@
                   </TextArea>
                </children>
             </VBox>
-            <VBox alignment="CENTER" minHeight="300.0" minWidth="250.0" prefHeight="419.0" prefWidth="348.0" spacing="20.0" style="-fx-background-color: #2C3E50; -fx-background-radius: 50; -fx-border-color: white; -fx-border-radius: 50; -fx-border-width: 3;" AnchorPane.bottomAnchor="121.0" AnchorPane.leftAnchor="880.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="110.0">
+            <VBox alignment="CENTER" minHeight="300.0" minWidth="250.0" prefHeight="419.0" prefWidth="355.0" spacing="20.0" style="-fx-background-color: #2C3E50; -fx-background-radius: 50; -fx-border-color: white; -fx-border-radius: 50; -fx-border-width: 3;" AnchorPane.bottomAnchor="121.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="110.0">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Credits :">
                      <font>
