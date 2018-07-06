@@ -57,24 +57,20 @@ public class ControllerMatchTable implements Initializable {
     private List<Button> toolChoiceButtonList;
 
     //Lista di liste per dadi sul trackboard
-    List<ImageView> diceExtraImgTrackboardList;
+    private List<ImageView> diceExtraImgTrackboardList;
 
-    List<Button> buttonTrackBoarIndexList;
+    private List<Button> buttonTrackBoarIndexList;
 
     //Lista index dello switch dei dadi sulla track
-    List<Integer> indexChangeDiceTrackBoard;
+    private List<Integer> indexChangeDiceTrackBoard;
 
-    @FXML GridPane schemeSelectionGrid;
-
+    @FXML private GridPane schemeSelectionGrid;
     @FXML private AnchorPane toolCardPane;
-
     @FXML private HBox hBoxDraftDice;
     @FXML private AnchorPane primaryScene;
     @FXML private ImageView cardImg;
     @FXML private HBox publicCardPane;
-    @FXML private ImageView privateCardImg;
     @FXML private GridPane gridPane;
-
 
     //TASTI SUL TAVOLO
 
@@ -110,17 +106,17 @@ public class ControllerMatchTable implements Initializable {
     @FXML Text numTokens;
 
     /**
-     * Img Dado selezionato dal Draft per la PICK
+     * Img die selected from the DraftPool
      */
     private ImageView selectedDie;
 
     /**
-     * Button selezionato per la scelta dell'uso della toolCard
+     * Button selected for the choice of the toolCard's use
      */
     private Button selectedButtonToolCardToUse;
 
     /**
-     * AnchorPane della cella cliccata
+     * AnchorPane of the clicked cell
      */
     private AnchorPane cellSelected;
 
@@ -130,7 +126,7 @@ public class ControllerMatchTable implements Initializable {
     private Button selectedButtonScheme;
 
     /**
-     * Img Dado selezionato dalla Trackboard
+     * Img die selected from the Trackboard
      */
     private ImageView selectedTrackboardDie;
 
@@ -143,25 +139,27 @@ public class ControllerMatchTable implements Initializable {
 
     private PlayerChoice playerChoice;
 
-    @FXML GridPane choiceToolCardGrid;
+    @FXML private GridPane choiceToolCardGrid;
 
     //-------------------
 
-    @FXML AnchorPane nicknamePane;
-    @FXML TextArea nicknameAreaText;
-    @FXML GridPane trackBoardGrid;
+    @FXML private AnchorPane nicknamePane;
+    @FXML private TextArea nicknameAreaText;
+    @FXML private GridPane trackBoardGrid;
 
     //---------------------
 
-    ClientBoard clientBoard;
+    private ClientBoard clientBoard;
 
-    ClientModel clientModel;
+    private ClientModel clientModel;
 
-    @FXML HBox hBoxMsgArea;
+    @FXML private HBox hBoxMsgArea;
 
     //----------------------
 
-    //scorrimento lettura carte pubbliche e obj privato
+    /**
+     * index for sliding reading of public card and objPrivateCard
+     */
     private int indexChangeCard;
 
     private View viewSocket;
@@ -188,14 +186,7 @@ public class ControllerMatchTable implements Initializable {
 
 
         cardSize(cardImg);
-
-        toolCardPane.setDisable(true);
-        schemeSelectionPane.setDisable(true);
-        loginPane.setDisable(true);
-        nicknamePane.setDisable(true);
-        gameboardPane.setDisable(true);
-        lobbyPane.setDisable(true);
-        scorePane.setDisable(true);
+        disablePanes();
 
         viewSocket = new View();
         GuiInput guiInput = (GuiInput) viewSocket.getInputStrategy();
@@ -213,16 +204,8 @@ public class ControllerMatchTable implements Initializable {
 
         //------------------------------------
 
-        cellSchemeList = new ArrayList<>();
-        diceOnDraftList = new ArrayList();
-        toolChoiceButtonList = new ArrayList<>();
-        diceExtraImgTrackboardList = new ArrayList<>();
-        buttonTrackBoarIndexList = new ArrayList<>();
-        indexChangeDiceTrackBoard = new ArrayList<>();
-        schemeVBoxList = new ArrayList<>();
-
+        arrayCreation();
         typeOfInputAsked = null;
-
         createMsgArea();
 
     }
@@ -236,12 +219,7 @@ public class ControllerMatchTable implements Initializable {
         cardImg.setImage(showCard(clientBoard.getCardOnBoard().getPublicObjCardList().get(index), "publicObjCard"));
     }
 
-    //TODO: TOGLIERE GIA' SI VISUALIZZANO DAL MENU
-    private void showToolCards(ClientBoard clientBoard, int index) {
-        cardImg.setImage(showCard(clientBoard.getCardOnBoard().getToolCardList().get(index), "toolCard"));
-    }
-
-    private void showNextDieTrackBoard (ClientBoard clientBoard, int index, int indexRound){
+    private void showNextDieTrackBoard (int index, int indexRound){
         diceExtraImgTrackboardList.get(indexRound).setImage(showDie
                 (clientBoard.getTrackBoardDice().getDiceList().get(indexRound).get(index)));
     }
@@ -257,15 +235,25 @@ public class ControllerMatchTable implements Initializable {
         cardImageView.fitHeightProperty().bind(publicCardPane.heightProperty().subtract(20));
     }
 
-
-    private Image showCard(Card card, String stringa) {
-        String string = "it/polimi/se2018/view/graphic/gui/img/" + stringa + "/" +
+    /**
+     * Creates image of the card depending on the its characteristics, through the path in resources
+     * @param card from which to take the img
+     * @param string type of Card
+     * @return image of the card requested
+     */
+    private Image showCard(Card card, String string) {
+        String path = "it/polimi/se2018/view/graphic/gui/img/" + string + "/" +
                 card.getName().replaceAll(" ", "") + ".jpg" ;
 
-        return new Image(string);
+        return new Image(path);
 
     }
 
+    /**
+     * Creates image of the die depending on the its characteristics, through the path in resources
+     * @param die from which to take the img
+     * @return image of the die requested
+     */
      private Image showDie(Die die) {
         String string = "it/polimi/se2018/view/graphic/gui/img/dice/" +
                 die.getColour().toString().toLowerCase() + "/" + die.getValue() + ".jpg";
@@ -273,7 +261,9 @@ public class ControllerMatchTable implements Initializable {
         return new Image(string);
     }
 
-
+    /**
+     * Switches public and private Card on the gameboard
+     */
     @FXML private void nextCard() {
         if (indexChangeCard == 3) {
             indexChangeCard = -1;
@@ -282,21 +272,27 @@ public class ControllerMatchTable implements Initializable {
         if(indexChangeCard == 3){
             showPrivateCards();
         }
-        showPublicCards(clientBoard, indexChangeCard);
+        else {
+            showPublicCards(clientBoard, indexChangeCard);
+        }
     }
 
+    /**
+     * Switches dice on the trackboard in a Round
+     * @param selectedButtonIndex index of what button of the Trackboard's one is pressed
+     * @param numExtraDiceRound num of dice in the Trackboard in that round
+     */
     @FXML private void nextDieTrackboard(int selectedButtonIndex, int numExtraDiceRound) {
         if (indexChangeDiceTrackBoard.get(selectedButtonIndex) == numExtraDiceRound - 1) {
             indexChangeDiceTrackBoard.remove(selectedButtonIndex);
             indexChangeDiceTrackBoard.add(selectedButtonIndex, -1);
         }
-        int indexValue = indexChangeDiceTrackBoard.get(selectedButtonIndex).intValue();
+        int indexValue = indexChangeDiceTrackBoard.get(selectedButtonIndex);
         indexChangeDiceTrackBoard.remove(selectedButtonIndex);
         indexChangeDiceTrackBoard.add(selectedButtonIndex, (indexValue + 1));
 
-        showNextDieTrackBoard(clientBoard, indexValue + 1, selectedButtonIndex);
+        showNextDieTrackBoard(indexValue + 1, selectedButtonIndex);
     }
-
 
 
     @FXML private void extractClick() {
@@ -311,6 +307,9 @@ public class ControllerMatchTable implements Initializable {
         syntaxController.validCommand("cancel");
     }
 
+    /**
+     * Show dice on the DraftPool
+     */
     private void showDiceBoard (){
         for (int i = 0; i < clientBoard.getBoardDice().getDieList().size(); i++) {
             ImageView die = new ImageView();
@@ -332,8 +331,11 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-
     //ENABLE & DISABLE PANE //
+
+    /**
+     * Enabling and disabling of the pane
+     */
 
     @FXML private void disableBackgroundPane (){
         backgroundPane.setOpacity(0);
@@ -413,7 +415,6 @@ public class ControllerMatchTable implements Initializable {
     }
 
     @FXML private void disableToolCardPane (){
-        //confirmToolCardChoice(); //TODO: NO??
         disableBackgroundPane();
         toolCardPane.setOpacity(0);
         toolCardPane.setVisible(false);
@@ -446,17 +447,12 @@ public class ControllerMatchTable implements Initializable {
         gameboardPane.setDisable(false);
     }
 
-    @FXML private void disableScorePane (){
-        scorePane.setOpacity(0);
-        scorePane.setVisible(false);
-        scorePane.setDisable(true);
-    }
-
     @FXML private void enableScorePane (){
         scorePane.setOpacity(1);
         scorePane.setVisible(true);
         scorePane.setDisable(false);
     }
+
 
     // REQUEST: richieste invocate dal GuiInput //
 
@@ -488,7 +484,6 @@ public class ControllerMatchTable implements Initializable {
     public void requestShowGameboard (ClientModel clientModel){
         this.clientBoard = clientModel.getClientBoard();
         this.clientModel = clientModel;
-        this.clientModel.setPrivateObjCard(playerChoice.getPrivateObjCard());
         enableGameboardPane();
         inizGameboard(clientBoard);
         disableNotYourTurn();
@@ -500,7 +495,7 @@ public class ControllerMatchTable implements Initializable {
         String winner = "Nessuno";
         int maxScore = 0;
         for (int i = 0; i <playerList.size(); i++) {
-            string = (i+1) + ". " + playerList.get(i).getNickname() + " " + playerList.get(i).getScore() + "\n" + string ;
+            string = (playerList.size()-i) + ". " + playerList.get(i).getNickname() + " " + playerList.get(i).getScore() + "\n" + string ;
 
             if (playerList.get(i).getScore() > maxScore){
                 maxScore = playerList.get(i).getScore();
@@ -539,8 +534,11 @@ public class ControllerMatchTable implements Initializable {
 
     //INIZ: chiamati per posizionare le carte nel corrispettivo pane //
 
-    //ADD DINAMICO DEI 4 SCHEMI CHE L'UTENTE DEVE SCEGLIERE
-    //TODO: ADD CARTA OBJ PRIVATO
+    /**
+     * Dynamic creation of 4 scheme, the player will choose which one he wants to use
+     * @param schemeToChooseList list of the 4 schemes
+     * @param privateObjCard privateCard that belongs to the player
+     */
     private void inizSchemeCardSelection(List<SchemaCard> schemeToChooseList, PrivateObjCard privateObjCard){
 
         Platform.runLater(() -> {
@@ -614,20 +612,25 @@ public class ControllerMatchTable implements Initializable {
     }
 
 
-    //TODO: FIX, NON SAI DI CHI E' LO SCHEMA, NUM DI GIOCATORI
     private void inizGameboard (ClientBoard clientBoard){
         Platform.runLater(() -> {
 
                 emptyPanes();
-
                 schemeVBOX.getChildren().add(createScheme(clientModel.getActualPlayer().getSchemaCard()));
-                System.out.println(" SIZE " + clientBoard.getPlayerList().size());
 
                 int i;
                 for(i = 0; i < clientBoard.getPlayerList().size(); i++) {
                     VBox vBox = new VBox();
                     vBox.setPadding(new Insets(10,60,0,60));
-                    vBox.getChildren().add(createScheme(clientBoard.getPlayerList().get(i).getSchemaCard()));
+                    HBox hBox = new HBox();
+                    hBox.setAlignment(Pos.CENTER);
+                    for(int j = 0; j < clientBoard.getPlayerList().get(i).getTokens(); j++){
+                        ImageView tokenImg = new ImageView("it/polimi/se2018/view/graphic/gui/img/Token.png");
+                        tokenImg.setPreserveRatio(true);
+                        tokenImg.setFitWidth(25);
+                        hBox.getChildren().add(tokenImg);
+                    }
+                    vBox.getChildren().addAll(createScheme(clientBoard.getPlayerList().get(i).getSchemaCard()), hBox);
                     vBox.prefWidthProperty().bind(schemeVBOX.widthProperty());
                     vBox.prefHeightProperty().bind(schemeVBOX.heightProperty());
                     schemeVBoxList.add(vBox);
@@ -643,9 +646,9 @@ public class ControllerMatchTable implements Initializable {
 
                 System.out.println("..update..");
                 inizToolCard();
-                 for(int j = 0; j < toolChoiceButtonList.size(); j++) {
-                     toolChoiceButtonList.get(j).setDisable(true);
-                 }
+            for (Button aToolChoiceButtonList : toolChoiceButtonList) {
+                aToolChoiceButtonList.setDisable(true);
+            }
                 showPublicCards(clientBoard,0);
                 showDiceBoard();
                 insertDiceTrackboard();
@@ -712,10 +715,10 @@ public class ControllerMatchTable implements Initializable {
                 button.setOnAction(event -> {
                     selectedButtonTrackBoardNext = button;
 
-                    //TODO: EVITARE DI CHIAMARE LA FUNZ DIVERSE VOLTE
-                    if(checkButtonTrackBoardIndex() != -1) {
-                        nextDieTrackboard(checkButtonTrackBoardIndex(),
-                                clientBoard.getTrackBoardDice().getDiceList().get(checkButtonTrackBoardIndex()).size());
+                    int buttonTBIndex = checkButtonTrackBoardIndex();
+                    if(buttonTBIndex != -1) {
+                        nextDieTrackboard(buttonTBIndex,
+                                clientBoard.getTrackBoardDice().getDiceList().get(buttonTBIndex).size());
                     }
                     //è premuto, chiama metodo switcha carta
                 });
@@ -732,7 +735,11 @@ public class ControllerMatchTable implements Initializable {
         }
     }
 
-
+    /**
+     * Creates a scheme Card dynamically
+     * @param schemaCard to compone in vectorial graphic
+     * @return gridpane of the scheme
+     */
     private GridPane createScheme (SchemaCard schemaCard) {
         int col = 0;
         int row = 0;
@@ -758,7 +765,6 @@ public class ControllerMatchTable implements Initializable {
             else if (c.getColour() != null) {
                 Map<ColourEnum, String> map = colorMap();
                 anchorPaneCell.setStyle("-fx-background-color: #" + map.get(c.getColour()));
-
             }
             else {
                 setCellValueRestriction(c, cellImg);
@@ -795,7 +801,6 @@ public class ControllerMatchTable implements Initializable {
             cellImg.fitWidthProperty().bind(anchorPaneCell.widthProperty().subtract(7));
             cellSchemeList.add(anchorPaneCell);
 
-
             schemeGridPane.add(anchorPaneCell, col, row);
             col++;
         }
@@ -826,6 +831,11 @@ public class ControllerMatchTable implements Initializable {
         return schemeGridPane;
     }
 
+    /**
+     * Sets the value restriction image of a die during the construction of a scheme Card
+     * @param c cell with value restriction
+     * @param cellImg imageview to be filled
+     */
     private void setCellValueRestriction (Cell c, ImageView cellImg){
         Image img = new Image("it/polimi/se2018/view/graphic/gui/img/dice/restriction/" + c.getValue() + ".jpg");
         cellImg.setOpacity(0.90);
@@ -902,9 +912,6 @@ public class ControllerMatchTable implements Initializable {
 
     private void nextCommandType (CommandTypeEnum commandTypeEnum) {
         switch (commandTypeEnum){
-            case COMPLETE: //TODO: disabilita tutto
-        //        disableNotYourTurn();
-                break;
             case DICEBOARDINDEX:
                 hBoxDraftDice.setDisable(false);    //abilita diceboard
                 break;
@@ -913,11 +920,11 @@ public class ControllerMatchTable implements Initializable {
                 schemeVBOX.setDisable(false);
             //    schemeVBOX2.setDisable(false);
                 break;
-            case TRACKBOARDINDEX:
-                enableDiceTrackBoard();
-                break;
             case VALUE:
                 ValueRequest.display(syntaxController);
+                break;
+            case TRACKBOARDINDEX:
+                enableDiceTrackBoard();
                 break;
             default:
                 break;
@@ -928,29 +935,32 @@ public class ControllerMatchTable implements Initializable {
         extractButton.setDisable(true);
         resetMoveButton.setDisable(true);
         passButton.setDisable(true);
-        for(int i = 0; i < diceExtraImgTrackboardList.size(); i++) {
-            diceExtraImgTrackboardList.get(i).setDisable(true);
+        for (ImageView aDiceExtraImgTrackboardList : diceExtraImgTrackboardList) {
+            aDiceExtraImgTrackboardList.setDisable(true);
         }
         hBoxDraftDice.setDisable(true);
 
       //  schemeVBOX.setDisable(true);      //TODO: DISABILITARLI?
       //  schemeVBOX1.setDisable(true);
-      //  schemeVBOX2.setDisable(true);
-      //  schemeVBOX3.setDisable(true);
     }
 
+    /**
+     * Enables command buttons on the gameBoard
+     */
     private void enableCommandButton (){
         Platform.runLater(() -> {
                     if (hBoxDraftDice.getChildren().isEmpty()) {
                         extractButton.setDisable(false);
                     }
                 });
-        //extractButton.setDisable(false);
         resetMoveButton.setDisable(false);
         toolCardButton.setDisable(false);
         passButton.setDisable(false);
     }
 
+    /**
+     * Enables tool choice buttons
+     */
     private void enableToolChoiceButton (){
         Platform.runLater(() -> {
             for (int i = 0; i < toolChoiceButtonList.size(); i++) {
@@ -960,9 +970,12 @@ public class ControllerMatchTable implements Initializable {
         });
     }
 
+    /**
+     * Enables dice on Trackboard
+     */
     private void enableDiceTrackBoard(){
-        for(int i = 0; i < diceExtraImgTrackboardList.size(); i++) {
-            diceExtraImgTrackboardList.get(i).setDisable(false);
+        for (ImageView aDiceExtraImgTrackboardList : diceExtraImgTrackboardList) {
+            aDiceExtraImgTrackboardList.setDisable(false);
         }
     }
 
@@ -989,6 +1002,10 @@ public class ControllerMatchTable implements Initializable {
 
     // CONFIG: set delle dimensioni corrette dei pane & binding
 
+    /**
+     * Configuration of an AnchorPane of the size needed
+     * @return the anchorPane created
+     */
     private AnchorPane configAnchorPane (){
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.setMinHeight(40);
@@ -997,13 +1014,16 @@ public class ControllerMatchTable implements Initializable {
         anchorPane.setPrefWidth(50);
         anchorPane.maxHeight(50);
         anchorPane.maxWidth(50);
-        // anchorPane.setPadding(new Insets(4,4,4,4));
         anchorPane.setBorder(new Border(new BorderStroke(Color.web("2C3E50"),
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
 
         return anchorPane;
     }
 
+    /**
+     * Configuration of an HBox of the size needed
+     * @return the HBox created
+     */
     private HBox configHBox (){
         HBox infoScheme = new HBox();
         infoScheme.setMinHeight(20);
@@ -1019,6 +1039,10 @@ public class ControllerMatchTable implements Initializable {
         return infoScheme;
     }
 
+    /**
+     * Configuration of an ImageView of the size needed
+     * @return the ImageView created
+     */
     private ImageView configCellImg (){
         ImageView cellImg = new ImageView();
         cellImg.setPreserveRatio(true); //used for the correct resize of the starting image
@@ -1029,6 +1053,9 @@ public class ControllerMatchTable implements Initializable {
         return cellImg;
     }
 
+    /**
+     * Configuration of a TextArea of the size needed
+     */
     private void createMsgArea (){
         msgArea = new TextArea();
         msgArea.setEditable(false);
@@ -1040,7 +1067,34 @@ public class ControllerMatchTable implements Initializable {
         hBoxMsgArea.getChildren().addAll(msgArea);
     }
 
-    public void setNumTokens(String numPlayerTokens) {
+    /**
+     * Sets the number of token of the player in the current turn
+     * @param numPlayerTokens current number of token of the player
+     */
+    private void setNumTokens(String numPlayerTokens) {
         numTokens.setText(numPlayerTokens);
+    }
+
+    /**
+     * Disables all the panes that compose the Scene
+     */
+    private void disablePanes (){
+        toolCardPane.setDisable(true);
+        schemeSelectionPane.setDisable(true);
+        loginPane.setDisable(true);
+        nicknamePane.setDisable(true);
+        gameboardPane.setDisable(true);
+        lobbyPane.setDisable(true);
+        scorePane.setDisable(true);
+    }
+
+    private void arrayCreation (){
+        cellSchemeList = new ArrayList<>();
+        diceOnDraftList = new ArrayList();
+        toolChoiceButtonList = new ArrayList<>();
+        diceExtraImgTrackboardList = new ArrayList<>();
+        buttonTrackBoarIndexList = new ArrayList<>();
+        indexChangeDiceTrackBoard = new ArrayList<>();
+        schemeVBoxList = new ArrayList<>();
     }
 }

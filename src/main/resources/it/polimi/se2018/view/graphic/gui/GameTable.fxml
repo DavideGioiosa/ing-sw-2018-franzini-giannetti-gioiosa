@@ -148,7 +148,7 @@
       </AnchorPane>
       <AnchorPane fx:id="gameboardPane" opacity="0.0" prefHeight="650.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <GridPane fx:id="gridPane" alignment="CENTER" gridLinesVisible="true" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #b8b8b8;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <GridPane fx:id="gridPane" alignment="CENTER" prefHeight="650.0" prefWidth="1280.0" style="-fx-background-color: #b8b8b8;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <HBox fx:id="hBoxDraftDice" maxHeight="80.0" maxWidth="1085.0" minHeight="50.0" minWidth="500.0" prefHeight="70.0" prefWidth="574.0" spacing="5.0" style="-fx-background-color: #B0C4DE;" GridPane.columnSpan="3" GridPane.rowIndex="1">
                      <cursor>
@@ -211,11 +211,6 @@
                            <children>
                               <GridPane alignment="CENTER" minHeight="153.0" minWidth="60.0" prefHeight="307.0" prefWidth="119.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Num. Tokens">
-                                       <font>
-                                          <Font name="System Italic" size="18.0" />
-                                       </font>
-                                    </Text>
                                     <StackPane minHeight="75.0" minWidth="100.0" prefHeight="150.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
                                        <children>
                                           <ImageView fitHeight="88.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true">
