@@ -77,13 +77,16 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
                     try {
                         clientRemoteInterface.receiveFromServer(playerMessage);
                     } catch (RemoteException e) {
+                        String remove = null;
                         for(String code : clientList.keySet()){
                             if(clientList.get(code).equals(clientRemoteInterface)){ //override equals
-                                disconnectionHandler(code);
+                                remove= code;
                             }
                         }
+                        if(remove != null){disconnectionHandler(remove);}
                     }
                 }
+
             }else{
                 if(clientList.containsKey(playerMessage.getUser().getUniqueCode())){
                     ClientRemoteInterface clientRemoteInterface = clientList.get(playerMessage.getUser().getUniqueCode());
@@ -163,7 +166,7 @@ public class ServerImplementation extends UnicastRemoteObject implements ServerR
      * Method used to transmit received messages to upper-classes
      * @param playerMessage message received
      */
-    void transmit(PlayerMessage playerMessage){
+    public void transmit(PlayerMessage playerMessage){
 
         obs.notify(playerMessage);
 

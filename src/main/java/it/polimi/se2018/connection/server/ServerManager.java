@@ -1,6 +1,5 @@
 package it.polimi.se2018.connection.server;
 
-
 import it.polimi.se2018.connection.server.rmi.RMITypeServer;
 import it.polimi.se2018.connection.server.socket.SocketTypeServer;
 import it.polimi.se2018.controller.GameCreator;
@@ -8,16 +7,22 @@ import it.polimi.se2018.model.*;
 import it.polimi.se2018.model.player.User;
 import it.polimi.se2018.utils.Observer;
 import it.polimi.se2018.view.RemoteView;
+
 import static  it.polimi.se2018.view.graphic.cli.CommandLinePrint.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 
-
+/**
+ * Class that manages both servers
+ * @author Silvia Franzini
+ */
 //link tra connessione e gioco, messaggi server e controller
 public class ServerManager implements Observer<PlayerMessage> {
-//osserva sia RMITypeServer che SocketTypeServer
+    /**
+     * class t
+     */
     private GameCreator gameCreator;
     private SocketTypeServer serverSocket;
     private RMITypeServer serverRMI;
@@ -27,7 +32,9 @@ public class ServerManager implements Observer<PlayerMessage> {
     private Timer senderTimer;
     private UsersDelayer usersDelayer;
     private boolean setUp;
-    private static final int MAXUSER = 3;
+    private static final int MINUSER = 2;
+
+    private static final int MAXUSER = 4;
 
 
 
@@ -103,11 +110,16 @@ public class ServerManager implements Observer<PlayerMessage> {
             playerMessage.setUser(user);
             playerMessage.setError(450); //nickname già presente
             sendMessage(playerMessage);
+
+            playerMessage.setUser(user);
+            playerMessage.setId(PlayerMessageTypeEnum.USER);
+            sendMessage(playerMessage);
+
         }else {
             userList.add(user);
             println("aggiunto user: "+ user.getNickname());
             if(gameCreator == null){
-                if(userList.size()== 1){
+                if(userList.size()== MINUSER){
                     userSetupTimer = new Timer();
                     usersDelayer = new UsersDelayer(this);
                     userSetupTimer.schedule(usersDelayer, (long)90*1000);
@@ -134,7 +146,7 @@ public class ServerManager implements Observer<PlayerMessage> {
                  }else {
                      println("disconnesso user: "+ us.getNickname());
                      disconnectedUserList.add(us);
-                     us.getPlayer().setConnectionStatus(false);
+                     if(us.getPlayer()!= null) us.getPlayer().setConnectionStatus(false);
                      gameCreator.modifyStatus();
                  }
 
